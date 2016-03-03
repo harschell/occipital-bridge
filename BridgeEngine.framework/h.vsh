@@ -1,0 +1,1 @@
+attribute vec4 a_position;varying vec2 d,e[6];void main(){gl_Position=a_position,d=(a_position.xy+1.)*.5;float a=.004167;e[0]=d-vec2(0.,3.*a),e[1]=d-vec2(0.,2.*a),e[2]=d-vec2(0.,1.*a),e[3]=d+vec2(0.,1.*a),e[4]=d+vec2(0.,2.*a),e[5]=d+vec2(0.,3.*a);}

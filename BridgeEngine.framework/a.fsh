@@ -1,0 +1,1 @@
+uniform sampler2D PIpQmUWm;uniform highp sampler2D Q9fvsJR7,jia5qlaa;varying vec2 e;uniform float A9TWgpHz;void main(){vec4 a=texture2D(PIpQmUWm,e);float b=texture2D(jia5qlaa,e).r,c=texture2D(Q9fvsJR7,e).r;if(c>b)a.a=0.,a.rgb*=A9TWgpHz;gl_FragColor=a;}

@@ -1,0 +1,1 @@
+uniform sampler2D YoiC1RvL,vUQVKgal;varying vec2 e;void main(){vec4 a;vec2 b=fract(e*vec2(2.,1.));a=vec4(0.);if(e.x>.5)a=texture2D(YoiC1RvL,b);else{vec2 c=1./vec2(1280.,960.);a=texture2D(vUQVKgal,b),a+=texture2D(vUQVKgal,b+vec2(0.,c.y)),a+=texture2D(vUQVKgal,b+vec2(c.x,0.)),a+=texture2D(vUQVKgal,b+c),a/=4.;}gl_FragColor=a;}
