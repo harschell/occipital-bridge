@@ -1,16 +1,9 @@
 # Welcome to the Bridge Engine Beta!
 
-- Documentation
-    - [Getting Started With Bridge Engine](https://docs.google.com/document/d/1O70yg9GA6b8zPC7WfnRwzDg7-ekyRDud3AlNDFB8CiQ/edit#)
-    - [Best Practices](https://docs.google.com/document/d/1Z7bjnp9kBcpySxMrZ_QLbaAl0AhYJwMz_2CaF_ZPRgU/edit)
-    - [Working with Assets in SceneKit](https://docs.google.com/document/d/1od_V1ZzVgmfOzCdM-_qumGS6g1NtEW8a8UH6fwQsEfs/edit)
-    - [Bridge Capture Tool OTA (aka Room Capture Next)](http://strx.io/bridge-capture-tool)
-         - Caveat: This is called Bridge Capture Tool, it will download as Room Capture Next
-         - Caveat: This is defaulted to use a WVL; We’ll have this fixed to select WVL/Non-WVL via Settings soon.
-         - PLEASE Do not share information (e.g. screenshots) of this app.
-    - [Calibrator OTA](http://strx.io/calibrator-wvl)
-         - Display the [Checkerboard Pattern](http://bit.ly/chkbrd25) onscreen calibration (or print it).
+We're glad to have you onboard. We're committed to developing the Bridge Engine, so we take all of your feedback and support very earnestly.
 
+Check out our <a href="https://www.youtube.com/embed/nXB_0DGbamU" target="_blank">Bridge Engine Beta Video Posted to Slack</a>. It's a great example of the robust RGB(D) tracking and fast relocalization available through the engine.   
 
-- Instructions on Importing Developer Keys, Certs, and Provisioning Profile
-    - https://github.com/OccipitalOpenSource/bridge-engine-beta/wiki/Importing-Keys
+###Please Use the Following Documentation & Resources to Get Up and Running
+- [Documentation: Table of Contents, Calibrator, and Bridge Capture Tool Applications](https://github.com/OccipitalOpenSource/bridge-engine-beta/wiki)
+- [Instructions on Importing Developer Keys, Certs, and Provisioning Profile](https://github.com/OccipitalOpenSource/bridge-engine-beta/wiki/Importing-Keys)
