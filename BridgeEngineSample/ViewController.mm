@@ -1,19 +1,17 @@
 /*
-    This file is part of the Structure SDK.
-    Copyright © 2016 Occipital, Inc. All rights reserved.
-    http://structure.io
-*/
+ This file is part of the Structure SDK.
+ Copyright © 2016 Occipital, Inc. All rights reserved.
+ http://structure.io
+ */
 
 #import "ViewController.h"
 
 #import <BridgeEngine/BridgeEngine.h>
 
-//------------------------------------------------------------------------------
-
-//the directory of our SceneKit assets
+// The directory of our SceneKit assets
 #define ASSETS_DIR "Assets.scnassets"
 
-//------------------------------------------------------------------------------
+#pragma mark - ViewController ()
 
 @interface ViewController () < BEMixedRealityModeDelegate >
 
@@ -23,12 +21,13 @@
 
 @end
 
-//------------------------------------------------------------------------------
+#pragma mark - ViewController
 
 @implementation ViewController
 {
     BEMixedRealityMode* _mixedReality;
     NSArray* _markupNameList;
+    BOOL experienceIsRunning;
 }
 
 + (SCNNode*) loadNodeNamed:(NSString*)nodeName fromSceneNamed:(NSString*)sceneName
@@ -37,11 +36,11 @@
     static const SCNMatrix4 defaultPivot = SCNMatrix4MakeRotation(M_PI, 1.0, 0.0, 0.0);
     
     SCNScene* scene = [SCNScene sceneNamed:sceneName];
-
+    
     SCNNode* node  = [scene.rootNode childNodeWithName:nodeName recursively:YES];
-
+    
     node.pivot = defaultPivot;
-
+    
     return node;
 }
 
@@ -53,25 +52,25 @@
     // Here is a list of markup we'll use for our sample.
     // If the user decides, the locations of this markup will be saved on device.
     _markupNameList = @[ @"tree", @"chair", @"gift" ];
-
+    
     _mixedReality = [[BEMixedRealityMode alloc]
-         initWithView:(BEView*)self.view
-         engineOptions:@{
-            kBECaptureReplayEnabled:  @(getBooleanValueFromAppSettings(@"replayCapture"  , NO)),
-            kBEUsingWideVisionLens: @(getBooleanValueFromAppSettings(@"useWVL"         , YES)),
-            kBEStereoRenderingEnabled:@(getBooleanValueFromAppSettings(@"stereoRendering", YES)),
-        }
-        markupNames:_markupNameList
-    ];
+                     initWithView:(BEView*)self.view
+                     engineOptions:@{
+                                     kBECaptureReplayEnabled:  @(getBooleanValueFromAppSettings(@"replayCapture"  , NO)),
+                                     kBEUsingWideVisionLens: @(getBooleanValueFromAppSettings(@"useWVL"         , YES)),
+                                     kBEStereoRenderingEnabled:@(getBooleanValueFromAppSettings(@"stereoRendering", YES)),
+                                     }
+                     markupNames:_markupNameList
+                     ];
     
     _mixedReality.delegate = self;
-
+    
+    [_mixedReality start];
 }
 
 - (void)viewDidAppear:(BOOL)animated
 {
     [super viewDidAppear:animated];
-    
     
     //Here we initialize two gesture recognizers as a way to expose features
     
@@ -91,66 +90,59 @@
                                                       initWithTarget:self action:@selector(handleTwoFingerTap:)];
     twoFingerTapRecognizer.numberOfTouchesRequired = 2;
     [self.view addGestureRecognizer:twoFingerTapRecognizer];
-
-
-    // tryToLoadScene should be called in viewDidAppear, not viewDidLoad
-    [_mixedReality tryToLoadScene];
+    
 }
 
-- (void)sceneDidLoad:(BOOL)success
+- (void)setUpSceneKitWorlds:(BEStageLoadingStatus)stageLoadingStatus
 {
-    //sceneDidLoad is called with the result of the Bridge Engine attempting to load the scene geometry.
+    // When this function is called, it is guaranteed that the SceneKit world is set up, and any
+    // previously-positioned markup nodes are loaded.
     
-    if (success)
-    {
-        //Load saved markup from device here.
-        //Currently, this must be called before start is called because we will then instantinate the markup nodes.
-        NSArray *markupNamesLoaded = [_mixedReality tryLoadingMarkup];
-        //It is up to you whether you want to call startMarkupEditing
-        //For this sample, we'll edit markup if any markup is missing from the given name list.
-        bool foundAllMarkup = YES;
-        for (id markupName in _markupNameList)
-        {
-            if (![markupNamesLoaded containsObject:markupName])
-            {
-                foundAllMarkup = NO;
-                break;
-            }
-        }
-        if (!foundAllMarkup)
-            [_mixedReality startMarkupEditing]; //spawns the markup editing view and mode
-        
-        
-        //this call starts the engine running
-        [_mixedReality start];
-    }
-    else
+    // As this function is called from a rendering thread, perform only SceneKit updates here.
+    // Avoid UIKit manipulation here (use main thread for UIKit).
+    
+    if (stageLoadingStatus == BEStageLoadingStatusNotFound)
     {
         NSLog(@"Your scene does not exist in the expected location on your device!");
         NSLog(@"You probably need to scan and export your local scene!");
+        return;
     }
-}
-
-- (void)setupSceneKitWorlds
-{
-    //When this function is called, it is guaranteed that the SceneKit world is set up, and any markup nodes are loaded.
-    //As this function is called from the SceneKit thread, only do SceneKit stuff here -
-    // Do not do anything related to UIKit
+    
+    // It is up to you whether you want to call startMarkupEditing
+    // For this sample, we'll edit markup if any markup is missing from the given name list.
+    bool foundAllMarkup = YES;
+    for (id markupName in _markupNameList)
+    {
+        if (![_mixedReality markupNodeForName:markupName])
+        {
+            foundAllMarkup = NO;
+            break;
+        }
+    }
+    
+    // If we have all the markup, let's directly begin the experience.
+    // Otherwise, let's activate the markup editing UI.
+    if (foundAllMarkup) [self startExperience];
+    else                [_mixedReality startMarkupEditing];
     
     // Load assets here
     self.treeNode  = [[self class] loadNodeNamed:@"Tree"  fromSceneNamed:@ASSETS_DIR"/tree.dae"];
     self.chairNode = [[self class] loadNodeNamed:@"Chair" fromSceneNamed:@ASSETS_DIR"/chair.dae"];
     self.giftNode  = [[self class] loadNodeNamed:@"Gift"  fromSceneNamed:@ASSETS_DIR"/gift.dae"];
     
-    //add assets to SceneKit node hierarchy
+    // Add assets to the world node
     [_mixedReality.worldNodeWhenRelocalized addChildNode:self.treeNode];
-    [self.treeNode setScale:SCNVector3Make(0.2f,0.2f,0.2f)];
     [_mixedReality.worldNodeWhenRelocalized addChildNode:self.chairNode];
     [_mixedReality.worldNodeWhenRelocalized addChildNode:self.giftNode];
     
-    //set any initial objects based on markup
+    // Hide all the objects initially (until markup positions them)
+    [self.treeNode setHidden:YES];
+    [self.chairNode setHidden:YES];
+    [self.giftNode setHidden:YES];
+    
+    // Set any initial objects based on markup
     for (id markupName in _markupNameList)
-        [self markupUpdated:markupName];
+        [self updateObjectPositionWithMarkupName:markupName];
     
 }
 
@@ -159,56 +151,70 @@
     [super didReceiveMemoryWarning];
 }
 
-- (void)markupUpdated:(NSString*)markupUpdatedName
+- (void)updateObjectPositionWithMarkupName:(NSString*)markupName
 {
-    //Here is a demonstration of a function called from a few different locations with a given markup name.
-    //Given the markup name, we may write our own logic to update our environment based on it.
-    //In this sample, we're only setting the location of static objects.
-    //However, you could do something much more sophisticated, like have multiple markup points be waypoints for a virtual character.
+    // Here, we're using markup to set the location of static objects.
     
+    // However, you could do something much more sophisticated, like have multiple markup points be
+    // waypoints for a virtual character.
     
-    //The possible relationships between objects and markup is shown in a couple ways here
+    SCNNode * markupNode = [_mixedReality markupNodeForName:markupName];
     
-    if ([markupUpdatedName isEqual: @"tree"])
+    // Early-return if this markup node hasn't been positioned yet.
+    if (!markupNode) return;
+    
+    SCNNode * objectNode = nil;
+    
+    if ([markupName isEqualToString: @"tree"])
     {
-        self.treeNode.position = [_mixedReality markupNodeForName:markupUpdatedName].position;
-        self.treeNode.eulerAngles = [_mixedReality markupNodeForName:markupUpdatedName].eulerAngles;
+        objectNode = self.treeNode;
+        objectNode.scale = SCNVector3Make(0.2f, 0.2f, 0.2f);
+        objectNode.position = markupNode.position;
+        objectNode.eulerAngles = markupNode.eulerAngles;
     }
-    else if ([markupUpdatedName isEqual: @"chair"])
+    else if ([markupName isEqualToString: @"chair"])
     {
-        self.chairNode.transform = [_mixedReality markupNodeForName:markupUpdatedName].transform;
+        objectNode = self.chairNode;
+        objectNode.transform = markupNode.transform;
     }
-    else if ([markupUpdatedName isEqual: @"gift"])
+    else if ([markupName isEqualToString: @"gift"])
     {
-        self.giftNode.position = [_mixedReality markupNodeForName:markupUpdatedName].position;
-        //gift's euler angles will be determined by updateAtTime
+        // The gift's rotation will be determined in updateAtTime
+        objectNode = self.giftNode;
+        objectNode.position = markupNode.position;
     }
+    
+    // Regardless of which object was moved, let's set it visible now.
+    objectNode.hidden = NO;
+}
+
+- (void)startExperience
+{
+    // For this experience, let's switch to a mode with AR objects composited with the passthrough camera.
+    [_mixedReality setRenderStyle:BERenderStyleSceneKitAndColorCamera withDuration:0.5];
+    experienceIsRunning = YES;
 }
 
 - (void)markupEditingEnded
 {
-    // called from the BEMixedRealityModeDelegate
-    
-    // if markup editing is over, then any experience in the scene may be started.
-    
-    //should set markup once editing is ended
-    for (id markupName in _markupNameList)
-        [self markupUpdated:markupName];
+    // If markup editing is over, then any experience in the scene may be started.
+    [self startExperience];
 }
 
 - (void)markupDidChange:(NSString*)markupChangedName
 {
-    // called from the BEMixedRealityModeDelegate
-    // we funnel this event into our sample markup logic
-    [self markupUpdated:markupChangedName];
+    // In this sample, markup and objects are 1:1, so we simply update the object position
+    // accordingly when a markup position changes.
+    
+    [self updateObjectPositionWithMarkupName:markupChangedName];
 }
 
 - (void) trackingStateChanged:(BETrackingState)trackingState
 {
     if (trackingState == BETrackingStateNominal)
-        NSLog(@"trackingStateChanged: BETrackingNominal");
-    if (trackingState == BETrackingStateNot)
-        NSLog(@"trackingStateChanged: BETrackingNot");
+        NSLog(@"trackingStateChanged: BETrackingStateNominal");
+    if (trackingState == BETrackingStateNotTracking)
+        NSLog(@"trackingStateChanged: BETrackingStateNotTracking");
 }
 
 - (void)handleTap:(UITapGestureRecognizer *)sender
@@ -222,7 +228,7 @@
     SCNVector3 meshNormal {NAN, NAN, NAN};
     SCNVector3 mesh3DPoint = [_mixedReality mesh3DFrom2DPoint:tapPoint outputNormal:&meshNormal];
     
-    NSLog(@"Bridge Sample handleTap %@", NSStringFromCGPoint(tapPoint));
+    NSLog(@"Bridge Engine Sample handleTap %@", NSStringFromCGPoint(tapPoint));
     NSLog(@"\t mesh3DPoint %f,%f,%f", mesh3DPoint.x, mesh3DPoint.y, mesh3DPoint.z);
     
     self.giftNode.position = mesh3DPoint;
@@ -230,17 +236,16 @@
 
 - (void)handleTwoFingerTap:(UITapGestureRecognizer *)sender
 {
-    //Increment through render styles. Sweet fade.
+    // Increment through render styles. Sweet fade.
     
     BERenderStyle renderStyle = [_mixedReality getRenderStyle];
     BERenderStyle nextRenderStyle = (BERenderStyle) ((renderStyle + 1) % NumBERenderStyles);
-    [_mixedReality changeRenderStyle:nextRenderStyle withDuration:1.0];
-    
+    [_mixedReality setRenderStyle:nextRenderStyle withDuration:0.5];
 }
 
 - (void)updateAtTime:(NSTimeInterval)time
 {
-    //Called each frame before render. It is safe to move SceneKit objects here.
+    // Called each frame before render. It is safe to move SceneKit objects here.
     
     static NSTimeInterval lastUpdateTime = NAN;
     
@@ -248,23 +253,25 @@
     {
         float deltaTime = (time - lastUpdateTime);
         
-        const float SPINNY_GIFT_RATE = 0.5; // rad/sec
+        // Only spin the gift once our experience begins (after markup complete)
         
-        SCNVector3 currentEuler = self.giftNode.eulerAngles;
-        currentEuler.y += SPINNY_GIFT_RATE * deltaTime;
-        
-        self.giftNode.eulerAngles = currentEuler;
-        
+        if(experienceIsRunning)
+        {
+            const float SPINNY_GIFT_RATE = 0.5; // rad/sec
+            
+            SCNVector3 currentEuler = self.giftNode.eulerAngles;
+            currentEuler.y += SPINNY_GIFT_RATE * deltaTime;
+            
+            self.giftNode.eulerAngles = currentEuler;
+        }
     }
     
+    // TODO: Here, you could control an interaction using the location of the device.
     
-//    SCNNode *localBridge = _mixedReality.localBridge;
-//    NSLog(@"localBridge position: [%f,%f,%f]", localBridge.position.x, localBridge.position.y, localBridge.position.z);
-    //TODO: you could do some interaction with the location of the device running the bridge engine.
+    //  SCNNode *localDeviceNode = _mixedReality.localDeviceNode;
+    //  NSLog(@"localDeviceNode position: [%f,%f,%f]", localDeviceNode.position.x, localDeviceNode.position.y, localDeviceNode.position.z);
     
     lastUpdateTime = time;
 }
 
 @end
-
-//------------------------------------------------------------------------------

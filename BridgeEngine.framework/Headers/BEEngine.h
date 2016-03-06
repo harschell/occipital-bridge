@@ -24,6 +24,14 @@ BE_API extern NSString* const kBEStereoRenderingEnabled;
 
 //------------------------------------------------------------------------------
 
+/** Bridge Engine Stage Status
+ Whether the files associated with the stage are available
+ */
+typedef NS_ENUM(NSInteger, BEStageLoadingStatus) {
+    BEStageLoadingStatusNotFound    = -1,
+    BEStageLoadingStatusLoaded      = 0
+};
+
 /** Bridge Engine Rendering Style
  
  SceneKit represents any virtual objects
@@ -48,7 +56,7 @@ typedef NS_ENUM(NSInteger, BERenderStyle)
 typedef NS_ENUM(NSInteger, BETrackingState)
 {
     BETrackingStateNominal               = 0,    //all is well, you can run your experience
-    BETrackingStateNot                   = 1,    //tracking may be poor for a few reasons (sensor disconnected, model not in view)
+    BETrackingStateNotTracking           = 1,    //tracking may be poor for a few reasons (sensor disconnected, model not in view)
     //BETrackingNot will be replaced by more descriptive states later.
     BETrackingStateUnknown               = -1
 };

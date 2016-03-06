@@ -25,11 +25,9 @@ typedef NSArray<NSString*> NSStringArray;
 BE_API
 @protocol BEMixedRealityModeDelegate
 
-// called when your local scene loads from device successfully or unsuccessfully
-- (void) sceneDidLoad:(BOOL)success;
-
 // called after the internal sceneKit world is set up, and you may add any custom sceneKit objects.
-- (void) setupSceneKitWorlds;
+//  stageLoadingStatus indicates whether the local scene loads from device successfully or unsuccessfully
+- (void) setUpSceneKitWorlds:(BEStageLoadingStatus)stageLoadingStatus;
 
 // called when the tracking state changed.
 - (void) trackingStateChanged:(BETrackingState)trackerState;
@@ -66,12 +64,6 @@ BE_API
            engineOptions:(NSDictionary*)engineOptions
              markupNames:(NSStringArray*)markupNames;
 
-/** call to tell BEMixedRealityMode to attempt to load the scene from device.
- The result will come in the [BEMixedRealityModeDelegate sceneDidLoad:]
- Currently, this is synchronous, but may become asynchronous in the future.
- */
-- (void) tryToLoadScene;
-
 // starts the engine running. You should have ensured that the scene is loaded by this point, or this will produce undefined behaviour.
 - (void) start;
 
@@ -81,8 +73,8 @@ BE_API
 @property (nonatomic, readonly) SCNNode* worldNodeWhenRelocalized;
 @property (nonatomic, readonly) SCNNode* worldNodeWhenNotTracking;
 
-// localBridge is an SCNNode that represents the transform of the device running the bridge engine
-@property (nonatomic, readonly) SCNNode* localBridge;
+// localDeviceNode is an SCNNode that represents the transform of the device running the bridge engine
+@property (nonatomic, readonly) SCNNode* localDeviceNode;
 
 // set your application-specific class as this delegate to receive callbacks
 @property (nonatomic, weak) id<BEMixedRealityModeDelegate> delegate;
@@ -94,7 +86,7 @@ BE_API
 // query the current render style
 - (BERenderStyle) getRenderStyle;
 // change from the current render style to a new one, with a smooth fade. The fade looks pretty great, to be honest.
-- (void) changeRenderStyle:(BERenderStyle)toRenderStyle withDuration:(NSTimeInterval)duration;
+- (void) setRenderStyle:(BERenderStyle)toRenderStyle withDuration:(NSTimeInterval)duration;
 
 // this collides a ray from an on-screen point to a position on the scene mesh, including a normal
 // this is commonly used for touch-based interaction
@@ -103,10 +95,12 @@ BE_API
 - (SCNVector3) mesh3DFrom2DPoint:(CGPoint)point outputNormal:(SCNVector3*)normal;
 
 
-// Call this to attempt to load markup from your scene directory. This returns a list of names of markup found. Based on whether this list corresponds with your expected list, you may choose to begin editing markup
-- (NSArray*) tryLoadingMarkup;
-// fetch the markup node for a given name
+/** fetch the markup node for a given name
+ throws NSInvalidArgumentException if markupName does not correspond to a name in the list given initially
+ returns nil if the markupNode has a NaN position, indicating that has not been initialized and is not "ready to use".
+ */
 - (SCNNode*) markupNodeForName:(NSString*)markupName;
+
 // begin the markup editing phase. A Markup View will be loaded, allowing you to edit and save markup. Pressing Done dismisses the view.
 - (void) startMarkupEditing;
 

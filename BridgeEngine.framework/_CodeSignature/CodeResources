@@ -4,17 +4,17 @@
 <dict>
 	<key>files</key>
 	<dict>
+		<key>.DS_Store</key>
+		<data>
+		6PbahegYdD+RTbqIU7cgaGNByCE=
+		</data>
 		<key>BEMixedRealityUI.nib</key>
 		<data>
-		tvPLMs8cHFzN+6AC5oYjLyG0+Nc=
-		</data>
-		<key>BridgeEngine.scnassets/.DS_Store</key>
-		<data>
-		enBVKtHtjYVhRIbEp3Fzktc0xLs=
+		zbKudDMIrHV+xhQHVDiOIPpvIrM=
 		</data>
 		<key>BridgeEngine.scnassets/axes.dae</key>
 		<data>
-		r/YIVQ8f+YdDUQrKNe7b9bhQS8M=
+		DTuJxl6QKq7fZ9xpRWiSrxX3VzM=
 		</data>
 		<key>BridgeEngine.scnassets/axes.png</key>
 		<data>
@@ -34,11 +34,11 @@
 		</data>
 		<key>Headers/BEEngine.h</key>
 		<data>
-		uGmRuqGhYMQvUlRzcPQ+T6gcuHI=
+		blEjI5p8Vk65X9op1SMe9ZpOsQA=
 		</data>
 		<key>Headers/BEMixedRealityMode.h</key>
 		<data>
-		e1Za3FDUsMGggVKeEai3UnH44kI=
+		wymm79BfpKFyobMujHZYGgftsKY=
 		</data>
 		<key>Headers/BESettings.h</key>
 		<data>
@@ -58,7 +58,7 @@
 		</data>
 		<key>Info.plist</key>
 		<data>
-		en/l1zpQSdrCFTYZ1T08Yo/Dc2c=
+		EQpSSZb8RpRZnJoKHaD4mSMJ/4Q=
 		</data>
 		<key>Modules/module.modulemap</key>
 		<data>
@@ -136,125 +136,335 @@
 	<key>files2</key>
 	<dict>
 		<key>BEMixedRealityUI.nib</key>
-		<data>
-		tvPLMs8cHFzN+6AC5oYjLyG0+Nc=
-		</data>
+		<dict>
+			<key>hash</key>
+			<data>
+			zbKudDMIrHV+xhQHVDiOIPpvIrM=
+			</data>
+			<key>hash2</key>
+			<data>
+			RztUeRXJwdMIeMqqVSmpCg88NOFyRrX748x0YMqQs2Y=
+			</data>
+		</dict>
 		<key>BridgeEngine.scnassets/axes.dae</key>
-		<data>
-		r/YIVQ8f+YdDUQrKNe7b9bhQS8M=
-		</data>
+		<dict>
+			<key>hash</key>
+			<data>
+			DTuJxl6QKq7fZ9xpRWiSrxX3VzM=
+			</data>
+			<key>hash2</key>
+			<data>
+			Drf3VyqkwWfRZHAY6m23etRkAe1UZstROr2Er+tuwIw=
+			</data>
+		</dict>
 		<key>BridgeEngine.scnassets/axes.png</key>
-		<data>
-		QvkuHZvEYofjJ71iG52daw4/Tto=
-		</data>
+		<dict>
+			<key>hash</key>
+			<data>
+			QvkuHZvEYofjJ71iG52daw4/Tto=
+			</data>
+			<key>hash2</key>
+			<data>
+			Y0BZ84rSSmKyKGw03zCexdr5hDQz3kGnsPNxCDGdfOs=
+			</data>
+		</dict>
 		<key>BridgeEngine.scnassets/signs/hold-still.png</key>
-		<data>
-		68l/+BguoHT85DD7QEZ/0jbZSTE=
-		</data>
+		<dict>
+			<key>hash</key>
+			<data>
+			68l/+BguoHT85DD7QEZ/0jbZSTE=
+			</data>
+			<key>hash2</key>
+			<data>
+			Ysehg19Zd6o4edYeu07RpqEo4Nv7wEViKvp0dKv0vG4=
+			</data>
+		</dict>
 		<key>BridgeEngine.scnassets/signs/tracking-loss.png</key>
-		<data>
-		U7PMtCoLkCXrttthHWRYPnvstj8=
-		</data>
+		<dict>
+			<key>hash</key>
+			<data>
+			U7PMtCoLkCXrttthHWRYPnvstj8=
+			</data>
+			<key>hash2</key>
+			<data>
+			6AWosx8N/EAj0gjAImD7hLcLrfVftEF8ktNdakQsXnY=
+			</data>
+		</dict>
 		<key>Default@2x.png</key>
-		<data>
-		bFBv+TSbHhRX+P+dawBC2n1xgok=
-		</data>
+		<dict>
+			<key>hash</key>
+			<data>
+			bFBv+TSbHhRX+P+dawBC2n1xgok=
+			</data>
+			<key>hash2</key>
+			<data>
+			zkXjHS8RyGpdS+X7EJuBheS5nOEqjO6xFwlLLu35K64=
+			</data>
+		</dict>
 		<key>Headers/BEEngine.h</key>
-		<data>
-		uGmRuqGhYMQvUlRzcPQ+T6gcuHI=
-		</data>
+		<dict>
+			<key>hash</key>
+			<data>
+			blEjI5p8Vk65X9op1SMe9ZpOsQA=
+			</data>
+			<key>hash2</key>
+			<data>
+			P2YhptO0RzDJFd0jhpmHbmOGvdaMP7AkZDTgMUVP4qQ=
+			</data>
+		</dict>
 		<key>Headers/BEMixedRealityMode.h</key>
-		<data>
-		e1Za3FDUsMGggVKeEai3UnH44kI=
-		</data>
+		<dict>
+			<key>hash</key>
+			<data>
+			wymm79BfpKFyobMujHZYGgftsKY=
+			</data>
+			<key>hash2</key>
+			<data>
+			8yBUYaYT9nc0xyF2dtXdAewaSPReb5pNiSrgghstnVc=
+			</data>
+		</dict>
 		<key>Headers/BESettings.h</key>
-		<data>
-		MTmRX0aVAs7rn9S8iuu2zelwjO0=
-		</data>
+		<dict>
+			<key>hash</key>
+			<data>
+			MTmRX0aVAs7rn9S8iuu2zelwjO0=
+			</data>
+			<key>hash2</key>
+			<data>
+			BAK7314m3xR6bfGlk0+L2AL/J8qwJjDxFTHBTmXrtt0=
+			</data>
+		</dict>
 		<key>Headers/BEView.h</key>
-		<data>
-		IUTYd5/KVcseeH7iXxNMJd77BM8=
-		</data>
+		<dict>
+			<key>hash</key>
+			<data>
+			IUTYd5/KVcseeH7iXxNMJd77BM8=
+			</data>
+			<key>hash2</key>
+			<data>
+			bGl/u2rEGYcZC6z0AcDUkg8+/GKuOLcxYM27Fao2+So=
+			</data>
+		</dict>
 		<key>Headers/BridgeEngine.h</key>
-		<data>
-		eVxSuU6bR7gCoqniZ8GTodPEVhY=
-		</data>
+		<dict>
+			<key>hash</key>
+			<data>
+			eVxSuU6bR7gCoqniZ8GTodPEVhY=
+			</data>
+			<key>hash2</key>
+			<data>
+			0ZBscdk4joc4ORbiG6/r7TMC8+XPnTU/l6FgbyUaD7Q=
+			</data>
+		</dict>
 		<key>Headers/BridgeEngineAPI.h</key>
-		<data>
-		o+JFQQfi8fHvey/VbvLvXIHoluM=
-		</data>
+		<dict>
+			<key>hash</key>
+			<data>
+			o+JFQQfi8fHvey/VbvLvXIHoluM=
+			</data>
+			<key>hash2</key>
+			<data>
+			QuyJomZyXH2Xlsep0u0stiFyIGlTiuvbQMM+J4aeJBI=
+			</data>
+		</dict>
 		<key>Modules/module.modulemap</key>
-		<data>
-		k/wjq0e3e++YQrfFzNKteAbi+NI=
-		</data>
+		<dict>
+			<key>hash</key>
+			<data>
+			k/wjq0e3e++YQrfFzNKteAbi+NI=
+			</data>
+			<key>hash2</key>
+			<data>
+			PTn5yxjm0Wp6XrhM7m2SpRh/9aRlK0Y7jYuSPq2+O70=
+			</data>
+		</dict>
 		<key>a.fsh</key>
-		<data>
-		2DEO+DYqDeoamD0tmXhi2UDjFRU=
-		</data>
+		<dict>
+			<key>hash</key>
+			<data>
+			2DEO+DYqDeoamD0tmXhi2UDjFRU=
+			</data>
+			<key>hash2</key>
+			<data>
+			izguJu2/35C1hzbmUXVhQnYhXO9IXTBNuzmyzLno1dc=
+			</data>
+		</dict>
 		<key>a.vsh</key>
-		<data>
-		r2iFtSJjysZKty7w9hNi4lssNYY=
-		</data>
+		<dict>
+			<key>hash</key>
+			<data>
+			r2iFtSJjysZKty7w9hNi4lssNYY=
+			</data>
+			<key>hash2</key>
+			<data>
+			xzo5iul/9pmvH/+b+X8k6pr11gJG9UwAgwK8YbcxDJA=
+			</data>
+		</dict>
 		<key>b.fsh</key>
-		<data>
-		S30O9+Qs+pvcEL+0jc8QgV/4JPI=
-		</data>
+		<dict>
+			<key>hash</key>
+			<data>
+			S30O9+Qs+pvcEL+0jc8QgV/4JPI=
+			</data>
+			<key>hash2</key>
+			<data>
+			m98jsAnxvHgPoG9+mNRehGDJMCID8FVlCTUhlBtPC0I=
+			</data>
+		</dict>
 		<key>b.vsh</key>
-		<data>
-		r2iFtSJjysZKty7w9hNi4lssNYY=
-		</data>
+		<dict>
+			<key>hash</key>
+			<data>
+			r2iFtSJjysZKty7w9hNi4lssNYY=
+			</data>
+			<key>hash2</key>
+			<data>
+			xzo5iul/9pmvH/+b+X8k6pr11gJG9UwAgwK8YbcxDJA=
+			</data>
+		</dict>
 		<key>c.fsh</key>
-		<data>
-		2hjVddkr572h985B2Ptlw9J7Rdg=
-		</data>
+		<dict>
+			<key>hash</key>
+			<data>
+			2hjVddkr572h985B2Ptlw9J7Rdg=
+			</data>
+			<key>hash2</key>
+			<data>
+			MNzKT+Pw4zCemkjCUkHJ/n1ZQqbh1cQShsiKjnwjVlc=
+			</data>
+		</dict>
 		<key>c.vsh</key>
-		<data>
-		r2iFtSJjysZKty7w9hNi4lssNYY=
-		</data>
+		<dict>
+			<key>hash</key>
+			<data>
+			r2iFtSJjysZKty7w9hNi4lssNYY=
+			</data>
+			<key>hash2</key>
+			<data>
+			xzo5iul/9pmvH/+b+X8k6pr11gJG9UwAgwK8YbcxDJA=
+			</data>
+		</dict>
 		<key>calibration.png</key>
-		<data>
-		qbH0vET/SEy+FHtQ8m4W8MnUIFw=
-		</data>
+		<dict>
+			<key>hash</key>
+			<data>
+			qbH0vET/SEy+FHtQ8m4W8MnUIFw=
+			</data>
+			<key>hash2</key>
+			<data>
+			3+9b36bBvai1MEod4UBteNdeRTMZo9biLf69/LobDrA=
+			</data>
+		</dict>
 		<key>d.fsh</key>
-		<data>
-		AtSW0GrQeE433GncmRZ+3x/s8UY=
-		</data>
+		<dict>
+			<key>hash</key>
+			<data>
+			AtSW0GrQeE433GncmRZ+3x/s8UY=
+			</data>
+			<key>hash2</key>
+			<data>
+			ST5YjIfzhf8ShdySU3sOfvoyGThX+yPKSdIG0i1MCM0=
+			</data>
+		</dict>
 		<key>d.vsh</key>
-		<data>
-		r2iFtSJjysZKty7w9hNi4lssNYY=
-		</data>
+		<dict>
+			<key>hash</key>
+			<data>
+			r2iFtSJjysZKty7w9hNi4lssNYY=
+			</data>
+			<key>hash2</key>
+			<data>
+			xzo5iul/9pmvH/+b+X8k6pr11gJG9UwAgwK8YbcxDJA=
+			</data>
+		</dict>
 		<key>e.fsh</key>
-		<data>
-		bGyOVmjZkwqSEMs2BKrKrf/AYwk=
-		</data>
+		<dict>
+			<key>hash</key>
+			<data>
+			bGyOVmjZkwqSEMs2BKrKrf/AYwk=
+			</data>
+			<key>hash2</key>
+			<data>
+			euLt9odpOmz36Jn1FkBDCWbluCxapFryumnK4bLmemA=
+			</data>
+		</dict>
 		<key>e.vsh</key>
-		<data>
-		r2iFtSJjysZKty7w9hNi4lssNYY=
-		</data>
+		<dict>
+			<key>hash</key>
+			<data>
+			r2iFtSJjysZKty7w9hNi4lssNYY=
+			</data>
+			<key>hash2</key>
+			<data>
+			xzo5iul/9pmvH/+b+X8k6pr11gJG9UwAgwK8YbcxDJA=
+			</data>
+		</dict>
 		<key>f.fsh</key>
-		<data>
-		vTgfYxvmK+5TpFoor8XGySa4lHQ=
-		</data>
+		<dict>
+			<key>hash</key>
+			<data>
+			vTgfYxvmK+5TpFoor8XGySa4lHQ=
+			</data>
+			<key>hash2</key>
+			<data>
+			ruHHyZvZmr9IEwtgOGF+HAmoXSTqjetqdDWTw78KD64=
+			</data>
+		</dict>
 		<key>f.vsh</key>
-		<data>
-		AsNebEbQ+B9qgGwlNjgXK2P7gT8=
-		</data>
+		<dict>
+			<key>hash</key>
+			<data>
+			AsNebEbQ+B9qgGwlNjgXK2P7gT8=
+			</data>
+			<key>hash2</key>
+			<data>
+			CJlKQjkKOo1FbPm+dbMeTwgCZM82s8Poia5HhOl4CZg=
+			</data>
+		</dict>
 		<key>g.fsh</key>
-		<data>
-		uGtBKQqrVjrZW8lSYZe1Xet+rPE=
-		</data>
+		<dict>
+			<key>hash</key>
+			<data>
+			uGtBKQqrVjrZW8lSYZe1Xet+rPE=
+			</data>
+			<key>hash2</key>
+			<data>
+			eFEmHtaCIm0/6E5RZV4NxCruhExNXDX+QfDC6g3om24=
+			</data>
+		</dict>
 		<key>g.vsh</key>
-		<data>
-		r2iFtSJjysZKty7w9hNi4lssNYY=
-		</data>
+		<dict>
+			<key>hash</key>
+			<data>
+			r2iFtSJjysZKty7w9hNi4lssNYY=
+			</data>
+			<key>hash2</key>
+			<data>
+			xzo5iul/9pmvH/+b+X8k6pr11gJG9UwAgwK8YbcxDJA=
+			</data>
+		</dict>
 		<key>h.fsh</key>
-		<data>
-		VDXyjv08hfbgoj6DmcdeiXISwkc=
-		</data>
+		<dict>
+			<key>hash</key>
+			<data>
+			VDXyjv08hfbgoj6DmcdeiXISwkc=
+			</data>
+			<key>hash2</key>
+			<data>
+			72ckmn3VfHKsygXpvU4QEl4fO3yDc3JFvGV9PvSxH6A=
+			</data>
+		</dict>
 		<key>h.vsh</key>
-		<data>
-		0GbLHO2vpIL3iz1nXVGgJ/ry9wk=
-		</data>
+		<dict>
+			<key>hash</key>
+			<data>
+			0GbLHO2vpIL3iz1nXVGgJ/ry9wk=
+			</data>
+			<key>hash2</key>
+			<data>
+			L3MypNntUCU4ttqST354OPVttFgOq1Etx07dc3adXas=
+			</data>
+		</dict>
 	</dict>
 	<key>rules</key>
 	<dict>
