@@ -88,11 +88,15 @@ BE_API
 // change from the current render style to a new one, with a smooth fade. The fade looks pretty great, to be honest.
 - (void) setRenderStyle:(BERenderStyle)toRenderStyle withDuration:(NSTimeInterval)duration;
 
-// this collides a ray from an on-screen point to a position on the scene mesh, including a normal
-// this is commonly used for touch-based interaction
-// NOTE: this does not collide with any SceneKit objects
-// FIXME: currently, this is roughly implement and is not accurate
+// This collides a ray from an on-screen point to a position on the scene mesh, including a normal.
+// This is commonly used for touch-based interaction.
+// NOTE: this does not collide with any SceneKit objects.
+// WARNING: Currently, this is roughly implemented and is not accurate.
 - (SCNVector3) mesh3DFrom2DPoint:(CGPoint)point outputNormal:(SCNVector3*)normal;
+
+// This internally calls SCNSceneRenderer Protocol's hitTest:options, where options are SceneKit Hit-Testing Options Keys.
+// NOTE: This hit test call is performance-expensive, and you should avoid calling it in an update loop.
+- (NSArray<SCNHitTestResult *> *)hitTestSceneKitFrom2DScreenPoint:(CGPoint)point options:(NSDictionary<NSString *, id> *)options;
 
 
 /** fetch the markup node for a given name

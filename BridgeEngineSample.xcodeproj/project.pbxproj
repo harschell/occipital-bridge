@@ -16,6 +16,7 @@
 		6F5CA0A81C751A4B00A33642 /* Assets.xcassets in Resources */ = {isa = PBXBuildFile; fileRef = 6F5CA0A71C751A4B00A33642 /* Assets.xcassets */; };
 		6F5CA0AB1C751A4B00A33642 /* LaunchScreen.storyboard in Resources */ = {isa = PBXBuildFile; fileRef = 6F5CA0A91C751A4B00A33642 /* LaunchScreen.storyboard */; };
 		6F85C2751C7E69C600152850 /* Assets.scnassets in Resources */ = {isa = PBXBuildFile; fileRef = 6F85C2741C7E69C600152850 /* Assets.scnassets */; };
+		6FADF94D1C8FAED200D2F3DB /* AppSettings.mm in Sources */ = {isa = PBXBuildFile; fileRef = 6FADF94C1C8FAED200D2F3DB /* AppSettings.mm */; };
 		6FC96EEF1C8546E0008450CD /* BridgeEngine.framework in Frameworks */ = {isa = PBXBuildFile; fileRef = 6FB58D0A1C853E0400EFDE8C /* BridgeEngine.framework */; };
 		6FC96EF01C8546E0008450CD /* BridgeEngine.framework in Embed Frameworks */ = {isa = PBXBuildFile; fileRef = 6FB58D0A1C853E0400EFDE8C /* BridgeEngine.framework */; settings = {ATTRIBUTES = (CodeSignOnCopy, RemoveHeadersOnCopy, ); }; };
 		6FF00A3B1C812D61009A3BCD /* Settings.bundle in Resources */ = {isa = PBXBuildFile; fileRef = 6FF00A3A1C812D61009A3BCD /* Settings.bundle */; };
@@ -50,6 +51,8 @@
 		6F5CA0AA1C751A4B00A33642 /* Base */ = {isa = PBXFileReference; lastKnownFileType = file.storyboard; name = Base; path = Base.lproj/LaunchScreen.storyboard; sourceTree = "<group>"; };
 		6F5CA0AC1C751A4B00A33642 /* Info.plist */ = {isa = PBXFileReference; lastKnownFileType = text.plist.xml; path = Info.plist; sourceTree = "<group>"; };
 		6F85C2741C7E69C600152850 /* Assets.scnassets */ = {isa = PBXFileReference; lastKnownFileType = wrapper.scnassets; path = Assets.scnassets; sourceTree = "<group>"; };
+		6FADF94B1C8FAED200D2F3DB /* AppSettings.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; path = AppSettings.h; sourceTree = "<group>"; };
+		6FADF94C1C8FAED200D2F3DB /* AppSettings.mm */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.cpp.objcpp; path = AppSettings.mm; sourceTree = "<group>"; };
 		6FB58D0A1C853E0400EFDE8C /* BridgeEngine.framework */ = {isa = PBXFileReference; lastKnownFileType = wrapper.framework; path = BridgeEngine.framework; sourceTree = SOURCE_ROOT; };
 		6FF00A3A1C812D61009A3BCD /* Settings.bundle */ = {isa = PBXFileReference; lastKnownFileType = "wrapper.plug-in"; path = Settings.bundle; sourceTree = "<group>"; };
 /* End PBXFileReference section */
@@ -108,6 +111,8 @@
 				6F5CA09C1C751A4B00A33642 /* main.mm */,
 				6F5CA09E1C751A4B00A33642 /* AppDelegate.h */,
 				6F5CA09F1C751A4B00A33642 /* AppDelegate.mm */,
+				6FADF94B1C8FAED200D2F3DB /* AppSettings.h */,
+				6FADF94C1C8FAED200D2F3DB /* AppSettings.mm */,
 				6F5CA0A11C751A4B00A33642 /* ViewController.h */,
 				6F5CA0A21C751A4B00A33642 /* ViewController.mm */,
 			);
@@ -194,6 +199,7 @@
 			isa = PBXSourcesBuildPhase;
 			buildActionMask = 2147483647;
 			files = (
+				6FADF94D1C8FAED200D2F3DB /* AppSettings.mm in Sources */,
 				6F5CA0A31C751A4B00A33642 /* ViewController.mm in Sources */,
 				6F5CA0A01C751A4B00A33642 /* AppDelegate.mm in Sources */,
 				6F5CA09D1C751A4B00A33642 /* main.mm in Sources */,

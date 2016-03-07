@@ -17,5 +17,4 @@ FOUNDATION_EXPORT const unsigned char BridgeEngineVersionString [];
 
 #import <BridgeEngine/BEEngine.h>
 #import <BridgeEngine/BEMixedRealityMode.h>
-#import <BridgeEngine/BESettings.h>
 #import <BridgeEngine/BEView.h>
