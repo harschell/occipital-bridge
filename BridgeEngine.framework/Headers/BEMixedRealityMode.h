@@ -55,6 +55,7 @@ BE_API
  
  - `kBECaptureReplayEnabled`: If YES, will start a capture replay. If NO, will expect a Structure Sensor to be connected to do it live.
  - `kBEUsingWideVisionLens`:  Whether a Wide Vision Lens is attached.
+ - `kBEUsingColorCameraOnly`: Whether the engine should try to connect to a Structure Sensor.
  - `kBEStereoRenderingEnabled`: If YES, we render two views, as if for a head-mounted display. If NO, we render a single (mono) view.
  
  @param markupNames An optional list of markup names, which will persist in the scene over multiple runs of the appl. In your app, you may call [BEMixedRealityMode startMarkupEditing] to load our internal UI for setting and saving markup.
@@ -69,9 +70,15 @@ BE_API
 
 //There are two different SceneKit nodes you may attach objects to:
 // worldNodeWhenRelocalized represents the alignment to the real world. You will likely add most of your Augmented Reality-like objects here. This and all children are hidden when we are not tracking
-// worldNodeWhenNotTracking is only shown when we are not tracking. We currently add different status billboards here. You may do so as well if you wish.
 @property (nonatomic, readonly) SCNNode* worldNodeWhenRelocalized;
-@property (nonatomic, readonly) SCNNode* worldNodeWhenNotTracking;
+
+// Low-level scenekit access
+@property (nonatomic, readonly) SCNRenderer* sceneKitRenderer;
+@property (nonatomic, readonly) SCNScene* sceneKitScene;
+@property (nonatomic, readonly) SCNCamera* sceneKitCamera;
+
+//TODO add accessor for wordUINode
+
 
 // localDeviceNode is an SCNNode that represents the transform of the device running the bridge engine
 @property (nonatomic, readonly) SCNNode* localDeviceNode;
@@ -88,6 +95,27 @@ BE_API
 // change from the current render style to a new one, with a smooth fade. The fade looks pretty great, to be honest.
 - (void) setRenderStyle:(BERenderStyle)toRenderStyle withDuration:(NSTimeInterval)duration;
 
+// set a custom fragment shader to do full-screen post processing. Here is the default:
+/*
+    const char* frag_shader = 
+    R"(
+        precision mediump float;
+
+        uniform sampler2D __u_bridgeRender;
+        varying vec2 __v_texCoord;
+
+        void main()
+        {
+            gl_FragColor = texture2D(__u_bridgeRender, __v_texCoord);
+        }
+    )";
+*/
+
+-(void)setCustomPostProcessingShader:(NSString*) frag_shader;
+
+// Update custom shader with a dictionairy of uniform values. These must be the same strings that are in the shader.
+-(void)setCustomPostProcessingShaderFloatUniforms:(NSDictionary*) uniforms;
+
 // This collides a ray from an on-screen point to a position on the scene mesh, including a normal.
 // This is commonly used for touch-based interaction.
 // NOTE: this does not collide with any SceneKit objects.
@@ -98,6 +126,13 @@ BE_API
 // NOTE: This hit test call is performance-expensive, and you should avoid calling it in an update loop.
 - (NSArray<SCNHitTestResult *> *)hitTestSceneKitFrom2DScreenPoint:(CGPoint)point options:(NSDictionary<NSString *, id> *)options;
 
+// This calls [SCNSceneRenderer projectPoint] which projects the point in the world coordinates
+// and returns the point in 2D pixel  SceneKit coordinates.
+- (SCNVector3) projectPoint:(SCNVector3)sceneRootNodeWorldPoint;
+
+// Does projectPoint: and then converts the SceneKit coordinates to UIKit coorindates os you can
+// use the returned point in UIKit operations (like moving a view to a location )
+- (CGPoint) projectPointToScreenCoordinates:(SCNVector3)sceneRootNodeWorldPoint;
 
 /** fetch the markup node for a given name
  throws NSInvalidArgumentException if markupName does not correspond to a name in the list given initially

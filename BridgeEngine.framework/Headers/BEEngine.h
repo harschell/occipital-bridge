@@ -21,6 +21,10 @@ BE_API extern NSString* const kBECaptureReplayEnabled;
 BE_API extern NSString* const kBEUsingWideVisionLens;
 // render stereo, as if for a head-mounted display
 BE_API extern NSString* const kBEStereoRenderingEnabled;
+// set to true if you want to track without a Structure Sensor.
+BE_API extern NSString* const kBEUsingColorCameraOnly;
+// This only tracks orientation and not translational movement.
+BE_API extern NSString* const kBEUsingIMUOnly;
 
 //------------------------------------------------------------------------------
 
@@ -45,6 +49,7 @@ typedef NS_ENUM(NSInteger, BERenderStyle)
     BERenderStyleSceneKitAndColorCamera              = 0,
     BERenderStyleSceneKitAndColorCameraAndWireframe  = 1,
     BERenderStyleSceneKitAndWireframe                = 2,
+    BERenderStyleSceneKitOnly                        = 3,
     NumBERenderStyles
 };
 
