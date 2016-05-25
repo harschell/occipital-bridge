@@ -23,8 +23,6 @@ BE_API extern NSString* const kBEUsingWideVisionLens;
 BE_API extern NSString* const kBEStereoRenderingEnabled;
 // set to true if you want to track without a Structure Sensor.
 BE_API extern NSString* const kBEUsingColorCameraOnly;
-// This only tracks orientation and not translational movement.
-BE_API extern NSString* const kBEUsingIMUOnly;
 
 //------------------------------------------------------------------------------
 

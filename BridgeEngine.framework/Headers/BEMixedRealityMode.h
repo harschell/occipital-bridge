@@ -68,17 +68,15 @@ BE_API
 // starts the engine running. You should have ensured that the scene is loaded by this point, or this will produce undefined behaviour.
 - (void) start;
 
-//There are two different SceneKit nodes you may attach objects to:
-// worldNodeWhenRelocalized represents the alignment to the real world. You will likely add most of your Augmented Reality-like objects here. This and all children are hidden when we are not tracking
+// worldNodeWhenRelocalized represents the alignment to the real world.
+// You will add most of your Augmented Reality-like objects here.
+// This and all children are hidden when we are not tracking.
 @property (nonatomic, readonly) SCNNode* worldNodeWhenRelocalized;
 
 // Low-level scenekit access
 @property (nonatomic, readonly) SCNRenderer* sceneKitRenderer;
-@property (nonatomic, readonly) SCNScene* sceneKitScene;
-@property (nonatomic, readonly) SCNCamera* sceneKitCamera;
-
-//TODO add accessor for wordUINode
-
+@property (nonatomic, readonly) SCNScene*    sceneKitScene;
+@property (nonatomic, readonly) SCNCamera*   sceneKitCamera;
 
 // localDeviceNode is an SCNNode that represents the transform of the device running the bridge engine
 @property (nonatomic, readonly) SCNNode* localDeviceNode;
@@ -110,10 +108,11 @@ BE_API
         }
     )";
 */
+// and uniforms are floats that are sent in
 
 -(void)setCustomPostProcessingShader:(NSString*) frag_shader;
 
-// Update custom shader with a dictionairy of uniform values. These must be the same strings that are in the shader.
+// Update custom shader with a dictionary of uniform values. These must be the same strings that are in the shader.
 -(void)setCustomPostProcessingShaderFloatUniforms:(NSDictionary*) uniforms;
 
 // This collides a ray from an on-screen point to a position on the scene mesh, including a normal.
@@ -130,7 +129,7 @@ BE_API
 // and returns the point in 2D pixel  SceneKit coordinates.
 - (SCNVector3) projectPoint:(SCNVector3)sceneRootNodeWorldPoint;
 
-// Does projectPoint: and then converts the SceneKit coordinates to UIKit coorindates os you can
+// Does projectPoint: and then converts the SceneKit coordinates to UIKit coordinates so you can
 // use the returned point in UIKit operations (like moving a view to a location )
 - (CGPoint) projectPointToScreenCoordinates:(SCNVector3)sceneRootNodeWorldPoint;
 
