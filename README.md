@@ -12,4 +12,4 @@ Check out our <a href="https://www.youtube.com/embed/nXB_0DGbamU" target="_blank
 
 ### Version 0.2 changes
  - Added new Rendering Sample (Updated sample names, and provisioning profiles). See [Rendering Documentation](https://github.com/OccipitalOpenSource/bridge-engine-beta/wiki/Documentation:-Advanced-Rendering-with-the-Bridge-Engine))
- - Color-only tracking support - Scan the room with the dtructure sensor, but track in AR with only the the iOS camera!
+ - Color-only tracking support - Scan the room with the Structure Sensor, but track in AR with only the the iOS camera!
