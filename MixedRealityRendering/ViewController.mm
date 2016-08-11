@@ -7,7 +7,9 @@
 #import "ViewController.h"
 #import "AppSettings.h"
 #import <BridgeEngine/BridgeEngine.h>
+
 #import <cassert>
+#import <ReplayKit/ReplayKit.h>
 
 //------------------------------------------------------------------------------
 
@@ -21,7 +23,7 @@ static const SCNMatrix4 defaultPivot = SCNMatrix4MakeRotation(M_PI, 1.0, 0.0, 0.
 
 #pragma mark - ViewController ()
 
-@interface ViewController () < BEMixedRealityModeDelegate >
+@interface ViewController () < BEMixedRealityModeDelegate, RPPreviewViewControllerDelegate >
 
 @property (strong) SCNNode *  treeNode;
 @property (strong) SCNNode * chairNode;
@@ -29,6 +31,7 @@ static const SCNMatrix4 defaultPivot = SCNMatrix4MakeRotation(M_PI, 1.0, 0.0, 0.
 @property (strong) NSDictionary *  shaderModifiersExample;
 
 @property (strong) SCNNode *  highlightNode;
+
 
 @end
 
@@ -41,6 +44,7 @@ static const SCNMatrix4 defaultPivot = SCNMatrix4MakeRotation(M_PI, 1.0, 0.0, 0.
     BEMixedRealityMode* _mixedReality;
     NSArray*            _markupNameList;
     BOOL                _experienceIsRunning;
+    RPScreenRecorder *  _screenRecorder;
 }
 
 + (SCNNode*) loadNodeNamed:(NSString*)nodeName fromSceneNamed:(NSString*)sceneName
@@ -112,31 +116,40 @@ static const SCNMatrix4 defaultPivot = SCNMatrix4MakeRotation(M_PI, 1.0, 0.0, 0.
 - (void)viewDidAppear:(BOOL)animated
 {
     [super viewDidAppear:animated];
-    
     // Here we initialize two gesture recognizers as a way to expose features.
-
+    
     {
         // Allocate and initialize the first tap gesture.
-
+        
         UITapGestureRecognizer *tapRecognizer = [[UITapGestureRecognizer alloc] initWithTarget:self action:@selector(handleTap:)];
         
         // Specify that the gesture must be a single tap.
-
+        
         tapRecognizer.numberOfTapsRequired = 1;
-
+        
         // Add the tap gesture recognizer to the view.
-
+        
         [self.view addGestureRecognizer:tapRecognizer];
     }
     
     {
         // Allocate and initialize the second gesture as a double-tap one.
-
+        
         UITapGestureRecognizer *twoFingerTapRecognizer = [[UITapGestureRecognizer alloc] initWithTarget:self action:@selector(handleTwoFingerTap:)];
-
+        
         twoFingerTapRecognizer.numberOfTouchesRequired = 2;
         
         [self.view addGestureRecognizer:twoFingerTapRecognizer];
+    }
+    
+    {
+        // Three-finger tap recognizer (for Start/Stop ReplayKit recording)
+        
+        UITapGestureRecognizer *threeFingerTapRecognizer = [[UITapGestureRecognizer alloc] initWithTarget:self action:@selector(handleThreeFingerTap:)];
+        
+        threeFingerTapRecognizer.numberOfTouchesRequired = 3;
+        
+        [self.view addGestureRecognizer:threeFingerTapRecognizer];
     }
 
 }
@@ -186,37 +199,38 @@ static const SCNMatrix4 defaultPivot = SCNMatrix4MakeRotation(M_PI, 1.0, 0.0, 0.
     // The shader modifiers can be supplied to the material in an
     // NSDictionary with keys for the entry points.
     
-    _shaderModifiersExample = @{
-        SCNShaderModifierEntryPointGeometry : @R"(
-            uniform float intensity;
+    _shaderModifiersExample =
+    @{
+      SCNShaderModifierEntryPointGeometry : @R"(
+      uniform float intensity;
 
-            // this gets copied into the vertex shader
-            // custom functions
-            float noise(vec3 p) { return 0.5 * fract(sin(dot(p.xyz ,vec3(12.9898, 78.233, 47.24))) * 43758.5453); }
+      // this gets copied into the vertex shader
+      // custom functions
+      float noise(vec3 p) { return 0.5 * fract(sin(dot(p.xyz ,vec3(12.9898, 78.233, 47.24))) * 43758.5453); }
+      
+#pragma body // seperator needded if you have custom functions
+      _geometry.position.x += intensity * 0.2 * noise(_geometry.position.xyz + u_time) * cos(2.0 * u_time + 25. * _geometry.position.y);
+      _geometry.position.x += intensity * 0.4 * sin(0.5 * u_time + _geometry.position.y);
+      _geometry.position.z += intensity * 0.1 * sin(5.0 * u_time + 25. * _geometry.position.y);
+      )",
+      SCNShaderModifierEntryPointFragment : @R"(
+      uniform float intensity;
 
-            #pragma body // separator needed if you have custom functions
-            _geometry.position.x += intensity * 0.2 * noise(_geometry.position.xyz + u_time) * cos(2.0 * u_time + 25. * _geometry.position.y);
-            _geometry.position.x += intensity * 0.4 * sin(0.5 * u_time + _geometry.position.y);
-            _geometry.position.z += intensity * 0.1 * sin(5.0 * u_time + 25. * _geometry.position.y);
-        )",
-        SCNShaderModifierEntryPointFragment : @R"(
-            uniform float intensity;
-
-            // this gets copied into the fragment shader
-            // custom functions
-            float noise(vec3 p) { return 0.2 * fract(sin(dot(p.xyz ,vec3(12.9898,78.233,47.24))) * 43758.5453); }
-            #pragma body // separator needed if you have custom functions
-            vec3 worldSpace = (u_inverseModelViewTransform * vec4(v_position, 1.0)).xyz;
-            float random = noise(vec3(u_time));
-            float flicker = max(1., random * 1.5);
-            float lines = abs(sin(worldSpace.y*30. + u_time));
-            vec4 oldColor = _output.color;
-            _output.color *= flicker * lines;
-            _output.color.rgb = pow(_output.color.rgb, vec3(0.6, 0.4, 0.1));
-            _output.color += noise(worldSpace*50.) * 0.3;
-            _output.color = intensity * _output.color + (1.0 - intensity) * oldColor;
-        )"
-    };
+      // this gets copied into the fragment shader
+      // custom functions
+      float noise(vec3 p) { return 0.2 * fract(sin(dot(p.xyz ,vec3(12.9898,78.233,47.24))) * 43758.5453); }
+#pragma body // seperator needded if you have custom functions
+      vec3 worldSpace = (u_inverseModelViewTransform * vec4(v_position, 1.0)).xyz;
+      float random = noise(vec3(u_time));
+      float flicker = max(1., random * 1.5);
+      float lines = abs(sin(worldSpace.y*30. + u_time));
+      vec4 oldColor = _output.color;
+      _output.color *= flicker * lines;
+      _output.color.rgb = pow(_output.color.rgb, vec3(0.6, 0.4, 0.1));
+      _output.color += noise(worldSpace*50.) * 0.3;
+      _output.color = intensity * _output.color + (1.0 - intensity) * oldColor;
+      )"
+      };
     
     // Add assets to the world node.
 
@@ -260,8 +274,8 @@ static const SCNMatrix4 defaultPivot = SCNMatrix4MakeRotation(M_PI, 1.0, 0.0, 0.
     uniform float u_time;
     
     
-    uniform sampler2D __u_bridgeRender;
-    varying vec2 __v_texCoord;
+    uniform sampler2D u_bridgeRender;
+    varying vec2 v_texCoord;
     
     // Start Ashima 2D Simplex Noise
     
@@ -316,7 +330,7 @@ static const SCNMatrix4 defaultPivot = SCNMatrix4MakeRotation(M_PI, 1.0, 0.0, 0.
     
     void main()
     {
-        vec2 p       =  __v_texCoord;
+        vec2 p       =  v_texCoord;
         
         float n = snoise( vec2(u_time/10. + p.y, 0.0) *3.) - 0.5;
         float n2 = snoise( vec2(u_time/10. + p.y, 0.0) *20.) - 0.5;
@@ -324,9 +338,9 @@ static const SCNMatrix4 defaultPivot = SCNMatrix4MakeRotation(M_PI, 1.0, 0.0, 0.
 
         vec2 coord = vec2(fract(p.x + offset),p.y);
         
-        gl_FragColor = texture2D(__u_bridgeRender, vec2(fract(p.x + offset),p.y));
-        gl_FragColor.r = texture2D(__u_bridgeRender, vec2(fract(p.x + offset * 0.5),p.y)).r;
-        gl_FragColor.b = texture2D(__u_bridgeRender, vec2(fract(p.x + offset * 1.5),p.y)).b;
+        gl_FragColor = texture2D(u_bridgeRender, vec2(fract(p.x + offset),p.y));
+        gl_FragColor.r = texture2D(u_bridgeRender, vec2(fract(p.x + offset * 0.5),p.y)).r;
+        gl_FragColor.b = texture2D(u_bridgeRender, vec2(fract(p.x + offset * 1.5),p.y)).b;
 
         gl_FragColor += u_distortion * sin(p.y*800.)/4.;
         
@@ -341,6 +355,7 @@ static const SCNMatrix4 defaultPivot = SCNMatrix4MakeRotation(M_PI, 1.0, 0.0, 0.
     [_mixedReality setCustomPostProcessingShader:customFragShader];
     [_mixedReality setCustomPostProcessingShaderFloatUniforms:uniformDictionary];
 
+    
     // You could add fog to the Scenekit objects with code like this.
     // Note that this does not affect the camera image.
 //    [[_mixedReality sceneKitScene] setFogEndDistance:2.0];
@@ -497,9 +512,7 @@ static const SCNMatrix4 defaultPivot = SCNMatrix4MakeRotation(M_PI, 1.0, 0.0, 0.
         }
         [SCNTransaction commit];
         
-    }
-    else
-    {
+    } else {
         
         [_mixedReality setCustomPostProcessingShaderFloatUniforms:@{@"u_distortion" :
                             [NSNumber numberWithDouble:tapPoint.x/self.view.frame.size.width]}];
@@ -510,6 +523,42 @@ static const SCNMatrix4 defaultPivot = SCNMatrix4MakeRotation(M_PI, 1.0, 0.0, 0.
 
 }
 
+// Here we use a 3-finger tap to start/end a ReplayKit screen recording.
+- (void)handleThreeFingerTap:(UITapGestureRecognizer *)sender
+{
+    if( _screenRecorder == nil) {
+         _screenRecorder = [RPScreenRecorder sharedRecorder];
+    }
+    
+    if(! _screenRecorder.isRecording &&  _screenRecorder.isAvailable)
+    {
+        [ _screenRecorder startRecordingWithMicrophoneEnabled:YES handler:^(NSError * _Nullable error) {
+            NSLog(@"Error Starting = %@", error);
+        }];
+    }
+    else
+    {
+        [ _screenRecorder stopRecordingWithHandler:^(RPPreviewViewController * _Nullable previewViewController, NSError * _Nullable error) {
+            if(error != nil)
+            {
+                NSLog(@"Error Ending = %@", error);
+            }
+            else
+            {
+                previewViewController.previewControllerDelegate = self;
+                previewViewController.popoverPresentationController.sourceView = self.view;
+                [self presentViewController:previewViewController animated:YES completion:nil];
+            }
+        }];
+    }
+}
+
+- (void)previewControllerDidFinish:(RPPreviewViewController *)previewController
+{
+    // When the user is finished with the ReplayKit preview controller, we dismiss it.
+    [previewController dismissViewControllerAnimated:YES completion:nil];
+}
+
 - (void)handleTwoFingerTap:(UITapGestureRecognizer *)sender
 {
     // Increment through render styles, with fading transitions.
@@ -517,6 +566,7 @@ static const SCNMatrix4 defaultPivot = SCNMatrix4MakeRotation(M_PI, 1.0, 0.0, 0.
     BERenderStyle renderStyle = [_mixedReality getRenderStyle];
     BERenderStyle nextRenderStyle = BERenderStyle((renderStyle + 1) % NumBERenderStyles);
 
+    NSLog(@"RenderStyle set to %d", nextRenderStyle);
     [_mixedReality setRenderStyle:nextRenderStyle withDuration:0.5];
 }
 

@@ -8,16 +8,6 @@
 			<key>Type</key>
 			<string>PSToggleSwitchSpecifier</string>
 			<key>Title</key>
-			<string>Replay Capture</string>
-			<key>Key</key>
-			<string>replayCapture</string>
-			<key>DefaultValue</key>
-			<false/>
-		</dict>
-		<dict>
-			<key>Type</key>
-			<string>PSToggleSwitchSpecifier</string>
-			<key>Title</key>
 			<string>Use Wide Vision Lens</string>
 			<key>Key</key>
 			<string>useWVL</string>
@@ -41,6 +31,32 @@
 			<string>Stereo Rendering</string>
 			<key>Key</key>
 			<string>stereoRendering</string>
+			<key>DefaultValue</key>
+			<true/>
+		</dict>
+		<dict>
+			<key>Type</key>
+			<string>PSGroupSpecifier</string>
+			<key>Title</key>
+			<string>Debugging</string>
+		</dict>
+		<dict>
+			<key>Type</key>
+			<string>PSToggleSwitchSpecifier</string>
+			<key>Title</key>
+			<string>Replay Capture</string>
+			<key>Key</key>
+			<string>replayCapture</string>
+			<key>DefaultValue</key>
+			<false/>
+		</dict>
+		<dict>
+			<key>Type</key>
+			<string>PSToggleSwitchSpecifier</string>
+			<key>Title</key>
+			<string>Enable Recording</string>
+			<key>Key</key>
+			<string>enableRecording</string>
 			<key>DefaultValue</key>
 			<false/>
 		</dict>

@@ -6,7 +6,7 @@
 
 #pragma once
 
-#import "BridgeEngineAPI.h"
+#import <BridgeEngine/BridgeEngineAPI.h>
 #import <Foundation/Foundation.h>
 
 //------------------------------------------------------------------------------
@@ -23,6 +23,8 @@ BE_API extern NSString* const kBEUsingWideVisionLens;
 BE_API extern NSString* const kBEStereoRenderingEnabled;
 // set to true if you want to track without a Structure Sensor.
 BE_API extern NSString* const kBEUsingColorCameraOnly;
+// set to true to enable recording options during tracking
+BE_API extern NSString* const kBERecordingOptionsEnabled;
 
 //------------------------------------------------------------------------------
 
@@ -48,6 +50,7 @@ typedef NS_ENUM(NSInteger, BERenderStyle)
     BERenderStyleSceneKitAndColorCameraAndWireframe  = 1,
     BERenderStyleSceneKitAndWireframe                = 2,
     BERenderStyleSceneKitOnly                        = 3,
+    BERenderStyleSceneKitAndCustomEnvironmentShader  = 4,
     NumBERenderStyles
 };
 

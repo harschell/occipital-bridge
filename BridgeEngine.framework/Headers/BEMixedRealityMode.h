@@ -6,8 +6,8 @@
 
 #pragma once
 
-#import "BridgeEngineAPI.h"
-#import "BEEngine.h"
+#import <BridgeEngine/BridgeEngineAPI.h>
+#import <BridgeEngine/BEEngine.h>
 #import <SceneKit/SceneKit.h>
 #import <Foundation/Foundation.h>
 
@@ -65,8 +65,14 @@ BE_API
            engineOptions:(NSDictionary*)engineOptions
              markupNames:(NSStringArray*)markupNames;
 
-// starts the engine running. You should have ensured that the scene is loaded by this point, or this will produce undefined behaviour.
+// starts the engine running. This will display a main menu UI to ask the user
+// if they want to start scanning or load the last scene.
 - (void) start;
+
+
+// starts the engine running. This will automatically load `BridgeEngineScene`
+// from the App Documents folder and try to start tracking.
+- (void) startWithSavedScene;
 
 // worldNodeWhenRelocalized represents the alignment to the real world.
 // You will add most of your Augmented Reality-like objects here.
@@ -78,7 +84,8 @@ BE_API
 @property (nonatomic, readonly) SCNScene*    sceneKitScene;
 @property (nonatomic, readonly) SCNCamera*   sceneKitCamera;
 
-// localDeviceNode is an SCNNode that represents the transform of the device running the bridge engine
+// localDeviceNode is an SCNNode that represents the transform of the device running the bridge engine.
+// in stereo rendering, this mode represents the position between the user's eyes, looking forward
 @property (nonatomic, readonly) SCNNode* localDeviceNode;
 
 // set your application-specific class as this delegate to receive callbacks
@@ -90,6 +97,8 @@ BE_API
 
 // query the current render style
 - (BERenderStyle) getRenderStyle;
+
+
 // change from the current render style to a new one, with a smooth fade. The fade looks pretty great, to be honest.
 - (void) setRenderStyle:(BERenderStyle)toRenderStyle withDuration:(NSTimeInterval)duration;
 
@@ -99,12 +108,12 @@ BE_API
     R"(
         precision mediump float;
 
-        uniform sampler2D __u_bridgeRender;
-        varying vec2 __v_texCoord;
+        uniform sampler2D u_bridgeRender;
+        varying vec2 v_texCoord;
 
         void main()
         {
-            gl_FragColor = texture2D(__u_bridgeRender, __v_texCoord);
+            gl_FragColor = texture2D(u_bridgeRender, v_texCoord);
         }
     )";
 */
@@ -141,6 +150,7 @@ BE_API
 
 // begin the markup editing phase. A Markup View will be loaded, allowing you to edit and save markup. Pressing Done dismisses the view.
 - (void) startMarkupEditing;
+
 
 
 @end

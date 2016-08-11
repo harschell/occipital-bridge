@@ -42,7 +42,7 @@
 			<key>Key</key>
 			<string>stereoRendering</string>
 			<key>DefaultValue</key>
-			<false/>
+			<true/>
 		</dict>
 	</array>
 	<key>StringsTable</key>

@@ -6,7 +6,7 @@
 
 #pragma once
 
-#import "BridgeEngineAPI.h"
+#import <BridgeEngine/BridgeEngineAPI.h>
 #import <UIKit/UIView.h>
 
 //------------------------------------------------------------------------------

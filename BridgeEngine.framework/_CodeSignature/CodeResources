@@ -6,15 +6,15 @@
 	<dict>
 		<key>Algorithm.metallib</key>
 		<data>
-		vqK0JR2xoBJB4/SMOX0gHPhOYas=
+		81vAX9pe4xck+q6JxwvFu//jnxY=
 		</data>
 		<key>BEMixedRealityUI.nib</key>
 		<data>
-		eRV8CykN3CDhFp8cZf1TuY4aie8=
+		yXiSM1BLLAd6ADCPA8zS0Mm9sdw=
 		</data>
 		<key>BridgeEngine.scnassets/.DS_Store</key>
 		<data>
-		0fYcCo1AO+Q3OnwQ0SZ851iFIgo=
+		3y++sUAKzaCQmjLBz2v0kvESHgc=
 		</data>
 		<key>BridgeEngine.scnassets/DwellCursor/DwellCursorFill0.png</key>
 		<data>
@@ -54,15 +54,63 @@
 		</data>
 		<key>BridgeEngine.scnassets/axes.dae</key>
 		<data>
-		cP2By+jl7N/4sgMkiFXQ1SulgQs=
+		btcd9tmiN4aqxLqYbsDLFmnowcc=
 		</data>
 		<key>BridgeEngine.scnassets/axes.png</key>
 		<data>
 		QvkuHZvEYofjJ71iG52daw4/Tto=
 		</data>
-		<key>BridgeEngine.scnassets/signs/.DS_Store</key>
+		<key>BridgeEngine.scnassets/csv.png</key>
 		<data>
-		3y++sUAKzaCQmjLBz2v0kvESHgc=
+		2PGtd1X2LlOVB3JF34Fk/XKi+sI=
+		</data>
+		<key>BridgeEngine.scnassets/done-btn.png</key>
+		<data>
+		P+JoQnrdlFGiw5g+os7NRa7CPq4=
+		</data>
+		<key>BridgeEngine.scnassets/home-loadscan-btn.png</key>
+		<data>
+		MKR/eLRArWwi3LMHdg69qy1/gSA=
+		</data>
+		<key>BridgeEngine.scnassets/home-rescan-btn.png</key>
+		<data>
+		2y4qJZNm+ThhmVUXXoXiI5CBc80=
+		</data>
+		<key>BridgeEngine.scnassets/home-scan-btn.png</key>
+		<data>
+		m+dwCdtkg/2M8v4dII/xJxir+PU=
+		</data>
+		<key>BridgeEngine.scnassets/home-text.png</key>
+		<data>
+		ecBW+paCX0iM9hjvhuC6x0Tz6MM=
+		</data>
+		<key>BridgeEngine.scnassets/main-menu-btn.png</key>
+		<data>
+		Y6fcO9e41WVO93tcmOHrM0LWMqE=
+		</data>
+		<key>BridgeEngine.scnassets/memorizing-scene.png</key>
+		<data>
+		m2zpkTO31ylLLtARpovo6+Pj3MA=
+		</data>
+		<key>BridgeEngine.scnassets/point-at-scene-box.png</key>
+		<data>
+		y1j/OD4CiJmJX3KMOEKMvyJDZRk=
+		</data>
+		<key>BridgeEngine.scnassets/record-btn.png</key>
+		<data>
+		369pl+hyju4V5X9QRWlA8yz8im0=
+		</data>
+		<key>BridgeEngine.scnassets/recording-btn.png</key>
+		<data>
+		JJ9TcODGXJaDt84aOhDJ5fdXMTI=
+		</data>
+		<key>BridgeEngine.scnassets/reset-btn.png</key>
+		<data>
+		u1apYeXki8lTrH2xPve1xyDfsBc=
+		</data>
+		<key>BridgeEngine.scnassets/scan-btn.png</key>
+		<data>
+		iDJbO0KB3nr3QpjFJJ9YtlRH0kM=
 		</data>
 		<key>BridgeEngine.scnassets/signs/hold-still.png</key>
 		<data>
@@ -72,25 +120,29 @@
 		<data>
 		U7PMtCoLkCXrttthHWRYPnvstj8=
 		</data>
+		<key>BridgeEngine.scnassets/udp.png</key>
+		<data>
+		BkLfOuaPMivwZDAluFlpC84LmsU=
+		</data>
 		<key>BridgeEngine.scnassets/uiFrame.png</key>
 		<data>
 		PCwRxhbmALeFnt8xqQFjtmho0RE=
 		</data>
 		<key>Core.metallib</key>
 		<data>
-		Nzznz9B+6d/s3lxdYilhH48pWHc=
+		vwaMY+2l6ZLslhsZbZWCFMSX4Lg=
 		</data>
 		<key>Headers/BEEngine.h</key>
 		<data>
-		oF2ldZPQzDe8xa/QvdrTEdOGuz4=
+		xv2f2/PCR2d05G/ZdZsk6LE8eRI=
 		</data>
 		<key>Headers/BEMixedRealityMode.h</key>
 		<data>
-		nVEElonYz+82drMpSaEoYe6WRHU=
+		/K1l7tTsd3G+TZ4r1lfP11OpOZs=
 		</data>
 		<key>Headers/BEView.h</key>
 		<data>
-		IUTYd5/KVcseeH7iXxNMJd77BM8=
+		K5Ha8u2KXpJljUf8+Z8xVzWexK0=
 		</data>
 		<key>Headers/BridgeEngine.h</key>
 		<data>
@@ -102,73 +154,73 @@
 		</data>
 		<key>Info.plist</key>
 		<data>
-		ToU4FjxGZez3jqpWh1kp19rGG6Y=
+		5vXGzLNXuiN8nZh5C8FQ+2lhj20=
 		</data>
 		<key>Modules/module.modulemap</key>
 		<data>
 		k/wjq0e3e++YQrfFzNKteAbi+NI=
 		</data>
-		<key>a.fsh</key>
+		<key>Shaders_Release/a.fsh</key>
 		<data>
 		2DEO+DYqDeoamD0tmXhi2UDjFRU=
 		</data>
-		<key>a.vsh</key>
+		<key>Shaders_Release/a.vsh</key>
 		<data>
 		r2iFtSJjysZKty7w9hNi4lssNYY=
 		</data>
-		<key>b.fsh</key>
+		<key>Shaders_Release/b.fsh</key>
 		<data>
 		S30O9+Qs+pvcEL+0jc8QgV/4JPI=
 		</data>
-		<key>b.vsh</key>
+		<key>Shaders_Release/b.vsh</key>
 		<data>
 		r2iFtSJjysZKty7w9hNi4lssNYY=
 		</data>
-		<key>c.fsh</key>
+		<key>Shaders_Release/c.fsh</key>
 		<data>
 		2hjVddkr572h985B2Ptlw9J7Rdg=
 		</data>
-		<key>c.vsh</key>
+		<key>Shaders_Release/c.vsh</key>
 		<data>
 		r2iFtSJjysZKty7w9hNi4lssNYY=
 		</data>
-		<key>d.fsh</key>
+		<key>Shaders_Release/d.fsh</key>
 		<data>
 		AtSW0GrQeE433GncmRZ+3x/s8UY=
 		</data>
-		<key>d.vsh</key>
+		<key>Shaders_Release/d.vsh</key>
 		<data>
 		r2iFtSJjysZKty7w9hNi4lssNYY=
 		</data>
-		<key>e.fsh</key>
+		<key>Shaders_Release/e.fsh</key>
 		<data>
 		bGyOVmjZkwqSEMs2BKrKrf/AYwk=
 		</data>
-		<key>e.vsh</key>
+		<key>Shaders_Release/e.vsh</key>
 		<data>
 		r2iFtSJjysZKty7w9hNi4lssNYY=
 		</data>
-		<key>f.fsh</key>
+		<key>Shaders_Release/f.fsh</key>
 		<data>
 		vTgfYxvmK+5TpFoor8XGySa4lHQ=
 		</data>
-		<key>f.vsh</key>
+		<key>Shaders_Release/f.vsh</key>
 		<data>
 		AsNebEbQ+B9qgGwlNjgXK2P7gT8=
 		</data>
-		<key>g.fsh</key>
+		<key>Shaders_Release/g.fsh</key>
 		<data>
 		uGtBKQqrVjrZW8lSYZe1Xet+rPE=
 		</data>
-		<key>g.vsh</key>
+		<key>Shaders_Release/g.vsh</key>
 		<data>
 		r2iFtSJjysZKty7w9hNi4lssNYY=
 		</data>
-		<key>h.fsh</key>
+		<key>Shaders_Release/h.fsh</key>
 		<data>
 		VDXyjv08hfbgoj6DmcdeiXISwkc=
 		</data>
-		<key>h.vsh</key>
+		<key>Shaders_Release/h.vsh</key>
 		<data>
 		0GbLHO2vpIL3iz1nXVGgJ/ry9wk=
 		</data>
@@ -179,22 +231,22 @@
 		<dict>
 			<key>hash</key>
 			<data>
-			vqK0JR2xoBJB4/SMOX0gHPhOYas=
+			81vAX9pe4xck+q6JxwvFu//jnxY=
 			</data>
 			<key>hash2</key>
 			<data>
-			lNK7GKVs/OIqw8pTrmB6u2ErsgQOAyKukLKlzzNAm/o=
+			h82h4t6vFqjZ0DEM9BINop6elBO04UfkPkUE370FRrU=
 			</data>
 		</dict>
 		<key>BEMixedRealityUI.nib</key>
 		<dict>
 			<key>hash</key>
 			<data>
-			eRV8CykN3CDhFp8cZf1TuY4aie8=
+			yXiSM1BLLAd6ADCPA8zS0Mm9sdw=
 			</data>
 			<key>hash2</key>
 			<data>
-			rZbB0uSo4twftOGJoTBc/PUvlAAPjOb0TyjQiMDSj5Q=
+			B62UzSL9/B7qgcBgin1Frc1EN1SlPiUgVXHiLu/ZuEM=
 			</data>
 		</dict>
 		<key>BridgeEngine.scnassets/DwellCursor/DwellCursorFill0.png</key>
@@ -300,11 +352,11 @@
 		<dict>
 			<key>hash</key>
 			<data>
-			cP2By+jl7N/4sgMkiFXQ1SulgQs=
+			btcd9tmiN4aqxLqYbsDLFmnowcc=
 			</data>
 			<key>hash2</key>
 			<data>
-			OWaO4fmlSB0Al3OBaGFNfNp4rbj0OIztzEnJ+CXbabg=
+			jPKQ5+DTJ/Skf7UcDCqX3vCwH77vjNvAvZR5ynxQT4k=
 			</data>
 		</dict>
 		<key>BridgeEngine.scnassets/axes.png</key>
@@ -316,6 +368,149 @@
 			<key>hash2</key>
 			<data>
 			Y0BZ84rSSmKyKGw03zCexdr5hDQz3kGnsPNxCDGdfOs=
+			</data>
+		</dict>
+		<key>BridgeEngine.scnassets/csv.png</key>
+		<dict>
+			<key>hash</key>
+			<data>
+			2PGtd1X2LlOVB3JF34Fk/XKi+sI=
+			</data>
+			<key>hash2</key>
+			<data>
+			BblW8BoJarz/i63EyTtLraOn7r3zBzlhIS9IqKgLI64=
+			</data>
+		</dict>
+		<key>BridgeEngine.scnassets/done-btn.png</key>
+		<dict>
+			<key>hash</key>
+			<data>
+			P+JoQnrdlFGiw5g+os7NRa7CPq4=
+			</data>
+			<key>hash2</key>
+			<data>
+			yCYzFz5yAd6SXxUhUMDZVSqI2MC2qsqabCuLGpO43JM=
+			</data>
+		</dict>
+		<key>BridgeEngine.scnassets/home-loadscan-btn.png</key>
+		<dict>
+			<key>hash</key>
+			<data>
+			MKR/eLRArWwi3LMHdg69qy1/gSA=
+			</data>
+			<key>hash2</key>
+			<data>
+			7dBagmQMk9TWRW/Mwi5w5KlyVKkuoQUJN7pPhevaVms=
+			</data>
+		</dict>
+		<key>BridgeEngine.scnassets/home-rescan-btn.png</key>
+		<dict>
+			<key>hash</key>
+			<data>
+			2y4qJZNm+ThhmVUXXoXiI5CBc80=
+			</data>
+			<key>hash2</key>
+			<data>
+			bD01v2/RjtjZ6UYJPwJ9rj7h4QzJBzBE8Dw5juuNKLE=
+			</data>
+		</dict>
+		<key>BridgeEngine.scnassets/home-scan-btn.png</key>
+		<dict>
+			<key>hash</key>
+			<data>
+			m+dwCdtkg/2M8v4dII/xJxir+PU=
+			</data>
+			<key>hash2</key>
+			<data>
+			ubmBQfeJyZ4Y90pnEqO48jaa9dL5nXLBO1CSwvw2Ffk=
+			</data>
+		</dict>
+		<key>BridgeEngine.scnassets/home-text.png</key>
+		<dict>
+			<key>hash</key>
+			<data>
+			ecBW+paCX0iM9hjvhuC6x0Tz6MM=
+			</data>
+			<key>hash2</key>
+			<data>
+			M0jTsdHH9xVCpvfefXYsYZwUI6AVt4xuZDyX0mnN8SA=
+			</data>
+		</dict>
+		<key>BridgeEngine.scnassets/main-menu-btn.png</key>
+		<dict>
+			<key>hash</key>
+			<data>
+			Y6fcO9e41WVO93tcmOHrM0LWMqE=
+			</data>
+			<key>hash2</key>
+			<data>
+			Yx1lPk+598YwJVO1GunLfilfakNXxHsW6Vf4ukV2Dto=
+			</data>
+		</dict>
+		<key>BridgeEngine.scnassets/memorizing-scene.png</key>
+		<dict>
+			<key>hash</key>
+			<data>
+			m2zpkTO31ylLLtARpovo6+Pj3MA=
+			</data>
+			<key>hash2</key>
+			<data>
+			r8cXujiyVWMHYo6uN8qnuw9rMnTUcJvcf6adasu3ov8=
+			</data>
+		</dict>
+		<key>BridgeEngine.scnassets/point-at-scene-box.png</key>
+		<dict>
+			<key>hash</key>
+			<data>
+			y1j/OD4CiJmJX3KMOEKMvyJDZRk=
+			</data>
+			<key>hash2</key>
+			<data>
+			MKzjECS74f/qEDwCNNDbQ9h3VXcGW+0vdQWPRbe63gA=
+			</data>
+		</dict>
+		<key>BridgeEngine.scnassets/record-btn.png</key>
+		<dict>
+			<key>hash</key>
+			<data>
+			369pl+hyju4V5X9QRWlA8yz8im0=
+			</data>
+			<key>hash2</key>
+			<data>
+			BHaSHHeQsUgkcw+kKe8Okf2nbdPPS82GXSvofHfbVMs=
+			</data>
+		</dict>
+		<key>BridgeEngine.scnassets/recording-btn.png</key>
+		<dict>
+			<key>hash</key>
+			<data>
+			JJ9TcODGXJaDt84aOhDJ5fdXMTI=
+			</data>
+			<key>hash2</key>
+			<data>
+			dYZpj/cpubDgGEMEieyIkLU172xkrgWxPuwGUhCh3zs=
+			</data>
+		</dict>
+		<key>BridgeEngine.scnassets/reset-btn.png</key>
+		<dict>
+			<key>hash</key>
+			<data>
+			u1apYeXki8lTrH2xPve1xyDfsBc=
+			</data>
+			<key>hash2</key>
+			<data>
+			5Twud80n1MrVtZUKmgx5MmaRogXP6W8gBbOBokRmQgs=
+			</data>
+		</dict>
+		<key>BridgeEngine.scnassets/scan-btn.png</key>
+		<dict>
+			<key>hash</key>
+			<data>
+			iDJbO0KB3nr3QpjFJJ9YtlRH0kM=
+			</data>
+			<key>hash2</key>
+			<data>
+			cSz7NyAWpXYV+rSZzXuJAIiP43v9v3SuT4+epcpie2Q=
 			</data>
 		</dict>
 		<key>BridgeEngine.scnassets/signs/hold-still.png</key>
@@ -340,6 +535,17 @@
 			6AWosx8N/EAj0gjAImD7hLcLrfVftEF8ktNdakQsXnY=
 			</data>
 		</dict>
+		<key>BridgeEngine.scnassets/udp.png</key>
+		<dict>
+			<key>hash</key>
+			<data>
+			BkLfOuaPMivwZDAluFlpC84LmsU=
+			</data>
+			<key>hash2</key>
+			<data>
+			i+1hW3dF0RprVRmcSrc0+0/I1QZ4JIV1YmVGszvBqaQ=
+			</data>
+		</dict>
 		<key>BridgeEngine.scnassets/uiFrame.png</key>
 		<dict>
 			<key>hash</key>
@@ -355,44 +561,44 @@
 		<dict>
 			<key>hash</key>
 			<data>
-			Nzznz9B+6d/s3lxdYilhH48pWHc=
+			vwaMY+2l6ZLslhsZbZWCFMSX4Lg=
 			</data>
 			<key>hash2</key>
 			<data>
-			JpoSLiyaeojqsSqFGSY3gWZX/SwgdhUnYvF3d6dlzVg=
+			FmuUhbo3pU09m4MqX5MXH/pjQxUpTjSvKeaXkdE+IVo=
 			</data>
 		</dict>
 		<key>Headers/BEEngine.h</key>
 		<dict>
 			<key>hash</key>
 			<data>
-			oF2ldZPQzDe8xa/QvdrTEdOGuz4=
+			xv2f2/PCR2d05G/ZdZsk6LE8eRI=
 			</data>
 			<key>hash2</key>
 			<data>
-			UASRXO5Z2yNkCmx0QspCt4qbOh3RGtx4YqprprCz9Rk=
+			Dn5gg1u8XmL4o1vrG3foIbE0335xHJY263rBU5fGo+Q=
 			</data>
 		</dict>
 		<key>Headers/BEMixedRealityMode.h</key>
 		<dict>
 			<key>hash</key>
 			<data>
-			nVEElonYz+82drMpSaEoYe6WRHU=
+			/K1l7tTsd3G+TZ4r1lfP11OpOZs=
 			</data>
 			<key>hash2</key>
 			<data>
-			HkLgLQeKjMfNBuKGLyUuLBDJtvUVQq13KnwB6WePatg=
+			ZVEPkh+Puh8XMvgCWgwIusqB2U3bnoFhLbaNaZ6VHOw=
 			</data>
 		</dict>
 		<key>Headers/BEView.h</key>
 		<dict>
 			<key>hash</key>
 			<data>
-			IUTYd5/KVcseeH7iXxNMJd77BM8=
+			K5Ha8u2KXpJljUf8+Z8xVzWexK0=
 			</data>
 			<key>hash2</key>
 			<data>
-			bGl/u2rEGYcZC6z0AcDUkg8+/GKuOLcxYM27Fao2+So=
+			XJyN6x6+W38ji0+Oi5qU/t7tZGjKKXn3R69Fd9aQm3I=
 			</data>
 		</dict>
 		<key>Headers/BridgeEngine.h</key>
@@ -428,7 +634,7 @@
 			PTn5yxjm0Wp6XrhM7m2SpRh/9aRlK0Y7jYuSPq2+O70=
 			</data>
 		</dict>
-		<key>a.fsh</key>
+		<key>Shaders_Release/a.fsh</key>
 		<dict>
 			<key>hash</key>
 			<data>
@@ -439,7 +645,7 @@
 			izguJu2/35C1hzbmUXVhQnYhXO9IXTBNuzmyzLno1dc=
 			</data>
 		</dict>
-		<key>a.vsh</key>
+		<key>Shaders_Release/a.vsh</key>
 		<dict>
 			<key>hash</key>
 			<data>
@@ -450,7 +656,7 @@
 			xzo5iul/9pmvH/+b+X8k6pr11gJG9UwAgwK8YbcxDJA=
 			</data>
 		</dict>
-		<key>b.fsh</key>
+		<key>Shaders_Release/b.fsh</key>
 		<dict>
 			<key>hash</key>
 			<data>
@@ -461,7 +667,7 @@
 			m98jsAnxvHgPoG9+mNRehGDJMCID8FVlCTUhlBtPC0I=
 			</data>
 		</dict>
-		<key>b.vsh</key>
+		<key>Shaders_Release/b.vsh</key>
 		<dict>
 			<key>hash</key>
 			<data>
@@ -472,7 +678,7 @@
 			xzo5iul/9pmvH/+b+X8k6pr11gJG9UwAgwK8YbcxDJA=
 			</data>
 		</dict>
-		<key>c.fsh</key>
+		<key>Shaders_Release/c.fsh</key>
 		<dict>
 			<key>hash</key>
 			<data>
@@ -483,7 +689,7 @@
 			MNzKT+Pw4zCemkjCUkHJ/n1ZQqbh1cQShsiKjnwjVlc=
 			</data>
 		</dict>
-		<key>c.vsh</key>
+		<key>Shaders_Release/c.vsh</key>
 		<dict>
 			<key>hash</key>
 			<data>
@@ -494,7 +700,7 @@
 			xzo5iul/9pmvH/+b+X8k6pr11gJG9UwAgwK8YbcxDJA=
 			</data>
 		</dict>
-		<key>d.fsh</key>
+		<key>Shaders_Release/d.fsh</key>
 		<dict>
 			<key>hash</key>
 			<data>
@@ -505,7 +711,7 @@
 			ST5YjIfzhf8ShdySU3sOfvoyGThX+yPKSdIG0i1MCM0=
 			</data>
 		</dict>
-		<key>d.vsh</key>
+		<key>Shaders_Release/d.vsh</key>
 		<dict>
 			<key>hash</key>
 			<data>
@@ -516,7 +722,7 @@
 			xzo5iul/9pmvH/+b+X8k6pr11gJG9UwAgwK8YbcxDJA=
 			</data>
 		</dict>
-		<key>e.fsh</key>
+		<key>Shaders_Release/e.fsh</key>
 		<dict>
 			<key>hash</key>
 			<data>
@@ -527,7 +733,7 @@
 			euLt9odpOmz36Jn1FkBDCWbluCxapFryumnK4bLmemA=
 			</data>
 		</dict>
-		<key>e.vsh</key>
+		<key>Shaders_Release/e.vsh</key>
 		<dict>
 			<key>hash</key>
 			<data>
@@ -538,7 +744,7 @@
 			xzo5iul/9pmvH/+b+X8k6pr11gJG9UwAgwK8YbcxDJA=
 			</data>
 		</dict>
-		<key>f.fsh</key>
+		<key>Shaders_Release/f.fsh</key>
 		<dict>
 			<key>hash</key>
 			<data>
@@ -549,7 +755,7 @@
 			ruHHyZvZmr9IEwtgOGF+HAmoXSTqjetqdDWTw78KD64=
 			</data>
 		</dict>
-		<key>f.vsh</key>
+		<key>Shaders_Release/f.vsh</key>
 		<dict>
 			<key>hash</key>
 			<data>
@@ -560,7 +766,7 @@
 			CJlKQjkKOo1FbPm+dbMeTwgCZM82s8Poia5HhOl4CZg=
 			</data>
 		</dict>
-		<key>g.fsh</key>
+		<key>Shaders_Release/g.fsh</key>
 		<dict>
 			<key>hash</key>
 			<data>
@@ -571,7 +777,7 @@
 			eFEmHtaCIm0/6E5RZV4NxCruhExNXDX+QfDC6g3om24=
 			</data>
 		</dict>
-		<key>g.vsh</key>
+		<key>Shaders_Release/g.vsh</key>
 		<dict>
 			<key>hash</key>
 			<data>
@@ -582,7 +788,7 @@
 			xzo5iul/9pmvH/+b+X8k6pr11gJG9UwAgwK8YbcxDJA=
 			</data>
 		</dict>
-		<key>h.fsh</key>
+		<key>Shaders_Release/h.fsh</key>
 		<dict>
 			<key>hash</key>
 			<data>
@@ -593,7 +799,7 @@
 			72ckmn3VfHKsygXpvU4QEl4fO3yDc3JFvGV9PvSxH6A=
 			</data>
 		</dict>
-		<key>h.vsh</key>
+		<key>Shaders_Release/h.vsh</key>
 		<dict>
 			<key>hash</key>
 			<data>

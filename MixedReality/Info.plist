@@ -52,5 +52,7 @@
 	<array>
 		<string>UIInterfaceOrientationLandscapeRight</string>
 	</array>
+	<key>NSCameraUsageDescription</key>
+	<string>Camera is used for tracking and mixed reality.</string>
 </dict>
 </plist>

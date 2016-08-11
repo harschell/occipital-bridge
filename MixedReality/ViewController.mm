@@ -6,6 +6,7 @@
 
 #import "ViewController.h"
 #import "AppSettings.h"
+
 #import <BridgeEngine/BridgeEngine.h>
 #import <cassert>
 
@@ -95,10 +96,21 @@ static const SCNMatrix4 defaultPivot = SCNMatrix4MakeRotation(M_PI, 1.0, 0.0, 0.
     _mixedReality = [[BEMixedRealityMode alloc]
         initWithView:(BEView*)self.view
         engineOptions:@{
-            kBECaptureReplayEnabled:  @([AppSettings booleanValueFromAppSetting:@"replayCapture"   defaultValueIfSettingIsNotInBundle:YES]),
-            kBEUsingWideVisionLens:   @([AppSettings booleanValueFromAppSetting:@"useWVL"          defaultValueIfSettingIsNotInBundle:YES]),
-            kBEStereoRenderingEnabled:@([AppSettings booleanValueFromAppSetting:@"stereoRendering" defaultValueIfSettingIsNotInBundle:YES]),
-            kBEUsingColorCameraOnly:  @([AppSettings booleanValueFromAppSetting:@"colorCameraOnly" defaultValueIfSettingIsNotInBundle:NO]),
+            kBECaptureReplayEnabled:
+                @([AppSettings booleanValueFromAppSetting:@"replayCapture"
+                       defaultValueIfSettingIsNotInBundle:NO]),
+            kBEUsingWideVisionLens:
+                @([AppSettings booleanValueFromAppSetting:@"useWVL"
+                       defaultValueIfSettingIsNotInBundle:YES]),
+            kBEStereoRenderingEnabled:
+                @([AppSettings booleanValueFromAppSetting:@"stereoRendering"
+                       defaultValueIfSettingIsNotInBundle:YES]),
+            kBEUsingColorCameraOnly:
+                @([AppSettings booleanValueFromAppSetting:@"colorCameraOnly"
+                       defaultValueIfSettingIsNotInBundle:NO]),
+            kBERecordingOptionsEnabled:
+                @([AppSettings booleanValueFromAppSetting:@"enableRecording"
+                       defaultValueIfSettingIsNotInBundle:NO]),
         }
         markupNames:_markupNameList
     ];
@@ -113,30 +125,31 @@ static const SCNMatrix4 defaultPivot = SCNMatrix4MakeRotation(M_PI, 1.0, 0.0, 0.
     [super viewDidAppear:animated];
     
     // Here we initialize two gesture recognizers as a way to expose features.
-
+    
     {
         // Allocate and initialize the first tap gesture.
-
+        
         UITapGestureRecognizer *tapRecognizer = [[UITapGestureRecognizer alloc] initWithTarget:self action:@selector(handleTap:)];
         
         // Specify that the gesture must be a single tap.
-
+        
         tapRecognizer.numberOfTapsRequired = 1;
-
+        
         // Add the tap gesture recognizer to the view.
-
+        
         [self.view addGestureRecognizer:tapRecognizer];
     }
     
     {
         // Allocate and initialize the second gesture as a double-tap one.
-
+        
         UITapGestureRecognizer *twoFingerTapRecognizer = [[UITapGestureRecognizer alloc] initWithTarget:self action:@selector(handleTwoFingerTap:)];
-
+        
         twoFingerTapRecognizer.numberOfTouchesRequired = 2;
         
         [self.view addGestureRecognizer:twoFingerTapRecognizer];
     }
+    
 }
 
 - (void)setUpSceneKitWorlds:(BEStageLoadingStatus)stageLoadingStatus
@@ -145,7 +158,7 @@ static const SCNMatrix4 defaultPivot = SCNMatrix4MakeRotation(M_PI, 1.0, 0.0, 0.
     // As this function is called from a rendering thread, perform only SceneKit updates here.
     // Avoid UIKit manipulation here (use main thread for UIKit).
     
-    if (stageLoadingStatus == BEStageLoadingStatusNotFound)
+        if (stageLoadingStatus == BEStageLoadingStatusNotFound)
     {
         NSLog(@"Your scene does not exist in the expected location on your device!");
         NSLog(@"You probably need to scan and export your local scene!");
@@ -220,6 +233,9 @@ static const SCNMatrix4 defaultPivot = SCNMatrix4MakeRotation(M_PI, 1.0, 0.0, 0.
     SCNNode * markupNode = [_mixedReality markupNodeForName:markupName];
     
     // Early-return if this markup node hasn't been positioned yet.
+
+    
+    NSLog(@"Markup Name is %@, at (%f, %f, %f)", markupName, markupNode.position.x, markupNode.position.y, markupNode.position.z);
 
     if (!markupNode)
         return;
@@ -343,10 +359,9 @@ static const SCNMatrix4 defaultPivot = SCNMatrix4MakeRotation(M_PI, 1.0, 0.0, 0.
 
 - (void)handleTap:(UITapGestureRecognizer *)sender
 {
-    // An example of what you can do when the user taps.
-    
     CGPoint tapPoint = [sender locationInView:self.view];
-    
+
+    // An example of what you can do when the user taps.
     NSLog(@"Bridge Engine Sample handleTap %@", NSStringFromCGPoint(tapPoint));
     
     // First, hit test against any SceneKit objects.
