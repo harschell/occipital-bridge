@@ -6,15 +6,11 @@
 	<dict>
 		<key>Algorithm.metallib</key>
 		<data>
-		81vAX9pe4xck+q6JxwvFu//jnxY=
+		CtfITdcB95itZIaSlnJXu1jBJvE=
 		</data>
 		<key>BEMixedRealityUI.nib</key>
 		<data>
-		yXiSM1BLLAd6ADCPA8zS0Mm9sdw=
-		</data>
-		<key>BridgeEngine.scnassets/.DS_Store</key>
-		<data>
-		3y++sUAKzaCQmjLBz2v0kvESHgc=
+		X1xeJrfEvXG+2PlORgKNpYMIRa4=
 		</data>
 		<key>BridgeEngine.scnassets/DwellCursor/DwellCursorFill0.png</key>
 		<data>
@@ -54,7 +50,7 @@
 		</data>
 		<key>BridgeEngine.scnassets/axes.dae</key>
 		<data>
-		btcd9tmiN4aqxLqYbsDLFmnowcc=
+		dRsz7lok5pHYcNaWdbt2GIaA+eM=
 		</data>
 		<key>BridgeEngine.scnassets/axes.png</key>
 		<data>
@@ -138,7 +134,7 @@
 		</data>
 		<key>Headers/BEMixedRealityMode.h</key>
 		<data>
-		/K1l7tTsd3G+TZ4r1lfP11OpOZs=
+		SbLKZykOQw1+0EFaEz5T0XIMnTw=
 		</data>
 		<key>Headers/BEView.h</key>
 		<data>
@@ -231,22 +227,22 @@
 		<dict>
 			<key>hash</key>
 			<data>
-			81vAX9pe4xck+q6JxwvFu//jnxY=
+			CtfITdcB95itZIaSlnJXu1jBJvE=
 			</data>
 			<key>hash2</key>
 			<data>
-			h82h4t6vFqjZ0DEM9BINop6elBO04UfkPkUE370FRrU=
+			0ufzodtk63N9J9tHmyn7PT9kPmVCTTuQFIKD5U5ahpM=
 			</data>
 		</dict>
 		<key>BEMixedRealityUI.nib</key>
 		<dict>
 			<key>hash</key>
 			<data>
-			yXiSM1BLLAd6ADCPA8zS0Mm9sdw=
+			X1xeJrfEvXG+2PlORgKNpYMIRa4=
 			</data>
 			<key>hash2</key>
 			<data>
-			B62UzSL9/B7qgcBgin1Frc1EN1SlPiUgVXHiLu/ZuEM=
+			HZHt6Onhdb5QdVkmcZmceyZluavfW5MseGBRQOMQEDE=
 			</data>
 		</dict>
 		<key>BridgeEngine.scnassets/DwellCursor/DwellCursorFill0.png</key>
@@ -352,11 +348,11 @@
 		<dict>
 			<key>hash</key>
 			<data>
-			btcd9tmiN4aqxLqYbsDLFmnowcc=
+			dRsz7lok5pHYcNaWdbt2GIaA+eM=
 			</data>
 			<key>hash2</key>
 			<data>
-			jPKQ5+DTJ/Skf7UcDCqX3vCwH77vjNvAvZR5ynxQT4k=
+			DbgulV8g7ZSmxPyiKHTEVlcjhLg+FmpT1wbgiT5paX8=
 			</data>
 		</dict>
 		<key>BridgeEngine.scnassets/axes.png</key>
@@ -583,11 +579,11 @@
 		<dict>
 			<key>hash</key>
 			<data>
-			/K1l7tTsd3G+TZ4r1lfP11OpOZs=
+			SbLKZykOQw1+0EFaEz5T0XIMnTw=
 			</data>
 			<key>hash2</key>
 			<data>
-			ZVEPkh+Puh8XMvgCWgwIusqB2U3bnoFhLbaNaZ6VHOw=
+			x6sei8V8rnFhIHy9spP8uK36qT9X9/MML+04HO5DAsA=
 			</data>
 		</dict>
 		<key>Headers/BEView.h</key>

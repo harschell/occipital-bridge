@@ -566,7 +566,7 @@ static const SCNMatrix4 defaultPivot = SCNMatrix4MakeRotation(M_PI, 1.0, 0.0, 0.
     BERenderStyle renderStyle = [_mixedReality getRenderStyle];
     BERenderStyle nextRenderStyle = BERenderStyle((renderStyle + 1) % NumBERenderStyles);
 
-    NSLog(@"RenderStyle set to %d", nextRenderStyle);
+    NSLog(@"RenderStyle set to %ld", (long)nextRenderStyle);
     [_mixedReality setRenderStyle:nextRenderStyle withDuration:0.5];
 }
 
