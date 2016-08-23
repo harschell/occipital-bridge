@@ -24,5 +24,5 @@ The old `[BEMixedRealityMode start]` will now take you to a scanning menu. There
 
 
  ### Known Issues
-  - **IN-APP SCANNING (v2.0) MAY PERFORM SLOWER THAN EXPECTED. After researching realize very odd behavior (potential throttling) with iOS. This will be fixed in a future release.**
+  - **IN-APP SCANNING (v2.0) MAY PERFORM SLOWER THAN EXPECTED. After researching the issue we realized very odd behavior (potential CPU throttling) with iOS. This will be fixed in a future release.**
   - In v2.0, stereo has higher latency than is needed. We will improve latency in a future build. 
