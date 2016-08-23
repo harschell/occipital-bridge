@@ -11,7 +11,7 @@ The old `[BEMixedRealityMode start]` will now take you to a scanning menu. There
 
 ### Please Use the Following Documentation & Resources to Get Up and Running
 - [Documentation: Table of Contents, Calibrator, and Bridge Capture Tool Applications](https://github.com/OccipitalOpenSource/bridge-engine-beta/wiki)
-- [Instructions on Importing Developer Keys, Certs, and Provisioning Profile](https://github.com/OccipitalOpenSource/bridge-engine-beta/wiki/Importing-Keys) (Deprecated)
+- (Deprecated) ~~Instructions on Importing Developer Keys, Certs, and Provisioning Profile~~
 
 ### Changelog
 
@@ -24,4 +24,5 @@ The old `[BEMixedRealityMode start]` will now take you to a scanning menu. There
 
 
  ### Known Issues
+  - **IN-APP SCANNING (v2.0) MAY PERFORM SLOWER THAN EXPECTED. After researching realize very odd behavior (potential throttling) with iOS. This will be fixed in a future release.**
   - In v2.0, stereo has higher latency than is needed. We will improve latency in a future build. 
