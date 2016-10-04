@@ -2,7 +2,7 @@
 
 We're glad to have you onboard. We're committed to developing the Bridge Engine, so we take all of your feedback and support very earnestly.
 
-Check out our <a href="https://www.youtube.com/embed/nXB_0DGbamU" target="_blank">Bridge Engine Beta Video Posted to Slack</a>. It's a great example of the robust RGB(D) tracking and fast relocalization available through the engine.   
+Check out our <a href="https://www.youtube.com/watch?v=qbkwew3bfWU&list=PLxCu2yuPufWPjCthmZYOOJG9ieRnGAL79" target="_blank">Occipital HQ Youtube Playlist for recent videos on Bridge Engine</a>. There are a few great examples of the robust RGB(D) tracking and fast relocalization available through the engine.   
 #### New in version 2: In-app scanning
 The Bridge Capture Tool is no longer needed -- scans can be performed from within the Bridge Engine. This means you don't have to set up Provisioning Profiles and Certs to be in the App Group, you can simply sign your apps yourself.
 
