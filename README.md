@@ -11,7 +11,6 @@ The old `[BEMixedRealityMode start]` will now take you to a scanning menu. There
 
 ### Please Use the Following Documentation & Resources to Get Up and Running
 - [Documentation: Table of Contents, Calibrator, and Bridge Capture Tool Applications](https://github.com/OccipitalOpenSource/bridge-engine-beta/wiki)
-- (Deprecated) ~~Instructions on Importing Developer Keys, Certs, and Provisioning Profile~~
 
 ### Changelog
 
