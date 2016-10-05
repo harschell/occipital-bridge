@@ -4,13 +4,13 @@ We're glad to have you onboard. We're committed to developing the Bridge Engine,
 
 Check out our <a href="https://www.youtube.com/watch?v=qbkwew3bfWU&list=PLxCu2yuPufWPjCthmZYOOJG9ieRnGAL79" target="_blank">Occipital HQ Youtube Playlist for recent videos on Bridge Engine</a>. There are a few great examples of the robust RGB(D) tracking and fast relocalization available through the engine.   
 #### New in version 2: In-app scanning
-The Bridge Capture Tool is no longer needed -- scans can be performed from within the Bridge Engine. This means you don't have to set up Provisioning Profiles and Certs to be in the App Group, you can simply sign your apps yourself.
+Scans can be performed from within the Bridge Engine. 
 
 The old `[BEMixedRealityMode start]` will now take you to a scanning menu. There is a new method `[BEMixedRealityMode startWithSavedScene]` that will load the scene from the app Documents folder **Bridge Engine Scene** without asking to scan, as before.
 
 
 ### Please Use the Following Documentation & Resources to Get Up and Running
-- [Documentation: Table of Contents, Calibrator, and Bridge Capture Tool Applications](https://github.com/OccipitalOpenSource/bridge-engine-beta/wiki)
+- [Documentation: Table of Contents and Calibrator App](https://github.com/OccipitalOpenSource/bridge-engine-beta/wiki)
 
 ### Changelog
 
@@ -19,7 +19,7 @@ The old `[BEMixedRealityMode start]` will now take you to a scanning menu. There
  - Color-only tracking support - Scan the room with the Structure Sensor, but track in AR with only the the iOS camera!
 
 ##### Version 2.0 changes
- - In-app scanning: The Bridge Capture Tool is no longer needed -- scans can be performed from within the Bridge Engine. 
+ - In-app scanning: Scans can be performed from within the Bridge Engine. 
 
 
  ### Known Issues
