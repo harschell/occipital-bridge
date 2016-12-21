@@ -1,0 +1,6 @@
+framework module BridgeEngine {
+  umbrella header "BridgeEngine.h"
+
+  export *
+  module * { export * }
+}

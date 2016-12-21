@@ -1,0 +1,1619 @@
+<!DOCTYPE html>
+<html>
+<head>
+	<meta charset="utf-8">
+
+	<title>BEMixedRealityMode Class Reference</title>
+
+	<link rel="stylesheet" href="../css/style.css">
+	<meta name="viewport" content="initial-scale=1, maximum-scale=1.4">
+	<meta name="generator" content="appledoc 2.2.1 (build 1333)">
+</head>
+<body class="appledoc">
+	<header>
+		<div class="container" class="hide-in-xcode">
+			
+			<h1 id="library-title">
+				<a href="../index.html">Bridge Engine SDK </a>
+			</h1>
+
+			<p id="developer-home">
+				<a href="../index.html">Occipital</a>
+			</p>
+			
+		</div>
+	</header>
+
+	<aside>
+		<div class="container">
+			<nav>
+				<ul id="header-buttons" role="toolbar">
+					<li><a href="../index.html">Index</a></li>
+<li><a href="../hierarchy.html">Hierarchy</a></li>
+
+					<li id="on-this-page" role="navigation">
+						<label>
+							On This Page
+
+							<div class="chevron">
+								<div class="chevy chevron-left"></div>
+								<div class="chevy chevron-right"></div>
+							</div>
+
+							<select id="jump-to">
+	<option value="top">Jump To&#133;</option>
+	
+	<option value="overview">Overview</option>
+	
+
+	
+	
+	<option value="tasks">Tasks</option>
+	
+	
+
+	
+	
+	<optgroup label="Properties">
+		
+		<option value="//api/name/delegate">delegate</option>
+		
+		<option value="//api/name/worldNodeWhenRelocalized">worldNodeWhenRelocalized</option>
+		
+		<option value="//api/name/sceneKitRenderer">sceneKitRenderer</option>
+		
+		<option value="//api/name/sceneKitScene">sceneKitScene</option>
+		
+		<option value="//api/name/sceneKitCamera">sceneKitCamera</option>
+		
+		<option value="//api/name/localDeviceNode">localDeviceNode</option>
+		
+		<option value="//api/name/sensorsStatus">sensorsStatus</option>
+		
+		<option value="//api/name/lastTrackerPoseAccuracy">lastTrackerPoseAccuracy</option>
+		
+		<option value="//api/name/lastTrackerHints">lastTrackerHints</option>
+		
+	</optgroup>
+	
+
+	
+
+	
+	<optgroup label="Instance Methods">
+		
+		<option value="//api/name/initWithView:engineOptions:markupNames:">- initWithView:engineOptions:markupNames:</option>
+		
+		<option value="//api/name/initWithView:engineOptions:markupNames:eaglSharegroup:">- initWithView:engineOptions:markupNames:eaglSharegroup:</option>
+		
+		<option value="//api/name/start">- start</option>
+		
+		<option value="//api/name/startWithSavedScene">- startWithSavedScene</option>
+		
+		<option value="//api/name/stop">- stop</option>
+		
+		<option value="//api/name/renderStyle">- renderStyle</option>
+		
+		<option value="//api/name/setRenderStyle:withDuration:">- setRenderStyle:withDuration:</option>
+		
+		<option value="//api/name/setCustomRenderStyle:">- setCustomRenderStyle:</option>
+		
+		<option value="//api/name/setCustomPostProcessingShader:">- setCustomPostProcessingShader:</option>
+		
+		<option value="//api/name/setCustomPostProcessingShaderFloatUniforms:">- setCustomPostProcessingShaderFloatUniforms:</option>
+		
+		<option value="//api/name/mesh3DFrom2DPoint:outputNormal:">- mesh3DFrom2DPoint:outputNormal:</option>
+		
+		<option value="//api/name/hitTestSceneKitFrom2DScreenPoint:options:">- hitTestSceneKitFrom2DScreenPoint:options:</option>
+		
+		<option value="//api/name/projectPoint:">- projectPoint:</option>
+		
+		<option value="//api/name/projectPointToScreenCoordinates:">- projectPointToScreenCoordinates:</option>
+		
+		<option value="//api/name/startMarkupEditing">- startMarkupEditing</option>
+		
+		<option value="//api/name/markupNodeForName:">- markupNodeForName:</option>
+		
+		<option value="//api/name/runBlockInRenderThread:">- runBlockInRenderThread:</option>
+		
+		<option value="//api/name/predictColorCameraPoseForDisplayLinkStart:colorCameraPose:poseTimestamp:">- predictColorCameraPoseForDisplayLinkStart:colorCameraPose:poseTimestamp:</option>
+		
+		<option value="//api/name/renderSceneMeshWithStyle:modelView:projection:">- renderSceneMeshWithStyle:modelView:projection:</option>
+		
+	</optgroup>
+	
+	
+</select>
+						</label>
+					</li>
+				</ul>
+			</nav>
+		</div>
+	</aside>
+
+	<article>
+		<div id="overview_contents" class="container">
+			<div id="content">
+				<main role="main">
+					<h1 class="title">BEMixedRealityMode Class Reference</h1>
+
+					
+					<div class="section section-specification"><table cellspacing="0"><tbody>
+						<tr>
+	<th>Inherits from</th>
+	<td>NSObject</td>
+</tr><tr>
+	<th>Declared in</th>
+	<td>BEMixedRealityMode.h</td>
+</tr>
+						</tbody></table></div>
+					
+
+                    
+					
+					<div class="section section-overview">
+						<a title="Overview" name="overview"></a>
+						<h2 class="subtitle subtitle-overview">Overview</h2>
+						<p>The main resource for your mixed reality rendering and interaction needs</p>
+					</div>
+					
+					
+
+					
+					
+					<div class="section section-tasks">
+						<a title="Tasks" name="tasks"></a>
+						
+
+						<a title="Init" name="task_Init"></a>
+						<h2 class="task-title">Init</h2>
+
+						<div class="task-list">
+							<div class="section-method">
+	<a name="//api/name/initWithView:engineOptions:markupNames:" title="initWithView:engineOptions:markupNames:"></a>
+	<h3 class="method-title"><code><a href="#//api/name/initWithView:engineOptions:markupNames:">&ndash;&nbsp;initWithView:engineOptions:markupNames:</a></code>
+</h3>
+
+	<div class="method-info">
+		<div class="pointy-thing"></div>
+
+		<div class="method-info-container">
+			
+			
+			<div class="method-subsection brief-description">
+				<p>Initialize with required parameters.</p>
+			</div>
+			
+		    
+
+			<div class="method-subsection method-declaration"><code>- (instancetype)initWithView:(BEView *)<em>view</em> engineOptions:(NSDictionary *)<em>engineOptions</em> markupNames:(NSStringArray *)<em>markupNames</em></code></div>
+
+		    
+			
+			<div class="method-subsection arguments-section parameters">
+				<h4 class="method-subtitle parameter-title">Parameters</h4>
+				<table class="argument-def parameter-def">
+				
+					<tr>
+						<th scope="row" class="argument-name"><code>view</code></th>
+						<td><p>The <a href="../Classes/BEView.html">BEView</a> that will be used for rendering. BEMixedRealityMode will add UI to this if necessary.</p></td>
+					</tr>
+				
+					<tr>
+						<th scope="row" class="argument-name"><code>engineOptions</code></th>
+						<td><p>The valid keys are:</p>
+
+<ul>
+<li><code>k</code>BECaptureReplayMode<code></code>: Whether a previous capture should be replayed. Valid values are listed in <a href="../Constants/BECaptureReplayMode.html">BECaptureReplayMode</a>. Default is BECaptureReplayModeDisabled.</li>
+<li><code>kBETrackerFallbackOnIMUEnabled</code>: If YES, will fallback to IMU-based rotational-only pose updates if the visual tracker is lost. Default is NO.</li>
+<li><code>kBEVisualInertialPoseFilterEnabled</code>: If YES, the tracker output will be smoother, but with potentially a slightly higher latency. Default is NO.</li>
+<li><code>kBEUsingWideVisionLens</code>:  Whether a Wide Vision Lens is attached. Default is NO.</li>
+<li><code>kBEUsingColorCameraOnly</code>: Whether the engine should try to connect to a Structure Sensor. Default is NO.</li>
+<li><code>kBEStereoRenderingEnabled</code>: If YES, we render two views, as if for a head-mounted display. If NO, we render a single (mono) view. Default is NO.</li>
+</ul>
+</td>
+					</tr>
+				
+					<tr>
+						<th scope="row" class="argument-name"><code>markupNames</code></th>
+						<td><p>An optional list of markup names, which will persist in the scene over multiple runs of the appl. In your app, you may call <a href="#//api/name/startMarkupEditing">[BEMixedRealityMode startMarkupEditing]</a> to load our internal UI for setting and saving markup.</p></td>
+					</tr>
+				
+				</table>
+			</div>
+			
+
+			
+
+			
+
+			
+
+			
+
+			
+
+			
+			<div class="method-subsection declared-in-section">
+				<h4 class="method-subtitle">Declared In</h4>
+				<p><code class="declared-in-ref">BEMixedRealityMode.h</code></p>
+			</div>
+			
+			
+		</div>
+	</div>
+</div><div class="section-method">
+	<a name="//api/name/initWithView:engineOptions:markupNames:eaglSharegroup:" title="initWithView:engineOptions:markupNames:eaglSharegroup:"></a>
+	<h3 class="method-title"><code><a href="#//api/name/initWithView:engineOptions:markupNames:eaglSharegroup:">&ndash;&nbsp;initWithView:engineOptions:markupNames:eaglSharegroup:</a></code>
+</h3>
+
+	<div class="method-info">
+		<div class="pointy-thing"></div>
+
+		<div class="method-info-container">
+			
+			
+			<div class="method-subsection brief-description">
+				<p>Initialize with required parameters.</p>
+			</div>
+			
+		    
+
+			<div class="method-subsection method-declaration"><code>- (instancetype)initWithView:(BEView *)<em>view</em> engineOptions:(NSDictionary *)<em>engineOptions</em> markupNames:(NSStringArray *)<em>markupNames</em> eaglSharegroup:(EAGLSharegroup *)<em>eaglSharegroup</em></code></div>
+
+		    
+			
+			<div class="method-subsection arguments-section parameters">
+				<h4 class="method-subtitle parameter-title">Parameters</h4>
+				<table class="argument-def parameter-def">
+				
+					<tr>
+						<th scope="row" class="argument-name"><code>view</code></th>
+						<td><p>The <a href="../Classes/BEView.html">BEView</a> that will be used for rendering. BEMixedRealityMode will add UI to this if necessary.</p></td>
+					</tr>
+				
+					<tr>
+						<th scope="row" class="argument-name"><code>engineOptions</code></th>
+						<td><p>The valid keys are:</p>
+
+<ul>
+<li><code>k</code>BECaptureReplayMode<code></code>: Whether a previous capture should be replayed. Valid values are listed in <a href="../Constants/BECaptureReplayMode.html">BECaptureReplayMode</a>. Default is BECaptureReplayModeDisabled.</li>
+<li><code>kBETrackerFallbackOnIMUEnabled</code>: If YES, will fallback to IMU-based rotational-only pose updates if the visual tracker is lost. Default is NO.</li>
+<li><code>kBEVisualInertialPoseFilterEnabled</code>: If YES, the tracker output will be smoother, but with potentially a slightly higher latency. Default is NO.</li>
+<li><code>kBEUsingWideVisionLens</code>:  Whether a Wide Vision Lens is attached. Default is NO.</li>
+<li><code>kBEUsingColorCameraOnly</code>: Whether the engine should try to connect to a Structure Sensor. Default is NO.</li>
+<li><code>kBEStereoRenderingEnabled</code>: If YES, we render two views, as if for a head-mounted display. If NO, we render a single (mono) view. Default is NO.</li>
+</ul>
+</td>
+					</tr>
+				
+					<tr>
+						<th scope="row" class="argument-name"><code>markupNames</code></th>
+						<td><p>An optional list of markup names, which will persist in the scene over multiple runs of the appl. In your app, you may call <a href="#//api/name/startMarkupEditing">[BEMixedRealityMode startMarkupEditing]</a> to load our internal UI for setting and saving markup.</p></td>
+					</tr>
+				
+					<tr>
+						<th scope="row" class="argument-name"><code>eaglSharegroup</code></th>
+						<td><p>An EAGLShareGroup to be used by BridgeEngine OpenGL contexts. Can be nil.</p></td>
+					</tr>
+				
+				</table>
+			</div>
+			
+
+			
+
+			
+
+			
+
+			
+
+			
+
+			
+			<div class="method-subsection declared-in-section">
+				<h4 class="method-subtitle">Declared In</h4>
+				<p><code class="declared-in-ref">BEMixedRealityMode.h</code></p>
+			</div>
+			
+			
+		</div>
+	</div>
+</div>
+						</div>
+						
+
+						<a title="Delegate" name="task_Delegate"></a>
+						<h2 class="task-title">Delegate</h2>
+
+						<div class="task-list">
+							<div class="section-method">
+	<a name="//api/name/delegate" title="delegate"></a>
+	<h3 class="method-title"><code><a href="#//api/name/delegate">&nbsp;&nbsp;delegate</a></code>
+</h3>
+
+	<div class="method-info">
+		<div class="pointy-thing"></div>
+
+		<div class="method-info-container">
+			
+			
+			<div class="method-subsection brief-description">
+				<p>Set your application-specific class as this delegate to receive callbacks</p>
+			</div>
+			
+		    
+
+			<div class="method-subsection method-declaration"><code>@property (nonatomic, weak) id&lt;BEMixedRealityModeDelegate&gt; delegate</code></div>
+
+		    
+			
+
+			
+
+			
+
+			
+
+			
+
+			
+
+			
+			<div class="method-subsection declared-in-section">
+				<h4 class="method-subtitle">Declared In</h4>
+				<p><code class="declared-in-ref">BEMixedRealityMode.h</code></p>
+			</div>
+			
+			
+		</div>
+	</div>
+</div>
+						</div>
+						
+
+						<a title="Engine Control" name="task_Engine Control"></a>
+						<h2 class="task-title">Engine Control</h2>
+
+						<div class="task-list">
+							<div class="section-method">
+	<a name="//api/name/start" title="start"></a>
+	<h3 class="method-title"><code><a href="#//api/name/start">&ndash;&nbsp;start</a></code>
+</h3>
+
+	<div class="method-info">
+		<div class="pointy-thing"></div>
+
+		<div class="method-info-container">
+			
+			
+			<div class="method-subsection brief-description">
+				<p>Start the engine. This will display a main menu UI to ask the user if they want to start scanning or load the last scene.</p>
+			</div>
+			
+		    
+
+			<div class="method-subsection method-declaration"><code>- (void)start</code></div>
+
+		    
+			
+
+			
+
+			
+
+			
+
+			
+
+			
+
+			
+			<div class="method-subsection declared-in-section">
+				<h4 class="method-subtitle">Declared In</h4>
+				<p><code class="declared-in-ref">BEMixedRealityMode.h</code></p>
+			</div>
+			
+			
+		</div>
+	</div>
+</div><div class="section-method">
+	<a name="//api/name/startWithSavedScene" title="startWithSavedScene"></a>
+	<h3 class="method-title"><code><a href="#//api/name/startWithSavedScene">&ndash;&nbsp;startWithSavedScene</a></code>
+</h3>
+
+	<div class="method-info">
+		<div class="pointy-thing"></div>
+
+		<div class="method-info-container">
+			
+			
+			<div class="method-subsection brief-description">
+				<p>Start the engine, automatically loading the last mapped area and starting tracking.
+Note that the last scene is stored in the <code>BridgeEngineScene</code> subfolder of the App Documents folder.</p>
+			</div>
+			
+		    
+
+			<div class="method-subsection method-declaration"><code>- (void)startWithSavedScene</code></div>
+
+		    
+			
+
+			
+
+			
+
+			
+
+			
+
+			
+
+			
+			<div class="method-subsection declared-in-section">
+				<h4 class="method-subtitle">Declared In</h4>
+				<p><code class="declared-in-ref">BEMixedRealityMode.h</code></p>
+			</div>
+			
+			
+		</div>
+	</div>
+</div><div class="section-method">
+	<a name="//api/name/stop" title="stop"></a>
+	<h3 class="method-title"><code><a href="#//api/name/stop">&ndash;&nbsp;stop</a></code>
+</h3>
+
+	<div class="method-info">
+		<div class="pointy-thing"></div>
+
+		<div class="method-info-container">
+			
+			
+			<div class="method-subsection brief-description">
+				<p>Stop the engine: tracking, rendering and camera. Use it for a graceful shutdown.</p>
+			</div>
+			
+		    
+
+			<div class="method-subsection method-declaration"><code>- (void)stop</code></div>
+
+		    
+			
+
+			
+
+			
+
+			
+
+			
+
+			
+
+			
+			<div class="method-subsection declared-in-section">
+				<h4 class="method-subtitle">Declared In</h4>
+				<p><code class="declared-in-ref">BEMixedRealityMode.h</code></p>
+			</div>
+			
+			
+		</div>
+	</div>
+</div>
+						</div>
+						
+
+						<a title="Special SceneKit Nodes" name="task_Special SceneKit Nodes"></a>
+						<h2 class="task-title">Special SceneKit Nodes</h2>
+
+						<div class="task-list">
+							<div class="section-method">
+	<a name="//api/name/worldNodeWhenRelocalized" title="worldNodeWhenRelocalized"></a>
+	<h3 class="method-title"><code><a href="#//api/name/worldNodeWhenRelocalized">&nbsp;&nbsp;worldNodeWhenRelocalized</a></code>
+</h3>
+
+	<div class="method-info">
+		<div class="pointy-thing"></div>
+
+		<div class="method-info-container">
+			
+			
+			<div class="method-subsection brief-description">
+				<p>SceneKit Node representing the coordinate system of the mapped area.
+You should add your augmented reality-like objects here for their location to be relative to the real world.</p>
+			</div>
+			
+		    
+
+			<div class="method-subsection method-declaration"><code>@property (nonatomic, readonly) SCNNode *worldNodeWhenRelocalized</code></div>
+
+		    
+			
+
+			
+
+			
+
+			
+			<div class="method-subsection discussion-section">
+				<h4 class="method-subtitle">Discussion</h4>
+				<div class="note"><p><strong>Note:</strong> This node and all its children are hidden when we are not tracking.</p></div>
+			</div>
+			
+
+			
+
+			
+
+			
+			<div class="method-subsection declared-in-section">
+				<h4 class="method-subtitle">Declared In</h4>
+				<p><code class="declared-in-ref">BEMixedRealityMode.h</code></p>
+			</div>
+			
+			
+		</div>
+	</div>
+</div><div class="section-method">
+	<a name="//api/name/sceneKitRenderer" title="sceneKitRenderer"></a>
+	<h3 class="method-title"><code><a href="#//api/name/sceneKitRenderer">&nbsp;&nbsp;sceneKitRenderer</a></code>
+</h3>
+
+	<div class="method-info">
+		<div class="pointy-thing"></div>
+
+		<div class="method-info-container">
+			
+			
+			<div class="method-subsection brief-description">
+				<p>SceneKit renderer accessor</p>
+			</div>
+			
+		    
+
+			<div class="method-subsection method-declaration"><code>@property (nonatomic, readonly) SCNRenderer *sceneKitRenderer</code></div>
+
+		    
+			
+
+			
+
+			
+
+			
+
+			
+
+			
+
+			
+			<div class="method-subsection declared-in-section">
+				<h4 class="method-subtitle">Declared In</h4>
+				<p><code class="declared-in-ref">BEMixedRealityMode.h</code></p>
+			</div>
+			
+			
+		</div>
+	</div>
+</div><div class="section-method">
+	<a name="//api/name/sceneKitScene" title="sceneKitScene"></a>
+	<h3 class="method-title"><code><a href="#//api/name/sceneKitScene">&nbsp;&nbsp;sceneKitScene</a></code>
+</h3>
+
+	<div class="method-info">
+		<div class="pointy-thing"></div>
+
+		<div class="method-info-container">
+			
+			
+			<div class="method-subsection brief-description">
+				<p>Root SceneKit Scene accessor</p>
+			</div>
+			
+		    
+
+			<div class="method-subsection method-declaration"><code>@property (nonatomic, readonly) SCNScene *sceneKitScene</code></div>
+
+		    
+			
+
+			
+
+			
+
+			
+
+			
+
+			
+
+			
+			<div class="method-subsection declared-in-section">
+				<h4 class="method-subtitle">Declared In</h4>
+				<p><code class="declared-in-ref">BEMixedRealityMode.h</code></p>
+			</div>
+			
+			
+		</div>
+	</div>
+</div><div class="section-method">
+	<a name="//api/name/sceneKitCamera" title="sceneKitCamera"></a>
+	<h3 class="method-title"><code><a href="#//api/name/sceneKitCamera">&nbsp;&nbsp;sceneKitCamera</a></code>
+</h3>
+
+	<div class="method-info">
+		<div class="pointy-thing"></div>
+
+		<div class="method-info-container">
+			
+			
+			<div class="method-subsection brief-description">
+				<p>SceneKit virtual camera accessor</p>
+			</div>
+			
+		    
+
+			<div class="method-subsection method-declaration"><code>@property (nonatomic, readonly) SCNCamera *sceneKitCamera</code></div>
+
+		    
+			
+
+			
+
+			
+
+			
+
+			
+
+			
+
+			
+			<div class="method-subsection declared-in-section">
+				<h4 class="method-subtitle">Declared In</h4>
+				<p><code class="declared-in-ref">BEMixedRealityMode.h</code></p>
+			</div>
+			
+			
+		</div>
+	</div>
+</div><div class="section-method">
+	<a name="//api/name/localDeviceNode" title="localDeviceNode"></a>
+	<h3 class="method-title"><code><a href="#//api/name/localDeviceNode">&nbsp;&nbsp;localDeviceNode</a></code>
+</h3>
+
+	<div class="method-info">
+		<div class="pointy-thing"></div>
+
+		<div class="method-info-container">
+			
+			
+			<div class="method-subsection brief-description">
+				<p>SceneKit node that represents the position of the device in the world.
+In mono rendering, the node is aligned with the iOS camera, looking forward.
+In stereo rendering, this node represents the position between the user&rsquo;s eyes, looking forward.</p>
+			</div>
+			
+		    
+
+			<div class="method-subsection method-declaration"><code>@property (nonatomic, readonly) SCNNode *localDeviceNode</code></div>
+
+		    
+			
+
+			
+
+			
+
+			
+
+			
+
+			
+
+			
+			<div class="method-subsection declared-in-section">
+				<h4 class="method-subtitle">Declared In</h4>
+				<p><code class="declared-in-ref">BEMixedRealityMode.h</code></p>
+			</div>
+			
+			
+		</div>
+	</div>
+</div>
+						</div>
+						
+
+						<a title="Sensor and Tracking Status" name="task_Sensor and Tracking Status"></a>
+						<h2 class="task-title">Sensor and Tracking Status</h2>
+
+						<div class="task-list">
+							<div class="section-method">
+	<a name="//api/name/sensorsStatus" title="sensorsStatus"></a>
+	<h3 class="method-title"><code><a href="#//api/name/sensorsStatus">&nbsp;&nbsp;sensorsStatus</a></code>
+</h3>
+
+	<div class="method-info">
+		<div class="pointy-thing"></div>
+
+		<div class="method-info-container">
+			
+
+			<div class="method-subsection method-declaration"><code>@property (nonatomic, readonly) BESensorsStatus sensorsStatus</code></div>
+
+		    
+		</div>
+	</div>
+</div><div class="section-method">
+	<a name="//api/name/lastTrackerPoseAccuracy" title="lastTrackerPoseAccuracy"></a>
+	<h3 class="method-title"><code><a href="#//api/name/lastTrackerPoseAccuracy">&nbsp;&nbsp;lastTrackerPoseAccuracy</a></code>
+</h3>
+
+	<div class="method-info">
+		<div class="pointy-thing"></div>
+
+		<div class="method-info-container">
+			
+			
+			<div class="method-subsection brief-description">
+				<p>Return the last tracker pose accuracy.</p>
+			</div>
+			
+		    
+
+			<div class="method-subsection method-declaration"><code>@property (readonly) BETrackerPoseAccuracy lastTrackerPoseAccuracy</code></div>
+
+		    
+			
+
+			
+
+			
+
+			
+
+			
+
+			
+
+			
+			<div class="method-subsection declared-in-section">
+				<h4 class="method-subtitle">Declared In</h4>
+				<p><code class="declared-in-ref">BEMixedRealityMode.h</code></p>
+			</div>
+			
+			
+		</div>
+	</div>
+</div><div class="section-method">
+	<a name="//api/name/lastTrackerHints" title="lastTrackerHints"></a>
+	<h3 class="method-title"><code><a href="#//api/name/lastTrackerHints">&nbsp;&nbsp;lastTrackerHints</a></code>
+</h3>
+
+	<div class="method-info">
+		<div class="pointy-thing"></div>
+
+		<div class="method-info-container">
+			
+			
+			<div class="method-subsection brief-description">
+				<p>Return the last tracker hints.</p>
+			</div>
+			
+		    
+
+			<div class="method-subsection method-declaration"><code>@property (readonly) BETrackerHints lastTrackerHints</code></div>
+
+		    
+			
+
+			
+
+			
+
+			
+
+			
+
+			
+
+			
+			<div class="method-subsection declared-in-section">
+				<h4 class="method-subtitle">Declared In</h4>
+				<p><code class="declared-in-ref">BEMixedRealityMode.h</code></p>
+			</div>
+			
+			
+		</div>
+	</div>
+</div>
+						</div>
+						
+
+						<a title="Rendering style" name="task_Rendering style"></a>
+						<h2 class="task-title">Rendering style</h2>
+
+						<div class="task-list">
+							<div class="section-method">
+	<a name="//api/name/renderStyle" title="renderStyle"></a>
+	<h3 class="method-title"><code><a href="#//api/name/renderStyle">&ndash;&nbsp;renderStyle</a></code>
+</h3>
+
+	<div class="method-info">
+		<div class="pointy-thing"></div>
+
+		<div class="method-info-container">
+			
+			
+			<div class="method-subsection brief-description">
+				<p>Current rendering style.</p>
+			</div>
+			
+		    
+
+			<div class="method-subsection method-declaration"><code>- (BERenderStyle)renderStyle</code></div>
+
+		    
+			
+
+			
+
+			
+
+			
+
+			
+
+			
+
+			
+			<div class="method-subsection declared-in-section">
+				<h4 class="method-subtitle">Declared In</h4>
+				<p><code class="declared-in-ref">BEMixedRealityMode.h</code></p>
+			</div>
+			
+			
+		</div>
+	</div>
+</div><div class="section-method">
+	<a name="//api/name/setRenderStyle:withDuration:" title="setRenderStyle:withDuration:"></a>
+	<h3 class="method-title"><code><a href="#//api/name/setRenderStyle:withDuration:">&ndash;&nbsp;setRenderStyle:withDuration:</a></code>
+</h3>
+
+	<div class="method-info">
+		<div class="pointy-thing"></div>
+
+		<div class="method-info-container">
+			
+			
+			<div class="method-subsection brief-description">
+				<p>Change the current rendering style, with the speficied fade duration.</p>
+			</div>
+			
+		    
+
+			<div class="method-subsection method-declaration"><code>- (void)setRenderStyle:(BERenderStyle)<em>toRenderStyle</em> withDuration:(NSTimeInterval)<em>duration</em></code></div>
+
+		    
+			
+
+			
+
+			
+
+			
+
+			
+
+			
+
+			
+			<div class="method-subsection declared-in-section">
+				<h4 class="method-subtitle">Declared In</h4>
+				<p><code class="declared-in-ref">BEMixedRealityMode.h</code></p>
+			</div>
+			
+			
+		</div>
+	</div>
+</div><div class="section-method">
+	<a name="//api/name/setCustomRenderStyle:" title="setCustomRenderStyle:"></a>
+	<h3 class="method-title"><code><a href="#//api/name/setCustomRenderStyle:">&ndash;&nbsp;setCustomRenderStyle:</a></code>
+</h3>
+
+	<div class="method-info">
+		<div class="pointy-thing"></div>
+
+		<div class="method-info-container">
+			
+			
+			<div class="method-subsection brief-description">
+				<p>Set a custom shader to be used for rendering the mapped area.</p>
+			</div>
+			
+		    
+
+			<div class="method-subsection method-declaration"><code>- (void)setCustomRenderStyle:(id&lt;BridgeEngineShaderDelegate&gt;)<em>customShader</em></code></div>
+
+		    
+			
+
+			
+
+			
+
+			
+			<div class="method-subsection discussion-section">
+				<h4 class="method-subtitle">Discussion</h4>
+				<div class="note"><p><strong>Note:</strong> This requires <a href="#//api/name/renderStyle">renderStyle</a> to be set to BERenderStyleSceneKitAndCustomEnvironmentShader.</p></div>
+			</div>
+			
+
+			
+
+			
+			<div class="method-subsection see-also-section">
+				<h4 class="method-subtitle">See Also</h4>
+				<ul>
+					
+					<li><code><p><a href="../Protocols/BridgeEngineShaderDelegate.html">BridgeEngineShaderDelegate</a></p></code></li>
+					
+				</ul>
+			</div>
+			
+
+			
+			<div class="method-subsection declared-in-section">
+				<h4 class="method-subtitle">Declared In</h4>
+				<p><code class="declared-in-ref">BEMixedRealityMode.h</code></p>
+			</div>
+			
+			
+		</div>
+	</div>
+</div><div class="section-method">
+	<a name="//api/name/setCustomPostProcessingShader:" title="setCustomPostProcessingShader:"></a>
+	<h3 class="method-title"><code><a href="#//api/name/setCustomPostProcessingShader:">&ndash;&nbsp;setCustomPostProcessingShader:</a></code>
+</h3>
+
+	<div class="method-info">
+		<div class="pointy-thing"></div>
+
+		<div class="method-info-container">
+			
+			
+			<div class="method-subsection brief-description">
+				<p>Set a custom fragment shader to do full-screen post processing.</p>
+			</div>
+			
+		    
+
+			<div class="method-subsection method-declaration"><code>- (void)setCustomPostProcessingShader:(NSString *)<em>frag_shader</em></code></div>
+
+		    
+			
+
+			
+
+			
+
+			
+			<div class="method-subsection discussion-section">
+				<h4 class="method-subtitle">Discussion</h4>
+				<p>Here is the default:</p>
+
+<pre><code> const char* fragmentShader = R"(
+     precision mediump float;
+
+     uniform sampler2D u_bridgeRender;
+     varying vec2 v_texCoord;
+
+     void main()
+     {
+        gl_FragColor = texture2D(u_bridgeRender, v_texCoord);
+     }
+</code></pre>
+
+<p>Some uniforms are automatically set:</p>
+
+<ul>
+<li><code>u_bridgeRender</code>: the current full-screen rendered texture (<code>sampler2D</code>)</li>
+<li><code>v_texCoord</code>: the texture coordinates (<code>vec2</code>)</li>
+</ul>
+
+			</div>
+			
+
+			
+
+			
+			<div class="method-subsection see-also-section">
+				<h4 class="method-subtitle">See Also</h4>
+				<ul>
+					
+					<li><code><p><a href="#//api/name/setCustomPostProcessingShaderFloatUniforms:">- setCustomPostProcessingShaderFloatUniforms:</a></p></code></li>
+					
+				</ul>
+			</div>
+			
+
+			
+			<div class="method-subsection declared-in-section">
+				<h4 class="method-subtitle">Declared In</h4>
+				<p><code class="declared-in-ref">BEMixedRealityMode.h</code></p>
+			</div>
+			
+			
+		</div>
+	</div>
+</div><div class="section-method">
+	<a name="//api/name/setCustomPostProcessingShaderFloatUniforms:" title="setCustomPostProcessingShaderFloatUniforms:"></a>
+	<h3 class="method-title"><code><a href="#//api/name/setCustomPostProcessingShaderFloatUniforms:">&ndash;&nbsp;setCustomPostProcessingShaderFloatUniforms:</a></code>
+</h3>
+
+	<div class="method-info">
+		<div class="pointy-thing"></div>
+
+		<div class="method-info-container">
+			
+			
+			<div class="method-subsection brief-description">
+				<p>Specific an additional dictionary of uniform float values to be passed to the custom postprocessing shader.
+The keys must exactly match the uniform names used in the shader.</p>
+			</div>
+			
+		    
+
+			<div class="method-subsection method-declaration"><code>- (void)setCustomPostProcessingShaderFloatUniforms:(NSDictionary *)<em>uniforms</em></code></div>
+
+		    
+			
+
+			
+
+			
+
+			
+
+			
+
+			
+
+			
+			<div class="method-subsection declared-in-section">
+				<h4 class="method-subtitle">Declared In</h4>
+				<p><code class="declared-in-ref">BEMixedRealityMode.h</code></p>
+			</div>
+			
+			
+		</div>
+	</div>
+</div>
+						</div>
+						
+
+						<a title="Collision Testing" name="task_Collision Testing"></a>
+						<h2 class="task-title">Collision Testing</h2>
+
+						<div class="task-list">
+							<div class="section-method">
+	<a name="//api/name/mesh3DFrom2DPoint:outputNormal:" title="mesh3DFrom2DPoint:outputNormal:"></a>
+	<h3 class="method-title"><code><a href="#//api/name/mesh3DFrom2DPoint:outputNormal:">&ndash;&nbsp;mesh3DFrom2DPoint:outputNormal:</a></code>
+</h3>
+
+	<div class="method-info">
+		<div class="pointy-thing"></div>
+
+		<div class="method-info-container">
+			
+			
+			<div class="method-subsection brief-description">
+				<p>Intersect a ray between the camera center and a given on-screen point with the mesh of the mapped area.</p>
+			</div>
+			
+		    
+
+			<div class="method-subsection method-declaration"><code>- (SCNVector3)mesh3DFrom2DPoint:(CGPoint)<em>point</em> outputNormal:(SCNVector3 *)<em>normal</em></code></div>
+
+		    
+			
+			<div class="method-subsection arguments-section parameters">
+				<h4 class="method-subtitle parameter-title">Parameters</h4>
+				<table class="argument-def parameter-def">
+				
+					<tr>
+						<th scope="row" class="argument-name"><code>point</code></th>
+						<td><p>the screen-space point</p></td>
+					</tr>
+				
+					<tr>
+						<th scope="row" class="argument-name"><code>outputNormal</code></th>
+						<td><p>a pointer to store the normal of the scene mesh at the intersection point</p></td>
+					</tr>
+				
+				</table>
+			</div>
+			
+
+			
+
+			
+
+			
+			<div class="method-subsection discussion-section">
+				<h4 class="method-subtitle">Discussion</h4>
+				<div class="note"><p><strong>Note:</strong> This is usually used for touch-based interaction.</p></div><div class="note"><p><strong>Note:</strong> This does not collide with any SceneKit objects, only with the mesh of mapped area</p></div><div class="warning"><p><strong>Warning:</strong> For efficiency reasons the intersection point might be approximate</p></div>
+			</div>
+			
+
+			
+
+			
+
+			
+			<div class="method-subsection declared-in-section">
+				<h4 class="method-subtitle">Declared In</h4>
+				<p><code class="declared-in-ref">BEMixedRealityMode.h</code></p>
+			</div>
+			
+			
+		</div>
+	</div>
+</div><div class="section-method">
+	<a name="//api/name/hitTestSceneKitFrom2DScreenPoint:options:" title="hitTestSceneKitFrom2DScreenPoint:options:"></a>
+	<h3 class="method-title"><code><a href="#//api/name/hitTestSceneKitFrom2DScreenPoint:options:">&ndash;&nbsp;hitTestSceneKitFrom2DScreenPoint:options:</a></code>
+</h3>
+
+	<div class="method-info">
+		<div class="pointy-thing"></div>
+
+		<div class="method-info-container">
+			
+			
+			<div class="method-subsection brief-description">
+				<p>Intersect a ray between the camera center and a given on-screen point with the SceneKit objects.</p>
+			</div>
+			
+		    
+
+			<div class="method-subsection method-declaration"><code>- (NSArray&lt;SCNHitTestResult*&gt; *)hitTestSceneKitFrom2DScreenPoint:(CGPoint)<em>point</em> options:(NSDictionary&lt;NSString*,id&gt; *)<em>options</em></code></div>
+
+		    
+			
+
+			
+
+			
+
+			
+			<div class="method-subsection discussion-section">
+				<h4 class="method-subtitle">Discussion</h4>
+				<div class="note"><p><strong>Note:</strong> This internally calls SCNSceneRenderer Protocol&rsquo;s hitTest:options, where options are SceneKit Hit-Testing Options Keys.</p></div><div class="note"><p><strong>Note:</strong> This hit-test is performance-intensive, you should avoid calling it in an update loop.</p></div>
+			</div>
+			
+
+			
+
+			
+
+			
+			<div class="method-subsection declared-in-section">
+				<h4 class="method-subtitle">Declared In</h4>
+				<p><code class="declared-in-ref">BEMixedRealityMode.h</code></p>
+			</div>
+			
+			
+		</div>
+	</div>
+</div>
+						</div>
+						
+
+						<a title="Coordinate Transforms" name="task_Coordinate Transforms"></a>
+						<h2 class="task-title">Coordinate Transforms</h2>
+
+						<div class="task-list">
+							<div class="section-method">
+	<a name="//api/name/projectPoint:" title="projectPoint:"></a>
+	<h3 class="method-title"><code><a href="#//api/name/projectPoint:">&ndash;&nbsp;projectPoint:</a></code>
+</h3>
+
+	<div class="method-info">
+		<div class="pointy-thing"></div>
+
+		<div class="method-info-container">
+			
+			
+			<div class="method-subsection brief-description">
+				<p>Project a 3D point in SceneKit world coordinates to the 2D SceneKit pixel coordinate.</p>
+			</div>
+			
+		    
+
+			<div class="method-subsection method-declaration"><code>- (SCNVector3)projectPoint:(SCNVector3)<em>sceneRootNodeWorldPoint</em></code></div>
+
+		    
+			
+
+			
+
+			
+
+			
+			<div class="method-subsection discussion-section">
+				<h4 class="method-subtitle">Discussion</h4>
+				<div class="note"><p><strong>Note:</strong> This internally calls <code>[SCNSceneRenderer projectPoint]</code></p></div>
+			</div>
+			
+
+			
+
+			
+
+			
+			<div class="method-subsection declared-in-section">
+				<h4 class="method-subtitle">Declared In</h4>
+				<p><code class="declared-in-ref">BEMixedRealityMode.h</code></p>
+			</div>
+			
+			
+		</div>
+	</div>
+</div><div class="section-method">
+	<a name="//api/name/projectPointToScreenCoordinates:" title="projectPointToScreenCoordinates:"></a>
+	<h3 class="method-title"><code><a href="#//api/name/projectPointToScreenCoordinates:">&ndash;&nbsp;projectPointToScreenCoordinates:</a></code>
+</h3>
+
+	<div class="method-info">
+		<div class="pointy-thing"></div>
+
+		<div class="method-info-container">
+			
+			
+			<div class="method-subsection brief-description">
+				<p>Project a 3D point in SceneKit world coordinates to screen space.
+This first calls <code>projectPoint</code> and then converts the SceneKit 2D coordinates to UIKit coordinate system.
+These coordinates can be used for UIKit operations like moving a UIView to a specific location.</p>
+			</div>
+			
+		    
+
+			<div class="method-subsection method-declaration"><code>- (CGPoint)projectPointToScreenCoordinates:(SCNVector3)<em>sceneRootNodeWorldPoint</em></code></div>
+
+		    
+			
+
+			
+
+			
+
+			
+
+			
+
+			
+
+			
+			<div class="method-subsection declared-in-section">
+				<h4 class="method-subtitle">Declared In</h4>
+				<p><code class="declared-in-ref">BEMixedRealityMode.h</code></p>
+			</div>
+			
+			
+		</div>
+	</div>
+</div>
+						</div>
+						
+
+						<a title="Markups" name="task_Markups"></a>
+						<h2 class="task-title">Markups</h2>
+
+						<div class="task-list">
+							<div class="section-method">
+	<a name="//api/name/startMarkupEditing" title="startMarkupEditing"></a>
+	<h3 class="method-title"><code><a href="#//api/name/startMarkupEditing">&ndash;&nbsp;startMarkupEditing</a></code>
+</h3>
+
+	<div class="method-info">
+		<div class="pointy-thing"></div>
+
+		<div class="method-info-container">
+			
+			
+			<div class="method-subsection brief-description">
+				<p>Begin the markup editing phase.
+A Markup View will be loaded, allowing you to edit and save markup.
+Pressing Done dismisses the view.</p>
+			</div>
+			
+		    
+
+			<div class="method-subsection method-declaration"><code>- (void)startMarkupEditing</code></div>
+
+		    
+			
+
+			
+
+			
+
+			
+
+			
+
+			
+
+			
+			<div class="method-subsection declared-in-section">
+				<h4 class="method-subtitle">Declared In</h4>
+				<p><code class="declared-in-ref">BEMixedRealityMode.h</code></p>
+			</div>
+			
+			
+		</div>
+	</div>
+</div><div class="section-method">
+	<a name="//api/name/markupNodeForName:" title="markupNodeForName:"></a>
+	<h3 class="method-title"><code><a href="#//api/name/markupNodeForName:">&ndash;&nbsp;markupNodeForName:</a></code>
+</h3>
+
+	<div class="method-info">
+		<div class="pointy-thing"></div>
+
+		<div class="method-info-container">
+			
+			
+			<div class="method-subsection brief-description">
+				<p>Get the markup node associated to a given name
+@throws NSInvalidArgumentException if <code>markupName</code> does not correspond to a name in the list given initially</p>
+			</div>
+			
+		    
+
+			<div class="method-subsection method-declaration"><code>- (SCNNode *)markupNodeForName:(NSString *)<em>markupName</em></code></div>
+
+		    
+			
+
+			
+			<div class="method-subsection return">
+				<h4 class="method-subtitle parameter-title">Return Value</h4>
+				<p>nil if the markupNode has a NaN position, indicating that has not been initialized and is not &ldquo;ready to use&rdquo;.</p>
+			</div>
+			
+
+			
+
+			
+
+			
+
+			
+
+			
+			<div class="method-subsection declared-in-section">
+				<h4 class="method-subtitle">Declared In</h4>
+				<p><code class="declared-in-ref">BEMixedRealityMode.h</code></p>
+			</div>
+			
+			
+		</div>
+	</div>
+</div>
+						</div>
+						
+
+						<a title="Utilities" name="task_Utilities"></a>
+						<h2 class="task-title">Utilities</h2>
+
+						<div class="task-list">
+							<div class="section-method">
+	<a name="//api/name/runBlockInRenderThread:" title="runBlockInRenderThread:"></a>
+	<h3 class="method-title"><code><a href="#//api/name/runBlockInRenderThread:">&ndash;&nbsp;runBlockInRenderThread:</a></code>
+</h3>
+
+	<div class="method-info">
+		<div class="pointy-thing"></div>
+
+		<div class="method-info-container">
+			
+			
+			<div class="method-subsection brief-description">
+				<p>This can be used to run a block on the rendering thread, e.g. to update a SceneKit node in sync with rendering.</p>
+			</div>
+			
+		    
+
+			<div class="method-subsection method-declaration"><code>- (void)runBlockInRenderThread:(void ( ^ ) ( void ))<em>block</em></code></div>
+
+		    
+			
+
+			
+
+			
+
+			
+
+			
+
+			
+
+			
+			<div class="method-subsection declared-in-section">
+				<h4 class="method-subtitle">Declared In</h4>
+				<p><code class="declared-in-ref">BEMixedRealityMode.h</code></p>
+			</div>
+			
+			
+		</div>
+	</div>
+</div>
+						</div>
+						
+
+						<a title="LowLevel Methods" name="task_LowLevel Methods"></a>
+						<h2 class="task-title">LowLevel Methods</h2>
+
+						<div class="task-list">
+							<div class="section-method">
+	<a name="//api/name/predictColorCameraPoseForDisplayLinkStart:colorCameraPose:poseTimestamp:" title="predictColorCameraPoseForDisplayLinkStart:colorCameraPose:poseTimestamp:"></a>
+	<h3 class="method-title"><code><a href="#//api/name/predictColorCameraPoseForDisplayLinkStart:colorCameraPose:poseTimestamp:">&ndash;&nbsp;predictColorCameraPoseForDisplayLinkStart:colorCameraPose:poseTimestamp:</a></code>
+</h3>
+
+	<div class="method-info">
+		<div class="pointy-thing"></div>
+
+		<div class="method-info-container">
+			
+			
+			<div class="method-subsection brief-description">
+				<p>Return the best estimate of the color camera pose for a given a display link timestamp</p>
+			</div>
+			
+		    
+
+			<div class="method-subsection method-declaration"><code>- (BOOL)predictColorCameraPoseForDisplayLinkStart:(NSTimeInterval)<em>displayLinkStart</em> colorCameraPose:(GLKMatrix4 *)<em>colorCameraPose</em> poseTimestamp:(NSTimeInterval *)<em>poseTimestamp</em></code></div>
+
+		    
+			
+			<div class="method-subsection arguments-section parameters">
+				<h4 class="method-subtitle parameter-title">Parameters</h4>
+				<table class="argument-def parameter-def">
+				
+					<tr>
+						<th scope="row" class="argument-name"><code>displayLinkStart</code></th>
+						<td><p>host timestamp when displayLink was started. This information will be used to determine the best pose timestamp.</p></td>
+					</tr>
+				
+					<tr>
+						<th scope="row" class="argument-name"><code>colorCameraPose</code></th>
+						<td><p>pose estimated by the tracker</p></td>
+					</tr>
+				
+					<tr>
+						<th scope="row" class="argument-name"><code>poseTimestamp</code></th>
+						<td><p>timestamp at which the camera pose was estimated. This may be in the future to reduce latency.</p></td>
+					</tr>
+				
+				</table>
+			</div>
+			
+
+			
+			<div class="method-subsection return">
+				<h4 class="method-subtitle parameter-title">Return Value</h4>
+				<p>YES if a pose could be estimated.</p>
+			</div>
+			
+
+			
+
+			
+			<div class="method-subsection discussion-section">
+				<h4 class="method-subtitle">Discussion</h4>
+				<p>This is meant to be used in headless mode (when BEView==nil), e.g. from the Unity plugin.</p>
+			</div>
+			
+
+			
+
+			
+
+			
+			<div class="method-subsection declared-in-section">
+				<h4 class="method-subtitle">Declared In</h4>
+				<p><code class="declared-in-ref">BEMixedRealityMode.h</code></p>
+			</div>
+			
+			
+		</div>
+	</div>
+</div><div class="section-method">
+	<a name="//api/name/renderSceneMeshWithStyle:modelView:projection:" title="renderSceneMeshWithStyle:modelView:projection:"></a>
+	<h3 class="method-title"><code><a href="#//api/name/renderSceneMeshWithStyle:modelView:projection:">&ndash;&nbsp;renderSceneMeshWithStyle:modelView:projection:</a></code>
+</h3>
+
+	<div class="method-info">
+		<div class="pointy-thing"></div>
+
+		<div class="method-info-container">
+			
+			
+			<div class="method-subsection brief-description">
+				<p>Render the scene mesh in the current GL context.</p>
+			</div>
+			
+		    
+
+			<div class="method-subsection method-declaration"><code>- (void)renderSceneMeshWithStyle:(BEOpenGLRenderStyle)<em>glStyle</em> modelView:(GLKMatrix4)<em>modelView</em> projection:(GLKMatrix4)<em>projection</em></code></div>
+
+		    
+			
+			<div class="method-subsection arguments-section parameters">
+				<h4 class="method-subtitle parameter-title">Parameters</h4>
+				<table class="argument-def parameter-def">
+				
+					<tr>
+						<th scope="row" class="argument-name"><code>glStyle</code></th>
+						<td><p>the rendering shader that will be used.</p></td>
+					</tr>
+				
+					<tr>
+						<th scope="row" class="argument-name"><code>modelView</code></th>
+						<td><p>the projection matrix used to render the mesh.</p></td>
+					</tr>
+				
+				</table>
+			</div>
+			
+
+			
+
+			
+
+			
+
+			
+
+			
+
+			
+			<div class="method-subsection declared-in-section">
+				<h4 class="method-subtitle">Declared In</h4>
+				<p><code class="declared-in-ref">BEMixedRealityMode.h</code></p>
+			</div>
+			
+			
+		</div>
+	</div>
+</div>
+						</div>
+						
+					</div>
+					
+					
+
+                    
+				</main>
+
+				<footer>
+					<div class="footer-copyright">
+						
+						<p class="copyright">Copyright &copy; 2016 Occipital. All rights reserved. Updated: 2016-12-21</p>
+						
+						
+						<p class="generator">Generated by <a href="http://appledoc.gentlebytes.com">appledoc 2.2.1 (build 1333)</a>.</p>
+						
+					</div>
+				</footer>
+			</div>
+		</div>
+	</article>
+
+	<script src="../js/script.js"></script>
+</body>
+</html>

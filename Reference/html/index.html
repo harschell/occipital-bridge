@@ -1,0 +1,234 @@
+<!DOCTYPE html>
+<html>
+<head>
+	<meta charset="utf-8">
+
+	<title>Bridge Engine SDK Reference</title>
+
+	<link rel="stylesheet" href="css/style.css">
+	<meta name="viewport" content="initial-scale=1, maximum-scale=1.4">
+	<meta name="generator" content="appledoc 2.2.1 (build 1333)">
+</head>
+<body class="appledoc">
+	<header>
+		<div class="container" class="hide-in-xcode">
+			
+			<h1 id="library-title">
+				<a href="index.html">Bridge Engine SDK </a>
+			</h1>
+
+			<p id="developer-home">
+				<a href="index.html">Occipital</a>
+			</p>
+			
+		</div>
+	</header>
+
+	<aside>
+		<div class="container">
+			<nav>
+				<ul id="header-buttons" role="toolbar">
+					<li><a href="hierarchy.html">Hierarchy</a></li>
+				</ul>
+			</nav>
+		</div>
+	</aside>
+
+	<article>
+		<div id="overview-contents" class="container">
+			<div id="content">
+				<main role="main">
+					<h1 class="title">Bridge Engine SDK Reference</h1>
+
+					
+					<div class="section section-overview index-overview">
+						
+						
+						<!--<div style="float: left"><img src="../assets/structure-sdk-banner.png"/></div>-->
+
+
+
+
+<div style="float: right; margin-left: 16px;"><img src="../assets/bridge-headset.png"/></div>
+
+
+<h1>Welcome, Bridge Engine Developer!</h1>
+
+<p>The Bridge Engine SDK is made of the <a href="#bridge-engine-framework">Bridge Engine Framework</a>, <a href="#sample-apps">sample applications</a> to get you started, and a <a href="#framework-references">reference framework documentation</a> generated from its headers.</p>
+
+<p>You can find out more about <a href="#app-dev">Bridge Engine app development</a> at: <a href="http://bridge.occipital.com/developers/">http://bridge.occipital.com/developers/</a>.</p>
+
+<div style="clear: both;"></div>
+
+
+<h2><a name="bridge-engine-framework"></a>Framework Overview</h2>
+
+<p>The <a href="../../Frameworks/BridgeEngine.Framework">Bridge Engine framework</a> defines an Objective-C interface for developing Mixed Reality applications leveraging the <a href="http://structure.io">Structure Sensor</a> and the <a href="http://bridge.occipital.com">Bridge Headset</a> on iOS devices.</p>
+
+<h4>Framework Header</h4>
+
+<pre><code>#import &lt;BridgeEngine/BridgeEngine.h&gt;
+</code></pre>
+
+<h4>Main Classes &amp; Protocols</h4>
+
+<ul>
+<li><a href="Classes/BEMixedRealityMode.html">BEMixedRealityMode</a></li>
+<li><a href="Protocols/BEMixedRealityModeDelegate.html">BEMixedRealityModeDelegate</a></li>
+<li><a href="Classes/BEController.html">BEController</a></li>
+<li><a href="Protocols/BEControllerDelegate.html">BEControllerDelegate</a></li>
+<li><a href="Classes/BEView.html">BEView</a></li>
+</ul>
+
+
+<h2><a name="sample-apps"></a>Sample Apps (Native)</h2>
+
+<p>The following sample apps have no non-standard dependencies (other than the Bridge Engine framework), and can be built and run with Xcode alone.</p>
+
+<h3><a name="mixed-reality"></a>MixedReality</h3>
+
+<div style="float: right; margin-left: 8px"><img src="../assets/mixed-reality-logo.png"/></div>
+
+
+<p>The <a href="../../Samples/MixedReality">MixedReality Sample application</a> is a simple application that will let you place some virtual objects in the scene.</p>
+
+<div style="clear: both;"></div>
+
+
+<h3><a name="bridget"></a>Bridget</h3>
+
+<div style="float: right; margin-left: 8px"><img src="../assets/bridget-logo.png"/></div>
+
+
+<p>The <em>Bridget Sample application</em> (Coming Soon) showcases the capabilities of Bridget, our cute little robot. Bridget can interact with the user, navigate around obstacles, and play fetch!</p>
+
+<div style="clear: both;"></div>
+
+
+<h2><a name="unity-plugin"></a>Unity Plugin</h2>
+
+<p>One Unity package is available to make it easy to get started with Bridge Engine for developers who are familiar with Unity. The package uses Bridge Engine SDK, and can be extended as needed by developers.</p>
+
+<p>See the <code>Unity</code> folder for more, including <a href="../../Unity/BridgeEngineUnity-Getting-Started.pdf">Unity Plugin Overview</a>.</p>
+
+<h2><a name="app-dev"></a>App Development</h2>
+
+<p>Developing applications with Bridge Engine requires Xcode 8 or above, freely available on the <a href="https://developer.apple.com/xcode">Apple developer site</a>.</p>
+
+<h3>External Accessory Protocols</h3>
+
+<div class="warning"><p><strong>Important:</strong> When creating a new application using the Bridge Engine SDK, the main <code>Info.plist</code> needs to contain an additional key "<code>Supported external accessory protocols</code>", with the following array of values:
+<ul>
+<li><code>io.structure.control</code></li>
+<li><code>io.structure.depth</code></li>
+<li><code>io.structure.infrared</code></li>
+</ul>
+Without this modification to the property list, the application will not be able to connect to the sensor. All sample applications have this key/value array. Check them out!
+</p>
+</div>
+
+
+<h3><a name="framework-references"></a>iOS Frameworks</h3>
+
+<p>The Bridge Engine framework depends on the following iOS frameworks:</p>
+
+<ul>
+<li><code>Accelerate.framework</code></li>
+<li><code>AVFoundation.framework</code></li>
+<li><code>CoreImage.framework</code></li>
+<li><code>CoreGraphics.framework</code></li>
+<li><code>CoreMedia.framework</code></li>
+<li><code>CoreMotion.framework</code></li>
+<li><code>CoreVideo.framework</code></li>
+<li><code>ExternalAccessory.framework</code></li>
+<li><code>Foundation.framework</code></li>
+<li><code>ImageIO.framework</code></li>
+<li><code>Metal.framework</code></li>
+<li><code>OpenGLES.framework</code></li>
+<li><code>QuartzCore.framework</code></li>
+<li><code>UIKit.framework</code></li>
+<li><code>libz.dylib</code></li>
+</ul>
+
+
+<p> You will therefore need to link them into your app too.</p>
+						
+						
+					</div>
+					
+
+					<div class="index-container">
+						
+
+						
+						<div class="index-column">
+							<h2 class="index-title">Class References</h2>
+							<ul>
+								
+								<li><a href="Classes/BEController.html">BEController</a></li>
+								
+								<li><a href="Classes/BEMixedRealityMode.html">BEMixedRealityMode</a></li>
+								
+								<li><a href="Classes/BEView.html">BEView</a></li>
+								
+							</ul>
+						</div>
+						
+
+						
+						<div class="index-column">
+							
+							<h2 class="index-title">Protocol References</h2>
+							<ul>
+								
+								<li><a href="Protocols/BEControllerDelegate.html">BEControllerDelegate</a></li>
+								
+								<li><a href="Protocols/BEMixedRealityModeDelegate.html">BEMixedRealityModeDelegate</a></li>
+								
+								<li><a href="Protocols/BridgeEngineShaderDelegate.html">BridgeEngineShaderDelegate</a></li>
+								
+							</ul>
+							
+
+							
+							<h2 class="index-title">Constant References</h2>
+							<ul>
+								
+									<li><a href="Constants/BECaptureReplayMode.html">BECaptureReplayMode</a></li>
+								
+									<li><a href="Constants/BECollisionCategory.html">BECollisionCategory</a></li>
+								
+									<li><a href="Constants/BEMappedAreaStatus.html">BEMappedAreaStatus</a></li>
+								
+									<li><a href="Constants/BEOpenGLRenderStyle.html">BEOpenGLRenderStyle</a></li>
+								
+									<li><a href="Constants/BERenderStyle.html">BERenderStyle</a></li>
+								
+									<li><a href="Constants/BETrackerPoseAccuracy.html">BETrackerPoseAccuracy</a></li>
+								
+							</ul>
+							
+
+							
+						</div>
+						
+					</div>
+
+					<footer>
+						<div class="footer-copyright">
+							
+							<p class="copyright">Copyright &copy; 2016 Occipital. All rights reserved. Updated: 2016-12-21</p>
+							
+							
+							<p class="generator">Generated by <a href="http://appledoc.gentlebytes.com">appledoc 2.2.1 (build 1333)</a>.</p>
+							
+						</div>
+					</footer>
+				</main>
+			</div>
+		</div>
+	</article>
+
+	<script src="js/script.js"></script>
+</body>
+</html>

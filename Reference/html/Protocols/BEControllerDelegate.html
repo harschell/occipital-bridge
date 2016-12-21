@@ -1,0 +1,398 @@
+<!DOCTYPE html>
+<html>
+<head>
+	<meta charset="utf-8">
+
+	<title>BEControllerDelegate Protocol Reference</title>
+
+	<link rel="stylesheet" href="../css/style.css">
+	<meta name="viewport" content="initial-scale=1, maximum-scale=1.4">
+	<meta name="generator" content="appledoc 2.2.1 (build 1333)">
+</head>
+<body class="appledoc">
+	<header>
+		<div class="container" class="hide-in-xcode">
+			
+			<h1 id="library-title">
+				<a href="../index.html">Bridge Engine SDK </a>
+			</h1>
+
+			<p id="developer-home">
+				<a href="../index.html">Occipital</a>
+			</p>
+			
+		</div>
+	</header>
+
+	<aside>
+		<div class="container">
+			<nav>
+				<ul id="header-buttons" role="toolbar">
+					<li><a href="../index.html">Index</a></li>
+<li><a href="../hierarchy.html">Hierarchy</a></li>
+
+					<li id="on-this-page" role="navigation">
+						<label>
+							On This Page
+
+							<div class="chevron">
+								<div class="chevy chevron-left"></div>
+								<div class="chevy chevron-right"></div>
+							</div>
+
+							<select id="jump-to">
+	<option value="top">Jump To&#133;</option>
+	
+	<option value="overview">Overview</option>
+	
+
+	
+	
+	<option value="tasks">Tasks</option>
+	
+	
+
+	
+	
+
+	
+
+	
+	<optgroup label="Instance Methods">
+		
+		<option value="//api/name/controllerDidConnect">- controllerDidConnect</option>
+		
+		<option value="//api/name/controllerDidDisconnect">- controllerDidDisconnect</option>
+		
+		<option value="//api/name/controllerButtonDown">- controllerButtonDown</option>
+		
+		<option value="//api/name/controllerButtonUp">- controllerButtonUp</option>
+		
+		<option value="//api/name/controllerDidPressButton">- controllerDidPressButton</option>
+		
+		<option value="//api/name/controllerDidHoldButton">- controllerDidHoldButton</option>
+		
+	</optgroup>
+	
+	
+</select>
+						</label>
+					</li>
+				</ul>
+			</nav>
+		</div>
+	</aside>
+
+	<article>
+		<div id="overview_contents" class="container">
+			<div id="content">
+				<main role="main">
+					<h1 class="title">BEControllerDelegate Protocol Reference</h1>
+
+					
+					<div class="section section-specification"><table cellspacing="0"><tbody>
+						<tr>
+	<th>Conforms to</th>
+	<td>NSObject</td>
+</tr><tr>
+	<th>Declared in</th>
+	<td>BEController.h</td>
+</tr>
+						</tbody></table></div>
+					
+
+                    
+					
+					<div class="section section-overview">
+						<a title="Overview" name="overview"></a>
+						<h2 class="subtitle subtitle-overview">Overview</h2>
+						<p>Bridge Engine Bluetooth Controller Delegate</p>
+
+<p>The interface that your application-specific class must implement to receive events from the bluetooth controller.</p>
+					</div>
+					
+					
+
+					
+					
+					<div class="section section-tasks">
+						<a title="Tasks" name="tasks"></a>
+						
+
+						
+						
+
+						<div class="task-list">
+							<div class="section-method">
+	<a name="//api/name/controllerDidConnect" title="controllerDidConnect"></a>
+	<h3 class="method-title"><code><a href="#//api/name/controllerDidConnect">&ndash;&nbsp;controllerDidConnect</a></code>
+</h3>
+
+	<div class="method-info">
+		<div class="pointy-thing"></div>
+
+		<div class="method-info-container">
+			
+			
+			<div class="method-subsection brief-description">
+				<p>Called when the controller is paired and ready to send events.</p>
+			</div>
+			
+		    
+
+			<div class="method-subsection method-declaration"><code>- (void)controllerDidConnect</code></div>
+
+		    
+			
+
+			
+
+			
+
+			
+
+			
+
+			
+
+			
+			<div class="method-subsection declared-in-section">
+				<h4 class="method-subtitle">Declared In</h4>
+				<p><code class="declared-in-ref">BEController.h</code></p>
+			</div>
+			
+			
+		</div>
+	</div>
+</div><div class="section-method">
+	<a name="//api/name/controllerDidDisconnect" title="controllerDidDisconnect"></a>
+	<h3 class="method-title"><code><a href="#//api/name/controllerDidDisconnect">&ndash;&nbsp;controllerDidDisconnect</a></code>
+</h3>
+
+	<div class="method-info">
+		<div class="pointy-thing"></div>
+
+		<div class="method-info-container">
+			
+			
+			<div class="method-subsection brief-description">
+				<p>Called when the controller got disconnected.</p>
+			</div>
+			
+		    
+
+			<div class="method-subsection method-declaration"><code>- (void)controllerDidDisconnect</code></div>
+
+		    
+			
+
+			
+
+			
+
+			
+
+			
+
+			
+
+			
+			<div class="method-subsection declared-in-section">
+				<h4 class="method-subtitle">Declared In</h4>
+				<p><code class="declared-in-ref">BEController.h</code></p>
+			</div>
+			
+			
+		</div>
+	</div>
+</div><div class="section-method">
+	<a name="//api/name/controllerButtonDown" title="controllerButtonDown"></a>
+	<h3 class="method-title"><code><a href="#//api/name/controllerButtonDown">&ndash;&nbsp;controllerButtonDown</a></code>
+</h3>
+
+	<div class="method-info">
+		<div class="pointy-thing"></div>
+
+		<div class="method-info-container">
+			
+			
+			<div class="method-subsection brief-description">
+				<p>Called when the controller button is pressed</p>
+			</div>
+			
+		    
+
+			<div class="method-subsection method-declaration"><code>- (void)controllerButtonDown</code></div>
+
+		    
+			
+
+			
+
+			
+
+			
+
+			
+
+			
+
+			
+			<div class="method-subsection declared-in-section">
+				<h4 class="method-subtitle">Declared In</h4>
+				<p><code class="declared-in-ref">BEController.h</code></p>
+			</div>
+			
+			
+		</div>
+	</div>
+</div><div class="section-method">
+	<a name="//api/name/controllerButtonUp" title="controllerButtonUp"></a>
+	<h3 class="method-title"><code><a href="#//api/name/controllerButtonUp">&ndash;&nbsp;controllerButtonUp</a></code>
+</h3>
+
+	<div class="method-info">
+		<div class="pointy-thing"></div>
+
+		<div class="method-info-container">
+			
+			
+			<div class="method-subsection brief-description">
+				<p>Called when the controller button is released</p>
+			</div>
+			
+		    
+
+			<div class="method-subsection method-declaration"><code>- (void)controllerButtonUp</code></div>
+
+		    
+			
+
+			
+
+			
+
+			
+
+			
+
+			
+
+			
+			<div class="method-subsection declared-in-section">
+				<h4 class="method-subtitle">Declared In</h4>
+				<p><code class="declared-in-ref">BEController.h</code></p>
+			</div>
+			
+			
+		</div>
+	</div>
+</div><div class="section-method">
+	<a name="//api/name/controllerDidPressButton" title="controllerDidPressButton"></a>
+	<h3 class="method-title"><code><a href="#//api/name/controllerDidPressButton">&ndash;&nbsp;controllerDidPressButton</a></code>
+</h3>
+
+	<div class="method-info">
+		<div class="pointy-thing"></div>
+
+		<div class="method-info-container">
+			
+			
+			<div class="method-subsection brief-description">
+				<p>Called if the controller button was quickly pressed and released.</p>
+			</div>
+			
+		    
+
+			<div class="method-subsection method-declaration"><code>- (void)controllerDidPressButton</code></div>
+
+		    
+			
+
+			
+
+			
+
+			
+
+			
+
+			
+
+			
+			<div class="method-subsection declared-in-section">
+				<h4 class="method-subtitle">Declared In</h4>
+				<p><code class="declared-in-ref">BEController.h</code></p>
+			</div>
+			
+			
+		</div>
+	</div>
+</div><div class="section-method">
+	<a name="//api/name/controllerDidHoldButton" title="controllerDidHoldButton"></a>
+	<h3 class="method-title"><code><a href="#//api/name/controllerDidHoldButton">&ndash;&nbsp;controllerDidHoldButton</a></code>
+</h3>
+
+	<div class="method-info">
+		<div class="pointy-thing"></div>
+
+		<div class="method-info-container">
+			
+			
+			<div class="method-subsection brief-description">
+				<p>Called if the controller button has been pressed for a long time.</p>
+			</div>
+			
+		    
+
+			<div class="method-subsection method-declaration"><code>- (void)controllerDidHoldButton</code></div>
+
+		    
+			
+
+			
+
+			
+
+			
+
+			
+
+			
+
+			
+			<div class="method-subsection declared-in-section">
+				<h4 class="method-subtitle">Declared In</h4>
+				<p><code class="declared-in-ref">BEController.h</code></p>
+			</div>
+			
+			
+		</div>
+	</div>
+</div>
+						</div>
+						
+					</div>
+					
+					
+
+                    
+				</main>
+
+				<footer>
+					<div class="footer-copyright">
+						
+						<p class="copyright">Copyright &copy; 2016 Occipital. All rights reserved. Updated: 2016-12-21</p>
+						
+						
+						<p class="generator">Generated by <a href="http://appledoc.gentlebytes.com">appledoc 2.2.1 (build 1333)</a>.</p>
+						
+					</div>
+				</footer>
+			</div>
+		</div>
+	</article>
+
+	<script src="../js/script.js"></script>
+</body>
+</html>
