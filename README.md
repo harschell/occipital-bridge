@@ -19,6 +19,7 @@ Want to help us expand the capabilities of Bridge Engine? We'd love contribution
 ### Please Use the Following Documentation & Resources to Get Up and Running
 - Open `Reference/html/index.html` in your browser to view documentation
 - [Documentation: Table of Contents and Calibrator App](https://github.com/OccipitalOpenSource/bridge-engine-beta/wiki)
+- Note that Bridge Engine is not compatible with the iOS simulator.
 
 ### Changelog
 
