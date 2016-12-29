@@ -1,0 +1,737 @@
+// !$*UTF8*$!
+{
+	archiveVersion = 1;
+	classes = {
+	};
+	objectVersion = 46;
+	objects = {
+
+/* Begin PBXBuildFile section */
+		2C5DA53C1E00EF1900A60606 /* ScanEnvironmentShader.h in Headers */ = {isa = PBXBuildFile; fileRef = 2C5DA53A1E00EF1900A60606 /* ScanEnvironmentShader.h */; };
+		2C5DA53D1E00EF1900A60606 /* ScanEnvironmentShader.mm in Sources */ = {isa = PBXBuildFile; fileRef = 2C5DA53B1E00EF1900A60606 /* ScanEnvironmentShader.mm */; };
+		2C5DA5421E00F06F00A60606 /* ScanComponent.h in Headers */ = {isa = PBXBuildFile; fileRef = 2C5DA53E1E00F06F00A60606 /* ScanComponent.h */; };
+		2C5DA5431E00F06F00A60606 /* ScanComponent.m in Sources */ = {isa = PBXBuildFile; fileRef = 2C5DA53F1E00F06F00A60606 /* ScanComponent.m */; };
+		2C5DA5441E00F06F00A60606 /* ScanEventComponent.h in Headers */ = {isa = PBXBuildFile; fileRef = 2C5DA5401E00F06F00A60606 /* ScanEventComponent.h */; };
+		2C5DA5451E00F06F00A60606 /* ScanEventComponent.m in Sources */ = {isa = PBXBuildFile; fileRef = 2C5DA5411E00F06F00A60606 /* ScanEventComponent.m */; };
+		2C5DA5481E00F12700A60606 /* ScanBehaviourComponent.h in Headers */ = {isa = PBXBuildFile; fileRef = 2C5DA5461E00F12700A60606 /* ScanBehaviourComponent.h */; };
+		2C5DA5491E00F12700A60606 /* ScanBehaviourComponent.m in Sources */ = {isa = PBXBuildFile; fileRef = 2C5DA5471E00F12700A60606 /* ScanBehaviourComponent.m */; };
+		2DC3E97E1E0005A2007C3C02 /* OpenBE.scnassets in Resources */ = {isa = PBXBuildFile; fileRef = 2DC3E97D1E0005A2007C3C02 /* OpenBE.scnassets */; };
+		2DC3EA431E005CC9007C3C02 /* BridgeEngine.framework in Frameworks */ = {isa = PBXBuildFile; fileRef = 2DC3EA421E005CC9007C3C02 /* BridgeEngine.framework */; };
+		2DCD6FF21DFFEED3003691AE /* OpenBE.h in Headers */ = {isa = PBXBuildFile; fileRef = 2DCD6FF01DFFEED3003691AE /* OpenBE.h */; settings = {ATTRIBUTES = (Public, ); }; };
+		2DCD703E1DFFEF84003691AE /* AudioEngine.h in Headers */ = {isa = PBXBuildFile; fileRef = 2DCD702A1DFFEF84003691AE /* AudioEngine.h */; };
+		2DCD703F1DFFEF84003691AE /* AudioEngine.mm in Sources */ = {isa = PBXBuildFile; fileRef = 2DCD702B1DFFEF84003691AE /* AudioEngine.mm */; };
+		2DCD70401DFFEF84003691AE /* Camera.h in Headers */ = {isa = PBXBuildFile; fileRef = 2DCD702C1DFFEF84003691AE /* Camera.h */; };
+		2DCD70411DFFEF84003691AE /* Camera.m in Sources */ = {isa = PBXBuildFile; fileRef = 2DCD702D1DFFEF84003691AE /* Camera.m */; };
+		2DCD70421DFFEF84003691AE /* Component.h in Headers */ = {isa = PBXBuildFile; fileRef = 2DCD702E1DFFEF84003691AE /* Component.h */; };
+		2DCD70431DFFEF84003691AE /* Component.m in Sources */ = {isa = PBXBuildFile; fileRef = 2DCD702F1DFFEF84003691AE /* Component.m */; };
+		2DCD70441DFFEF84003691AE /* ComponentProtocol.h in Headers */ = {isa = PBXBuildFile; fileRef = 2DCD70301DFFEF84003691AE /* ComponentProtocol.h */; };
+		2DCD70451DFFEF84003691AE /* Core.h in Headers */ = {isa = PBXBuildFile; fileRef = 2DCD70311DFFEF84003691AE /* Core.h */; };
+		2DCD70461DFFEF84003691AE /* CoreMotionComponentProtocol.h in Headers */ = {isa = PBXBuildFile; fileRef = 2DCD70321DFFEF84003691AE /* CoreMotionComponentProtocol.h */; };
+		2DCD70471DFFEF84003691AE /* EventComponentProtocol.h in Headers */ = {isa = PBXBuildFile; fileRef = 2DCD70331DFFEF84003691AE /* EventComponentProtocol.h */; };
+		2DCD70481DFFEF84003691AE /* EventManager.h in Headers */ = {isa = PBXBuildFile; fileRef = 2DCD70341DFFEF84003691AE /* EventManager.h */; };
+		2DCD70491DFFEF84003691AE /* EventManager.mm in Sources */ = {isa = PBXBuildFile; fileRef = 2DCD70351DFFEF84003691AE /* EventManager.mm */; };
+		2DCD704A1DFFEF84003691AE /* GeometryComponent.h in Headers */ = {isa = PBXBuildFile; fileRef = 2DCD70361DFFEF84003691AE /* GeometryComponent.h */; };
+		2DCD704B1DFFEF84003691AE /* GeometryComponent.m in Sources */ = {isa = PBXBuildFile; fileRef = 2DCD70371DFFEF84003691AE /* GeometryComponent.m */; };
+		2DCD704E1DFFEF84003691AE /* Scene.h in Headers */ = {isa = PBXBuildFile; fileRef = 2DCD703A1DFFEF84003691AE /* Scene.h */; };
+		2DCD704F1DFFEF84003691AE /* Scene.m in Sources */ = {isa = PBXBuildFile; fileRef = 2DCD703B1DFFEF84003691AE /* Scene.m */; };
+		2DCD70501DFFEF84003691AE /* SceneManager.h in Headers */ = {isa = PBXBuildFile; fileRef = 2DCD703C1DFFEF84003691AE /* SceneManager.h */; };
+		2DCD70511DFFEF84003691AE /* SceneManager.m in Sources */ = {isa = PBXBuildFile; fileRef = 2DCD703D1DFFEF84003691AE /* SceneManager.m */; };
+		2DCD70A11DFFEF8D003691AE /* AnimationComponent.h in Headers */ = {isa = PBXBuildFile; fileRef = 2DCD70531DFFEF8D003691AE /* AnimationComponent.h */; };
+		2DCD70A21DFFEF8D003691AE /* AnimationComponent.m in Sources */ = {isa = PBXBuildFile; fileRef = 2DCD70541DFFEF8D003691AE /* AnimationComponent.m */; };
+		2DCD70A31DFFEF8D003691AE /* BeamComponent.h in Headers */ = {isa = PBXBuildFile; fileRef = 2DCD70551DFFEF8D003691AE /* BeamComponent.h */; };
+		2DCD70A41DFFEF8D003691AE /* BeamComponent.m in Sources */ = {isa = PBXBuildFile; fileRef = 2DCD70561DFFEF8D003691AE /* BeamComponent.m */; };
+		2DCD70A51DFFEF8D003691AE /* BeamUIBehaviourComponent.h in Headers */ = {isa = PBXBuildFile; fileRef = 2DCD70581DFFEF8D003691AE /* BeamUIBehaviourComponent.h */; };
+		2DCD70A61DFFEF8D003691AE /* BeamUIBehaviourComponent.m in Sources */ = {isa = PBXBuildFile; fileRef = 2DCD70591DFFEF8D003691AE /* BeamUIBehaviourComponent.m */; };
+		2DCD70A71DFFEF8D003691AE /* BehaviourComponent.h in Headers */ = {isa = PBXBuildFile; fileRef = 2DCD705A1DFFEF8D003691AE /* BehaviourComponent.h */; };
+		2DCD70A81DFFEF8D003691AE /* BehaviourComponent.m in Sources */ = {isa = PBXBuildFile; fileRef = 2DCD705B1DFFEF8D003691AE /* BehaviourComponent.m */; };
+		2DCD70A91DFFEF8D003691AE /* ExpressionBehaviourComponent.h in Headers */ = {isa = PBXBuildFile; fileRef = 2DCD705C1DFFEF8D003691AE /* ExpressionBehaviourComponent.h */; };
+		2DCD70AA1DFFEF8D003691AE /* ExpressionBehaviourComponent.m in Sources */ = {isa = PBXBuildFile; fileRef = 2DCD705D1DFFEF8D003691AE /* ExpressionBehaviourComponent.m */; };
+		2DCD70AD1DFFEF8D003691AE /* LookAtBehaviourComponent.h in Headers */ = {isa = PBXBuildFile; fileRef = 2DCD70601DFFEF8D003691AE /* LookAtBehaviourComponent.h */; };
+		2DCD70AE1DFFEF8D003691AE /* LookAtBehaviourComponent.m in Sources */ = {isa = PBXBuildFile; fileRef = 2DCD70611DFFEF8D003691AE /* LookAtBehaviourComponent.m */; };
+		2DCD70AF1DFFEF8D003691AE /* LookAtCameraBehaviourComponent.h in Headers */ = {isa = PBXBuildFile; fileRef = 2DCD70621DFFEF8D003691AE /* LookAtCameraBehaviourComponent.h */; };
+		2DCD70B01DFFEF8D003691AE /* LookAtCameraBehaviourComponent.m in Sources */ = {isa = PBXBuildFile; fileRef = 2DCD70631DFFEF8D003691AE /* LookAtCameraBehaviourComponent.m */; };
+		2DCD70B11DFFEF8D003691AE /* LookAtNodeBehaviourComponent.h in Headers */ = {isa = PBXBuildFile; fileRef = 2DCD70641DFFEF8D003691AE /* LookAtNodeBehaviourComponent.h */; };
+		2DCD70B21DFFEF8D003691AE /* LookAtNodeBehaviourComponent.m in Sources */ = {isa = PBXBuildFile; fileRef = 2DCD70651DFFEF8D003691AE /* LookAtNodeBehaviourComponent.m */; };
+		2DCD70B31DFFEF8D003691AE /* MoveToBehaviourComponent.h in Headers */ = {isa = PBXBuildFile; fileRef = 2DCD70661DFFEF8D003691AE /* MoveToBehaviourComponent.h */; };
+		2DCD70B41DFFEF8D003691AE /* MoveToBehaviourComponent.m in Sources */ = {isa = PBXBuildFile; fileRef = 2DCD70671DFFEF8D003691AE /* MoveToBehaviourComponent.m */; };
+		2DCD70B51DFFEF8D003691AE /* PathFindMoveToBehaviourComponent.h in Headers */ = {isa = PBXBuildFile; fileRef = 2DCD70681DFFEF8D003691AE /* PathFindMoveToBehaviourComponent.h */; };
+		2DCD70B61DFFEF8D003691AE /* PathFindMoveToBehaviourComponent.m in Sources */ = {isa = PBXBuildFile; fileRef = 2DCD70691DFFEF8D003691AE /* PathFindMoveToBehaviourComponent.m */; };
+		2DCD70B71DFFEF8D003691AE /* BlockDemoReticleComponent.h in Headers */ = {isa = PBXBuildFile; fileRef = 2DCD706A1DFFEF8D003691AE /* BlockDemoReticleComponent.h */; };
+		2DCD70B81DFFEF8D003691AE /* BlockDemoReticleComponent.m in Sources */ = {isa = PBXBuildFile; fileRef = 2DCD706B1DFFEF8D003691AE /* BlockDemoReticleComponent.m */; };
+		2DCD70B91DFFEF8D003691AE /* ButtonComponent.h in Headers */ = {isa = PBXBuildFile; fileRef = 2DCD706C1DFFEF8D003691AE /* ButtonComponent.h */; };
+		2DCD70BA1DFFEF8D003691AE /* ButtonComponent.m in Sources */ = {isa = PBXBuildFile; fileRef = 2DCD706D1DFFEF8D003691AE /* ButtonComponent.m */; };
+		2DCD70BB1DFFEF8D003691AE /* ButtonContainerComponent.h in Headers */ = {isa = PBXBuildFile; fileRef = 2DCD706E1DFFEF8D003691AE /* ButtonContainerComponent.h */; };
+		2DCD70BC1DFFEF8D003691AE /* ButtonContainerComponent.m in Sources */ = {isa = PBXBuildFile; fileRef = 2DCD706F1DFFEF8D003691AE /* ButtonContainerComponent.m */; };
+		2DCD70BF1DFFEF8D003691AE /* FetchEventComponent.h in Headers */ = {isa = PBXBuildFile; fileRef = 2DCD70721DFFEF8D003691AE /* FetchEventComponent.h */; };
+		2DCD70C01DFFEF8D003691AE /* FetchEventComponent.m in Sources */ = {isa = PBXBuildFile; fileRef = 2DCD70731DFFEF8D003691AE /* FetchEventComponent.m */; };
+		2DCD70C11DFFEF8D003691AE /* FixedSizeReticleComponent.h in Headers */ = {isa = PBXBuildFile; fileRef = 2DCD70741DFFEF8D003691AE /* FixedSizeReticleComponent.h */; };
+		2DCD70C21DFFEF8D003691AE /* FixedSizeReticleComponent.m in Sources */ = {isa = PBXBuildFile; fileRef = 2DCD70751DFFEF8D003691AE /* FixedSizeReticleComponent.m */; };
+		2DCD70C31DFFEF8D003691AE /* GazeComponent.h in Headers */ = {isa = PBXBuildFile; fileRef = 2DCD70761DFFEF8D003691AE /* GazeComponent.h */; };
+		2DCD70C41DFFEF8D003691AE /* GazeComponent.m in Sources */ = {isa = PBXBuildFile; fileRef = 2DCD70771DFFEF8D003691AE /* GazeComponent.m */; };
+		2DCD70C51DFFEF8D003691AE /* GazePointerProtocol.h in Headers */ = {isa = PBXBuildFile; fileRef = 2DCD70781DFFEF8D003691AE /* GazePointerProtocol.h */; };
+		2DCD70D01DFFEF8D003691AE /* MoveRobotEventComponent.h in Headers */ = {isa = PBXBuildFile; fileRef = 2DCD70831DFFEF8D003691AE /* MoveRobotEventComponent.h */; };
+		2DCD70D11DFFEF8D003691AE /* MoveRobotEventComponent.m in Sources */ = {isa = PBXBuildFile; fileRef = 2DCD70841DFFEF8D003691AE /* MoveRobotEventComponent.m */; };
+		2DCD70D21DFFEF8D003691AE /* NavigationComponent.h in Headers */ = {isa = PBXBuildFile; fileRef = 2DCD70851DFFEF8D003691AE /* NavigationComponent.h */; };
+		2DCD70D31DFFEF8D003691AE /* NavigationComponent.m in Sources */ = {isa = PBXBuildFile; fileRef = 2DCD70861DFFEF8D003691AE /* NavigationComponent.m */; };
+		2DCD70D41DFFEF8D003691AE /* PhysicsContactAudioComponent.h in Headers */ = {isa = PBXBuildFile; fileRef = 2DCD70871DFFEF8D003691AE /* PhysicsContactAudioComponent.h */; };
+		2DCD70D51DFFEF8D003691AE /* PhysicsContactAudioComponent.m in Sources */ = {isa = PBXBuildFile; fileRef = 2DCD70881DFFEF8D003691AE /* PhysicsContactAudioComponent.m */; };
+		2DCD70D81DFFEF8D003691AE /* RobotActionComponent.h in Headers */ = {isa = PBXBuildFile; fileRef = 2DCD708B1DFFEF8D003691AE /* RobotActionComponent.h */; };
+		2DCD70D91DFFEF8D003691AE /* RobotActionComponent.mm in Sources */ = {isa = PBXBuildFile; fileRef = 2DCD708C1DFFEF8D003691AE /* RobotActionComponent.mm */; };
+		2DCD70DA1DFFEF8D003691AE /* RobotBehaviourComponent.h in Headers */ = {isa = PBXBuildFile; fileRef = 2DCD708D1DFFEF8D003691AE /* RobotBehaviourComponent.h */; };
+		2DCD70DB1DFFEF8D003691AE /* RobotBehaviourComponent.m in Sources */ = {isa = PBXBuildFile; fileRef = 2DCD708E1DFFEF8D003691AE /* RobotBehaviourComponent.m */; };
+		2DCD70DC1DFFEF8D003691AE /* RobotBodyEmojiComponent.h in Headers */ = {isa = PBXBuildFile; fileRef = 2DCD708F1DFFEF8D003691AE /* RobotBodyEmojiComponent.h */; };
+		2DCD70DD1DFFEF8D003691AE /* RobotBodyEmojiComponent.m in Sources */ = {isa = PBXBuildFile; fileRef = 2DCD70901DFFEF8D003691AE /* RobotBodyEmojiComponent.m */; };
+		2DCD70DE1DFFEF8D003691AE /* RobotMeshControllerComponent.h in Headers */ = {isa = PBXBuildFile; fileRef = 2DCD70911DFFEF8D003691AE /* RobotMeshControllerComponent.h */; };
+		2DCD70DF1DFFEF8D003691AE /* RobotMeshControllerComponent.mm in Sources */ = {isa = PBXBuildFile; fileRef = 2DCD70921DFFEF8D003691AE /* RobotMeshControllerComponent.mm */; };
+		2DCD70E01DFFEF8D003691AE /* RobotSeesMeComponent.h in Headers */ = {isa = PBXBuildFile; fileRef = 2DCD70931DFFEF8D003691AE /* RobotSeesMeComponent.h */; };
+		2DCD70E11DFFEF8D003691AE /* RobotSeesMeComponent.mm in Sources */ = {isa = PBXBuildFile; fileRef = 2DCD70941DFFEF8D003691AE /* RobotSeesMeComponent.mm */; };
+		2DCD70E21DFFEF8D003691AE /* RobotVemojiComponent.h in Headers */ = {isa = PBXBuildFile; fileRef = 2DCD70951DFFEF8D003691AE /* RobotVemojiComponent.h */; };
+		2DCD70E31DFFEF8D003691AE /* RobotVemojiComponent.m in Sources */ = {isa = PBXBuildFile; fileRef = 2DCD70961DFFEF8D003691AE /* RobotVemojiComponent.m */; };
+		2DCD70E41DFFEF8D003691AE /* SelectableModelComponent.h in Headers */ = {isa = PBXBuildFile; fileRef = 2DCD70971DFFEF8D003691AE /* SelectableModelComponent.h */; };
+		2DCD70E51DFFEF8D003691AE /* SelectableModelComponent.mm in Sources */ = {isa = PBXBuildFile; fileRef = 2DCD70981DFFEF8D003691AE /* SelectableModelComponent.mm */; };
+		2DCD70E61DFFEF8D003691AE /* SpawnComponent.h in Headers */ = {isa = PBXBuildFile; fileRef = 2DCD70991DFFEF8D003691AE /* SpawnComponent.h */; };
+		2DCD70E71DFFEF8D003691AE /* SpawnComponent.m in Sources */ = {isa = PBXBuildFile; fileRef = 2DCD709A1DFFEF8D003691AE /* SpawnComponent.m */; };
+		2DCD73021DFFEF9D003691AE /* ComponentUtils.h in Headers */ = {isa = PBXBuildFile; fileRef = 2DCD72F31DFFEF9C003691AE /* ComponentUtils.h */; };
+		2DCD73031DFFEF9D003691AE /* ComponentUtils.m in Sources */ = {isa = PBXBuildFile; fileRef = 2DCD72F41DFFEF9C003691AE /* ComponentUtils.m */; };
+		2DCD73061DFFEF9D003691AE /* Math.h in Headers */ = {isa = PBXBuildFile; fileRef = 2DCD72F71DFFEF9C003691AE /* Math.h */; };
+		2DCD73071DFFEF9D003691AE /* PathFinding.h in Headers */ = {isa = PBXBuildFile; fileRef = 2DCD72F81DFFEF9C003691AE /* PathFinding.h */; };
+		2DCD73081DFFEF9D003691AE /* PathFinding.mm in Sources */ = {isa = PBXBuildFile; fileRef = 2DCD72F91DFFEF9C003691AE /* PathFinding.mm */; };
+		2DCD730B1DFFEF9D003691AE /* SceneKitExtensions.h in Headers */ = {isa = PBXBuildFile; fileRef = 2DCD72FC1DFFEF9C003691AE /* SceneKitExtensions.h */; };
+		2DCD730C1DFFEF9D003691AE /* SceneKitExtensions.m in Sources */ = {isa = PBXBuildFile; fileRef = 2DCD72FD1DFFEF9C003691AE /* SceneKitExtensions.m */; };
+		2DCD730D1DFFEF9D003691AE /* SceneKitTools.h in Headers */ = {isa = PBXBuildFile; fileRef = 2DCD72FE1DFFEF9C003691AE /* SceneKitTools.h */; };
+		2DCD730E1DFFEF9D003691AE /* SceneKitTools.mm in Sources */ = {isa = PBXBuildFile; fileRef = 2DCD72FF1DFFEF9C003691AE /* SceneKitTools.mm */; };
+		2DCD73411DFFF2ED003691AE /* OpenBE.xcconfig in Resources */ = {isa = PBXBuildFile; fileRef = 2DCD73401DFFF2ED003691AE /* OpenBE.xcconfig */; };
+		2DE0874A1DFFF8C4000FF474 /* GameController.framework in Frameworks */ = {isa = PBXBuildFile; fileRef = 2DE087491DFFF8C4000FF474 /* GameController.framework */; };
+/* End PBXBuildFile section */
+
+/* Begin PBXFileReference section */
+		2C5DA53A1E00EF1900A60606 /* ScanEnvironmentShader.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; path = ScanEnvironmentShader.h; sourceTree = "<group>"; };
+		2C5DA53B1E00EF1900A60606 /* ScanEnvironmentShader.mm */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.cpp.objcpp; path = ScanEnvironmentShader.mm; sourceTree = "<group>"; };
+		2C5DA53E1E00F06F00A60606 /* ScanComponent.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; path = ScanComponent.h; sourceTree = "<group>"; };
+		2C5DA53F1E00F06F00A60606 /* ScanComponent.m */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.objc; path = ScanComponent.m; sourceTree = "<group>"; };
+		2C5DA5401E00F06F00A60606 /* ScanEventComponent.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; path = ScanEventComponent.h; sourceTree = "<group>"; };
+		2C5DA5411E00F06F00A60606 /* ScanEventComponent.m */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.objc; path = ScanEventComponent.m; sourceTree = "<group>"; };
+		2C5DA5461E00F12700A60606 /* ScanBehaviourComponent.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; path = ScanBehaviourComponent.h; sourceTree = "<group>"; };
+		2C5DA5471E00F12700A60606 /* ScanBehaviourComponent.m */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.objc; path = ScanBehaviourComponent.m; sourceTree = "<group>"; };
+		2DC3E97D1E0005A2007C3C02 /* OpenBE.scnassets */ = {isa = PBXFileReference; lastKnownFileType = wrapper.scnassets; path = OpenBE.scnassets; sourceTree = "<group>"; };
+		2DC3EA421E005CC9007C3C02 /* BridgeEngine.framework */ = {isa = PBXFileReference; lastKnownFileType = wrapper.framework; name = BridgeEngine.framework; path = ../Frameworks/BridgeEngine.framework; sourceTree = "<group>"; };
+		2DCD6FED1DFFEED3003691AE /* OpenBE.framework */ = {isa = PBXFileReference; explicitFileType = wrapper.framework; includeInIndex = 0; path = OpenBE.framework; sourceTree = BUILT_PRODUCTS_DIR; };
+		2DCD6FF01DFFEED3003691AE /* OpenBE.h */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.c.h; path = OpenBE.h; sourceTree = "<group>"; };
+		2DCD6FF11DFFEED3003691AE /* Info.plist */ = {isa = PBXFileReference; lastKnownFileType = text.plist.xml; path = Info.plist; sourceTree = "<group>"; };
+		2DCD702A1DFFEF84003691AE /* AudioEngine.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; path = AudioEngine.h; sourceTree = "<group>"; };
+		2DCD702B1DFFEF84003691AE /* AudioEngine.mm */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.cpp.objcpp; path = AudioEngine.mm; sourceTree = "<group>"; };
+		2DCD702C1DFFEF84003691AE /* Camera.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; path = Camera.h; sourceTree = "<group>"; };
+		2DCD702D1DFFEF84003691AE /* Camera.m */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.objc; path = Camera.m; sourceTree = "<group>"; };
+		2DCD702E1DFFEF84003691AE /* Component.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; path = Component.h; sourceTree = "<group>"; };
+		2DCD702F1DFFEF84003691AE /* Component.m */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.objc; path = Component.m; sourceTree = "<group>"; };
+		2DCD70301DFFEF84003691AE /* ComponentProtocol.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; path = ComponentProtocol.h; sourceTree = "<group>"; };
+		2DCD70311DFFEF84003691AE /* Core.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; path = Core.h; sourceTree = "<group>"; };
+		2DCD70321DFFEF84003691AE /* CoreMotionComponentProtocol.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; path = CoreMotionComponentProtocol.h; sourceTree = "<group>"; };
+		2DCD70331DFFEF84003691AE /* EventComponentProtocol.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; path = EventComponentProtocol.h; sourceTree = "<group>"; };
+		2DCD70341DFFEF84003691AE /* EventManager.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; path = EventManager.h; sourceTree = "<group>"; };
+		2DCD70351DFFEF84003691AE /* EventManager.mm */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.cpp.objcpp; path = EventManager.mm; sourceTree = "<group>"; };
+		2DCD70361DFFEF84003691AE /* GeometryComponent.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; path = GeometryComponent.h; sourceTree = "<group>"; };
+		2DCD70371DFFEF84003691AE /* GeometryComponent.m */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.objc; path = GeometryComponent.m; sourceTree = "<group>"; };
+		2DCD703A1DFFEF84003691AE /* Scene.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; path = Scene.h; sourceTree = "<group>"; };
+		2DCD703B1DFFEF84003691AE /* Scene.m */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.objc; path = Scene.m; sourceTree = "<group>"; };
+		2DCD703C1DFFEF84003691AE /* SceneManager.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; path = SceneManager.h; sourceTree = "<group>"; };
+		2DCD703D1DFFEF84003691AE /* SceneManager.m */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.objc; path = SceneManager.m; sourceTree = "<group>"; };
+		2DCD70531DFFEF8D003691AE /* AnimationComponent.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; path = AnimationComponent.h; sourceTree = "<group>"; };
+		2DCD70541DFFEF8D003691AE /* AnimationComponent.m */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.objc; path = AnimationComponent.m; sourceTree = "<group>"; };
+		2DCD70551DFFEF8D003691AE /* BeamComponent.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; path = BeamComponent.h; sourceTree = "<group>"; };
+		2DCD70561DFFEF8D003691AE /* BeamComponent.m */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.objc; path = BeamComponent.m; sourceTree = "<group>"; };
+		2DCD70581DFFEF8D003691AE /* BeamUIBehaviourComponent.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; path = BeamUIBehaviourComponent.h; sourceTree = "<group>"; };
+		2DCD70591DFFEF8D003691AE /* BeamUIBehaviourComponent.m */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.objc; path = BeamUIBehaviourComponent.m; sourceTree = "<group>"; };
+		2DCD705A1DFFEF8D003691AE /* BehaviourComponent.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; path = BehaviourComponent.h; sourceTree = "<group>"; };
+		2DCD705B1DFFEF8D003691AE /* BehaviourComponent.m */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.objc; path = BehaviourComponent.m; sourceTree = "<group>"; };
+		2DCD705C1DFFEF8D003691AE /* ExpressionBehaviourComponent.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; path = ExpressionBehaviourComponent.h; sourceTree = "<group>"; };
+		2DCD705D1DFFEF8D003691AE /* ExpressionBehaviourComponent.m */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.objc; path = ExpressionBehaviourComponent.m; sourceTree = "<group>"; };
+		2DCD70601DFFEF8D003691AE /* LookAtBehaviourComponent.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; path = LookAtBehaviourComponent.h; sourceTree = "<group>"; };
+		2DCD70611DFFEF8D003691AE /* LookAtBehaviourComponent.m */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.objc; path = LookAtBehaviourComponent.m; sourceTree = "<group>"; };
+		2DCD70621DFFEF8D003691AE /* LookAtCameraBehaviourComponent.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; path = LookAtCameraBehaviourComponent.h; sourceTree = "<group>"; };
+		2DCD70631DFFEF8D003691AE /* LookAtCameraBehaviourComponent.m */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.objc; path = LookAtCameraBehaviourComponent.m; sourceTree = "<group>"; };
+		2DCD70641DFFEF8D003691AE /* LookAtNodeBehaviourComponent.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; path = LookAtNodeBehaviourComponent.h; sourceTree = "<group>"; };
+		2DCD70651DFFEF8D003691AE /* LookAtNodeBehaviourComponent.m */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.objc; path = LookAtNodeBehaviourComponent.m; sourceTree = "<group>"; };
+		2DCD70661DFFEF8D003691AE /* MoveToBehaviourComponent.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; path = MoveToBehaviourComponent.h; sourceTree = "<group>"; };
+		2DCD70671DFFEF8D003691AE /* MoveToBehaviourComponent.m */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.objc; path = MoveToBehaviourComponent.m; sourceTree = "<group>"; };
+		2DCD70681DFFEF8D003691AE /* PathFindMoveToBehaviourComponent.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; path = PathFindMoveToBehaviourComponent.h; sourceTree = "<group>"; };
+		2DCD70691DFFEF8D003691AE /* PathFindMoveToBehaviourComponent.m */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.objc; path = PathFindMoveToBehaviourComponent.m; sourceTree = "<group>"; };
+		2DCD706A1DFFEF8D003691AE /* BlockDemoReticleComponent.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; path = BlockDemoReticleComponent.h; sourceTree = "<group>"; };
+		2DCD706B1DFFEF8D003691AE /* BlockDemoReticleComponent.m */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.objc; path = BlockDemoReticleComponent.m; sourceTree = "<group>"; };
+		2DCD706C1DFFEF8D003691AE /* ButtonComponent.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; path = ButtonComponent.h; sourceTree = "<group>"; };
+		2DCD706D1DFFEF8D003691AE /* ButtonComponent.m */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.objc; path = ButtonComponent.m; sourceTree = "<group>"; };
+		2DCD706E1DFFEF8D003691AE /* ButtonContainerComponent.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; path = ButtonContainerComponent.h; sourceTree = "<group>"; };
+		2DCD706F1DFFEF8D003691AE /* ButtonContainerComponent.m */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.objc; path = ButtonContainerComponent.m; sourceTree = "<group>"; };
+		2DCD70721DFFEF8D003691AE /* FetchEventComponent.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; path = FetchEventComponent.h; sourceTree = "<group>"; };
+		2DCD70731DFFEF8D003691AE /* FetchEventComponent.m */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.objc; path = FetchEventComponent.m; sourceTree = "<group>"; };
+		2DCD70741DFFEF8D003691AE /* FixedSizeReticleComponent.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; path = FixedSizeReticleComponent.h; sourceTree = "<group>"; };
+		2DCD70751DFFEF8D003691AE /* FixedSizeReticleComponent.m */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.objc; path = FixedSizeReticleComponent.m; sourceTree = "<group>"; };
+		2DCD70761DFFEF8D003691AE /* GazeComponent.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; path = GazeComponent.h; sourceTree = "<group>"; };
+		2DCD70771DFFEF8D003691AE /* GazeComponent.m */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.objc; path = GazeComponent.m; sourceTree = "<group>"; };
+		2DCD70781DFFEF8D003691AE /* GazePointerProtocol.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; path = GazePointerProtocol.h; sourceTree = "<group>"; };
+		2DCD70831DFFEF8D003691AE /* MoveRobotEventComponent.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; path = MoveRobotEventComponent.h; sourceTree = "<group>"; };
+		2DCD70841DFFEF8D003691AE /* MoveRobotEventComponent.m */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.objc; path = MoveRobotEventComponent.m; sourceTree = "<group>"; };
+		2DCD70851DFFEF8D003691AE /* NavigationComponent.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; path = NavigationComponent.h; sourceTree = "<group>"; };
+		2DCD70861DFFEF8D003691AE /* NavigationComponent.m */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.objc; path = NavigationComponent.m; sourceTree = "<group>"; };
+		2DCD70871DFFEF8D003691AE /* PhysicsContactAudioComponent.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; path = PhysicsContactAudioComponent.h; sourceTree = "<group>"; };
+		2DCD70881DFFEF8D003691AE /* PhysicsContactAudioComponent.m */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.objc; path = PhysicsContactAudioComponent.m; sourceTree = "<group>"; };
+		2DCD708B1DFFEF8D003691AE /* RobotActionComponent.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; path = RobotActionComponent.h; sourceTree = "<group>"; };
+		2DCD708C1DFFEF8D003691AE /* RobotActionComponent.mm */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.cpp.objcpp; path = RobotActionComponent.mm; sourceTree = "<group>"; };
+		2DCD708D1DFFEF8D003691AE /* RobotBehaviourComponent.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; path = RobotBehaviourComponent.h; sourceTree = "<group>"; };
+		2DCD708E1DFFEF8D003691AE /* RobotBehaviourComponent.m */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.objc; path = RobotBehaviourComponent.m; sourceTree = "<group>"; };
+		2DCD708F1DFFEF8D003691AE /* RobotBodyEmojiComponent.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; path = RobotBodyEmojiComponent.h; sourceTree = "<group>"; };
+		2DCD70901DFFEF8D003691AE /* RobotBodyEmojiComponent.m */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.objc; path = RobotBodyEmojiComponent.m; sourceTree = "<group>"; };
+		2DCD70911DFFEF8D003691AE /* RobotMeshControllerComponent.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; path = RobotMeshControllerComponent.h; sourceTree = "<group>"; };
+		2DCD70921DFFEF8D003691AE /* RobotMeshControllerComponent.mm */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.cpp.objcpp; path = RobotMeshControllerComponent.mm; sourceTree = "<group>"; };
+		2DCD70931DFFEF8D003691AE /* RobotSeesMeComponent.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; path = RobotSeesMeComponent.h; sourceTree = "<group>"; };
+		2DCD70941DFFEF8D003691AE /* RobotSeesMeComponent.mm */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.cpp.objcpp; path = RobotSeesMeComponent.mm; sourceTree = "<group>"; };
+		2DCD70951DFFEF8D003691AE /* RobotVemojiComponent.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; path = RobotVemojiComponent.h; sourceTree = "<group>"; };
+		2DCD70961DFFEF8D003691AE /* RobotVemojiComponent.m */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.objc; path = RobotVemojiComponent.m; sourceTree = "<group>"; };
+		2DCD70971DFFEF8D003691AE /* SelectableModelComponent.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; path = SelectableModelComponent.h; sourceTree = "<group>"; };
+		2DCD70981DFFEF8D003691AE /* SelectableModelComponent.mm */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.cpp.objcpp; path = SelectableModelComponent.mm; sourceTree = "<group>"; };
+		2DCD70991DFFEF8D003691AE /* SpawnComponent.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; path = SpawnComponent.h; sourceTree = "<group>"; };
+		2DCD709A1DFFEF8D003691AE /* SpawnComponent.m */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.objc; path = SpawnComponent.m; sourceTree = "<group>"; };
+		2DCD72F31DFFEF9C003691AE /* ComponentUtils.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; path = ComponentUtils.h; sourceTree = "<group>"; };
+		2DCD72F41DFFEF9C003691AE /* ComponentUtils.m */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.objc; path = ComponentUtils.m; sourceTree = "<group>"; };
+		2DCD72F71DFFEF9C003691AE /* Math.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; path = Math.h; sourceTree = "<group>"; };
+		2DCD72F81DFFEF9C003691AE /* PathFinding.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; path = PathFinding.h; sourceTree = "<group>"; };
+		2DCD72F91DFFEF9C003691AE /* PathFinding.mm */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.cpp.objcpp; path = PathFinding.mm; sourceTree = "<group>"; };
+		2DCD72FC1DFFEF9C003691AE /* SceneKitExtensions.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; path = SceneKitExtensions.h; sourceTree = "<group>"; };
+		2DCD72FD1DFFEF9C003691AE /* SceneKitExtensions.m */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.objc; path = SceneKitExtensions.m; sourceTree = "<group>"; };
+		2DCD72FE1DFFEF9C003691AE /* SceneKitTools.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; path = SceneKitTools.h; sourceTree = "<group>"; };
+		2DCD72FF1DFFEF9C003691AE /* SceneKitTools.mm */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.cpp.objcpp; path = SceneKitTools.mm; sourceTree = "<group>"; };
+		2DCD73401DFFF2ED003691AE /* OpenBE.xcconfig */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = text.xcconfig; path = OpenBE.xcconfig; sourceTree = "<group>"; };
+		2DE087491DFFF8C4000FF474 /* GameController.framework */ = {isa = PBXFileReference; lastKnownFileType = wrapper.framework; name = GameController.framework; path = System/Library/Frameworks/GameController.framework; sourceTree = SDKROOT; };
+/* End PBXFileReference section */
+
+/* Begin PBXFrameworksBuildPhase section */
+		2DCD6FE91DFFEED3003691AE /* Frameworks */ = {
+			isa = PBXFrameworksBuildPhase;
+			buildActionMask = 2147483647;
+			files = (
+				2DE0874A1DFFF8C4000FF474 /* GameController.framework in Frameworks */,
+				2DC3EA431E005CC9007C3C02 /* BridgeEngine.framework in Frameworks */,
+			);
+			runOnlyForDeploymentPostprocessing = 0;
+		};
+/* End PBXFrameworksBuildPhase section */
+
+/* Begin PBXGroup section */
+		2C5DA5391E00EF1900A60606 /* Shaders */ = {
+			isa = PBXGroup;
+			children = (
+				2C5DA53A1E00EF1900A60606 /* ScanEnvironmentShader.h */,
+				2C5DA53B1E00EF1900A60606 /* ScanEnvironmentShader.mm */,
+			);
+			name = Shaders;
+			path = OpenBE/Shaders;
+			sourceTree = "<group>";
+		};
+		2DCD6FE31DFFEED3003691AE = {
+			isa = PBXGroup;
+			children = (
+				2DCD73401DFFF2ED003691AE /* OpenBE.xcconfig */,
+				2DCD6FEF1DFFEED3003691AE /* OpenBE */,
+				2DCD6FEE1DFFEED3003691AE /* Products */,
+				2C5DA5391E00EF1900A60606 /* Shaders */,
+				2DE087481DFFF8C4000FF474 /* Frameworks */,
+			);
+			sourceTree = "<group>";
+		};
+		2DCD6FEE1DFFEED3003691AE /* Products */ = {
+			isa = PBXGroup;
+			children = (
+				2DCD6FED1DFFEED3003691AE /* OpenBE.framework */,
+			);
+			name = Products;
+			sourceTree = "<group>";
+		};
+		2DCD6FEF1DFFEED3003691AE /* OpenBE */ = {
+			isa = PBXGroup;
+			children = (
+				2DC3E97D1E0005A2007C3C02 /* OpenBE.scnassets */,
+				2DCD70291DFFEF84003691AE /* Core */,
+				2DCD70521DFFEF8D003691AE /* Components */,
+				2DCD72F01DFFEF9C003691AE /* Utils */,
+				2DCD6FF01DFFEED3003691AE /* OpenBE.h */,
+				2DCD6FF11DFFEED3003691AE /* Info.plist */,
+			);
+			path = OpenBE;
+			sourceTree = "<group>";
+		};
+		2DCD70291DFFEF84003691AE /* Core */ = {
+			isa = PBXGroup;
+			children = (
+				2DCD702A1DFFEF84003691AE /* AudioEngine.h */,
+				2DCD702B1DFFEF84003691AE /* AudioEngine.mm */,
+				2DCD702C1DFFEF84003691AE /* Camera.h */,
+				2DCD702D1DFFEF84003691AE /* Camera.m */,
+				2DCD702E1DFFEF84003691AE /* Component.h */,
+				2DCD702F1DFFEF84003691AE /* Component.m */,
+				2DCD70301DFFEF84003691AE /* ComponentProtocol.h */,
+				2DCD70311DFFEF84003691AE /* Core.h */,
+				2DCD70321DFFEF84003691AE /* CoreMotionComponentProtocol.h */,
+				2DCD70331DFFEF84003691AE /* EventComponentProtocol.h */,
+				2DCD70341DFFEF84003691AE /* EventManager.h */,
+				2DCD70351DFFEF84003691AE /* EventManager.mm */,
+				2DCD70361DFFEF84003691AE /* GeometryComponent.h */,
+				2DCD70371DFFEF84003691AE /* GeometryComponent.m */,
+				2DCD72F81DFFEF9C003691AE /* PathFinding.h */,
+				2DCD72F91DFFEF9C003691AE /* PathFinding.mm */,
+				2DCD703A1DFFEF84003691AE /* Scene.h */,
+				2DCD703B1DFFEF84003691AE /* Scene.m */,
+				2DCD703C1DFFEF84003691AE /* SceneManager.h */,
+				2DCD703D1DFFEF84003691AE /* SceneManager.m */,
+			);
+			path = Core;
+			sourceTree = "<group>";
+		};
+		2DCD70521DFFEF8D003691AE /* Components */ = {
+			isa = PBXGroup;
+			children = (
+				2DCD70531DFFEF8D003691AE /* AnimationComponent.h */,
+				2DCD70541DFFEF8D003691AE /* AnimationComponent.m */,
+				2DCD70551DFFEF8D003691AE /* BeamComponent.h */,
+				2DCD70561DFFEF8D003691AE /* BeamComponent.m */,
+				2DCD70571DFFEF8D003691AE /* BehaviourComponents */,
+				2DCD706A1DFFEF8D003691AE /* BlockDemoReticleComponent.h */,
+				2DCD706B1DFFEF8D003691AE /* BlockDemoReticleComponent.m */,
+				2DCD706C1DFFEF8D003691AE /* ButtonComponent.h */,
+				2DCD706D1DFFEF8D003691AE /* ButtonComponent.m */,
+				2DCD706E1DFFEF8D003691AE /* ButtonContainerComponent.h */,
+				2DCD706F1DFFEF8D003691AE /* ButtonContainerComponent.m */,
+				2DCD70721DFFEF8D003691AE /* FetchEventComponent.h */,
+				2DCD70731DFFEF8D003691AE /* FetchEventComponent.m */,
+				2DCD70741DFFEF8D003691AE /* FixedSizeReticleComponent.h */,
+				2DCD70751DFFEF8D003691AE /* FixedSizeReticleComponent.m */,
+				2DCD70761DFFEF8D003691AE /* GazeComponent.h */,
+				2DCD70771DFFEF8D003691AE /* GazeComponent.m */,
+				2DCD70781DFFEF8D003691AE /* GazePointerProtocol.h */,
+				2DCD70831DFFEF8D003691AE /* MoveRobotEventComponent.h */,
+				2DCD70841DFFEF8D003691AE /* MoveRobotEventComponent.m */,
+				2DCD70851DFFEF8D003691AE /* NavigationComponent.h */,
+				2DCD70861DFFEF8D003691AE /* NavigationComponent.m */,
+				2DCD70871DFFEF8D003691AE /* PhysicsContactAudioComponent.h */,
+				2DCD70881DFFEF8D003691AE /* PhysicsContactAudioComponent.m */,
+				2DCD708B1DFFEF8D003691AE /* RobotActionComponent.h */,
+				2DCD708C1DFFEF8D003691AE /* RobotActionComponent.mm */,
+				2DCD708D1DFFEF8D003691AE /* RobotBehaviourComponent.h */,
+				2DCD708E1DFFEF8D003691AE /* RobotBehaviourComponent.m */,
+				2DCD708F1DFFEF8D003691AE /* RobotBodyEmojiComponent.h */,
+				2C5DA53E1E00F06F00A60606 /* ScanComponent.h */,
+				2C5DA53F1E00F06F00A60606 /* ScanComponent.m */,
+				2C5DA5401E00F06F00A60606 /* ScanEventComponent.h */,
+				2C5DA5411E00F06F00A60606 /* ScanEventComponent.m */,
+				2DCD70901DFFEF8D003691AE /* RobotBodyEmojiComponent.m */,
+				2DCD70911DFFEF8D003691AE /* RobotMeshControllerComponent.h */,
+				2DCD70921DFFEF8D003691AE /* RobotMeshControllerComponent.mm */,
+				2DCD70931DFFEF8D003691AE /* RobotSeesMeComponent.h */,
+				2DCD70941DFFEF8D003691AE /* RobotSeesMeComponent.mm */,
+				2DCD70951DFFEF8D003691AE /* RobotVemojiComponent.h */,
+				2DCD70961DFFEF8D003691AE /* RobotVemojiComponent.m */,
+				2DCD70971DFFEF8D003691AE /* SelectableModelComponent.h */,
+				2DCD70981DFFEF8D003691AE /* SelectableModelComponent.mm */,
+				2DCD70991DFFEF8D003691AE /* SpawnComponent.h */,
+				2DCD709A1DFFEF8D003691AE /* SpawnComponent.m */,
+			);
+			path = Components;
+			sourceTree = "<group>";
+		};
+		2DCD70571DFFEF8D003691AE /* BehaviourComponents */ = {
+			isa = PBXGroup;
+			children = (
+				2DCD70581DFFEF8D003691AE /* BeamUIBehaviourComponent.h */,
+				2DCD70591DFFEF8D003691AE /* BeamUIBehaviourComponent.m */,
+				2DCD705A1DFFEF8D003691AE /* BehaviourComponent.h */,
+				2DCD705B1DFFEF8D003691AE /* BehaviourComponent.m */,
+				2DCD705C1DFFEF8D003691AE /* ExpressionBehaviourComponent.h */,
+				2DCD705D1DFFEF8D003691AE /* ExpressionBehaviourComponent.m */,
+				2DCD70601DFFEF8D003691AE /* LookAtBehaviourComponent.h */,
+				2DCD70611DFFEF8D003691AE /* LookAtBehaviourComponent.m */,
+				2DCD70621DFFEF8D003691AE /* LookAtCameraBehaviourComponent.h */,
+				2DCD70631DFFEF8D003691AE /* LookAtCameraBehaviourComponent.m */,
+				2DCD70641DFFEF8D003691AE /* LookAtNodeBehaviourComponent.h */,
+				2DCD70651DFFEF8D003691AE /* LookAtNodeBehaviourComponent.m */,
+				2DCD70661DFFEF8D003691AE /* MoveToBehaviourComponent.h */,
+				2DCD70671DFFEF8D003691AE /* MoveToBehaviourComponent.m */,
+				2DCD70681DFFEF8D003691AE /* PathFindMoveToBehaviourComponent.h */,
+				2DCD70691DFFEF8D003691AE /* PathFindMoveToBehaviourComponent.m */,
+				2C5DA5461E00F12700A60606 /* ScanBehaviourComponent.h */,
+				2C5DA5471E00F12700A60606 /* ScanBehaviourComponent.m */,
+			);
+			path = BehaviourComponents;
+			sourceTree = "<group>";
+		};
+		2DCD72F01DFFEF9C003691AE /* Utils */ = {
+			isa = PBXGroup;
+			children = (
+				2DCD72F31DFFEF9C003691AE /* ComponentUtils.h */,
+				2DCD72F41DFFEF9C003691AE /* ComponentUtils.m */,
+				2DCD72F71DFFEF9C003691AE /* Math.h */,
+				2DCD72FC1DFFEF9C003691AE /* SceneKitExtensions.h */,
+				2DCD72FD1DFFEF9C003691AE /* SceneKitExtensions.m */,
+				2DCD72FE1DFFEF9C003691AE /* SceneKitTools.h */,
+				2DCD72FF1DFFEF9C003691AE /* SceneKitTools.mm */,
+			);
+			path = Utils;
+			sourceTree = "<group>";
+		};
+		2DE087481DFFF8C4000FF474 /* Frameworks */ = {
+			isa = PBXGroup;
+			children = (
+				2DC3EA421E005CC9007C3C02 /* BridgeEngine.framework */,
+				2DE087491DFFF8C4000FF474 /* GameController.framework */,
+			);
+			name = Frameworks;
+			sourceTree = "<group>";
+		};
+/* End PBXGroup section */
+
+/* Begin PBXHeadersBuildPhase section */
+		2DCD6FEA1DFFEED3003691AE /* Headers */ = {
+			isa = PBXHeadersBuildPhase;
+			buildActionMask = 2147483647;
+			files = (
+				2DCD70421DFFEF84003691AE /* Component.h in Headers */,
+				2DCD73071DFFEF9D003691AE /* PathFinding.h in Headers */,
+				2DCD703E1DFFEF84003691AE /* AudioEngine.h in Headers */,
+				2DCD70DE1DFFEF8D003691AE /* RobotMeshControllerComponent.h in Headers */,
+				2DCD70C11DFFEF8D003691AE /* FixedSizeReticleComponent.h in Headers */,
+				2DCD730B1DFFEF9D003691AE /* SceneKitExtensions.h in Headers */,
+				2DCD73061DFFEF9D003691AE /* Math.h in Headers */,
+				2DCD70481DFFEF84003691AE /* EventManager.h in Headers */,
+				2C5DA5481E00F12700A60606 /* ScanBehaviourComponent.h in Headers */,
+				2DCD70D21DFFEF8D003691AE /* NavigationComponent.h in Headers */,
+				2DCD704A1DFFEF84003691AE /* GeometryComponent.h in Headers */,
+				2DCD70C51DFFEF8D003691AE /* GazePointerProtocol.h in Headers */,
+				2DCD704E1DFFEF84003691AE /* Scene.h in Headers */,
+				2DCD70B31DFFEF8D003691AE /* MoveToBehaviourComponent.h in Headers */,
+				2DCD70E21DFFEF8D003691AE /* RobotVemojiComponent.h in Headers */,
+				2DCD70A71DFFEF8D003691AE /* BehaviourComponent.h in Headers */,
+				2DCD70E01DFFEF8D003691AE /* RobotSeesMeComponent.h in Headers */,
+				2DCD70E61DFFEF8D003691AE /* SpawnComponent.h in Headers */,
+				2DCD70451DFFEF84003691AE /* Core.h in Headers */,
+				2DCD73021DFFEF9D003691AE /* ComponentUtils.h in Headers */,
+				2DCD730D1DFFEF9D003691AE /* SceneKitTools.h in Headers */,
+				2DCD70A91DFFEF8D003691AE /* ExpressionBehaviourComponent.h in Headers */,
+				2DCD70401DFFEF84003691AE /* Camera.h in Headers */,
+				2DCD70B11DFFEF8D003691AE /* LookAtNodeBehaviourComponent.h in Headers */,
+				2DCD70BF1DFFEF8D003691AE /* FetchEventComponent.h in Headers */,
+				2DCD70A31DFFEF8D003691AE /* BeamComponent.h in Headers */,
+				2DCD70E41DFFEF8D003691AE /* SelectableModelComponent.h in Headers */,
+				2DCD6FF21DFFEED3003691AE /* OpenBE.h in Headers */,
+				2DCD70471DFFEF84003691AE /* EventComponentProtocol.h in Headers */,
+				2C5DA53C1E00EF1900A60606 /* ScanEnvironmentShader.h in Headers */,
+				2DCD70B51DFFEF8D003691AE /* PathFindMoveToBehaviourComponent.h in Headers */,
+				2DCD70AF1DFFEF8D003691AE /* LookAtCameraBehaviourComponent.h in Headers */,
+				2DCD70B91DFFEF8D003691AE /* ButtonComponent.h in Headers */,
+				2DCD70AD1DFFEF8D003691AE /* LookAtBehaviourComponent.h in Headers */,
+				2C5DA5441E00F06F00A60606 /* ScanEventComponent.h in Headers */,
+				2C5DA5421E00F06F00A60606 /* ScanComponent.h in Headers */,
+				2DCD70A51DFFEF8D003691AE /* BeamUIBehaviourComponent.h in Headers */,
+				2DCD70C31DFFEF8D003691AE /* GazeComponent.h in Headers */,
+				2DCD70D41DFFEF8D003691AE /* PhysicsContactAudioComponent.h in Headers */,
+				2DCD70DA1DFFEF8D003691AE /* RobotBehaviourComponent.h in Headers */,
+				2DCD70461DFFEF84003691AE /* CoreMotionComponentProtocol.h in Headers */,
+				2DCD70D81DFFEF8D003691AE /* RobotActionComponent.h in Headers */,
+				2DCD70B71DFFEF8D003691AE /* BlockDemoReticleComponent.h in Headers */,
+				2DCD70DC1DFFEF8D003691AE /* RobotBodyEmojiComponent.h in Headers */,
+				2DCD70BB1DFFEF8D003691AE /* ButtonContainerComponent.h in Headers */,
+				2DCD70501DFFEF84003691AE /* SceneManager.h in Headers */,
+				2DCD70D01DFFEF8D003691AE /* MoveRobotEventComponent.h in Headers */,
+				2DCD70441DFFEF84003691AE /* ComponentProtocol.h in Headers */,
+				2DCD70A11DFFEF8D003691AE /* AnimationComponent.h in Headers */,
+			);
+			runOnlyForDeploymentPostprocessing = 0;
+		};
+/* End PBXHeadersBuildPhase section */
+
+/* Begin PBXNativeTarget section */
+		2DCD6FEC1DFFEED3003691AE /* OpenBE */ = {
+			isa = PBXNativeTarget;
+			buildConfigurationList = 2DCD6FF51DFFEED3003691AE /* Build configuration list for PBXNativeTarget "OpenBE" */;
+			buildPhases = (
+				2DCD6FE81DFFEED3003691AE /* Sources */,
+				2DCD6FE91DFFEED3003691AE /* Frameworks */,
+				2DCD6FEA1DFFEED3003691AE /* Headers */,
+				2DCD6FEB1DFFEED3003691AE /* Resources */,
+			);
+			buildRules = (
+			);
+			dependencies = (
+			);
+			name = OpenBE;
+			productName = OpenBE;
+			productReference = 2DCD6FED1DFFEED3003691AE /* OpenBE.framework */;
+			productType = "com.apple.product-type.framework";
+		};
+/* End PBXNativeTarget section */
+
+/* Begin PBXProject section */
+		2DCD6FE41DFFEED3003691AE /* Project object */ = {
+			isa = PBXProject;
+			attributes = {
+				LastUpgradeCheck = 0820;
+				ORGANIZATIONNAME = Occipital;
+				TargetAttributes = {
+					2DCD6FEC1DFFEED3003691AE = {
+						CreatedOnToolsVersion = 8.2;
+						ProvisioningStyle = Automatic;
+					};
+				};
+			};
+			buildConfigurationList = 2DCD6FE71DFFEED3003691AE /* Build configuration list for PBXProject "OpenBE" */;
+			compatibilityVersion = "Xcode 3.2";
+			developmentRegion = English;
+			hasScannedForEncodings = 0;
+			knownRegions = (
+				en,
+			);
+			mainGroup = 2DCD6FE31DFFEED3003691AE;
+			productRefGroup = 2DCD6FEE1DFFEED3003691AE /* Products */;
+			projectDirPath = "";
+			projectRoot = "";
+			targets = (
+				2DCD6FEC1DFFEED3003691AE /* OpenBE */,
+			);
+		};
+/* End PBXProject section */
+
+/* Begin PBXResourcesBuildPhase section */
+		2DCD6FEB1DFFEED3003691AE /* Resources */ = {
+			isa = PBXResourcesBuildPhase;
+			buildActionMask = 2147483647;
+			files = (
+				2DCD73411DFFF2ED003691AE /* OpenBE.xcconfig in Resources */,
+				2DC3E97E1E0005A2007C3C02 /* OpenBE.scnassets in Resources */,
+			);
+			runOnlyForDeploymentPostprocessing = 0;
+		};
+/* End PBXResourcesBuildPhase section */
+
+/* Begin PBXSourcesBuildPhase section */
+		2DCD6FE81DFFEED3003691AE /* Sources */ = {
+			isa = PBXSourcesBuildPhase;
+			buildActionMask = 2147483647;
+			files = (
+				2DCD70C41DFFEF8D003691AE /* GazeComponent.m in Sources */,
+				2DCD70BA1DFFEF8D003691AE /* ButtonComponent.m in Sources */,
+				2DCD70D51DFFEF8D003691AE /* PhysicsContactAudioComponent.m in Sources */,
+				2DCD73081DFFEF9D003691AE /* PathFinding.mm in Sources */,
+				2DCD70491DFFEF84003691AE /* EventManager.mm in Sources */,
+				2DCD70B81DFFEF8D003691AE /* BlockDemoReticleComponent.m in Sources */,
+				2C5DA5491E00F12700A60606 /* ScanBehaviourComponent.m in Sources */,
+				2DCD70D11DFFEF8D003691AE /* MoveRobotEventComponent.m in Sources */,
+				2DCD70431DFFEF84003691AE /* Component.m in Sources */,
+				2DCD70A41DFFEF8D003691AE /* BeamComponent.m in Sources */,
+				2C5DA5431E00F06F00A60606 /* ScanComponent.m in Sources */,
+				2DCD70A21DFFEF8D003691AE /* AnimationComponent.m in Sources */,
+				2DCD70E31DFFEF8D003691AE /* RobotVemojiComponent.m in Sources */,
+				2DCD70511DFFEF84003691AE /* SceneManager.m in Sources */,
+				2DCD73031DFFEF9D003691AE /* ComponentUtils.m in Sources */,
+				2DCD70DD1DFFEF8D003691AE /* RobotBodyEmojiComponent.m in Sources */,
+				2DCD70A61DFFEF8D003691AE /* BeamUIBehaviourComponent.m in Sources */,
+				2C5DA53D1E00EF1900A60606 /* ScanEnvironmentShader.mm in Sources */,
+				2DCD70B21DFFEF8D003691AE /* LookAtNodeBehaviourComponent.m in Sources */,
+				2DCD704B1DFFEF84003691AE /* GeometryComponent.m in Sources */,
+				2DCD730E1DFFEF9D003691AE /* SceneKitTools.mm in Sources */,
+				2DCD70E71DFFEF8D003691AE /* SpawnComponent.m in Sources */,
+				2DCD70DF1DFFEF8D003691AE /* RobotMeshControllerComponent.mm in Sources */,
+				2DCD70B61DFFEF8D003691AE /* PathFindMoveToBehaviourComponent.m in Sources */,
+				2DCD70DB1DFFEF8D003691AE /* RobotBehaviourComponent.m in Sources */,
+				2DCD70E51DFFEF8D003691AE /* SelectableModelComponent.mm in Sources */,
+				2DCD70B41DFFEF8D003691AE /* MoveToBehaviourComponent.m in Sources */,
+				2DCD70411DFFEF84003691AE /* Camera.m in Sources */,
+				2DCD70D31DFFEF8D003691AE /* NavigationComponent.m in Sources */,
+				2DCD70D91DFFEF8D003691AE /* RobotActionComponent.mm in Sources */,
+				2DCD703F1DFFEF84003691AE /* AudioEngine.mm in Sources */,
+				2DCD70C01DFFEF8D003691AE /* FetchEventComponent.m in Sources */,
+				2DCD70C21DFFEF8D003691AE /* FixedSizeReticleComponent.m in Sources */,
+				2DCD730C1DFFEF9D003691AE /* SceneKitExtensions.m in Sources */,
+				2DCD704F1DFFEF84003691AE /* Scene.m in Sources */,
+				2DCD70B01DFFEF8D003691AE /* LookAtCameraBehaviourComponent.m in Sources */,
+				2DCD70AA1DFFEF8D003691AE /* ExpressionBehaviourComponent.m in Sources */,
+				2C5DA5451E00F06F00A60606 /* ScanEventComponent.m in Sources */,
+				2DCD70E11DFFEF8D003691AE /* RobotSeesMeComponent.mm in Sources */,
+				2DCD70A81DFFEF8D003691AE /* BehaviourComponent.m in Sources */,
+				2DCD70AE1DFFEF8D003691AE /* LookAtBehaviourComponent.m in Sources */,
+				2DCD70BC1DFFEF8D003691AE /* ButtonContainerComponent.m in Sources */,
+			);
+			runOnlyForDeploymentPostprocessing = 0;
+		};
+/* End PBXSourcesBuildPhase section */
+
+/* Begin XCBuildConfiguration section */
+		2DCD6FF31DFFEED3003691AE /* Debug */ = {
+			isa = XCBuildConfiguration;
+			baseConfigurationReference = 2DCD73401DFFF2ED003691AE /* OpenBE.xcconfig */;
+			buildSettings = {
+				ALWAYS_SEARCH_USER_PATHS = NO;
+				CLANG_ANALYZER_NONNULL = YES;
+				CLANG_ENABLE_MODULES = YES;
+				CLANG_ENABLE_OBJC_ARC = YES;
+				CLANG_WARN_BOOL_CONVERSION = YES;
+				CLANG_WARN_CONSTANT_CONVERSION = YES;
+				CLANG_WARN_DIRECT_OBJC_ISA_USAGE = YES_ERROR;
+				CLANG_WARN_DOCUMENTATION_COMMENTS = YES;
+				CLANG_WARN_EMPTY_BODY = YES;
+				CLANG_WARN_ENUM_CONVERSION = YES;
+				CLANG_WARN_INFINITE_RECURSION = YES;
+				CLANG_WARN_INT_CONVERSION = YES;
+				CLANG_WARN_OBJC_ROOT_CLASS = YES_ERROR;
+				CLANG_WARN_SUSPICIOUS_MOVE = YES;
+				CLANG_WARN_UNREACHABLE_CODE = YES;
+				CLANG_WARN__DUPLICATE_METHOD_MATCH = YES;
+				CODE_SIGN_IDENTITY = "iPhone Developer";
+				"CODE_SIGN_IDENTITY[sdk=iphoneos*]" = "iPhone Developer";
+				COPY_PHASE_STRIP = NO;
+				CURRENT_PROJECT_VERSION = 1;
+				DEBUG_INFORMATION_FORMAT = dwarf;
+				ENABLE_STRICT_OBJC_MSGSEND = YES;
+				ENABLE_TESTABILITY = YES;
+				GCC_DYNAMIC_NO_PIC = NO;
+				GCC_NO_COMMON_BLOCKS = YES;
+				GCC_OPTIMIZATION_LEVEL = 0;
+				GCC_PREPROCESSOR_DEFINITIONS = (
+					"DEBUG=1",
+					"$(inherited)",
+				);
+				GCC_WARN_64_TO_32_BIT_CONVERSION = YES;
+				GCC_WARN_ABOUT_RETURN_TYPE = YES_ERROR;
+				GCC_WARN_UNDECLARED_SELECTOR = YES;
+				GCC_WARN_UNINITIALIZED_AUTOS = YES_AGGRESSIVE;
+				GCC_WARN_UNUSED_FUNCTION = YES;
+				GCC_WARN_UNUSED_VARIABLE = YES;
+				IPHONEOS_DEPLOYMENT_TARGET = 10.2;
+				MTL_ENABLE_DEBUG_INFO = YES;
+				ONLY_ACTIVE_ARCH = YES;
+				SDKROOT = iphoneos;
+				TARGETED_DEVICE_FAMILY = "1,2";
+				VERSIONING_SYSTEM = "apple-generic";
+				VERSION_INFO_PREFIX = "";
+			};
+			name = Debug;
+		};
+		2DCD6FF41DFFEED3003691AE /* Release */ = {
+			isa = XCBuildConfiguration;
+			baseConfigurationReference = 2DCD73401DFFF2ED003691AE /* OpenBE.xcconfig */;
+			buildSettings = {
+				ALWAYS_SEARCH_USER_PATHS = NO;
+				CLANG_ANALYZER_NONNULL = YES;
+				CLANG_ENABLE_MODULES = YES;
+				CLANG_ENABLE_OBJC_ARC = YES;
+				CLANG_WARN_BOOL_CONVERSION = YES;
+				CLANG_WARN_CONSTANT_CONVERSION = YES;
+				CLANG_WARN_DIRECT_OBJC_ISA_USAGE = YES_ERROR;
+				CLANG_WARN_DOCUMENTATION_COMMENTS = YES;
+				CLANG_WARN_EMPTY_BODY = YES;
+				CLANG_WARN_ENUM_CONVERSION = YES;
+				CLANG_WARN_INFINITE_RECURSION = YES;
+				CLANG_WARN_INT_CONVERSION = YES;
+				CLANG_WARN_OBJC_ROOT_CLASS = YES_ERROR;
+				CLANG_WARN_SUSPICIOUS_MOVE = YES;
+				CLANG_WARN_UNREACHABLE_CODE = YES;
+				CLANG_WARN__DUPLICATE_METHOD_MATCH = YES;
+				CODE_SIGN_IDENTITY = "iPhone Developer";
+				"CODE_SIGN_IDENTITY[sdk=iphoneos*]" = "iPhone Developer";
+				COPY_PHASE_STRIP = NO;
+				CURRENT_PROJECT_VERSION = 1;
+				DEBUG_INFORMATION_FORMAT = "dwarf-with-dsym";
+				ENABLE_NS_ASSERTIONS = NO;
+				ENABLE_STRICT_OBJC_MSGSEND = YES;
+				GCC_NO_COMMON_BLOCKS = YES;
+				GCC_WARN_64_TO_32_BIT_CONVERSION = YES;
+				GCC_WARN_ABOUT_RETURN_TYPE = YES_ERROR;
+				GCC_WARN_UNDECLARED_SELECTOR = YES;
+				GCC_WARN_UNINITIALIZED_AUTOS = YES_AGGRESSIVE;
+				GCC_WARN_UNUSED_FUNCTION = YES;
+				GCC_WARN_UNUSED_VARIABLE = YES;
+				IPHONEOS_DEPLOYMENT_TARGET = 10.2;
+				MTL_ENABLE_DEBUG_INFO = NO;
+				SDKROOT = iphoneos;
+				TARGETED_DEVICE_FAMILY = "1,2";
+				VALIDATE_PRODUCT = YES;
+				VERSIONING_SYSTEM = "apple-generic";
+				VERSION_INFO_PREFIX = "";
+			};
+			name = Release;
+		};
+		2DCD6FF61DFFEED3003691AE /* Debug */ = {
+			isa = XCBuildConfiguration;
+			buildSettings = {
+				ARCHS = arm64;
+				CLANG_ENABLE_MODULES = YES;
+				CLANG_LINK_OBJC_RUNTIME = YES;
+				CODE_SIGN_IDENTITY = "";
+				"CODE_SIGN_IDENTITY[sdk=iphoneos*]" = "iPhone Developer";
+				DEFINES_MODULE = YES;
+				DEVELOPMENT_TEAM = "";
+				DYLIB_COMPATIBILITY_VERSION = 1;
+				DYLIB_CURRENT_VERSION = 1;
+				DYLIB_INSTALL_NAME_BASE = "@rpath";
+				FRAMEWORK_SEARCH_PATHS = ../Frameworks;
+				GCC_SYMBOLS_PRIVATE_EXTERN = NO;
+				HEADER_SEARCH_PATHS = "$(SRCROOT)";
+				INFOPLIST_FILE = OpenBE/Info.plist;
+				INSTALL_PATH = "$(LOCAL_LIBRARY_DIR)/Frameworks";
+				IPHONEOS_DEPLOYMENT_TARGET = 9.3;
+				LD_RUNPATH_SEARCH_PATHS = "$(inherited) @executable_path/Frameworks @loader_path/Frameworks";
+				PRODUCT_BUNDLE_IDENTIFIER = com.occipital.OpenBE;
+				PRODUCT_NAME = "$(TARGET_NAME)";
+				SKIP_INSTALL = YES;
+				USE_HEADERMAP = NO;
+			};
+			name = Debug;
+		};
+		2DCD6FF71DFFEED3003691AE /* Release */ = {
+			isa = XCBuildConfiguration;
+			buildSettings = {
+				ARCHS = arm64;
+				CLANG_ENABLE_MODULES = YES;
+				CLANG_LINK_OBJC_RUNTIME = YES;
+				CODE_SIGN_IDENTITY = "";
+				"CODE_SIGN_IDENTITY[sdk=iphoneos*]" = "iPhone Developer";
+				DEFINES_MODULE = YES;
+				DEVELOPMENT_TEAM = "";
+				DYLIB_COMPATIBILITY_VERSION = 1;
+				DYLIB_CURRENT_VERSION = 1;
+				DYLIB_INSTALL_NAME_BASE = "@rpath";
+				FRAMEWORK_SEARCH_PATHS = ../Frameworks;
+				GCC_SYMBOLS_PRIVATE_EXTERN = NO;
+				HEADER_SEARCH_PATHS = "$(SRCROOT)";
+				INFOPLIST_FILE = OpenBE/Info.plist;
+				INSTALL_PATH = "$(LOCAL_LIBRARY_DIR)/Frameworks";
+				IPHONEOS_DEPLOYMENT_TARGET = 9.3;
+				LD_RUNPATH_SEARCH_PATHS = "$(inherited) @executable_path/Frameworks @loader_path/Frameworks";
+				PRODUCT_BUNDLE_IDENTIFIER = com.occipital.OpenBE;
+				PRODUCT_NAME = "$(TARGET_NAME)";
+				SKIP_INSTALL = YES;
+				USE_HEADERMAP = NO;
+			};
+			name = Release;
+		};
+/* End XCBuildConfiguration section */
+
+/* Begin XCConfigurationList section */
+		2DCD6FE71DFFEED3003691AE /* Build configuration list for PBXProject "OpenBE" */ = {
+			isa = XCConfigurationList;
+			buildConfigurations = (
+				2DCD6FF31DFFEED3003691AE /* Debug */,
+				2DCD6FF41DFFEED3003691AE /* Release */,
+			);
+			defaultConfigurationIsVisible = 0;
+			defaultConfigurationName = Release;
+		};
+		2DCD6FF51DFFEED3003691AE /* Build configuration list for PBXNativeTarget "OpenBE" */ = {
+			isa = XCConfigurationList;
+			buildConfigurations = (
+				2DCD6FF61DFFEED3003691AE /* Debug */,
+				2DCD6FF71DFFEED3003691AE /* Release */,
+			);
+			defaultConfigurationIsVisible = 0;
+			defaultConfigurationName = Release;
+		};
+/* End XCConfigurationList section */
+	};
+	rootObject = 2DCD6FE41DFFEED3003691AE /* Project object */;
+}

@@ -34,7 +34,7 @@ BE_API extern NSString* const kBEStereoRenderingEnabled;
 /// enable this to track without a Structure Sensor.
 BE_API extern NSString* const kBEUsingColorCameraOnly;
 
-/// if enabled some recording options will be shown during tracking.
+/// if enabled some recording options will be shown during tracking in mono mode.
 BE_API extern NSString* const kBERecordingOptionsEnabled;
 
 /// if enabled the UI will require the user to connect a controller before loading the app.

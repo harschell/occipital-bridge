@@ -15,9 +15,10 @@ FOUNDATION_EXPORT const unsigned char BridgeEngineVersionString [];
 
 //------------------------------------------------------------------------------
 
+#import <BridgeEngine/BEAudioEngine.h>
+#import <BridgeEngine/BEController.h>
+#import <BridgeEngine/BEDebugging.h>
 #import <BridgeEngine/BEEngine.h>
 #import <BridgeEngine/BEMixedRealityMode.h>
-#import <BridgeEngine/BEView.h>
-#import <BridgeEngine/BEDebugging.h>
 #import <BridgeEngine/BEProfiling.h>
-#import <BridgeEngine/BEController.h>
+#import <BridgeEngine/BEView.h>

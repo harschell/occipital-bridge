@@ -272,6 +272,22 @@ static const SCNMatrix4 defaultPivot = SCNMatrix4MakeRotation(M_PI, 1.0, 0.0, 0.
 // --------------------------------------------
 // MixedReality Delegate Methods
 
+- (void) mixedRealitySensorsStatusChanged:(BESensorsStatus)sensorsStatus
+{
+    if (sensorsStatus.allSensorsReady)
+    {
+        be_dbg("sensorStatus: OK");
+    }
+    else
+    {
+        be_dbg("sensorStatus: %s%s%s%s",
+               sensorsStatus.needToConnectDepthSensor ? "[NeedToConnectDepthSensor]" : "",
+               sensorsStatus.needToChargeDepthSensor ? "[NeedToChargeDepthSensor]" : "",
+               sensorsStatus.needToRunCalibrator ? "[NeedToRunCalibrator]" : "",
+               sensorsStatus.needToAuthorizeIOSCamera ? "[NeedToAuthorizeIOSCamera]" : "");
+    }
+}
+
 - (void)mixedRealitySetUpSceneKitWorlds:(BEMappedAreaStatus)mappedAreaStatus
 {
     // When this function is called, it is guaranteed that the SceneKit world is set up, and any previously-positioned markup nodes are loaded.
@@ -478,7 +494,7 @@ static const SCNMatrix4 defaultPivot = SCNMatrix4MakeRotation(M_PI, 1.0, 0.0, 0.
     
     SCNNode *tappedObjectNode = nil;
     
-    for (id result in hitTestResults)
+    for (SCNHitTestResult* result in hitTestResults)
     {
         SCNNode *node = [result node];
         
