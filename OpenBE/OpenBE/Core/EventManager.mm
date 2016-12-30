@@ -128,7 +128,7 @@
 }
 
 - (void) cleanUpTouchEventResponders:(UIEvent *)event {
-    NSMutableArray * canceledTouchEventResponders = [[NSMutableArray alloc] init];
+    NSMutableArray * cancelledTouchEventResponders = [[NSMutableArray alloc] init];
     
     for( TouchEventResponders * touchEventResponder in self.touchEventResponders ) {
         TouchEventResponders * cleanup = touchEventResponder;
@@ -140,11 +140,11 @@
         }
         
         if( cleanup ) {
-            [canceledTouchEventResponders addObject:cleanup];
+            [cancelledTouchEventResponders addObject:cleanup];
         }
     }
     
-    for( TouchEventResponders * cleanup in  canceledTouchEventResponders ) {
+    for( TouchEventResponders * cleanup in  cancelledTouchEventResponders ) {
         [self.touchEventResponders removeObject:cleanup];
     }
 }
@@ -315,7 +315,7 @@
             uint8_t button = 1; // only one button for now.
             for( GKComponent * component in touchEventResponder.eventComponents ) {
                 [_mixedRealityMode runBlockInRenderThread:^(void) {
-                    [(GKComponent <EventComponentProtocol> * )component touchCanceledButton:button forward:[self getTouchForward:touch] hit:hit];
+                    [(GKComponent <EventComponentProtocol> * )component touchCancelledButton:button forward:[self getTouchForward:touch] hit:hit];
                 }];
             }
             

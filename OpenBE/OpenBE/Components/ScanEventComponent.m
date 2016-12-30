@@ -74,7 +74,7 @@
     return YES;
 }
 
-- (bool) touchCanceledButton:(uint8_t)button forward:(GLKVector3)touchForward hit:(SCNHitTestResult *) hit {
+- (bool) touchCancelledButton:(uint8_t)button forward:(GLKVector3)touchForward hit:(SCNHitTestResult *) hit {
     self.scanning = NO;
     return NO;
 }
