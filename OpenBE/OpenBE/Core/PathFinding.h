@@ -49,7 +49,7 @@
 
 /**
  * Generate an array of occupied points in world coordinate.
- * @returns Array of NSValue of GLKVector3 data - [NSValue valueWithBytes:&p objCType:@encode(GLKVector3)]
+ * @returns Array of NSValue of GLKVector3 data - [NSValue valueWithBytes:&p objCType:@@encode(GLKVector3)]
  */
 - (NSMutableArray<NSValue*> *) occupiedPoints;
 
@@ -69,7 +69,7 @@
 /**
  * Searchs the connectedComponentMap for nearest reachable goal point in component.
  * @param goalPoint goal we're trying to get to
- * @param component that is being searched
+ * @param targetComponent component that is being searched
  * @param result If successfull result is stored here
  * @return Success if a valid nearest point is found.
  */ 
