@@ -5,7 +5,7 @@
  http://structure.io
  */
 
-#import <GamePlayKit/GamePlayKit.h>
+#import <GameplayKit/GameplayKit.h>
 #import <SceneKit/SceneKit.h>
 
 @interface Scene : NSObject
