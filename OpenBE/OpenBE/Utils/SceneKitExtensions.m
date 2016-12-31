@@ -16,7 +16,7 @@
 
 @implementation SceneKit
 
-+ (NSString*) pathOfResourceNamed:(NSString*)resourceName withExtension:(NSString*)type
++ (NSString*) pathForResourceNamed:(NSString*)resourceName withExtension:(NSString*)type
 {
     NSString* resourcePath = nil;
     NSLog(@"looking for %@", resourceName);
@@ -45,23 +45,23 @@
 
 + (NSURL*)URLForResource:(NSString*)resourceName withExtension:(NSString*)ext
 {
-    return [NSURL fileURLWithPath:[SceneKit pathOfResourceNamed:resourceName withExtension:ext]];
+    return [NSURL fileURLWithPath:[SceneKit pathForResourceNamed:resourceName withExtension:ext]];
 }
 
-+ (NSString*) pathOfResourceNamed:(NSString*)resourceName
++ (NSString*) pathForResourceNamed:(NSString*)resourceName
 {
-    return [SceneKit pathOfResourceNamed:resourceName withExtension:nil];
+    return [SceneKit pathForResourceNamed:resourceName withExtension:nil];
 }
 
-+ (NSString*)pathOfImageResourceNamed:(NSString*)imageName
++ (NSString*)pathForImageResourceNamed:(NSString*)imageName
 {
-    NSString* resourcePath = [SceneKit pathOfResourceNamed:imageName];
+    NSString* resourcePath = [SceneKit pathForResourceNamed:imageName];
     
     if (resourcePath == nil)
-        resourcePath = [SceneKit pathOfResourceNamed:imageName withExtension:@"png"];
+        resourcePath = [SceneKit pathForResourceNamed:imageName withExtension:@"png"];
     
     if (resourcePath == nil)
-        resourcePath = [SceneKit pathOfResourceNamed:[@"Textures" stringByAppendingPathComponent:imageName]];
+        resourcePath = [SceneKit pathForResourceNamed:[@"Textures" stringByAppendingPathComponent:imageName]];
     
     return resourcePath;
 }
@@ -194,13 +194,13 @@
 
 + (SCNNode*) firstNodeFromSceneNamed:(NSString*)sceneName
 {
-    NSString* resourcePath = [SceneKit pathOfResourceNamed:sceneName];
+    NSString* resourcePath = [SceneKit pathForResourceNamed:sceneName];
     
     if (resourcePath == nil)
-        resourcePath = [SceneKit pathOfResourceNamed:[@"Models" stringByAppendingPathComponent:sceneName]];
+        resourcePath = [SceneKit pathForResourceNamed:[@"Models" stringByAppendingPathComponent:sceneName]];
     
     if (resourcePath == nil)
-        resourcePath = [SceneKit pathOfResourceNamed:[@"Models/Animations" stringByAppendingPathComponent:sceneName]];
+        resourcePath = [SceneKit pathForResourceNamed:[@"Models/Animations" stringByAppendingPathComponent:sceneName]];
     
     SCNScene* scene = [SCNScene sceneWithURL:[NSURL fileURLWithPath:resourcePath]
                                      options:nil
@@ -224,9 +224,9 @@
 
 + (SCNScene*)sceneInFrameworkOrAppNamed:(NSString*)sceneName
 {
-    NSString* resourcePath = [SceneKit pathOfResourceNamed:sceneName];
+    NSString* resourcePath = [SceneKit pathForResourceNamed:sceneName];
     if (resourcePath == nil)
-        resourcePath = [SceneKit pathOfResourceNamed:[@"Models" stringByAppendingPathComponent:sceneName]];
+        resourcePath = [SceneKit pathForResourceNamed:[@"Models" stringByAppendingPathComponent:sceneName]];
     
     SCNScene* scene = [SCNScene sceneWithURL:[NSURL fileURLWithPath:resourcePath]
                                      options:nil

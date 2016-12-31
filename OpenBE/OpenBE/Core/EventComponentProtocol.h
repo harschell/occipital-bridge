@@ -5,24 +5,26 @@
  http://structure.io
  */
 
-#import <GamePlayKit/GamePlayKit.h>
+#import <GameplayKit/GameplayKit.h>
 #import <SceneKit/SceneKit.h>
 
 @class GazeComponent;
 
 /**
  * Responders for hit events.
+ */
+@protocol EventComponentProtocol
+
+/**
  * @return not used
  *         Future:
  *         YES to indicate event should go up the responder chain.
  *         NO to indicate event was handled.
  */
-@protocol EventComponentProtocol
-
 - (bool) touchBeganButton:(uint8_t)button forward:(GLKVector3)touchForward hit:(SCNHitTestResult *) hit;
 - (bool) touchMovedButton:(uint8_t)button forward:(GLKVector3)touchForward hit:(SCNHitTestResult *) hit;
 - (bool) touchEndedButton:(uint8_t)button forward:(GLKVector3)touchForward hit:(SCNHitTestResult *) hit;
-- (bool) touchCanceledButton:(uint8_t)button forward:(GLKVector3)touchForward hit:(SCNHitTestResult *) hit;
+- (bool) touchCancelledButton:(uint8_t)button forward:(GLKVector3)touchForward hit:(SCNHitTestResult *) hit;
 
 @optional
 - (void) setPause:(bool)pausing;

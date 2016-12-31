@@ -141,17 +141,17 @@ BEControllerDelegate
     // let's make another menu for Rendering options
     _renderMenu = [[ButtonContainerComponent alloc] init];
     
-    ButtonComponent * buttonRenderStyle0 = [[ButtonComponent alloc] initWithImage:[SceneKit pathOfImageResourceNamed:@"button_wire.png"] andBlock:^{
+    ButtonComponent * buttonRenderStyle0 = [[ButtonComponent alloc] initWithImage:[SceneKit pathForImageResourceNamed:@"button_wire.png"] andBlock:^{
         [_mixedReality setRenderStyle:BERenderStyle::BERenderStyleSceneKitAndWireframe withDuration:1.0];
     }];
     [buttonRenderStyle0 setDepthTesting:YES];
     
-    ButtonComponent * buttonRenderStyle1 = [[ButtonComponent alloc] initWithImage:[SceneKit pathOfImageResourceNamed:@"button_cam.png"] andBlock:^{
+    ButtonComponent * buttonRenderStyle1 = [[ButtonComponent alloc] initWithImage:[SceneKit pathForImageResourceNamed:@"button_cam.png"] andBlock:^{
         [_mixedReality setRenderStyle:BERenderStyle::BERenderStyleSceneKitAndColorCamera withDuration:1.0];
     }];
     [buttonRenderStyle1 setDepthTesting:YES];
     
-    ButtonComponent * buttonRenderStyle2 = [[ButtonComponent alloc] initWithImage:[SceneKit pathOfImageResourceNamed:@"button_wire_cam.png"] andBlock:^{
+    ButtonComponent * buttonRenderStyle2 = [[ButtonComponent alloc] initWithImage:[SceneKit pathForImageResourceNamed:@"button_wire_cam.png"] andBlock:^{
         [_mixedReality setRenderStyle:BERenderStyle::BERenderStyleSceneKitAndColorCameraAndWireframe withDuration:1.0];
     }];
     [buttonRenderStyle2 setDepthTesting:YES];
@@ -267,7 +267,7 @@ BEControllerDelegate
     beamUIComponent.uiComponent = bridgetMenu;
     [self.robotEntity addComponent:beamUIComponent];
     
-    ButtonComponent * buttonFetchComponent = [[ButtonComponent alloc] initWithImage:[SceneKit pathOfImageResourceNamed:@"button_bone.png"] andBlock:^{
+    ButtonComponent * buttonFetchComponent = [[ButtonComponent alloc] initWithImage:[SceneKit pathForImageResourceNamed:@"button_bone.png"] andBlock:^{
         [behaviourComponent stopAllBehaviours];
         [bridgetMenu setEnabled:NO];
         [moveComponent setEnabled:NO];
@@ -276,7 +276,7 @@ BEControllerDelegate
         [spawnObjectComponent setEnabled:NO];
     }];
     
-    ButtonComponent * buttonMoveComponent = [[ButtonComponent alloc] initWithImage:[SceneKit pathOfImageResourceNamed:@"button_move.png"] andBlock:^{
+    ButtonComponent * buttonMoveComponent = [[ButtonComponent alloc] initWithImage:[SceneKit pathForImageResourceNamed:@"button_move.png"] andBlock:^{
         [behaviourComponent stopAllBehaviours];
         [bridgetMenu setEnabled:NO];
         [moveComponent setEnabled:YES];
@@ -286,7 +286,7 @@ BEControllerDelegate
         [spawnObjectComponent setEnabled:NO];
     }];
     
-    ButtonComponent * buttonScanComponent = [[ButtonComponent alloc] initWithImage:[SceneKit pathOfImageResourceNamed:@"button_scan.png"] andBlock:^{
+    ButtonComponent * buttonScanComponent = [[ButtonComponent alloc] initWithImage:[SceneKit pathForImageResourceNamed:@"button_scan.png"] andBlock:^{
         [behaviourComponent stopAllBehaviours];
         [bridgetMenu setEnabled:NO];
         [fetchComponent setEnabled:NO];
@@ -295,7 +295,7 @@ BEControllerDelegate
         [spawnObjectComponent setEnabled:NO];
     }];
     
-    ButtonComponent * buttonSpawnObjectComponent = [[ButtonComponent alloc] initWithImage:[SceneKit pathOfImageResourceNamed:@"button_chair.png"] andBlock:^{
+    ButtonComponent * buttonSpawnObjectComponent = [[ButtonComponent alloc] initWithImage:[SceneKit pathForImageResourceNamed:@"button_chair.png"] andBlock:^{
         [behaviourComponent stopAllBehaviours];
         [bridgetMenu setEnabled:NO];
         [fetchComponent setEnabled:NO];

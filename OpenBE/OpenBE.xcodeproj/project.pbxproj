@@ -19,7 +19,7 @@
 		2DC3EA431E005CC9007C3C02 /* BridgeEngine.framework in Frameworks */ = {isa = PBXBuildFile; fileRef = 2DC3EA421E005CC9007C3C02 /* BridgeEngine.framework */; };
 		2DCD6FF21DFFEED3003691AE /* OpenBE.h in Headers */ = {isa = PBXBuildFile; fileRef = 2DCD6FF01DFFEED3003691AE /* OpenBE.h */; settings = {ATTRIBUTES = (Public, ); }; };
 		2DCD703E1DFFEF84003691AE /* AudioEngine.h in Headers */ = {isa = PBXBuildFile; fileRef = 2DCD702A1DFFEF84003691AE /* AudioEngine.h */; };
-		2DCD703F1DFFEF84003691AE /* AudioEngine.mm in Sources */ = {isa = PBXBuildFile; fileRef = 2DCD702B1DFFEF84003691AE /* AudioEngine.mm */; };
+		2DCD703F1DFFEF84003691AE /* AudioEngine.m in Sources */ = {isa = PBXBuildFile; fileRef = 2DCD702B1DFFEF84003691AE /* AudioEngine.m */; };
 		2DCD70401DFFEF84003691AE /* Camera.h in Headers */ = {isa = PBXBuildFile; fileRef = 2DCD702C1DFFEF84003691AE /* Camera.h */; };
 		2DCD70411DFFEF84003691AE /* Camera.m in Sources */ = {isa = PBXBuildFile; fileRef = 2DCD702D1DFFEF84003691AE /* Camera.m */; };
 		2DCD70421DFFEF84003691AE /* Component.h in Headers */ = {isa = PBXBuildFile; fileRef = 2DCD702E1DFFEF84003691AE /* Component.h */; };
@@ -29,7 +29,7 @@
 		2DCD70461DFFEF84003691AE /* CoreMotionComponentProtocol.h in Headers */ = {isa = PBXBuildFile; fileRef = 2DCD70321DFFEF84003691AE /* CoreMotionComponentProtocol.h */; };
 		2DCD70471DFFEF84003691AE /* EventComponentProtocol.h in Headers */ = {isa = PBXBuildFile; fileRef = 2DCD70331DFFEF84003691AE /* EventComponentProtocol.h */; };
 		2DCD70481DFFEF84003691AE /* EventManager.h in Headers */ = {isa = PBXBuildFile; fileRef = 2DCD70341DFFEF84003691AE /* EventManager.h */; };
-		2DCD70491DFFEF84003691AE /* EventManager.mm in Sources */ = {isa = PBXBuildFile; fileRef = 2DCD70351DFFEF84003691AE /* EventManager.mm */; };
+		2DCD70491DFFEF84003691AE /* EventManager.m in Sources */ = {isa = PBXBuildFile; fileRef = 2DCD70351DFFEF84003691AE /* EventManager.m */; };
 		2DCD704A1DFFEF84003691AE /* GeometryComponent.h in Headers */ = {isa = PBXBuildFile; fileRef = 2DCD70361DFFEF84003691AE /* GeometryComponent.h */; };
 		2DCD704B1DFFEF84003691AE /* GeometryComponent.m in Sources */ = {isa = PBXBuildFile; fileRef = 2DCD70371DFFEF84003691AE /* GeometryComponent.m */; };
 		2DCD704E1DFFEF84003691AE /* Scene.h in Headers */ = {isa = PBXBuildFile; fileRef = 2DCD703A1DFFEF84003691AE /* Scene.h */; };
@@ -119,7 +119,7 @@
 		2DCD6FF01DFFEED3003691AE /* OpenBE.h */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.c.h; path = OpenBE.h; sourceTree = "<group>"; };
 		2DCD6FF11DFFEED3003691AE /* Info.plist */ = {isa = PBXFileReference; lastKnownFileType = text.plist.xml; path = Info.plist; sourceTree = "<group>"; };
 		2DCD702A1DFFEF84003691AE /* AudioEngine.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; path = AudioEngine.h; sourceTree = "<group>"; };
-		2DCD702B1DFFEF84003691AE /* AudioEngine.mm */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.cpp.objcpp; path = AudioEngine.mm; sourceTree = "<group>"; };
+		2DCD702B1DFFEF84003691AE /* AudioEngine.m */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.objc; path = AudioEngine.m; sourceTree = "<group>"; };
 		2DCD702C1DFFEF84003691AE /* Camera.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; path = Camera.h; sourceTree = "<group>"; };
 		2DCD702D1DFFEF84003691AE /* Camera.m */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.objc; path = Camera.m; sourceTree = "<group>"; };
 		2DCD702E1DFFEF84003691AE /* Component.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; path = Component.h; sourceTree = "<group>"; };
@@ -129,7 +129,7 @@
 		2DCD70321DFFEF84003691AE /* CoreMotionComponentProtocol.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; path = CoreMotionComponentProtocol.h; sourceTree = "<group>"; };
 		2DCD70331DFFEF84003691AE /* EventComponentProtocol.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; path = EventComponentProtocol.h; sourceTree = "<group>"; };
 		2DCD70341DFFEF84003691AE /* EventManager.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; path = EventManager.h; sourceTree = "<group>"; };
-		2DCD70351DFFEF84003691AE /* EventManager.mm */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.cpp.objcpp; path = EventManager.mm; sourceTree = "<group>"; };
+		2DCD70351DFFEF84003691AE /* EventManager.m */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.objc; path = EventManager.m; sourceTree = "<group>"; };
 		2DCD70361DFFEF84003691AE /* GeometryComponent.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; path = GeometryComponent.h; sourceTree = "<group>"; };
 		2DCD70371DFFEF84003691AE /* GeometryComponent.m */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.objc; path = GeometryComponent.m; sourceTree = "<group>"; };
 		2DCD703A1DFFEF84003691AE /* Scene.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; path = Scene.h; sourceTree = "<group>"; };
@@ -263,7 +263,7 @@
 			isa = PBXGroup;
 			children = (
 				2DCD702A1DFFEF84003691AE /* AudioEngine.h */,
-				2DCD702B1DFFEF84003691AE /* AudioEngine.mm */,
+				2DCD702B1DFFEF84003691AE /* AudioEngine.m */,
 				2DCD702C1DFFEF84003691AE /* Camera.h */,
 				2DCD702D1DFFEF84003691AE /* Camera.m */,
 				2DCD702E1DFFEF84003691AE /* Component.h */,
@@ -273,7 +273,7 @@
 				2DCD70321DFFEF84003691AE /* CoreMotionComponentProtocol.h */,
 				2DCD70331DFFEF84003691AE /* EventComponentProtocol.h */,
 				2DCD70341DFFEF84003691AE /* EventManager.h */,
-				2DCD70351DFFEF84003691AE /* EventManager.mm */,
+				2DCD70351DFFEF84003691AE /* EventManager.m */,
 				2DCD70361DFFEF84003691AE /* GeometryComponent.h */,
 				2DCD70371DFFEF84003691AE /* GeometryComponent.m */,
 				2DCD72F81DFFEF9C003691AE /* PathFinding.h */,
@@ -518,7 +518,7 @@
 				2DCD70BA1DFFEF8D003691AE /* ButtonComponent.m in Sources */,
 				2DCD70D51DFFEF8D003691AE /* PhysicsContactAudioComponent.m in Sources */,
 				2DCD73081DFFEF9D003691AE /* PathFinding.mm in Sources */,
-				2DCD70491DFFEF84003691AE /* EventManager.mm in Sources */,
+				2DCD70491DFFEF84003691AE /* EventManager.m in Sources */,
 				2DCD70B81DFFEF8D003691AE /* BlockDemoReticleComponent.m in Sources */,
 				2C5DA5491E00F12700A60606 /* ScanBehaviourComponent.m in Sources */,
 				2DCD70D11DFFEF8D003691AE /* MoveRobotEventComponent.m in Sources */,
@@ -544,7 +544,7 @@
 				2DCD70411DFFEF84003691AE /* Camera.m in Sources */,
 				2DCD70D31DFFEF8D003691AE /* NavigationComponent.m in Sources */,
 				2DCD70D91DFFEF8D003691AE /* RobotActionComponent.mm in Sources */,
-				2DCD703F1DFFEF84003691AE /* AudioEngine.mm in Sources */,
+				2DCD703F1DFFEF84003691AE /* AudioEngine.m in Sources */,
 				2DCD70C01DFFEF8D003691AE /* FetchEventComponent.m in Sources */,
 				2DCD70C21DFFEF8D003691AE /* FixedSizeReticleComponent.m in Sources */,
 				2DCD730C1DFFEF9D003691AE /* SceneKitExtensions.m in Sources */,

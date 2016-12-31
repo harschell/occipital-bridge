@@ -75,7 +75,7 @@ bool menuSoundPlayed;
     GLKVector3 robotFwd = [self.meshController getForward]; //GLKVector3Normalize(GLKVector3Subtract( [self.meshController getPosition], cameraPos ));
 
     // Calculate the facing angle along level axis, used for rotating the UI component into the right facing angle.
-    float rot = atan2f( robotFwd.z, robotFwd.x );
+//    float rot = atan2f( robotFwd.z, robotFwd.x );
     
     // Project the UI Distance from camera position.
     GLKVector3 uiFwd = GLKVector3MultiplyScalar(robotFwd, UI_DISTANCE);
@@ -149,7 +149,7 @@ bool menuSoundPlayed;
     return YES;
 }
 
-- (bool) touchCanceledButton:(uint8_t)button forward:(GLKVector3)touchForward hit:(SCNHitTestResult *) hit {
+- (bool) touchCancelledButton:(uint8_t)button forward:(GLKVector3)touchForward hit:(SCNHitTestResult *) hit {
     return NO;
 }
 

@@ -109,7 +109,7 @@
         
         self.startWithUnboxingSequence = unboxingExperience;
         
-        _vemojiFolderPath = [SceneKit pathOfResourceNamed:@"Textures/Vemoji"];
+        _vemojiFolderPath = [SceneKit pathForResourceNamed:@"Textures/Vemoji"];
         be_assert (_vemojiFolderPath != nil, "Cannot find the Vemoji folder.");
     }
     return self;

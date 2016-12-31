@@ -48,7 +48,7 @@
     AVAudioPCMBuffer *aBuff = _bufferDictionary[named];
     if(aBuff == nil ) {
         // Attempt loading the audio subfolder.
-        NSString* soundsFolder = [SceneKit pathOfResourceNamed:@"Sounds"];
+        NSString* soundsFolder = [SceneKit pathForResourceNamed:@"Sounds"];
         
         NSString *path = [soundsFolder stringByAppendingPathComponent:named];
 
