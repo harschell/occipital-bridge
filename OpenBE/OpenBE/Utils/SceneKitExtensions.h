@@ -10,9 +10,9 @@
 @interface SceneKit : NSObject
 
 // FIXME: move to some resources header something, since these generic methods are not specific to SceneKit.
-+ (NSString*)pathOfResourceNamed:(NSString*)resourceName withExtension:(NSString*)type;
-+ (NSString*)pathOfResourceNamed:(NSString*)resourceName; // extension included in the name
-+ (NSString*)pathOfImageResourceNamed:(NSString*)imageName;
++ (NSString*)pathForResourceNamed:(NSString*)resourceName withExtension:(NSString*)type;
++ (NSString*)pathForResourceNamed:(NSString*)resourceName; // extension included in the name
++ (NSString*)pathForImageResourceNamed:(NSString*)imageName;
 + (NSURL*)URLForResource:(NSString*)resourceName withExtension:(NSString*)ext;
 
 @end

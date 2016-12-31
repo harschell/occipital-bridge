@@ -41,7 +41,7 @@
         self.node = [self createSceneNodeForGaze];
 
         // Create a hit target and parent it to this node.
-        self.target = [[ButtonComponent alloc] initWithImage:[SceneKit pathOfImageResourceNamed:@"target-white-128.png"] andBlock:nil];
+        self.target = [[ButtonComponent alloc] initWithImage:[SceneKit pathForImageResourceNamed:@"target-white-128.png"] andBlock:nil];
         [_target.node.geometry.firstMaterial setTransparency:0.4];
         
         _target.node.categoryBitMask |= RAYCAST_IGNORE_BIT;
