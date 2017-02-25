@@ -36,6 +36,36 @@
 		</dict>
 		<dict>
 			<key>Type</key>
+			<string>PSToggleSwitchSpecifier</string>
+			<key>Title</key>
+			<string>Enable In-Headset Scanning</string>
+			<key>Key</key>
+			<string>stereoScanning</string>
+			<key>DefaultValue</key>
+			<false/>
+		</dict>
+		<dict>
+			<key>Title</key>
+			<string>Mapping Resolution</string>
+			<key>Type</key>
+			<string>PSGroupSpecifier</string>
+		</dict>
+		<dict>
+			<key>Type</key>
+			<string>PSSliderSpecifier</string>
+			<key>Title</key>
+			<string>Mapper Resolution</string>
+			<key>Key</key>
+			<string>mapperVoxelResolution</string>
+			<key>DefaultValue</key>
+			<real>0.02</real>
+			<key>MinimumValue</key>
+			<real>0.02</real>
+			<key>MaximumValue</key>
+			<real>0.2</real>
+		</dict>
+		<dict>
+			<key>Type</key>
 			<string>PSGroupSpecifier</string>
 			<key>Title</key>
 			<string>Debugging</string>

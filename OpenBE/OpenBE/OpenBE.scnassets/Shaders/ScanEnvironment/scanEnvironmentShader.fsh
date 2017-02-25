@@ -20,6 +20,8 @@ uniform vec2 u_resolution;
 
 const float LinesPerMeter = 25.;
 const float ScanSlewTimingRate = 0.015;
+const float ScanPeakDuration = 0.1; 
+const float ScanFadeDuration = 1.0;
 
 void main()
 {
@@ -30,9 +32,9 @@ void main()
     
     vec4 fragPos = vec4(v_worldPos, 1.0);
     
-    // Calculate the decay parameters related to scanning time (0 min, to 0.5 peak, to 1 min)
+    // Calculate the decay parameters related to scanning time (0 min, to ScanRampDuration peak, to 1.0 sec min)
     float pulseTime = 1.;
-    float strength = smoothstep( 0., .5, scanTime) * (1.- smoothstep( duration-.5, duration, scanTime));
+    float strength = smoothstep( 0., ScanPeakDuration, scanTime) * (1.- smoothstep( duration-ScanFadeDuration, duration, scanTime));
     float maxDist = scanRadius * strength;
     float waveLength = .3;
     
@@ -44,6 +46,7 @@ void main()
     
     float diffamount = (1.-.5*amount);
     
+    // worldStableScanY refers to the scanning lines. These an be animated by uncommenting the " - scanTime*ScanSlewTimingRate" below.
     float worldStableScanY = (fragPos.y/* - scanTime*ScanSlewTimingRate*/) * LinesPerMeter;
     float emissionAmount = amount * (1.-smoothstep( 0., 0.15, abs( fract( worldStableScanY ) - .5) ));
     

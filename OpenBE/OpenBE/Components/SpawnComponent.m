@@ -73,7 +73,7 @@
     for (int i = 0; i < [self.furniture count]; i++) {
         SCNNode *thing = [self.furniture objectAtIndex:i];
         
-        [thing setCategoryBitMaskRecursively:CATEGORY_BIT_MASK_LIGHTING|RAYCAST_IGNORE_BIT];
+        [thing setCategoryBitMaskRecursively: BEShadowCategoryBitMaskCastShadowOntoSceneKit | BEShadowCategoryBitMaskCastShadowOntoEnvironment|RAYCAST_IGNORE_BIT];
         thing.hidden = YES;
         
         SCNPhysicsShape *objectShape = [SCNPhysicsShape shapeWithNode:thing
@@ -91,15 +91,17 @@
         objBody.damping = 0.1;
         objBody.angularDamping = 0.1;
         objBody.allowsResting = YES;
-        
-        objBody.categoryBitMask = BECollisionCategoryVirtualObjects;
-        // Want spawned objects to only collide with the floor and each other?  Uncomment this line:
-        // WARNING: due to unhandled collision events with the world mesh, this can run slowly when objects intersect the world.
-//        objBody.collisionBitMask = BECollisionCategoryFloor | BECollisionCategoryVirtualObjects; 
-        
+
         // some initial velocity when falling
         objBody.velocity = SCNVector3Make(0, 1.0, 0);
-
+        
+        objBody.categoryBitMask = SCNPhysicsCollisionCategoryDefault | BECollisionCategoryVirtualObjects;
+        // Want spawned objects to only collide with the floor and each other?  Uncomment this line:
+        // WARNING: due to unhandled collision events with the world mesh, this can run slowly when objects intersect the world.
+        
+        objBody.collisionBitMask = BECollisionCategoryFloor | SCNPhysicsCollisionCategoryDefault| BECollisionCategoryVirtualObjects;
+        objBody.contactTestBitMask = BECollisionCategoryFloor | SCNPhysicsCollisionCategoryDefault | BECollisionCategoryVirtualObjects; 
+        
         // Associate furniture hitting things with ball Bounce.
         [_physicsContactAudio addNodeName:thing.name audioName:@"BallBounce.caf"];
         

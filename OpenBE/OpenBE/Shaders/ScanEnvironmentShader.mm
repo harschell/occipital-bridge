@@ -40,7 +40,6 @@
 
 - (void) setActive:(bool)active {
     if( active ) {
-
         [self.mixedRealityMode setCustomRenderStyle:self];
         [self.mixedRealityMode setRenderStyle:BERenderStyleSceneKitAndCustomEnvironmentShader withDuration:0.f];
     } else {

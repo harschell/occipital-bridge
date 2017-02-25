@@ -351,7 +351,7 @@
 - (SCNAction*)renderInWorldsAR:(BOOL)arWorld VR:(BOOL)vrWorld {
     SCNAction *action = [SCNAction runBlock:^(SCNNode * _Nonnull node) {
         RobotMeshControllerComponent * geometry = (RobotMeshControllerComponent *)[ComponentUtils getComponentFromEntity:self.entity ofClass:[RobotMeshControllerComponent class]];
-        [geometry.node setRenderingOrderRecursively:(vrWorld ? VR_WORLD_RENDERING_ORDER:0)];
+        [geometry.node setRenderingOrderRecursively:(vrWorld ? VR_WORLD_RENDERING_ORDER + 1000 : 0)];
     }];
 
     [self appendAction:action];

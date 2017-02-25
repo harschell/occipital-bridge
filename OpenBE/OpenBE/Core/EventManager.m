@@ -80,10 +80,10 @@
 
 - (void) pauseGlobalEventComponents {
     self.globalEventComponentsPaused = YES;
-    
+
     for( GKComponent * component in self.globalEventComponents ) {
         if( [component conformsToProtocol:@protocol(EventComponentProtocol)]
-           && [component respondsToSelector:@selector(setPause:)]) {
+         && [component respondsToSelector:@selector(setPause:)]) {
             [(GKComponent <EventComponentProtocol> *)component setPause:true];
         }
     }
@@ -91,10 +91,10 @@
 
 - (void) resumeGlobalEventComponents {
     self.globalEventComponentsPaused = NO;
-    
+
     for( GKComponent * component in self.globalEventComponents ) {
         if( [component conformsToProtocol:@protocol(EventComponentProtocol)]
-           && [component respondsToSelector:@selector(setPause:)]) {
+         && [component respondsToSelector:@selector(setPause:)]) {
             [(GKComponent <EventComponentProtocol> *)component setPause:false];
         }
     }
@@ -261,7 +261,17 @@
         
         [self.touchEventResponders addObject:touchEventRepsonders];
         
-        uint8_t button = 1; // only one button for now
+        uint8_t button; // only one button for now
+        
+        // Special case for when controller button is being used vs touch events.
+        // Button = 1, for when a controller button is held down. (takes precidence)
+        // Button = 0, for touch input
+        if( [touches containsObject:_controllerButtonTouch] ) {
+            button = 1;
+        } else {
+            button = 0;
+        }
+        
         for( GKComponent * component in touchEventRepsonders.eventComponents ) {
             [_mixedRealityMode runBlockInRenderThread:^(void) {
                 [(GKComponent <EventComponentProtocol> * )component touchBeganButton:button forward:forward hit:hit];
@@ -314,6 +324,10 @@
         if( touchEventResponder ) {
             uint8_t button = 1; // only one button for now.
             for( GKComponent * component in touchEventResponder.eventComponents ) {
+                if( [component respondsToSelector:@selector(touchCancelledButton:forward:hit:)] == NO ) {
+                    NSLog(@"Unhandled @selector(touchCancelledButton:forward:hit:) with object class: %@", NSStringFromClass(component.class));
+                }
+                
                 [_mixedRealityMode runBlockInRenderThread:^(void) {
                     [(GKComponent <EventComponentProtocol> * )component touchCancelledButton:button forward:[self getTouchForward:touch] hit:hit];
                 }];
@@ -376,17 +390,22 @@
         SCNVector3 to = SCNVector3FromGLKVector3( GLKVector3Add( [Camera main].position, GLKVector3MultiplyScalar([Camera main].reticleForward, maxDistance) ) );
         
         if( (from.x == 0.f && from.y == 0.f && from.z == 0.f) ||
-           (to.x == 0.f && to.y == 0.f && to.z == 0.f) ||
-           (from.x == to.x && from.y == to.y && from.z == to.z ) ||
-           isnan(from.x) || isnan(from.y) || isnan(from.z) ||
-           isnan(to.x) || isnan(to.y) || isnan(to.z) ) {
+            (to.x == 0.f && to.y == 0.f && to.z == 0.f) ||
+            (from.x == to.x && from.y == to.y && from.z == to.z ) ||
+            isnan(from.x) || isnan(from.y) || isnan(from.z) ||
+            isnan(to.x) || isnan(to.y) || isnan(to.z) ) {
             // don't know why: but if we continue now a bad access exception will be thrown
             // by rayTestWithSegmentFromPoint.
             // TODO: find out why and fix this.
             return nil;
         }
         
-        hitTestResults = [[Scene main].scene.rootNode hitTestWithSegmentFromPoint:from toPoint:to options:nil];
+        // SCNHitTestOptionCategoryBitMask only works on iOS 10 !!!
+        //NSDictionary *options = @{SCNHitTestSortResultsKey:@YES, SCNHitTestBackFaceCullingKey:@NO, SCNHitTestOptionCategoryBitMask:@(~(NSUInteger)RAYCAST_IGNORE_BIT)};
+        
+        NSDictionary *options = @{SCNHitTestSortResultsKey:@YES, SCNHitTestBackFaceCullingKey:@NO};
+        hitTestResults = [[Scene main].scene.rootNode hitTestWithSegmentFromPoint:from toPoint:to options:options];
+//        NSLog(@"%ld reticle intersection hits", hitTestResults.count);
     } else {
         CGPoint tapPoint = [touch locationInView:touch.view];
         hitTestResults = [_mixedRealityMode hitTestSceneKitFrom2DScreenPoint:tapPoint options:@{}];
@@ -394,7 +413,9 @@
     
     if( [hitTestResults count] ) {
         for( SCNHitTestResult * result in hitTestResults ) {
-            if( !(result.node.categoryBitMask & RAYCAST_IGNORE_BIT) ) return result;
+            if( !(result.node.categoryBitMask & RAYCAST_IGNORE_BIT) ) {
+				return result;
+			}
         }
     }
     

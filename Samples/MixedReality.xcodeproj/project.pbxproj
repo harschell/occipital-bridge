@@ -7,6 +7,8 @@
 	objects = {
 
 /* Begin PBXBuildFile section */
+		2C7E5C7A1E1C5ECB002F86AF /* CustomRenderMode.mm in Sources */ = {isa = PBXBuildFile; fileRef = 2C7E5C791E1C5ECB002F86AF /* CustomRenderMode.mm */; };
+		2C7E5C7C1E1C61CF002F86AF /* OpenGLES.framework in Frameworks */ = {isa = PBXBuildFile; fileRef = 2A5AA3831771397A0092391A /* OpenGLES.framework */; };
 		2DC3EA0D1E005B5D007C3C02 /* BridgeEngine.framework in Frameworks */ = {isa = PBXBuildFile; fileRef = 2DC3EA0C1E005B5D007C3C02 /* BridgeEngine.framework */; };
 		2DC3EA0E1E005B72007C3C02 /* BridgeEngine.framework in Embed Frameworks */ = {isa = PBXBuildFile; fileRef = 2DC3EA0C1E005B5D007C3C02 /* BridgeEngine.framework */; settings = {ATTRIBUTES = (CodeSignOnCopy, RemoveHeadersOnCopy, ); }; };
 		6F2E92131C7E735000C43E8A /* UIKit.framework in Frameworks */ = {isa = PBXBuildFile; fileRef = 2AFC8D77176F966000F7F3B5 /* UIKit.framework */; };
@@ -50,6 +52,8 @@
 		2AFC8D77176F966000F7F3B5 /* UIKit.framework */ = {isa = PBXFileReference; lastKnownFileType = wrapper.framework; name = UIKit.framework; path = System/Library/Frameworks/UIKit.framework; sourceTree = SDKROOT; };
 		2AFC8D79176F966000F7F3B5 /* Foundation.framework */ = {isa = PBXFileReference; lastKnownFileType = wrapper.framework; name = Foundation.framework; path = System/Library/Frameworks/Foundation.framework; sourceTree = SDKROOT; };
 		2AFC8D7D176F966000F7F3B5 /* GLKit.framework */ = {isa = PBXFileReference; lastKnownFileType = wrapper.framework; name = GLKit.framework; path = System/Library/Frameworks/GLKit.framework; sourceTree = SDKROOT; };
+		2C7E5C781E1C5ECB002F86AF /* CustomRenderMode.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; path = CustomRenderMode.h; sourceTree = "<group>"; };
+		2C7E5C791E1C5ECB002F86AF /* CustomRenderMode.mm */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.cpp.objcpp; path = CustomRenderMode.mm; sourceTree = "<group>"; };
 		2D3287E91C3185C300216B0F /* SpriteKit.framework */ = {isa = PBXFileReference; lastKnownFileType = wrapper.framework; name = SpriteKit.framework; path = System/Library/Frameworks/SpriteKit.framework; sourceTree = SDKROOT; };
 		2DC3EA0C1E005B5D007C3C02 /* BridgeEngine.framework */ = {isa = PBXFileReference; lastKnownFileType = wrapper.framework; name = BridgeEngine.framework; path = ../Frameworks/BridgeEngine.framework; sourceTree = "<group>"; };
 		2DC7D69518438E1D005BEE8B /* ImageIO.framework */ = {isa = PBXFileReference; lastKnownFileType = wrapper.framework; name = ImageIO.framework; path = System/Library/Frameworks/ImageIO.framework; sourceTree = SDKROOT; };
@@ -83,6 +87,7 @@
 			isa = PBXFrameworksBuildPhase;
 			buildActionMask = 2147483647;
 			files = (
+				2C7E5C7C1E1C61CF002F86AF /* OpenGLES.framework in Frameworks */,
 				2DC3EA0D1E005B5D007C3C02 /* BridgeEngine.framework in Frameworks */,
 				6F2E92131C7E735000C43E8A /* UIKit.framework in Frameworks */,
 				6F2E92141C7E735A00C43E8A /* SceneKit.framework in Frameworks */,
@@ -150,6 +155,8 @@
 				6F5CA0AC1C751A4B00A33642 /* Info.plist */,
 				6F5CA0A91C751A4B00A33642 /* LaunchScreen.storyboard */,
 				6F5CA0A41C751A4B00A33642 /* Main.storyboard */,
+				2C7E5C781E1C5ECB002F86AF /* CustomRenderMode.h */,
+				2C7E5C791E1C5ECB002F86AF /* CustomRenderMode.mm */,
 				6F5CA09C1C751A4B00A33642 /* main.mm */,
 				6F5CA09E1C751A4B00A33642 /* AppDelegate.h */,
 				6F5CA09F1C751A4B00A33642 /* AppDelegate.mm */,
@@ -193,6 +200,7 @@
 				TargetAttributes = {
 					6F5CA0981C751A4B00A33642 = {
 						CreatedOnToolsVersion = 7.2.1;
+						DevelopmentTeam = TP97HMW84Y;
 						SystemCapabilities = {
 							com.apple.ApplicationGroups.iOS = {
 								enabled = 0;
@@ -244,6 +252,7 @@
 				6F5CA0A01C751A4B00A33642 /* AppDelegate.mm in Sources */,
 				6F5CA09D1C751A4B00A33642 /* main.mm in Sources */,
 				773DED7A1C8F8BF1006233EA /* AppSettings.mm in Sources */,
+				2C7E5C7A1E1C5ECB002F86AF /* CustomRenderMode.mm in Sources */,
 			);
 			runOnlyForDeploymentPostprocessing = 0;
 		};
@@ -364,7 +373,7 @@
 				CLANG_WARN__DUPLICATE_METHOD_MATCH = YES;
 				CODE_SIGN_IDENTITY = "iPhone Developer";
 				"CODE_SIGN_IDENTITY[sdk=iphoneos*]" = "iPhone Developer";
-				DEVELOPMENT_TEAM = "";
+				DEVELOPMENT_TEAM = TP97HMW84Y;
 				ENABLE_STRICT_OBJC_MSGSEND = YES;
 				FRAMEWORK_SEARCH_PATHS = ../Frameworks;
 				GCC_C_LANGUAGE_STANDARD = gnu99;
@@ -409,7 +418,7 @@
 				CODE_SIGN_IDENTITY = "iPhone Developer";
 				"CODE_SIGN_IDENTITY[sdk=iphoneos*]" = "iPhone Developer";
 				COPY_PHASE_STRIP = NO;
-				DEVELOPMENT_TEAM = "";
+				DEVELOPMENT_TEAM = TP97HMW84Y;
 				ENABLE_STRICT_OBJC_MSGSEND = YES;
 				FRAMEWORK_SEARCH_PATHS = ../Frameworks;
 				GCC_C_LANGUAGE_STANDARD = gnu99;

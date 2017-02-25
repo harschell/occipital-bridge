@@ -136,7 +136,7 @@ typedef void (^callback)(void);
                 // Create SCNNodes
                 SCNNode *node = [SCNNode nodeWithGeometry:geo];
                 node.categoryBitMask |= RAYCAST_IGNORE_BIT;
-                node.categoryBitMask |= CATEGORY_BIT_MASK_LIGHTING; // add lighting
+                node.categoryBitMask |= BEShadowCategoryBitMaskCastShadowOntoSceneKit | BEShadowCategoryBitMaskCastShadowOntoEnvironment; // add lighting
                 node.castsShadow = NO;
                 node.position = SCNVector3FromGLKVector3(p);
                 [_occupancyParentNode addChildNode:node];
@@ -186,7 +186,7 @@ typedef void (^callback)(void);
                 SCNGeometry *geo = geoColors[componentSet];
                 SCNNode *node = [SCNNode nodeWithGeometry:geo];
                 node.categoryBitMask |= RAYCAST_IGNORE_BIT;
-                node.categoryBitMask |= CATEGORY_BIT_MASK_LIGHTING; // add lighting
+                node.categoryBitMask |= BEShadowCategoryBitMaskCastShadowOntoSceneKit | BEShadowCategoryBitMaskCastShadowOntoEnvironment; // add lighting
                 node.castsShadow = NO;
                 node.position = SCNVector3Make(p.x, -nodeSize, p.z);
                 [_connectedComponentsParentNode addChildNode:node];
@@ -501,7 +501,7 @@ typedef void (^callback)(void);
         [waypoint getValue:&target];
         
         SCNNode *wpNode = [SCNNode nodeWithGeometry:_pathGeo];
-        wpNode.categoryBitMask |= RAYCAST_IGNORE_BIT | CATEGORY_BIT_MASK_LIGHTING;
+        wpNode.categoryBitMask |= RAYCAST_IGNORE_BIT | BEShadowCategoryBitMaskCastShadowOntoSceneKit | BEShadowCategoryBitMaskCastShadowOntoEnvironment;
         wpNode.eulerAngles = SCNVector3Make(M_PI, 0, 0);
         SCNVector3 nodePos = SCNVector3FromGLKVector3(target);
         wpNode.position = nodePos;

@@ -40,6 +40,13 @@ BE_API extern NSString* const kBERecordingOptionsEnabled;
 /// if enabled the UI will require the user to connect a controller before loading the app.
 BE_API extern NSString* const kBERequireConnectedController;
 
+/// enable scanning in headset (beta feature)
+BE_API extern NSString* const kBEEnableStereoScanningBeta;
+
+/// control the voxel size used for the mapping phase. Larger voxels allow scanning a larger area, at decreased accuracy
+BE_API extern NSString* const kBEMapperVolumeResolutionKey;
+
+
 //------------------------------------------------------------------------------
 
 /// Bridge Engine Capture Replay Mode
@@ -188,3 +195,44 @@ typedef struct
     bool isOrientationOnly;
     
 } BETrackerHints;
+
+
+// Rendering State Enums
+
+/** Bridge Engine Node Rendering Order 
+ 
+    The rendering order of certain nodes in the SceneKit scene graph. 
+    For proper transparency blending, transparent objects like particle systems must be rendered after the Environment Scan.
+    e.g. `[yourTransparentSCNNode setRenderingOrder:BEEnvironmentScanRenderingOrder + 1]`
+ */
+typedef NS_ENUM(NSInteger, BENodeRenderingOrder)
+{
+    /// The order that SceneKit will render the environment scan mesh
+    BEEnvironmentScanRenderingOrder         =   99999,
+    
+    /// The order that SceneKit will composite shadows on the environment scan mesh
+    BEEnvironmentScanShadowRenderingOrder   =   BEEnvironmentScanRenderingOrder + 1
+};
+
+/** Bridge Engine Shadow casting categories
+ 
+    Casting shadows is controlled by the node's categoryBitMask. Shadows are accomplished by maintaining two SCNLightTypeSpot in the same location.
+    If a node's `(categoryBitMask & BEShadowCategoryBitMaskCastShadowOntoEnvironment) > 0` it will be rendered into the AR shadow map.
+    If a node's `(categoryBitMask & BEShadowCategoryBitMaskCastShadowOntoSceneKit) > 0` it will be rendered into the SceneKit shadow map.
+ 
+    For SceneKit nodes, they will receive shadows from any other nodes with the mask BEShadowCategoryBitMaskCastShadowOntoSceneKit.
+    For the scanned room mesh, it will recieve shadows from SceneKit objects with the mask BEShadowCategoryBitMaskCastShadowOntoEnvironment.
+ 
+ */
+typedef NS_ENUM(NSInteger, BEShadowCategoryBitMask)
+{
+    /// Default, node will be rendered when relocalized and tracking
+    BEShadowCategoryBitMaskDefault                          =   1,
+
+    /// The node should cast shadows onto the scanned room mesh (does not include SceneKit objects).
+    BEShadowCategoryBitMaskCastShadowOntoEnvironment        =   2,
+    
+    /// The node should cast shadows onto other 3D objects in the SceneKit scene (does not include scanned room mesh).
+    BEShadowCategoryBitMaskCastShadowOntoSceneKit           =   4,
+    
+};

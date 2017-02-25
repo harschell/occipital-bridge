@@ -73,7 +73,7 @@ id getValueForSettingCommon(NSString* key, id defaultValueIfSettingIsNotInBundle
     if(hasSettingsBundle)
     {
         id settingValue = [[NSUserDefaults standardUserDefaults] objectForKey:key];
-        
+        NSLog(@"\tvalue: %@", settingValue);
         // If the setting is in the Bundle, return the value (or its bundle-specified default).
 
         if(settingValue)
@@ -92,6 +92,11 @@ id getValueForSettingCommon(NSString* key, id defaultValueIfSettingIsNotInBundle
 + (bool) booleanValueFromAppSetting:(NSString*)settingsKey defaultValueIfSettingIsNotInBundle:(bool)defaultValue
 {
     return [getValueForSettingCommon(settingsKey, [NSNumber numberWithFloat:defaultValue]) boolValue];
+}
+
++ (float) floatValueFromAppSetting:(NSString*)settingsKey defaultValueIfSettingIsNotInBundle:(float)defaultValue
+{
+    return [getValueForSettingCommon(settingsKey, [NSNumber numberWithFloat:defaultValue]) floatValue];
 }
 
 @end

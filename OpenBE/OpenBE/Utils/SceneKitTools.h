@@ -73,6 +73,7 @@ inline SCNVector3 operator / (const SCNVector3& lhs, CGFloat val) { return SCNVe
 + (void)printParentHierarchyOfNode:(SCNNode*)node;
 
 + (SCNVector3) getPositionFromTransform:(SCNMatrix4)m;
++ (SCNVector4) getRotationFromTransform:(SCNMatrix4)m;
 + (SCNVector3) getWorldPos:(SCNNode *)n;
 + (SCNVector4) getWorldRot:(SCNNode *)n;
 + (SCNVector3) vectorFromNode:(SCNNode *)fromNode toNode:(SCNNode*)toNode;
@@ -88,6 +89,11 @@ inline SCNVector3 operator / (const SCNVector3& lhs, CGFloat val) { return SCNVe
 + (SCNMatrix4) isolateRotationFromSCNMatrix4:(SCNMatrix4)matrix;
 + (SCNMatrix4) convertSTTrackerPoseToSceneKitPose:(GLKMatrix4)stTrackerPose;
 + (GLKMatrix4) convertSceneKitPoseToSTTrackerPose:(SCNMatrix4)stTrackerPose;
+
++ (void) setCastShadow:(bool)castShadow ofNode:(SCNNode *)node;
++ (void) setCategoryBitMask:(int)bitmask ofNode:(SCNNode *)node;
++ (void) setRenderingOrder:(int)order ofNode:(SCNNode *)node;
++ (void) setOpacity:(float)opacity ofNode:(SCNNode *)node;
 
 @end
 

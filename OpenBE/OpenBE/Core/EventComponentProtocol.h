@@ -12,6 +12,8 @@
 
 /**
  * Responders for hit events.
+ * Button = 0, if touch input
+ * Button = 1, for controller clicking
  */
 @protocol EventComponentProtocol
 

@@ -1,4 +1,4 @@
-# Welcome to the Bridge Engine Beta 3!
+# Welcome to the Bridge Engine Beta 4!
 
 We're glad to have you onboard. We're committed to enhancing Bridge Engine, so we take all of your feedback and support very earnestly.
 
@@ -24,6 +24,11 @@ Want to help us expand the capabilities of Bridge Engine? We'd love contribution
 - Note that Bridge Engine is not compatible with the iOS simulator.
 
 ### Changelog
+
+##### Beta 4 changes
+- OpenBE: portal rendering code
+- Supports in-headset scanning
+- Exposes additional rendering information like system rendering order and shadow controls 
 
 ##### Beta 3 Update 1 changes
 - Added the Bridget sample

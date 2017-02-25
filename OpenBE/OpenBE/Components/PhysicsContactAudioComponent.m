@@ -153,6 +153,15 @@
 }
 
 - (void) calculatePeakImpulseForContact:(SCNPhysicsContact *)contact {
+    // Reject non-colliding contacts, where it's non-mutual.
+    SCNPhysicsBody *bodyA = contact.nodeA.physicsBody;
+    SCNPhysicsBody *bodyB = contact.nodeB.physicsBody;
+    if( (bodyA.collisionBitMask & bodyB.categoryBitMask) == 0 )
+    {
+        be_NSDbg(@"Unecessary contact on %@, check your contactTestBitMask", contact.nodeA.name);
+        return; //Reject non-mutual collision.
+    } 
+
     PhysicsContactAudio *contactSound = _physicsContactNodes[contact.nodeA.name];
     if( contactSound != nil ) {
         [contactSound calculatePeakImpulseForContact:contact forNode:contact.nodeA];

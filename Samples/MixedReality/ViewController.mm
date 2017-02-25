@@ -9,6 +9,7 @@
 
 #import <BridgeEngine/BridgeEngine.h>
 #import <BridgeEngine/BEController.h>
+#import "CustomRenderMode.h"
 #import <cassert>
 
 //------------------------------------------------------------------------------
@@ -122,6 +123,12 @@ static const SCNMatrix4 defaultPivot = SCNMatrix4MakeRotation(M_PI, 1.0, 0.0, 0.
             kBERecordingOptionsEnabled:
                 @([AppSettings booleanValueFromAppSetting:@"enableRecording"
                        defaultValueIfSettingIsNotInBundle:NO]),
+            kBEEnableStereoScanningBeta:
+                @([AppSettings booleanValueFromAppSetting:@"stereoScanning"
+                       defaultValueIfSettingIsNotInBundle:NO]),
+            kBEMapperVolumeResolutionKey:
+                @([AppSettings floatValueFromAppSetting:@"mapperVoxelResolution"
+                       defaultValueIfSettingIsNotInBundle:0.02]),
         }
         markupNames:_markupNameList
     ];
@@ -174,9 +181,9 @@ static const SCNMatrix4 defaultPivot = SCNMatrix4MakeRotation(M_PI, 1.0, 0.0, 0.
 - (void)startExperience
 {
     // For this experience, let's switch to a mode with AR objects composited with the passthrough camera.
-
+    
     [_mixedReality setRenderStyle:BERenderStyleSceneKitAndColorCamera withDuration:0.5];
- 
+
     _experienceIsRunning = YES;
 }
 
@@ -365,14 +372,24 @@ static const SCNMatrix4 defaultPivot = SCNMatrix4MakeRotation(M_PI, 1.0, 0.0, 0.
     self.reticleNode.geometry.firstMaterial.writesToDepthBuffer = NO;
     self.reticleNode.geometry.firstMaterial.readsFromDepthBuffer = NO;
     self.reticleNode.castsShadow = NO;
+    // Reticle should be the last thing drawn in the scene, so that it can render on top of everything
+    self.reticleNode.renderingOrder = BEEnvironmentScanRenderingOrder + 100;
     
-    self.reticleNode.hidden = ![[BEController sharedController] isConnected] && self.runningInStereo;
+    self.reticleNode.hidden = ![[BEController sharedController] isConnected] || !self.runningInStereo;
     
     // rotate the cylinder so that it points the direction of user's gaze, and translate forward by 1m
     self.reticleNode.transform = SCNMatrix4Translate(SCNMatrix4Rotate(SCNMatrix4Identity, M_PI_2, 1, 0, 0), 0, 0, 1);
     
     // add this as a child of Bridge, not of the scanned world. This will make it follow the user's gaze.
     [_mixedReality.localDeviceNode addChildNode:self.reticleNode];
+    
+    // demonstrate using custom render modes
+    CustomRenderMode *customRenderMode = [[CustomRenderMode alloc] init];
+    [customRenderMode compile];
+    [_mixedReality setCustomRenderStyle:customRenderMode];
+    
+    // uncomment this line to trigger the custom rendering mode.
+    // [_mixedReality setRenderStyle:BERenderStyleSceneKitAndCustomEnvironmentShader withDuration:1];
 
 }
 

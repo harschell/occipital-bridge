@@ -5,6 +5,14 @@
 */
 
 #import "AppDelegate.h"
+#import <BridgeEngine/BridgeEngine.h>
+
+// You can monitor NSLog events and other messages by
+//  un-commenting the REMOTE_LOG_HOST line below,
+//  and specifying your machine's IP address.
+//
+// Run on terminal: nc -lk 4999
+//#define REMOTE_LOG_HOST "192.168.100.11"
 
 //------------------------------------------------------------------------------
 
@@ -51,6 +59,13 @@ void preventApplicationFromStartingInTheBackgroundWhenTheStructureSensorIsPlugge
     // Override point for customization after application launch.
 
     preventApplicationFromStartingInTheBackgroundWhenTheStructureSensorIsPlugged();
+
+#ifdef REMOTE_LOG_HOST
+    NSError* error = nil;
+    BEStartLoggingToWirelessConsole(@REMOTE_LOG_HOST, 4999, &error);
+    if (error)
+        NSLog(@"Can't start wireless log: %@", [error localizedDescription]);
+#endif
 
     return YES;
 }

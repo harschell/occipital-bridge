@@ -15,7 +15,7 @@
 @property(nonatomic, strong) ScanBehaviourComponent *scanBehaviour;
 @property(nonatomic, strong) ScanComponent *scanComponent;
 @property(nonatomic) bool continueScaneWhileTouching;
-@property(nonatomic) bool scanning;
+@property(nonatomic) bool scanning, continueTrackingOnReticle;
 @property(nonatomic) float scanTime;
 @property(nonatomic) GLKVector3 targetPosition;
 @property(nonatomic) GLKVector3 currentPosition;
@@ -37,29 +37,20 @@
     if( self.continueScaneWhileTouching && hit ) {
         [self startScan:SCNVector3ToGLKVector3(hit.worldCoordinates)];
         self.scanning = YES;
+        
+        if( button ) {
+            _continueTrackingOnReticle = true;
+        } else {
+            _continueTrackingOnReticle = false;
+        }
     }
     return YES;
 }
 
 - (bool) touchMovedButton:(uint8_t)button forward:(GLKVector3)touchForward hit:(SCNHitTestResult *) hit {
-
-//    if( hit ) {
-//        self.targetPosition = SCNVector3ToGLKVector3(hit.worldCoordinates);
-//    }
-
-//    if( self.scanning ) {
-//        if( hit ) {
-//            [self.scanBehaviour setTargetPosition:SCNVector3ToGLKVector3(hit.worldCoordinates)];
-//        } else {
-//            self.scanning = NO;
-//        }
-//    } else {
-//        // Re-start if we moved into a good hit zone.
-//        if( self.continueScaneWhileTouching && hit ) {
-//            [self startScan:SCNVector3ToGLKVector3(hit.worldCoordinates)];
-//            self.scanning = YES;
-//        }
-//    }
+    if( self.scanning && hit && self.continueScaneWhileTouching ) {
+        self.targetPosition = SCNVector3ToGLKVector3(hit.worldCoordinates);
+    }
 
     return NO;
 }
@@ -85,9 +76,9 @@
     if( self.scanning && self.continueScaneWhileTouching ) {
         self.scanTime += seconds;
         self.scanBehaviour.intervalTime = MAX( self.scanTime + 1., self.scanBehaviour.intervalTime );
-        self.scanComponent.duration = self.scanBehaviour.intervalTime - 1.f;
+        self.scanComponent.duration = self.scanBehaviour.intervalTime;
         
-        if( self.continueScaneWhileTouching ) {
+        if( self.continueScaneWhileTouching && _continueTrackingOnReticle ) {
             float maxDistance = GAZE_INTERSECTION_FAR_DISTANCE;
             SCNVector3 from = SCNVector3FromGLKVector3( [Camera main].position );
             SCNVector3 to = SCNVector3FromGLKVector3( GLKVector3Add( [Camera main].position, GLKVector3MultiplyScalar([Camera main].reticleForward, maxDistance) ) );
@@ -96,7 +87,11 @@
              && !isnan(from.y)
              && !isnan(from.z) )
             {
-                NSArray<SCNHitTestResult *> *hitTestResults = [[Scene main].scene.rootNode hitTestWithSegmentFromPoint:from toPoint:to options:@{SCNHitTestSortResultsKey:@(YES)}];
+                NSDictionary *hitTestOptions = @{
+                    SCNHitTestSortResultsKey:@YES,
+                    SCNHitTestBackFaceCullingKey:@NO
+                };
+                NSArray<SCNHitTestResult *> *hitTestResults = [[Scene main].scene.rootNode hitTestWithSegmentFromPoint:from toPoint:to options:hitTestOptions];
                 SCNHitTestResult *nearest = nil;
                 if( [hitTestResults count] ) {
                     for( SCNHitTestResult * result in [hitTestResults reverseObjectEnumerator] ) {

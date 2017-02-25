@@ -24,6 +24,9 @@
 #import "../Core/AudioEngine.h"
 #import "../Utils/Math.h"
 #import "../Utils/SceneKitExtensions.h"
+
+#import <BridgeEngine/BEEngine.h>
+
 //#import "BESceneKitTools.h"
 
 #define FETCH_IDLE_DISTANCE .75f
@@ -135,6 +138,7 @@ typedef NS_ENUM (NSUInteger, FetchPositionState) {
     [self.node addChildNode:self.representationCube];
     
     [self.physicsCube setHidden:YES];
+    [self.representationCube setHidden:YES];
     
     self.idlePosition = FETCH_RIGHT;
     self.fetchState = FETCH_IDLE;
@@ -309,9 +313,10 @@ typedef NS_ENUM (NSUInteger, FetchPositionState) {
             
             // Intersection check, from beam to ball.
             SCNNode *rootNode = [[Scene main] rootNode];
+            NSDictionary *options = @{SCNHitTestBackFaceCullingKey:@NO};
             NSArray<SCNHitTestResult *> *hitTestResults = [rootNode hitTestWithSegmentFromPoint:SCNVector3FromGLKVector3(beamStart)
                                                                     toPoint:SCNVector3FromGLKVector3(ball)
-                                                                    options:nil];
+                                                                    options:options];
             BOOL hitSomething = NO;
             for( SCNHitTestResult *result in hitTestResults ) {
                 if( !(result.node.categoryBitMask & RAYCAST_IGNORE_BIT) ) {
@@ -444,7 +449,7 @@ typedef NS_ENUM (NSUInteger, FetchPositionState) {
     SCNNode *cube = [SCNNode firstNodeFromSceneNamed:@"Objects/SphereToy.dae"];
     cube.name = @"ball";
     cube.scale = SCNVector3Make(0.65, 0.65, 0.65);
-    cube.categoryBitMask |= RAYCAST_IGNORE_BIT | CATEGORY_BIT_MASK_LIGHTING;
+    cube.categoryBitMask |= RAYCAST_IGNORE_BIT | BEShadowCategoryBitMaskCastShadowOntoSceneKit | BEShadowCategoryBitMaskCastShadowOntoEnvironment;
     return cube;
 }
 

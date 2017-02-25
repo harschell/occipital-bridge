@@ -16,16 +16,16 @@
 // +y is down, -y is up from center. z offset is 1.0.
 #define RETICLE_VERTICAL_OFFSET 0.1
 
-// From BridgeEngine
+// From BE private
 #define CATEGORY_BIT_MASK_CASTS_SHADOWS_ONTO_ENVIRONMENT 2
 #define CATEGORY_BIT_MASK_CASTS_SHADOWS_ONTO_AR 4
 #define CATEGORY_BIT_MASK_LIGHTING (CATEGORY_BIT_MASK_CASTS_SHADOWS_ONTO_ENVIRONMENT|CATEGORY_BIT_MASK_CASTS_SHADOWS_ONTO_AR)
 
-#define BACKGROUND_RENDERING_ORDER 100000
-
 #define VR_WORLD_RENDERING_ORDER 110000
 // transparent objects must be rendered last
 #define TRANSPARENCY_RENDERING_ORDER 120000
+
+#define PORTAL_STENCIL_VALUE 4 // 1 is used internally by the engine currently
 
 #import "Camera.h"
 #import "Scene.h"

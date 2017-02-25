@@ -32,6 +32,7 @@
 #import "RobotBodyEmojiComponent.h"
 #import "RobotMeshControllerComponent.h"
 #import "RobotVemojiComponent.h"
+#import "SpawnPortalComponent.h"
 
 @import GLKit;
 
@@ -175,9 +176,10 @@
     if( cameraPosition.y > -DUCKANDDANCE_HEIGHT_THREHSOLD ) // Duck 
      {
         MoveRobotEventComponent *moveEventComponent = (MoveRobotEventComponent *)[self.entity componentForClass:MoveRobotEventComponent.class];
+        SpawnPortalComponent *spawnPortalComponent = (SpawnPortalComponent*)[self.entity componentForClass:SpawnPortalComponent.class];
          BOOL canDance = [self isUnfolded] // Make sure Bridget isn't folded up still.
          && (robotPos.y >= ROBOT_FLYING_THRESHOLD) // Make sure Bridget is not flying in the air.
-         && (self.isIdle || moveEventComponent.isEnabled  );
+         && (self.isIdle || moveEventComponent.isEnabled || spawnPortalComponent.isEnabled );
 
         if( canDance && _duckAndDanceCooldownTime < 0 && _ducking == NO ) {
             NSLog(@"--==** Duck & Dance **==--");

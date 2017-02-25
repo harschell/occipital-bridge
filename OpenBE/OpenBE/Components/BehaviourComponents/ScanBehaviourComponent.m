@@ -12,7 +12,7 @@
 #import "../../Utils/Math.h"
 @import GLKit;
 
-#define ROBOT_LOOK_DURATION 0.4f
+#define ROBOT_LOOK_DURATION 0.1f
 #define ROBOT_TRACKING_LOOK_DURATION 0.0f  // can be zero because the targetposition will change smooth
                                             // in scaneventcomponent
 
@@ -78,7 +78,7 @@ typedef NS_ENUM (NSUInteger, RobotScanState) {
         self.scanState = SCAN_SCAN;
         
         // perform scan
-        [self.scanComponent startScan:true atPosition:self.targetPosition duration:self.intervalTime-1.f radius:_scanRadius];
+        [self.scanComponent startScan:true atPosition:self.targetPosition duration:self.intervalTime-ROBOT_LOOK_DURATION radius:_scanRadius];
     }
     
     // Keep tracking where our target is.
@@ -89,8 +89,8 @@ typedef NS_ENUM (NSUInteger, RobotScanState) {
             self.beamComponent.startPos = [[self getRobot] getBeamStartPosition];
             self.beamComponent.endPos = self.targetPosition;
             
-            float fadeIn = saturatef( (self.timer - ROBOT_LOOK_DURATION)*2.f );
-            float fadeOut = 1.-saturatef( (self.intervalTime - self.timer - ROBOT_LOOK_DURATION)*2.f );
+            float fadeIn = saturatef( ((self.timer - ROBOT_LOOK_DURATION)/ROBOT_LOOK_DURATION)*2.f );
+            float fadeOut = 1.-saturatef( ((self.intervalTime - self.timer)/ROBOT_LOOK_DURATION)*2.f );
             float radius = (fadeIn-fadeOut) * .05f;
             [self.beamComponent setEnabled:YES];
             [self.beamComponent setActive:(fadeIn+fadeOut)*.5 beamWidth:radius beamHeight:radius];

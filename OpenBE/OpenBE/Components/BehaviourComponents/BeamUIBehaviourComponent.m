@@ -75,7 +75,7 @@ bool menuSoundPlayed;
     GLKVector3 robotFwd = [self.meshController getForward]; //GLKVector3Normalize(GLKVector3Subtract( [self.meshController getPosition], cameraPos ));
 
     // Calculate the facing angle along level axis, used for rotating the UI component into the right facing angle.
-//    float rot = atan2f( robotFwd.z, robotFwd.x );
+    float rot = atan2f( robotFwd.x, robotFwd.z ) + M_PI;
     
     // Project the UI Distance from camera position.
     GLKVector3 uiFwd = GLKVector3MultiplyScalar(robotFwd, UI_DISTANCE);
@@ -88,7 +88,7 @@ bool menuSoundPlayed;
 //    [self.meshController lookAt:lookatPos rotateIn:UI_ACTIVATION_DURATION];
     
     self.uiComponent.node.position = SCNVector3FromGLKVector3( uiPos );
-    self.uiComponent.node.eulerAngles = SCNVector3Make( -M_PI_4, 0, 0 );
+    self.uiComponent.node.eulerAngles = SCNVector3Make( -M_PI_4, rot, 0 );
     
     self.beamComponent.startPos = robotSensorPos; //[[self getRobot] getBeamStartPosition];
     

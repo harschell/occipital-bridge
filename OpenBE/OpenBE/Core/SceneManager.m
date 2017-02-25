@@ -54,6 +54,7 @@
     worldBody.mass = 100000;  // Super heavy world.
     worldBody.type = SCNPhysicsBodyTypeStatic;
     worldBody.categoryBitMask = BECollisionCategoryRealWorld;
+    worldBody.contactTestBitMask = BECollisionCategoryRealWorld;
     worldBody.collisionBitMask = SCNPhysicsCollisionCategoryAll;
     worldBody.friction = 0.9; // Lots of friction.
     worldBody.rollingFriction = 0.5; // soft surface prevents rolling.

@@ -80,7 +80,7 @@
                 NSLog(@"SelectableModelComponent FAILED TO LOAD: %@", modelName);
                 return nil;
             } else {
-                [model setCategoryBitMaskRecursively:CATEGORY_BIT_MASK_LIGHTING];
+                [model setCategoryBitMaskRecursively: BEShadowCategoryBitMaskCastShadowOntoSceneKit | BEShadowCategoryBitMaskCastShadowOntoEnvironment];
                 model.eulerAngles = SCNVector3Make(M_PI, 0, 0); // Counter the rotation from createSceneNodeForGaze
                 [self.node insertChildNode:model atIndex:0];
             }

@@ -11,5 +11,6 @@
 @interface AppSettings : NSObject 
 
 + (bool) booleanValueFromAppSetting:(NSString*)settingsKey defaultValueIfSettingIsNotInBundle:(bool)defaultValue;
++ (float) floatValueFromAppSetting:(NSString*)settingsKey defaultValueIfSettingIsNotInBundle:(float)defaultValue;
 
 @end

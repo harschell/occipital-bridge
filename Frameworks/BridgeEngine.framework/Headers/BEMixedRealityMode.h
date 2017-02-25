@@ -197,7 +197,7 @@ BE_API
 
 /** Intersect a ray between the camera center and a given on-screen point with the mesh of the mapped area.
  @param point the screen-space point
- @param normal a pointer to store the normal of the scene mesh at the intersection point
+ @param outputNormal a pointer to store the normal of the scene mesh at the intersection point
  @note This is usually used for touch-based interaction.
  @note This does not collide with any SceneKit objects, only with the mesh of mapped area
  @warning For efficiency reasons the intersection point might be approximate
@@ -266,7 +266,7 @@ These coordinates can be used for UIKit operations like moving a UIView to a spe
  
  @param glStyle the rendering shader that will be used.
  @param modelView the modelView matrix used to render the mesh.
- @param projection the projection matrix used to render the mesh.
+ @param modelView the projection matrix used to render the mesh.
  
  */
 - (void)renderSceneMeshWithStyle:(BEOpenGLRenderStyle)glStyle

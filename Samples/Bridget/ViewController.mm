@@ -31,6 +31,8 @@
 #import <OpenBE/Components/ScanEventComponent.h>
 #import <OpenBE/Components/ScanComponent.h>
 #import <OpenBE/Components/SpawnComponent.h>
+#import <OpenBE/Components/SpawnPortalComponent.h>
+#import <OpenBE/Components/VRWorldComponent.h>
 
 #import "OpenBE/Shaders/ScanEnvironmentShader.h"
 
@@ -49,14 +51,10 @@
 #import <OpenBE/Utils/SceneKitExtensions.h>
 
 //------------------------------------------------------------------------------
-
 #pragma mark - ViewController ()
 
-@interface ViewController ()
-<
-BEMixedRealityModeDelegate,
-BEControllerDelegate
->
+
+@interface ViewController () <BEMixedRealityModeDelegate, BEControllerDelegate>
 
 @property (strong) RobotActionComponent* robot;
 @property (strong) GKEntity * robotEntity;
@@ -64,7 +62,6 @@ BEControllerDelegate
 @property (strong) BEController* controller;
 
 @end
-
 //------------------------------------------------------------------------------
 
 #pragma mark - ViewController
@@ -74,6 +71,8 @@ BEControllerDelegate
     BEMixedRealityMode* _mixedReality;
     NSArray*            _markupNameList;
     BOOL                _experienceIsRunning;
+    VRWorldComponent *_vrWorld;
+    PortalComponent *_portal;
 }
 
 - (void)viewDidLoad
@@ -96,6 +95,7 @@ BEControllerDelegate
     _mixedReality = [[BEMixedRealityMode alloc]
         initWithView:(BEView*)self.view
         engineOptions:@{
+            kBETrackerFallbackOnIMUEnabled:@(YES),
             kBECaptureReplayMode:
                 @(replayMode),
             kBEUsingWideVisionLens:
@@ -109,6 +109,9 @@ BEControllerDelegate
                        defaultValueIfSettingIsNotInBundle:NO]),
             kBERecordingOptionsEnabled:
                 @([AppSettings booleanValueFromAppSetting:@"enableRecording"
+                       defaultValueIfSettingIsNotInBundle:NO]),
+            kBEEnableStereoScanningBeta:
+                @([AppSettings booleanValueFromAppSetting:@"stereoScanning"
                        defaultValueIfSettingIsNotInBundle:NO]),
         }
         markupNames:_markupNameList
@@ -183,7 +186,7 @@ BEControllerDelegate
     Component *fixedSizeReticle = [[FixedSizeReticleComponent alloc] init];
     //Component *fixedSizeReticle = [[BlockDemoReticleComponent alloc] init];
     [gazeEntity addComponent:fixedSizeReticle];
-
+    
     // The main Robot object
     self.robotEntity = [[SceneManager main] createEntity];
     
@@ -229,6 +232,28 @@ BEControllerDelegate
     [[EventManager main] addGlobalEventComponent:fetchComponent];
     [[EventManager main] addGlobalEventComponent:scanEventComponent];
     [[EventManager main] addGlobalEventComponent:spawnObjectComponent];
+    
+    // portal
+    ColorOverlayComponent *colorOverlay = [[ColorOverlayComponent alloc] init];
+    [[[SceneManager main] createEntity] addComponent:colorOverlay];
+    
+    _vrWorld = [[VRWorldComponent alloc] init];
+    [[[SceneManager main] createEntity] addComponent:_vrWorld];
+    _portal = [[PortalComponent alloc] init];
+    _portal.mixedReality = _mixedReality;
+    _portal.overlayComponent = colorOverlay;
+    _vrWorld.portalComponent = _portal;
+    _portal.robotEntity = self.robotEntity;
+    _portal.stereoRendering = stereo;
+    //_portal.interactive = [BEAppSettings booleanValueFromAppSetting:SETTING_PLAY_SCRIPT defaultValueIfSettingIsNotInBundle:NO] == NO;
+    [[[SceneManager main] createEntity] addComponent:_portal];
+    
+    // spawn portal
+    SpawnPortalComponent * spawnPortalComponent = [[SpawnPortalComponent alloc] init];
+    spawnPortalComponent.vrWorldComponent = _vrWorld;
+    spawnPortalComponent.portalComponent = _portal;
+    spawnPortalComponent.robotActionSequencer = _robot;
+    [[EventManager main] addGlobalEventComponent:spawnPortalComponent];
 
     // The event components are hooked to the robot Behaviour to trigger animations and movements.
     moveComponent.robotBehaviourComponent = behaviourComponent;
@@ -267,13 +292,14 @@ BEControllerDelegate
     beamUIComponent.uiComponent = bridgetMenu;
     [self.robotEntity addComponent:beamUIComponent];
     
-    ButtonComponent * buttonFetchComponent = [[ButtonComponent alloc] initWithImage:[SceneKit pathForImageResourceNamed:@"button_bone.png"] andBlock:^{
+    ButtonComponent * buttonPortalComponent = [[ButtonComponent alloc] initWithImage:[SceneKit pathForImageResourceNamed:@"button_wallPortal.png"] andBlock:^{
         [behaviourComponent stopAllBehaviours];
         [bridgetMenu setEnabled:NO];
-        [moveComponent setEnabled:NO];
-        [fetchComponent setEnabled:YES];
-        [scanEventComponent setEnabled:NO];
+        [fetchComponent setEnabled:NO];
+        [spawnPortalComponent setEnabled:YES];
         [spawnObjectComponent setEnabled:NO];
+        [scanEventComponent setEnabled:NO];
+        [moveComponent setEnabled:NO];
     }];
     
     ButtonComponent * buttonMoveComponent = [[ButtonComponent alloc] initWithImage:[SceneKit pathForImageResourceNamed:@"button_move.png"] andBlock:^{
@@ -284,6 +310,7 @@ BEControllerDelegate
         [scanEventComponent setEnabled:NO];
         [behaviourComponent addPointOfInterest:[Camera main].position];
         [spawnObjectComponent setEnabled:NO];
+        [spawnPortalComponent setEnabled:NO];
     }];
     
     ButtonComponent * buttonScanComponent = [[ButtonComponent alloc] initWithImage:[SceneKit pathForImageResourceNamed:@"button_scan.png"] andBlock:^{
@@ -293,6 +320,7 @@ BEControllerDelegate
         [scanEventComponent setEnabled:YES];
         [moveComponent setEnabled:NO];
         [spawnObjectComponent setEnabled:NO];
+        [spawnPortalComponent setEnabled:NO];
     }];
     
     ButtonComponent * buttonSpawnObjectComponent = [[ButtonComponent alloc] initWithImage:[SceneKit pathForImageResourceNamed:@"button_chair.png"] andBlock:^{
@@ -302,14 +330,31 @@ BEControllerDelegate
         [scanEventComponent setEnabled:NO];
         [moveComponent setEnabled:NO];
         [spawnObjectComponent setEnabled:YES];
+        [spawnPortalComponent setEnabled:NO];
     }];
     
-    [[[SceneManager main] createEntity] addComponent:buttonFetchComponent];
+    ButtonComponent * buttonFetchComponent = [[ButtonComponent alloc] initWithImage:[SceneKit pathForImageResourceNamed:@"button_bone.png"] andBlock:^{
+        [behaviourComponent stopAllBehaviours];
+        [bridgetMenu setEnabled:NO];
+        [moveComponent setEnabled:NO];
+        [fetchComponent setEnabled:YES];
+        [scanEventComponent setEnabled:NO];
+        [spawnObjectComponent setEnabled:NO];
+        [spawnPortalComponent setEnabled:NO];
+    }];
+
+    [[[SceneManager main] createEntity] addComponent:buttonPortalComponent];
     [[[SceneManager main] createEntity] addComponent:buttonMoveComponent];
     [[[SceneManager main] createEntity] addComponent:buttonScanComponent];
     [[[SceneManager main] createEntity] addComponent:buttonSpawnObjectComponent];
+    [[[SceneManager main] createEntity] addComponent:buttonFetchComponent];
+    
 
-    bridgetMenu.buttonComponents = [[NSMutableArray alloc] initWithArray:@[buttonFetchComponent, buttonMoveComponent, buttonScanComponent, buttonSpawnObjectComponent]];
+    bridgetMenu.buttonComponents = [[NSMutableArray alloc] initWithArray:@[buttonMoveComponent,
+                                                                           buttonScanComponent,
+                                                                           buttonSpawnObjectComponent,
+                                                                           buttonFetchComponent,
+                                                                           buttonPortalComponent]];
     
     [self setupRenderingMenu];
     
@@ -319,6 +364,7 @@ BEControllerDelegate
     // now we can manually tweak the components that have been created, after they have been started
     //---------------------------------------------------------------------
     [bridgetMenu setEnabled:NO];
+    [spawnPortalComponent setEnabled:NO];
     
     float scale = .13f;
     bridgetMenu.node.scale = SCNVector3Make(scale, scale, scale);
@@ -344,6 +390,7 @@ BEControllerDelegate
     // setup controller
     self.controller = [BEController sharedController];
     _controller.delegate = self;
+
     
     // if we found all the markups, skip markup editing.
     if (foundAllMarkup)
@@ -484,5 +531,4 @@ BEControllerDelegate
     
     [_mixedReality setRenderStyle:nextRenderStyle withDuration:0.5];
 }
-
 @end

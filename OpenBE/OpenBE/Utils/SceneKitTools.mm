@@ -407,4 +407,32 @@ SCNMatrix4 SCNMatrix4MakeFromSCNVector3(SCNVector3 vector)
     return m;
 }
 
++ (void) setCastShadow:(bool)castShadow ofNode:(SCNNode *)node {
+    node.castsShadow = castShadow;
+    for( SCNNode * child in node.childNodes ) {
+        [SceneKitTools setCastShadow:castShadow ofNode:child];
+    }
+}
+
++ (void) setCategoryBitMask:(int)bitmask ofNode:(SCNNode *)node {
+    node.categoryBitMask = bitmask;
+    for( SCNNode * child in node.childNodes ) {
+        [SceneKitTools setCategoryBitMask:bitmask ofNode:child];
+    }
+}
+
++ (void) setRenderingOrder:(int)order ofNode:(SCNNode *)node {
+    node.renderingOrder = order;
+    for( SCNNode * child in node.childNodes ) {
+        [SceneKitTools setRenderingOrder:order ofNode:child];
+    }
+}
+
++ (void) setOpacity:(float)opacity ofNode:(SCNNode *)node {
+    node.opacity = opacity;
+    for( SCNNode * child in node.childNodes ) {
+        [SceneKitTools setOpacity:opacity ofNode:child];
+    }
+}
+
 @end

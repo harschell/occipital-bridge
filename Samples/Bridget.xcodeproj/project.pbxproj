@@ -17,6 +17,7 @@
 		2DC3E93E1E0002B2007C3C02 /* OpenBE.framework in Embed Frameworks */ = {isa = PBXBuildFile; fileRef = 2DC3E8DD1DFFFFD5007C3C02 /* OpenBE.framework */; settings = {ATTRIBUTES = (CodeSignOnCopy, RemoveHeadersOnCopy, ); }; };
 		2DC3EA111E005C17007C3C02 /* BridgeEngine.framework in Frameworks */ = {isa = PBXBuildFile; fileRef = 2DC3EA101E005C17007C3C02 /* BridgeEngine.framework */; };
 		2DC3EA121E005C3A007C3C02 /* BridgeEngine.framework in Embed Frameworks */ = {isa = PBXBuildFile; fileRef = 2DC3EA101E005C17007C3C02 /* BridgeEngine.framework */; settings = {ATTRIBUTES = (CodeSignOnCopy, RemoveHeadersOnCopy, ); }; };
+		6DE302131E43B98B00B0403A /* CoreBluetooth.framework in Frameworks */ = {isa = PBXBuildFile; fileRef = DA28568D1C6E546E0030250A /* CoreBluetooth.framework */; };
 		6F2E92131C7E735000C43E8A /* UIKit.framework in Frameworks */ = {isa = PBXBuildFile; fileRef = 2AFC8D77176F966000F7F3B5 /* UIKit.framework */; };
 		6F2E92141C7E735A00C43E8A /* SceneKit.framework in Frameworks */ = {isa = PBXBuildFile; fileRef = 0DF7F8861B8E387E003127B0 /* SceneKit.framework */; };
 		6F5CA09D1C751A4B00A33642 /* main.mm in Sources */ = {isa = PBXBuildFile; fileRef = 6F5CA09C1C751A4B00A33642 /* main.mm */; };
@@ -99,6 +100,7 @@
 			isa = PBXFrameworksBuildPhase;
 			buildActionMask = 2147483647;
 			files = (
+				6DE302131E43B98B00B0403A /* CoreBluetooth.framework in Frameworks */,
 				2DC3E93D1E0002AA007C3C02 /* OpenBE.framework in Frameworks */,
 				2C23A7491DFBA73500C326B5 /* GameController.framework in Frameworks */,
 				6F2E92131C7E735000C43E8A /* UIKit.framework in Frameworks */,
@@ -427,11 +429,17 @@
 				GCC_WARN_UNUSED_VARIABLE = YES;
 				HEADER_SEARCH_PATHS = ../OpenBE;
 				INFOPLIST_FILE = Bridget/Info.plist;
+				IPHONEOS_DEPLOYMENT_TARGET = 10.2;
 				LD_RUNPATH_SEARCH_PATHS = "$(inherited) @executable_path/Frameworks";
+				LIBRARY_SEARCH_PATHS = (
+					"$(inherited)",
+					"$(PROJECT_DIR)/Bridget",
+				);
 				MTL_ENABLE_DEBUG_INFO = YES;
 				PRODUCT_BUNDLE_IDENTIFIER = "com.example.occipital-samplecode.Bridget";
 				PRODUCT_NAME = "$(TARGET_NAME)";
 				PROVISIONING_PROFILE = "";
+				TARGETED_DEVICE_FAMILY = "1,2";
 			};
 			name = Debug;
 		};
@@ -467,11 +475,17 @@
 				GCC_WARN_UNUSED_VARIABLE = YES;
 				HEADER_SEARCH_PATHS = ../OpenBE;
 				INFOPLIST_FILE = Bridget/Info.plist;
+				IPHONEOS_DEPLOYMENT_TARGET = 10.2;
 				LD_RUNPATH_SEARCH_PATHS = "$(inherited) @executable_path/Frameworks";
+				LIBRARY_SEARCH_PATHS = (
+					"$(inherited)",
+					"$(PROJECT_DIR)/Bridget",
+				);
 				MTL_ENABLE_DEBUG_INFO = NO;
 				PRODUCT_BUNDLE_IDENTIFIER = "com.example.occipital-samplecode.Bridget";
 				PRODUCT_NAME = "$(TARGET_NAME)";
 				PROVISIONING_PROFILE = "";
+				TARGETED_DEVICE_FAMILY = "1,2";
 			};
 			name = Release;
 		};
