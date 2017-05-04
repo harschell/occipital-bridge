@@ -55,46 +55,5 @@
 
     // TODO: Get gaze point-to-point testing working.... for now just see camera.
     self.robotSeesMainCamera = YES;
-
-/*
-    if( from.x == 0.f && from.y == 0.f && from.z == 0.f ) {
-        // don't know why: but if we continue now a bad access exception will be thrown
-        // by rayTestWithSegmentFromPoint.
-        // TODO: find out why and fix this.
-        return;
-    }
-
-    // Do point-to-point checks to see if we're occluded by something.
-    NSArray<SCNHitTestResult *> *hitTestGazeResults = [[Scene main].rootNodeForGaze hitTestWithSegmentFromPoint:SCNVector3FromGLKVector3(from) toPoint:SCNVector3FromGLKVector3(to) options:nil];
-    NSArray<SCNHitTestResult *> *hitTestPhysicsResults = [[Scene main].scene.physicsWorld rayTestWithSegmentFromPoint:SCNVector3FromGLKVector3(from) toPoint:SCNVector3FromGLKVector3(to) options:nil];
-    
-    SCNHitTestResult * result;
-    SCNHitTestResult * resultGaze;
-    SCNHitTestResult * resultPhysics;
-    
-    if( [hitTestGazeResults count] ) {
-        for( resultGaze in hitTestGazeResults ) {
-            if( !(resultGaze.node.categoryBitMask & RAYCAST_IGNORE_BIT) ) break;
-        }
-    }
-
-    result = resultGaze;
-    if( [hitTestPhysicsResults count] ) {
-        for( resultPhysics in hitTestPhysicsResults ) {
-            if( !(resultPhysics.node.categoryBitMask & RAYCAST_IGNORE_BIT) ) break;
-        }
-    }
-    
-    // Map down the result from physics engine if it's closer.
-    if( resultPhysics && result && GLKVector3Distance([Camera main].position, SCNVector3ToGLKVector3(resultPhysics.worldCoordinates)) < GLKVector3Distance([Camera main].position, SCNVector3ToGLKVector3(result.worldCoordinates))) {
-        result = resultPhysics;
-    }
-
-    if( result && result.node == _robotSensorNode ) {
-        self.robotSeesMainCamera = YES;
-    } else {
-        self.robotSeesMainCamera = NO;
-    }
-*/
 }
 @end

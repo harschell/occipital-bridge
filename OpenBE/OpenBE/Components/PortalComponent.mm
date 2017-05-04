@@ -130,12 +130,12 @@ typedef NS_ENUM (NSUInteger, PortalState) {
     // NOTE: Attach the PortalGeometryNode after it's been cloned, or flattenedClone will inherit the _node.scale
     _occlude = [_portalGeometryNode flattenedClone];
     _occlude.transform = _portalGeometryNode.transform;
-    [SceneKitTools setRenderingOrder:(VR_WORLD_RENDERING_ORDER-4) ofNode:_occlude];
+    [_occlude setRenderingOrderRecursively:(VR_WORLD_RENDERING_ORDER-4)];
     [_portalGeometryTransformNode addChildNode:_occlude];
     
     _depth = [_portalGeometryNode flattenedClone];
     _depth.transform = _portalGeometryNode.transform;
-    [SceneKitTools setRenderingOrder:(VR_WORLD_RENDERING_ORDER+4) ofNode:_depth];
+    [_depth setRenderingOrderRecursively:(VR_WORLD_RENDERING_ORDER+4)];
     [_portalGeometryTransformNode addChildNode:_depth];
     
     self.occlude.geometry.firstMaterial.cullMode = SCNCullFront;
@@ -172,19 +172,27 @@ typedef NS_ENUM (NSUInteger, PortalState) {
         [_node addChildNode:self.portalFrameNode];
 # else
         self.portalFrameNode = [SCNNode firstNodeFromSceneNamed:@"Frame.dae"];
-        float scaleFrame = 1.1*PORTAL_HEIGHT/2.0;
+        float scaleFrame = 1.0*PORTAL_HEIGHT/2.0;
         self.portalFrameNode.scale = SCNVector3Make(1.1, scaleFrame, 1);
         self.portalFrameNode.eulerAngles = SCNVector3Make(M_PI, 0, 0);
         [_node addChildNode:self.portalFrameNode];
 # endif
         
+        
         self.portalFrameNode.hidden = ![self isEnabled];
 
-        [SceneKitTools setCategoryBitMask:RAYCAST_IGNORE_BIT | CATEGORY_BIT_MASK_LIGHTING
-                              ofNode:self.portalFrameNode];
+        [self.portalFrameNode setCategoryBitMaskRecursively:RAYCAST_IGNORE_BIT | CATEGORY_BIT_MASK_LIGHTING];
+    } else {
+        // round frame for portal ont he wall.
+        self.portalFrameNode = [SCNNode nodeWithGeometry:[SCNTorus torusWithRingRadius:PORTAL_CIRCLE_RADIUS pipeRadius:0.0075f]];
+        [self.portalFrameNode.geometry.firstMaterial.diffuse setContents:[UIColor colorWithRed:0.678f green:0.678f blue:0.678f alpha:1]];
+        self.portalFrameNode.rotation = SCNVector4Make(1, 0, 0, M_PI_2);
+        self.portalFrameNode.transform = _portalGeometryNode.transform;
+        [self.portalFrameNode setCategoryBitMask:RAYCAST_IGNORE_BIT | CATEGORY_BIT_MASK_LIGHTING];
+        [self.portalGeometryTransformNode addChildNode:self.portalFrameNode];
     }
 
-    [SceneKitTools setCastShadow:NO ofNode:self.node];
+    [self.node setCastsShadowRecursively:NO];
 }
 
 - (void) setEnabled:(bool)enabled {
@@ -285,17 +293,19 @@ typedef NS_ENUM (NSUInteger, PortalState) {
             self.node.scale = SCNVector3Make(1,open,1);
         }
         
+        _audioWarpIn.position = self.node.position;
         [_audioWarpIn play];
         self.portalState = PORTAL_OPEN;
         
     } else {
         
         self.time = (_portalState == PORTAL_OPEN) ? (_audioWarpIn.duration - _time) : 0.f; // Re-target if portal was opening.
+        _audioWarpOut.position = self.node.position;
         [_audioWarpOut play];
         self.portalState = PORTAL_CLOSE;
     }
-    
 }
+
 - (float) openDuration {
     return _audioWarpIn.duration;
 }
@@ -319,11 +329,14 @@ typedef NS_ENUM (NSUInteger, PortalState) {
         
         be_dbg("Emergency Exit VR -- Powering Up");
         self.emergencyExitTimer = 0;
+        [_emergencyExitPowerUp play];
         _emergencyExitVR = YES;
     } else {
         // Disabling, so power-down.
         if( _emergencyExitVR && _emergencyExitTimer < EMERGENCYEXIT_ABORT_DURATION ) {
             be_dbg("Emergency Exit VR -- Abort");
+            [_emergencyExitPowerUp stop];
+            [_emergencyExitPowerAbort play];
             _emergencyExitVR = NO;
             _overlayComponent.color = [UIColor clearColor];
         }
@@ -430,9 +443,11 @@ typedef NS_ENUM (NSUInteger, PortalState) {
         
 //         a hack, but if you're in VR, always render Robot:
         if( !self.isInsideAR ) {
-           [SceneKitTools setRenderingOrder:(VR_WORLD_RENDERING_ORDER+6) ofNode:((GeometryComponent *)[self.robotEntity componentForClass:[GeometryComponent class]]).node];
+           [((GeometryComponent *)[self.robotEntity componentForClass:[GeometryComponent class]]).node
+                setRenderingOrderRecursively:(VR_WORLD_RENDERING_ORDER+6)];
         } else {
-           [SceneKitTools setRenderingOrder:1 ofNode:((GeometryComponent *)[self.robotEntity componentForClass:[GeometryComponent class]]).node];
+           [((GeometryComponent *)[self.robotEntity componentForClass:[GeometryComponent class]]).node
+                setRenderingOrderRecursively:1];
         }
     }
     

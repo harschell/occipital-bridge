@@ -19,7 +19,7 @@
 + (NSString*) pathForResourceNamed:(NSString*)resourceName withExtension:(NSString*)type
 {
     NSString* resourcePath = nil;
-    NSLog(@"looking for %@", resourceName);
+//    NSLog(@"looking for %@", resourceName);
     for (NSBundle* resourceBundle in @[
                                        [NSBundle mainBundle], // The app bundle.
                                        [NSBundle bundleForClass:[BEMixedRealityMode class]], // The Bridge Engine framework bundle.
@@ -43,11 +43,6 @@
     return resourcePath;
 }
 
-+ (NSURL*)URLForResource:(NSString*)resourceName withExtension:(NSString*)ext
-{
-    return [NSURL fileURLWithPath:[SceneKit pathForResourceNamed:resourceName withExtension:ext]];
-}
-
 + (NSString*) pathForResourceNamed:(NSString*)resourceName
 {
     return [SceneKit pathForResourceNamed:resourceName withExtension:nil];
@@ -64,6 +59,24 @@
         resourcePath = [SceneKit pathForResourceNamed:[@"Textures" stringByAppendingPathComponent:imageName]];
     
     return resourcePath;
+}
+
++ (NSURL*)URLForResource:(NSString*)resourceName withExtension:(NSString*)ext
+{
+    return [NSURL fileURLWithPath:[SceneKit pathForResourceNamed:resourceName withExtension:ext]];
+}
+
++ (SCNNode*) loadNodeFromSceneNamed:(NSString*)sceneName
+{
+    SCNScene* scene = [SCNScene sceneNamed:sceneName];
+    if (!scene)
+    {
+        NSLog(@"Could not load scene named: %@", sceneName);
+        assert(scene);
+    }
+    
+    // return first child node
+    return [scene.rootNode.childNodes objectAtIndex:0];
 }
 
 @end

@@ -56,10 +56,11 @@
 
 @interface ViewController () <BEMixedRealityModeDelegate, BEControllerDelegate>
 
-@property (strong) RobotActionComponent* robot;
-@property (strong) GKEntity * robotEntity;
-@property (strong) ButtonContainerComponent * renderMenu;
-@property (strong) BEController* controller;
+@property (nonatomic, strong) RobotActionComponent* robot;
+@property (nonatomic, strong) GKEntity * robotEntity;
+@property (nonatomic, strong) ButtonContainerComponent * renderMenu;
+@property (nonatomic, strong) Component *fixedSizeReticle;
+@property (nonatomic, strong) BEController* controller;
 
 @end
 //------------------------------------------------------------------------------
@@ -109,9 +110,6 @@
                        defaultValueIfSettingIsNotInBundle:NO]),
             kBERecordingOptionsEnabled:
                 @([AppSettings booleanValueFromAppSetting:@"enableRecording"
-                       defaultValueIfSettingIsNotInBundle:NO]),
-            kBEEnableStereoScanningBeta:
-                @([AppSettings booleanValueFromAppSetting:@"stereoScanning"
                        defaultValueIfSettingIsNotInBundle:NO]),
         }
         markupNames:_markupNameList
@@ -183,9 +181,11 @@
     [gazeEntity addComponent:gazeComponent];
     
     // Try some other reticles!
-    Component *fixedSizeReticle = [[FixedSizeReticleComponent alloc] init];
+    self.fixedSizeReticle = [[FixedSizeReticleComponent alloc] init];
     //Component *fixedSizeReticle = [[BlockDemoReticleComponent alloc] init];
-    [gazeEntity addComponent:fixedSizeReticle];
+    [gazeEntity addComponent:_fixedSizeReticle];
+
+    [self updateReticleInputMode];
     
     // The main Robot object
     self.robotEntity = [[SceneManager main] createEntity];
@@ -292,16 +292,6 @@
     beamUIComponent.uiComponent = bridgetMenu;
     [self.robotEntity addComponent:beamUIComponent];
     
-    ButtonComponent * buttonPortalComponent = [[ButtonComponent alloc] initWithImage:[SceneKit pathForImageResourceNamed:@"button_wallPortal.png"] andBlock:^{
-        [behaviourComponent stopAllBehaviours];
-        [bridgetMenu setEnabled:NO];
-        [fetchComponent setEnabled:NO];
-        [spawnPortalComponent setEnabled:YES];
-        [spawnObjectComponent setEnabled:NO];
-        [scanEventComponent setEnabled:NO];
-        [moveComponent setEnabled:NO];
-    }];
-    
     ButtonComponent * buttonMoveComponent = [[ButtonComponent alloc] initWithImage:[SceneKit pathForImageResourceNamed:@"button_move.png"] andBlock:^{
         [behaviourComponent stopAllBehaviours];
         [bridgetMenu setEnabled:NO];
@@ -342,19 +332,31 @@
         [spawnObjectComponent setEnabled:NO];
         [spawnPortalComponent setEnabled:NO];
     }];
+    
+    ButtonComponent * buttonPortalComponent = [[ButtonComponent alloc] initWithImage:[SceneKit pathForImageResourceNamed:@"button_wallPortal.png"] andBlock:^{
+        [behaviourComponent stopAllBehaviours];
+        [bridgetMenu setEnabled:NO];
+        [fetchComponent setEnabled:NO];
+        [spawnPortalComponent setEnabled:YES];
+        [spawnObjectComponent setEnabled:NO];
+        [scanEventComponent setEnabled:NO];
+        [moveComponent setEnabled:NO];
+    }];
 
-    [[[SceneManager main] createEntity] addComponent:buttonPortalComponent];
     [[[SceneManager main] createEntity] addComponent:buttonMoveComponent];
     [[[SceneManager main] createEntity] addComponent:buttonScanComponent];
     [[[SceneManager main] createEntity] addComponent:buttonSpawnObjectComponent];
     [[[SceneManager main] createEntity] addComponent:buttonFetchComponent];
-    
+    [[[SceneManager main] createEntity] addComponent:buttonPortalComponent];
 
-    bridgetMenu.buttonComponents = [[NSMutableArray alloc] initWithArray:@[buttonMoveComponent,
-                                                                           buttonScanComponent,
-                                                                           buttonSpawnObjectComponent,
-                                                                           buttonFetchComponent,
-                                                                           buttonPortalComponent]];
+    // Determines the order in which the buttons appear on the hologram menu projected by the robot
+    bridgetMenu.buttonComponents = @[
+        buttonMoveComponent,
+        buttonScanComponent,
+        buttonSpawnObjectComponent,
+        buttonFetchComponent,
+        buttonPortalComponent,
+        ].mutableCopy;
     
     [self setupRenderingMenu];
     
@@ -479,6 +481,9 @@
 
 - (void)mixedRealityUpdateAtTime:(NSTimeInterval)time
 {
+    // Update the controller's camera world transform, so we're tracking with it.
+    _controller.cameraTransform = SCNMatrix4ToGLKMatrix4(_mixedReality.localDeviceNode.worldTransform);
+
     if( !_experienceIsRunning ) {
         return;
     }
@@ -489,6 +494,14 @@
 
 
 // BEController Delegate Methods
+
+- (void)controllerDidConnect {
+    [self updateReticleInputMode];
+}
+
+- (void)controllerDidDisconnect {
+    [self updateReticleInputMode];
+}
 
 - (void)controllerButtonDown
 {
@@ -531,4 +544,13 @@
     
     [_mixedReality setRenderStyle:nextRenderStyle withDuration:0.5];
 }
+
+#pragma mark - Support Methods
+
+/// Hook up reticle visibility to controller connectes status.
+- (void) updateReticleInputMode {
+    BOOL enableReticleInput = [BEController sharedController].isConnected;
+    [_fixedSizeReticle setEnabled:enableReticleInput];
+}
+
 @end

@@ -9,6 +9,7 @@
 #import "LookAtCameraBehaviourComponent.h"
 #import "../BeamComponent.h"
 #import "../../Core/AudioEngine.h"
+
 @import GLKit;
 
 typedef NS_ENUM (NSUInteger, RobotBeamUIState) {
@@ -103,6 +104,7 @@ bool menuSoundPlayed;
         [self.uiComponent setEnabled:YES];
         
         if(!menuSoundPlayed) {
+            _menuOpenSound.position = _uiComponent.node.position;
             [self.menuOpenSound play];
             menuSoundPlayed = YES;
         }
@@ -123,7 +125,8 @@ bool menuSoundPlayed;
     [self.beamComponent setEnabled:NO];
     [self.uiComponent setEnabled:NO];
     
-    [self.menuCloseSound play];
+    _menuCloseSound.position = _uiComponent.node.position;
+    [_menuCloseSound play];
     menuSoundPlayed = NO;
 
     [[EventManager main] resumeGlobalEventComponents];

@@ -7,6 +7,8 @@
 	objects = {
 
 /* Begin PBXBuildFile section */
+		2C22A9AE1EAABC69000A96EF /* BridgeControllerComponent.h in Headers */ = {isa = PBXBuildFile; fileRef = 2C22A9AC1EAABC69000A96EF /* BridgeControllerComponent.h */; };
+		2C22A9AF1EAABC69000A96EF /* BridgeControllerComponent.mm in Sources */ = {isa = PBXBuildFile; fileRef = 2C22A9AD1EAABC69000A96EF /* BridgeControllerComponent.mm */; };
 		2C5DA53C1E00EF1900A60606 /* ScanEnvironmentShader.h in Headers */ = {isa = PBXBuildFile; fileRef = 2C5DA53A1E00EF1900A60606 /* ScanEnvironmentShader.h */; };
 		2C5DA53D1E00EF1900A60606 /* ScanEnvironmentShader.mm in Sources */ = {isa = PBXBuildFile; fileRef = 2C5DA53B1E00EF1900A60606 /* ScanEnvironmentShader.mm */; };
 		2C5DA5421E00F06F00A60606 /* ScanComponent.h in Headers */ = {isa = PBXBuildFile; fileRef = 2C5DA53E1E00F06F00A60606 /* ScanComponent.h */; };
@@ -118,6 +120,8 @@
 /* End PBXBuildFile section */
 
 /* Begin PBXFileReference section */
+		2C22A9AC1EAABC69000A96EF /* BridgeControllerComponent.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; path = BridgeControllerComponent.h; sourceTree = "<group>"; };
+		2C22A9AD1EAABC69000A96EF /* BridgeControllerComponent.mm */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.cpp.objcpp; path = BridgeControllerComponent.mm; sourceTree = "<group>"; };
 		2C5DA53A1E00EF1900A60606 /* ScanEnvironmentShader.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; path = ScanEnvironmentShader.h; sourceTree = "<group>"; };
 		2C5DA53B1E00EF1900A60606 /* ScanEnvironmentShader.mm */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.cpp.objcpp; path = ScanEnvironmentShader.mm; sourceTree = "<group>"; };
 		2C5DA53E1E00F06F00A60606 /* ScanComponent.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; path = ScanComponent.h; sourceTree = "<group>"; };
@@ -323,6 +327,8 @@
 				2DCD70571DFFEF8D003691AE /* BehaviourComponents */,
 				2DCD706A1DFFEF8D003691AE /* BlockDemoReticleComponent.h */,
 				2DCD706B1DFFEF8D003691AE /* BlockDemoReticleComponent.m */,
+				2C22A9AC1EAABC69000A96EF /* BridgeControllerComponent.h */,
+				2C22A9AD1EAABC69000A96EF /* BridgeControllerComponent.mm */,
 				2DCD706C1DFFEF8D003691AE /* ButtonComponent.h */,
 				2DCD706D1DFFEF8D003691AE /* ButtonComponent.m */,
 				2DCD706E1DFFEF8D003691AE /* ButtonContainerComponent.h */,
@@ -467,6 +473,7 @@
 				2DCD70AF1DFFEF8D003691AE /* LookAtCameraBehaviourComponent.h in Headers */,
 				2DCD70B91DFFEF8D003691AE /* ButtonComponent.h in Headers */,
 				2DCD70AD1DFFEF8D003691AE /* LookAtBehaviourComponent.h in Headers */,
+				2C22A9AE1EAABC69000A96EF /* BridgeControllerComponent.h in Headers */,
 				6DD7C93F1E5CF5A5006AAC6F /* SpawnPortalComponent.h in Headers */,
 				2C5DA5441E00F06F00A60606 /* ScanEventComponent.h in Headers */,
 				2C5DA5421E00F06F00A60606 /* ScanComponent.h in Headers */,
@@ -570,6 +577,7 @@
 				2DCD70A41DFFEF8D003691AE /* BeamComponent.m in Sources */,
 				6DD7C9401E5CF5A5006AAC6F /* SpawnPortalComponent.m in Sources */,
 				2C5DA5431E00F06F00A60606 /* ScanComponent.m in Sources */,
+				2C22A9AF1EAABC69000A96EF /* BridgeControllerComponent.mm in Sources */,
 				6DD7C93A1E5CF521006AAC6F /* VRWorldComponent.mm in Sources */,
 				2DCD70A21DFFEF8D003691AE /* AnimationComponent.m in Sources */,
 				2DCD70E31DFFEF8D003691AE /* RobotVemojiComponent.m in Sources */,
@@ -643,6 +651,7 @@
 				GCC_PREPROCESSOR_DEFINITIONS = (
 					"DEBUG=1",
 					"$(inherited)",
+					"ENABLE_ROBOTROOM=1",
 				);
 				GCC_WARN_64_TO_32_BIT_CONVERSION = YES;
 				GCC_WARN_ABOUT_RETURN_TYPE = YES_ERROR;
@@ -688,6 +697,10 @@
 				ENABLE_NS_ASSERTIONS = NO;
 				ENABLE_STRICT_OBJC_MSGSEND = YES;
 				GCC_NO_COMMON_BLOCKS = YES;
+				GCC_PREPROCESSOR_DEFINITIONS = (
+					"$(inherited)",
+					"ENABLE_ROBOTROOM=1",
+				);
 				GCC_WARN_64_TO_32_BIT_CONVERSION = YES;
 				GCC_WARN_ABOUT_RETURN_TYPE = YES_ERROR;
 				GCC_WARN_UNDECLARED_SELECTOR = YES;

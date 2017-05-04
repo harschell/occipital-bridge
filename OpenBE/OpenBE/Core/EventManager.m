@@ -7,6 +7,7 @@
 
 #import <GLKit/GLKit.h>
 #import <GameController/GameController.h>
+#import <BridgeEngine/BEDebugging.h>
 
 #import "EventManager.h"
 #import "Core.h"
@@ -195,7 +196,8 @@
 - (void)handleTouchesBegan:(NSSet *)touches withEvent:(UIEvent *)event {
     
     // FIXME: This temporarily blocks all controller actions when not tracking.  Later this can be changed, it's not a fundamental thing we need to keep forever.
-    if( _mixedRealityMode.lastTrackerPoseAccuracy != BETrackerPoseAccuracyHigh ){
+    if( _mixedRealityMode.lastTrackerPoseAccuracy == BETrackerPoseAccuracyNotAvailable ){
+        be_dbg("Ignored touchesBegan event, pose not available");
         return;
     }
     
@@ -273,6 +275,7 @@
         }
         
         for( GKComponent * component in touchEventRepsonders.eventComponents ) {
+            be_NSDbg(@"Touch Began on component: %@, button: %d", NSStringFromClass(component.class), button);
             [_mixedRealityMode runBlockInRenderThread:^(void) {
                 [(GKComponent <EventComponentProtocol> * )component touchBeganButton:button forward:forward hit:hit];
             }];
@@ -283,7 +286,8 @@
 - (void)touchesEnded:(NSSet *)touches withEvent:(UIEvent *)event {
     // FIXME: This temporarily blocks all controller actions when not tracking.
     // This can be changed, it's not a fundamental thing we need to keep forever.
-    if(_mixedRealityMode.lastTrackerPoseAccuracy != BETrackerPoseAccuracyHigh ) {
+    if(_mixedRealityMode.lastTrackerPoseAccuracy == BETrackerPoseAccuracyNotAvailable ) {
+        be_dbg("Ignored touchesEnded event, pose not available");
         [self cleanUpTouchEventResponders:event];
         return;
     }
@@ -295,8 +299,18 @@
         TouchEventResponders * touchEventResponder = [self getTouchEventRespondersForTouch:touch];
         
         if( touchEventResponder ) {
-            uint8_t button = 1; // only one button for now.
+	        uint8_t button; // only one button for now
+        
+	        // Special case for when controller button is being used vs touch events.
+	        // Button = 1, for when a controller button is held down. (takes precidence)
+	        // Button = 0, for touch input
+	        if( [touches containsObject:_controllerButtonTouch] ) {
+	            button = 1;
+	        } else {
+	            button = 0;
+	        }
             for( GKComponent * component in touchEventResponder.eventComponents ) {
+                be_NSDbg(@"Touch End on component: %@", NSStringFromClass(component.class));
                 [_mixedRealityMode runBlockInRenderThread:^(void) {
                     [(GKComponent <EventComponentProtocol> * )component  touchEndedButton:button forward:[self getTouchForward:touch] hit:hit];
                 }];
@@ -310,7 +324,8 @@
 - (void)touchesCancelled:(NSSet *)touches withEvent:(UIEvent *)event {
     // FIXME: This temporarily blocks all controller actions when not tracking.
     // This can be changed, it's not a fundamental thing we need to keep forever.
-    if(_mixedRealityMode.lastTrackerPoseAccuracy != BETrackerPoseAccuracyHigh ) {
+    if(_mixedRealityMode.lastTrackerPoseAccuracy == BETrackerPoseAccuracyNotAvailable ) {
+        be_dbg("Ignored touchesCancelled event, pose not available");
         [self cleanUpTouchEventResponders:event];
         return;
     }
@@ -322,15 +337,26 @@
         TouchEventResponders * touchEventResponder = [self getTouchEventRespondersForTouch:touch];
         
         if( touchEventResponder ) {
-            uint8_t button = 1; // only one button for now.
+	        uint8_t button; // only one button for now
+        
+	        // Special case for when controller button is being used vs touch events.
+	        // Button = 1, for when a controller button is held down. (takes precidence)
+	        // Button = 0, for touch input
+	        if( [touches containsObject:_controllerButtonTouch] ) {
+	            button = 1;
+	        } else {
+	            button = 0;
+	        }
+
             for( GKComponent * component in touchEventResponder.eventComponents ) {
                 if( [component respondsToSelector:@selector(touchCancelledButton:forward:hit:)] == NO ) {
-                    NSLog(@"Unhandled @selector(touchCancelledButton:forward:hit:) with object class: %@", NSStringFromClass(component.class));
+                    be_NSDbg(@"Unhandled @selector(touchCancelledButton:forward:hit:) with object class: %@", NSStringFromClass(component.class));
+                } else {
+                    be_NSDbg(@"Touch Cancelled on component: %@", NSStringFromClass(component.class));
+                    [_mixedRealityMode runBlockInRenderThread:^(void) {
+                        [(GKComponent <EventComponentProtocol> * )component touchCancelledButton:button forward:[self getTouchForward:touch] hit:hit];
+                    }];
                 }
-                
-                [_mixedRealityMode runBlockInRenderThread:^(void) {
-                    [(GKComponent <EventComponentProtocol> * )component touchCancelledButton:button forward:[self getTouchForward:touch] hit:hit];
-                }];
             }
             
             // no first responder after touch ended
@@ -342,7 +368,8 @@
 - (void)touchesMoved:(NSSet *)touches withEvent:(UIEvent *)event {
     // FIXME: This temporarily blocks all controller actions when not tracking.
     // This can be changed, it's not a fundamental thing we need to keep forever.
-    if(_mixedRealityMode.lastTrackerPoseAccuracy != BETrackerPoseAccuracyHigh ) {
+    if(_mixedRealityMode.lastTrackerPoseAccuracy == BETrackerPoseAccuracyNotAvailable ) {
+        be_dbg("Ignored touchesMoved event, pose not available");
         [self cleanUpTouchEventResponders:event];
         return;
     }
@@ -354,8 +381,19 @@
         TouchEventResponders * touchEventResponder = [self getTouchEventRespondersForTouch:touch];
         
         if( touchEventResponder ) {
-            uint8_t button = 1; // only one button for now.
+	        uint8_t button; // only one button for now
+        
+	        // Special case for when controller button is being used vs touch events.
+	        // Button = 1, for when a controller button is held down. (takes precidence)
+	        // Button = 0, for touch input
+	        if( [touches containsObject:_controllerButtonTouch] ) {
+	            button = 1;
+	        } else {
+	            button = 0;
+	        }
+
             for( GKComponent * component in touchEventResponder.eventComponents ) {
+//                be_NSDbg(@"Touch Moved with button %d on component: %@", button, NSStringFromClass(component.class));
                 [_mixedRealityMode runBlockInRenderThread:^(void) {
                     [(GKComponent <EventComponentProtocol> * )component touchMovedButton:button forward:[self getTouchForward:touch] hit:hit];
                 }];
@@ -377,7 +415,8 @@
 
 - (SCNHitTestResult *) intersectSceneFromTouch:(UITouch *)touch {
     
-    if(_mixedRealityMode.lastTrackerPoseAccuracy != BETrackerPoseAccuracyHigh ) {
+    if(_mixedRealityMode.lastTrackerPoseAccuracy == BETrackerPoseAccuracyNotAvailable ) {
+        be_dbg("Ignored intersection test, pose not available");
         return nil;
     }
     
@@ -408,7 +447,8 @@
 //        NSLog(@"%ld reticle intersection hits", hitTestResults.count);
     } else {
         CGPoint tapPoint = [touch locationInView:touch.view];
-        hitTestResults = [_mixedRealityMode hitTestSceneKitFrom2DScreenPoint:tapPoint options:@{}];
+        NSDictionary *options = @{SCNHitTestSortResultsKey:@YES, SCNHitTestBackFaceCullingKey:@NO};
+        hitTestResults = [_mixedRealityMode hitTestSceneKitFrom2DScreenPoint:tapPoint options:options];
     }
     
     if( [hitTestResults count] ) {

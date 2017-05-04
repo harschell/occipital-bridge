@@ -15,6 +15,7 @@
 @property(nonatomic) NSTimeInterval bounceCoolOffTimer;
 @property(nonatomic) float bounceCoolOffMaxImpulse;
 @property(nonatomic) float bounceHighestImpulse;
+@property(nonatomic) SCNVector3 bouncePosition;
 @end
 
 @implementation PhysicsContactAudio
@@ -55,6 +56,7 @@
 
     if( _bounceHighestImpulse < collisionImpulse ) {
         _bounceHighestImpulse = collisionImpulse;
+        _bouncePosition = contact.contactPoint;
     }
 }
 
@@ -81,6 +83,7 @@
         float bounceVolume = clampf(1, 0, powf(bounceImpulse - _minImpulse, PHYSICS_BOUNCE_IMPULSE_POWER) / powf(_maxImpulse-_minImpulse, PHYSICS_BOUNCE_IMPULSE_POWER) );
 //         NSLog(@"bounce volume: %f, impulse: %f, actual impulse: %f", bounceVolume, bounceImpulse, _bounceCoolOffMaxImpulse );
         _audioNode.volume = bounceVolume;
+        _audioNode.position = _bouncePosition;
         [self.audioNode play];
     }
 }

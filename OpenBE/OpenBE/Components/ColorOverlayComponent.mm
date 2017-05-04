@@ -10,15 +10,11 @@
 //  things like taking a hit.
 
 #import "ColorOverlayComponent.h"
-#import "../Core/Core.h"
-#import "../Utils/Program.h"
 #import "../Utils/Math.h"
-#import "../Utils/SceneKitTools.h"
+#import "../Core/Core.h"
+#import "../Utils/SceneKitExtensions.h"
 #import <GLKit/GLKVector3.h>
 #import <OpenGLES/EAGL.h>
-
-//@import GLKit.GLKVector3;
-//@import OpenGLES;
 
 @interface ColorOverlayComponent ()
 
@@ -69,7 +65,7 @@
     material.writesToDepthBuffer = false;
     material.doubleSided = true;
     self.node.renderingOrder = TRANSPARENCY_RENDERING_ORDER + 999; // Stay behind HUD and FixedSizeReticle.
-    [SceneKitTools setCastShadow:NO ofNode:self.node];
+    [self.node setCastsShadowRecursively:NO];
 }
 
 /**

@@ -38,11 +38,10 @@
 #define VR_LIGHT_LEVEL_OUTSIDE .01f
 #define VR_LIGHT_LEVEL_SPEED 2.f
 
-
 @interface VRWorldComponent()
 @property(nonatomic, strong) SCNNode *node;
 @property (nonatomic, strong) SCNNode *bookstoreNode;
-
+#ifdef ENABLE_ROBOTROOM
 // ------ Robot Room Mode properties -----
 @property (nonatomic, strong) SCNNode *robotRoomNode;
 
@@ -64,7 +63,7 @@
 @property (nonatomic, strong) NSArray * hinges;
 @property (nonatomic, strong) NSArray * displayCubes;
 @property (nonatomic) float displayTime;
-// ------
+#endif
 @end
 
 
@@ -80,7 +79,7 @@
     
     self.node = [[SCNNode alloc] init];
     _node.position = SCNVector3Make(0, .01, 0); // Give a 1cm offset, so we don't get co-planar z-fighting between VR world and real world floor.
-    
+#ifdef ENABLE_ROBOTROOM
     // ------ Robot Room ----
     self.robotRoomNode = [SCNNode firstNodeFromSceneNamed:@"RobotRoom.dae"];
     //    _robotRoomNode.rotation = SCNVector4Make(1, 0, 0, M_PI);
@@ -131,14 +130,14 @@
     [self setLightLevel:VR_LIGHT_LEVEL_OUTSIDE];
     
     self.openBayDoorsAudio = [[AudioEngine main] loadAudioNamed:@"VRWorld_BayDoorsOpening.caf"];
-    // ------ /Robot Room ----
+// ------ /Robot Room ----
+#endif
     
-
     // ------ Bookstore ----
     self.bookstoreNode = [SCNNode firstNodeFromSceneNamed:@"bookstore.dae"];
     [_node addChildNode:_bookstoreNode];
-    [SceneKitTools setRenderingOrder:VR_WORLD_RENDERING_ORDER ofNode:_node];
-    [SceneKitTools setCastShadow:NO ofNode:_node];
+    [_node setRenderingOrderRecursively:VR_WORLD_RENDERING_ORDER];
+    [_node setCastsShadowRecursively:NO];
     
     [[Scene main].rootNode addChildNode:_node];
     
@@ -154,7 +153,9 @@
     }];
     
     // Start off the rooms hidden.
+#ifdef ENABLE_ROBOTROOM
     _robotRoomNode.hidden = YES;
+#endif
     _bookstoreNode.hidden = YES;
 }
 
@@ -163,7 +164,9 @@
  */
 - (void) setMode:(VRWorldMode)mode {
     _mode = mode;
+#ifdef ENABLE_ROBOTROOM
     _robotRoomNode.hidden = mode!=VRWorldRobotRoom;
+#endif
     _bookstoreNode.hidden = mode!=VRWorldBookstore;
 }
 
@@ -187,13 +190,18 @@
 }
 
 - (void)alignVRWorldToNode:(SCNNode*)targetNode {
+#ifdef ENABLE_ROBOTROOM
     if( self.mode == VRWorldRobotRoom ) {
         _robotRoomNode.position = SCNVector3Make(0, 0, 1.5);
         _robotRoomNode.eulerAngles = SCNVector3Make(M_PI, 0, 0); // Rotate around Y-axis to look the other way.
-    } else if( self.mode == VRWorldBookstore ){
+    } else if( self.mode == VRWorldBookstore ) {
         _bookstoreNode.position = SCNVector3Make(0, -0.5, -2.4); // Adjust the vr world to be a little more centred.
         _bookstoreNode.eulerAngles = SCNVector3Make(0, M_PI, 0); // Turn the bookstore around.
     }
+#else
+    _bookstoreNode.position = SCNVector3Make(0, -0.5, -2.4); // Adjust the vr world to be a little more centred.
+    _bookstoreNode.eulerAngles = SCNVector3Make(0, M_PI, 0); // Turn the bookstore around.
+#endif
     
     SCNVector3 targetPos = targetNode.position; 
     targetPos.y = 0.0; // Remove the y-offset from the target node, and align to its x/z position only.
@@ -203,6 +211,7 @@
 
 - (void) updateWithDeltaTime:(NSTimeInterval)seconds {
     [super updateWithDeltaTime:seconds];
+#ifdef ENABLE_ROBOTROOM
     if( _mode == VRWorldRobotRoom ) {
         if( self.portalComponent.isInsideAR == NO ){
             if ( !self.turnOnLights)
@@ -248,6 +257,7 @@
         [self updateLights:seconds];
         [self flickerDisplayCubes:seconds];
     }
+#endif
     float grayness = 1.0 - 2.0 * _portalComponent.mixedReality.lastTrackerHints.modelVisibilityPercentage;
     if ( isnan(grayness))
         grayness = 1.0;
@@ -261,6 +271,7 @@
     }];
 }
 
+#ifdef ENABLE_ROBOTROOM
 - (void) updateLights:(NSTimeInterval)seconds {
     float lightLevel = self.currentLightLevel;
     
@@ -313,5 +324,5 @@
         i++;
     }
 }
-
+#endif
 @end

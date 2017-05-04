@@ -5,12 +5,13 @@
  http://structure.io
  */
 
-#import <GameplayKit/GameplayKit.h>
+#import <GamePlayKit/GamePlayKit.h>
 #import <SceneKit/SceneKit.h>
 
 #import "../Core/Core.h"
-#import "../Core/AudioEngine.h"
 #import "NavigationComponent.h"
+
+@class AudioNode;
 
 typedef NS_ENUM (NSUInteger, RobotHeads) {
     kBoxy,

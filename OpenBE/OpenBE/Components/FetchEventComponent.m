@@ -8,6 +8,8 @@
 #import <Foundation/Foundation.h>
 #import <GLKit/GLKit.h>
 
+#import "../Core/Core.h"
+
 #import "FetchEventComponent.h"
 #import "AnimationComponent.h"
 #import "BeamComponent.h"
@@ -16,11 +18,10 @@
 #import "BehaviourComponents/LookAtCameraBehaviourComponent.h"
 #import "BehaviourComponents/PathFindMoveToBehaviourComponent.h"
 #import "BehaviourComponents/MoveToBehaviourComponent.h"
-#import "Behaviourcomponents/LookAtBehaviourComponent.h"
+#import "BehaviourComponents/LookAtBehaviourComponent.h"
 #import "GazeComponent.h"
 #import "RobotVemojiComponent.h"
 #import "SelectableModelComponent.h"
-#import "../Core/Core.h"
 #import "../Core/AudioEngine.h"
 #import "../Utils/Math.h"
 #import "../Utils/SceneKitExtensions.h"
@@ -74,8 +75,8 @@ typedef NS_ENUM (NSUInteger, FetchPositionState) {
 
 @property (atomic) FetchEventState fetchState;
 
-@property (atomic) GLKVector3 rotation;
-@property (atomic) bool rotationSet;
+@property (atomic) GLKMatrix4 motionTransform;
+@property (atomic) bool motionTransformSet;
 
 
 @property (atomic) float timer;
@@ -130,8 +131,9 @@ typedef NS_ENUM (NSUInteger, FetchPositionState) {
     cubeBody.angularDamping = 0.50;
     cubeBody.allowsResting = YES;
 
-    cubeBody.categoryBitMask = SCNPhysicsCollisionCategoryDefault;
-    cubeBody.collisionBitMask = SCNPhysicsCollisionCategoryAll; // SCNPhysicsCollisionCategoryStatic | BECollisionCategoryRealWorld | BECollisionCategoryVirtualObjects;
+    cubeBody.categoryBitMask = SCNPhysicsCollisionCategoryDefault | BECollisionCategoryVirtualObjects;
+    cubeBody.collisionBitMask = BECollisionCategoryRealWorld | BECollisionCategoryVirtualObjects | BECollisionCategoryFloor;
+    cubeBody.contactTestBitMask = SCNPhysicsCollisionCategoryAll;
     self.physicsCube.physicsBody = cubeBody;
     
     [self.node addChildNode:self.physicsCube];
@@ -143,7 +145,7 @@ typedef NS_ENUM (NSUInteger, FetchPositionState) {
     self.idlePosition = FETCH_RIGHT;
     self.fetchState = FETCH_IDLE;
     
-    self.rotationSet = NO;
+    self.motionTransformSet = NO;
     self.endExperience = NO;
     
     self.timer = 0.f;
@@ -198,9 +200,9 @@ typedef NS_ENUM (NSUInteger, FetchPositionState) {
     }
 }
 
-- (bool) handleRotation:(GLKVector3)rotation {
-    self.rotation = rotation;
-    self.rotationSet = YES;
+- (bool) handleMotionTransform:(GLKMatrix4)transform {
+    self.motionTransform = transform;
+    self.motionTransformSet = YES;
     return YES;
 }
 
@@ -328,6 +330,7 @@ typedef NS_ENUM (NSUInteger, FetchPositionState) {
             if( distToCube < _moveTo.stoppingDistance // If we're close enough, grab the ball anyway.
              || (distToCube < FETCH_MAX_DISTANCE_TO_CUBE && hitSomething == NO) ) {
                 // Reachable. Great, keep going!
+                _audioBallPickup.position = _physicsCube.position;
                 [_audioBallPickup play];
                 [self.vemojiComponent setIdleName:@"Vemoji_Squee_OpenEyes"];
                 self.fetchState = FETCH_FETCH_TURN_TO_CAMERA;
@@ -440,8 +443,11 @@ typedef NS_ENUM (NSUInteger, FetchPositionState) {
         [self.lookAtNode runBehaviourFor:999.f lookAtNode:self.representationCube callback:nil];
     }
     
-    if( self.fetchState > FETCH_FETCH && self.rotationSet) {
-        self.representationCube.eulerAngles = SCNVector3FromGLKVector3(self.rotation);
+    if( self.fetchState > FETCH_FETCH && self.motionTransformSet) {
+        GLKQuaternion quaternion = GLKQuaternionMakeWithMatrix4(self.motionTransform);
+        GLKVector3 axis = GLKQuaternionAxis(quaternion);
+        SCNVector4 scnRotation = SCNVector4Make(axis.x, axis.y, axis.z, GLKQuaternionAngle(quaternion));
+        self.representationCube.rotation = scnRotation;
     }
 }
 
@@ -455,6 +461,7 @@ typedef NS_ENUM (NSUInteger, FetchPositionState) {
 
 - (void) throw {
     self.fetchState = FETCH_THROW_START;
+    _audioBallToss.position = _physicsCube.position;
     [self.audioBallToss play];
     [self.beamComponent setEnabled:NO];
     [_bounce resetBounceCooloffTimer];

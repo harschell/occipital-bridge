@@ -90,6 +90,18 @@
 		
 		<option value="//api/name/startWithSavedScene">- startWithSavedScene</option>
 		
+		<option value="//api/name/startWithSavedSceneAtPath:">- startWithSavedSceneAtPath:</option>
+		
+		<option value="//api/name/enterScanningMode">- enterScanningMode</option>
+		
+		<option value="//api/name/startScanning">- startScanning</option>
+		
+		<option value="//api/name/stopScanningAndExportToPath:">- stopScanningAndExportToPath:</option>
+		
+		<option value="//api/name/stopScanningAndExport">- stopScanningAndExport</option>
+		
+		<option value="//api/name/resetScanning">- resetScanning</option>
+		
 		<option value="//api/name/stop">- stop</option>
 		
 		<option value="//api/name/renderStyle">- renderStyle</option>
@@ -116,9 +128,15 @@
 		
 		<option value="//api/name/runBlockInRenderThread:">- runBlockInRenderThread:</option>
 		
-		<option value="//api/name/predictColorCameraPoseForDisplayLinkStart:colorCameraPose:poseTimestamp:">- predictColorCameraPoseForDisplayLinkStart:colorCameraPose:poseTimestamp:</option>
+		<option value="//api/name/lockAndGetSceneMesh">- lockAndGetSceneMesh</option>
 		
-		<option value="//api/name/renderSceneMeshWithStyle:modelView:projection:">- renderSceneMeshWithStyle:modelView:projection:</option>
+		<option value="//api/name/unlockSceneMesh">- unlockSceneMesh</option>
+		
+		<option value="//api/name/predictColorCameraPoseForDisplayLinkStart:">- predictColorCameraPoseForDisplayLinkStart:</option>
+		
+		<option value="//api/name/renderSceneMeshWithStyle:modelView:projection:associatedColorFrame:">- renderSceneMeshWithStyle:modelView:projection:associatedColorFrame:</option>
+		
+		<option value="//api/name/renderSceneMeshFromColorCameraViewpointWithStyle:associatedColorFrame:">- renderSceneMeshFromColorCameraViewpointWithStyle:associatedColorFrame:</option>
 		
 	</optgroup>
 	
@@ -205,6 +223,7 @@
 
 <ul>
 <li><code>k</code>BECaptureReplayMode<code></code>: Whether a previous capture should be replayed. Valid values are listed in <a href="../Constants/BECaptureReplayMode.html">BECaptureReplayMode</a>. Default is BECaptureReplayModeDisabled.</li>
+<li><code>kBECaptureReplayFile</code>: path to the OCC replay file, relative to the app documents folder. Default is &ldquo;BridgeEngineScene/sceneReplay.occ&rdquo;, with a fallback on &ldquo;BridgeEngineScene/capture.occ&rdquo;.</li>
 <li><code>kBETrackerFallbackOnIMUEnabled</code>: If YES, will fallback to IMU-based rotational-only pose updates if the visual tracker is lost. Default is NO.</li>
 <li><code>kBEVisualInertialPoseFilterEnabled</code>: If YES, the tracker output will be smoother, but with potentially a slightly higher latency. Default is NO.</li>
 <li><code>kBEUsingWideVisionLens</code>:  Whether a Wide Vision Lens is attached. Default is NO.</li>
@@ -460,6 +479,162 @@ Note that the last scene is stored in the <code>BridgeEngineScene</code> subfold
 			</div>
 			
 			
+		</div>
+	</div>
+</div><div class="section-method">
+	<a name="//api/name/startWithSavedSceneAtPath:" title="startWithSavedSceneAtPath:"></a>
+	<h3 class="method-title"><code><a href="#//api/name/startWithSavedSceneAtPath:">&ndash;&nbsp;startWithSavedSceneAtPath:</a></code>
+</h3>
+
+	<div class="method-info">
+		<div class="pointy-thing"></div>
+
+		<div class="method-info-container">
+			
+			
+			<div class="method-subsection brief-description">
+				<p>Start the engine, automatically loading the last mapped area in the given subfolder and starting tracking.
+Note that the scenePath is relative to the app Documents folder.</p>
+			</div>
+			
+		    
+
+			<div class="method-subsection method-declaration"><code>- (void)startWithSavedSceneAtPath:(NSString *)<em>scenePath</em></code></div>
+
+		    
+			
+
+			
+
+			
+
+			
+
+			
+
+			
+			<div class="method-subsection see-also-section">
+				<h4 class="method-subtitle">See Also</h4>
+				<ul>
+					
+					<li><code><p><a href="#//api/name/startWithSavedScene">- startWithSavedScene</a></p></code></li>
+					
+				</ul>
+			</div>
+			
+
+			
+			<div class="method-subsection declared-in-section">
+				<h4 class="method-subtitle">Declared In</h4>
+				<p><code class="declared-in-ref">BEMixedRealityMode.h</code></p>
+			</div>
+			
+			
+		</div>
+	</div>
+</div><div class="section-method">
+	<a name="//api/name/enterScanningMode" title="enterScanningMode"></a>
+	<h3 class="method-title"><code><a href="#//api/name/enterScanningMode">&ndash;&nbsp;enterScanningMode</a></code>
+</h3>
+
+	<div class="method-info">
+		<div class="pointy-thing"></div>
+
+		<div class="method-info-container">
+			
+			
+			<div class="method-subsection brief-description">
+				<p>FIXME: document</p>
+			</div>
+			
+		    
+
+			<div class="method-subsection method-declaration"><code>- (void)enterScanningMode</code></div>
+
+		    
+			
+
+			
+
+			
+
+			
+
+			
+
+			
+
+			
+			<div class="method-subsection declared-in-section">
+				<h4 class="method-subtitle">Declared In</h4>
+				<p><code class="declared-in-ref">BEMixedRealityMode.h</code></p>
+			</div>
+			
+			
+		</div>
+	</div>
+</div><div class="section-method">
+	<a name="//api/name/startScanning" title="startScanning"></a>
+	<h3 class="method-title"><code><a href="#//api/name/startScanning">&ndash;&nbsp;startScanning</a></code>
+</h3>
+
+	<div class="method-info">
+		<div class="pointy-thing"></div>
+
+		<div class="method-info-container">
+			
+
+			<div class="method-subsection method-declaration"><code>- (void)startScanning</code></div>
+
+		    
+		</div>
+	</div>
+</div><div class="section-method">
+	<a name="//api/name/stopScanningAndExportToPath:" title="stopScanningAndExportToPath:"></a>
+	<h3 class="method-title"><code><a href="#//api/name/stopScanningAndExportToPath:">&ndash;&nbsp;stopScanningAndExportToPath:</a></code>
+</h3>
+
+	<div class="method-info">
+		<div class="pointy-thing"></div>
+
+		<div class="method-info-container">
+			
+
+			<div class="method-subsection method-declaration"><code>- (void)stopScanningAndExportToPath:(NSString *)<em>pathRelativeToDocumentsFolder</em></code></div>
+
+		    
+		</div>
+	</div>
+</div><div class="section-method">
+	<a name="//api/name/stopScanningAndExport" title="stopScanningAndExport"></a>
+	<h3 class="method-title"><code><a href="#//api/name/stopScanningAndExport">&ndash;&nbsp;stopScanningAndExport</a></code>
+</h3>
+
+	<div class="method-info">
+		<div class="pointy-thing"></div>
+
+		<div class="method-info-container">
+			
+
+			<div class="method-subsection method-declaration"><code>- (void)stopScanningAndExport</code></div>
+
+		    
+		</div>
+	</div>
+</div><div class="section-method">
+	<a name="//api/name/resetScanning" title="resetScanning"></a>
+	<h3 class="method-title"><code><a href="#//api/name/resetScanning">&ndash;&nbsp;resetScanning</a></code>
+</h3>
+
+	<div class="method-info">
+		<div class="pointy-thing"></div>
+
+		<div class="method-info-container">
+			
+
+			<div class="method-subsection method-declaration"><code>- (void)resetScanning</code></div>
+
+		    
 		</div>
 	</div>
 </div><div class="section-method">
@@ -1131,8 +1306,8 @@ The keys must exactly match the uniform names used in the shader.</p>
 					</tr>
 				
 					<tr>
-						<th scope="row" class="argument-name"><code>outputNormal</code></th>
-						<td><p>a pointer to store the normal of the scene mesh at the intersection point</p></td>
+						<th scope="row" class="argument-name"><code>normal</code></th>
+						<td><p>Normal at the intersection point of the scene mesh</p></td>
 					</tr>
 				
 				</table>
@@ -1462,8 +1637,100 @@ Pressing Done dismisses the view.</p>
 
 						<div class="task-list">
 							<div class="section-method">
-	<a name="//api/name/predictColorCameraPoseForDisplayLinkStart:colorCameraPose:poseTimestamp:" title="predictColorCameraPoseForDisplayLinkStart:colorCameraPose:poseTimestamp:"></a>
-	<h3 class="method-title"><code><a href="#//api/name/predictColorCameraPoseForDisplayLinkStart:colorCameraPose:poseTimestamp:">&ndash;&nbsp;predictColorCameraPoseForDisplayLinkStart:colorCameraPose:poseTimestamp:</a></code>
+	<a name="//api/name/lockAndGetSceneMesh" title="lockAndGetSceneMesh"></a>
+	<h3 class="method-title"><code><a href="#//api/name/lockAndGetSceneMesh">&ndash;&nbsp;lockAndGetSceneMesh</a></code>
+</h3>
+
+	<div class="method-info">
+		<div class="pointy-thing"></div>
+
+		<div class="method-info-container">
+			
+			
+			<div class="method-subsection brief-description">
+				<p>Lock the scene mesh (mapping updates will be blocked) and return its current content.</p>
+			</div>
+			
+		    
+
+			<div class="method-subsection method-declaration"><code>- (BEMesh *)lockAndGetSceneMesh</code></div>
+
+		    
+			
+
+			
+			<div class="method-subsection return">
+				<h4 class="method-subtitle parameter-title">Return Value</h4>
+				<p>the scene mesh.</p>
+			</div>
+			
+
+			
+
+			
+
+			
+
+			
+
+			
+			<div class="method-subsection declared-in-section">
+				<h4 class="method-subtitle">Declared In</h4>
+				<p><code class="declared-in-ref">BEMixedRealityMode.h</code></p>
+			</div>
+			
+			
+		</div>
+	</div>
+</div><div class="section-method">
+	<a name="//api/name/unlockSceneMesh" title="unlockSceneMesh"></a>
+	<h3 class="method-title"><code><a href="#//api/name/unlockSceneMesh">&ndash;&nbsp;unlockSceneMesh</a></code>
+</h3>
+
+	<div class="method-info">
+		<div class="pointy-thing"></div>
+
+		<div class="method-info-container">
+			
+			
+			<div class="method-subsection brief-description">
+				<p>Unlock the scene mesh.</p>
+			</div>
+			
+		    
+
+			<div class="method-subsection method-declaration"><code>- (void)unlockSceneMesh</code></div>
+
+		    
+			
+
+			
+
+			
+
+			
+			<div class="method-subsection discussion-section">
+				<h4 class="method-subtitle">Discussion</h4>
+				<div class="note"><p><strong>Note:</strong> You cannot safely use the <a href="../Classes/BEMesh.html">BEMesh</a> returned by <a href="#//api/name/lockAndGetSceneMesh">lockAndGetSceneMesh</a> after this.</p></div>
+			</div>
+			
+
+			
+
+			
+
+			
+			<div class="method-subsection declared-in-section">
+				<h4 class="method-subtitle">Declared In</h4>
+				<p><code class="declared-in-ref">BEMixedRealityMode.h</code></p>
+			</div>
+			
+			
+		</div>
+	</div>
+</div><div class="section-method">
+	<a name="//api/name/predictColorCameraPoseForDisplayLinkStart:" title="predictColorCameraPoseForDisplayLinkStart:"></a>
+	<h3 class="method-title"><code><a href="#//api/name/predictColorCameraPoseForDisplayLinkStart:">&ndash;&nbsp;predictColorCameraPoseForDisplayLinkStart:</a></code>
 </h3>
 
 	<div class="method-info">
@@ -1478,7 +1745,7 @@ Pressing Done dismisses the view.</p>
 			
 		    
 
-			<div class="method-subsection method-declaration"><code>- (BOOL)predictColorCameraPoseForDisplayLinkStart:(NSTimeInterval)<em>displayLinkStart</em> colorCameraPose:(GLKMatrix4 *)<em>colorCameraPose</em> poseTimestamp:(NSTimeInterval *)<em>poseTimestamp</em></code></div>
+			<div class="method-subsection method-declaration"><code>- (BEMixedRealityPrediction *)predictColorCameraPoseForDisplayLinkStart:(NSTimeInterval)<em>displayLinkStart</em></code></div>
 
 		    
 			
@@ -1491,16 +1758,6 @@ Pressing Done dismisses the view.</p>
 						<td><p>host timestamp when displayLink was started. This information will be used to determine the best pose timestamp.</p></td>
 					</tr>
 				
-					<tr>
-						<th scope="row" class="argument-name"><code>colorCameraPose</code></th>
-						<td><p>pose estimated by the tracker</p></td>
-					</tr>
-				
-					<tr>
-						<th scope="row" class="argument-name"><code>poseTimestamp</code></th>
-						<td><p>timestamp at which the camera pose was estimated. This may be in the future to reduce latency.</p></td>
-					</tr>
-				
 				</table>
 			</div>
 			
@@ -1508,7 +1765,7 @@ Pressing Done dismisses the view.</p>
 			
 			<div class="method-subsection return">
 				<h4 class="method-subtitle parameter-title">Return Value</h4>
-				<p>YES if a pose could be estimated.</p>
+				<p>pose estimated by the tracker with timestamp at which the camera pose was estimated.</p>
 			</div>
 			
 
@@ -1535,8 +1792,8 @@ Pressing Done dismisses the view.</p>
 		</div>
 	</div>
 </div><div class="section-method">
-	<a name="//api/name/renderSceneMeshWithStyle:modelView:projection:" title="renderSceneMeshWithStyle:modelView:projection:"></a>
-	<h3 class="method-title"><code><a href="#//api/name/renderSceneMeshWithStyle:modelView:projection:">&ndash;&nbsp;renderSceneMeshWithStyle:modelView:projection:</a></code>
+	<a name="//api/name/renderSceneMeshWithStyle:modelView:projection:associatedColorFrame:" title="renderSceneMeshWithStyle:modelView:projection:associatedColorFrame:"></a>
+	<h3 class="method-title"><code><a href="#//api/name/renderSceneMeshWithStyle:modelView:projection:associatedColorFrame:">&ndash;&nbsp;renderSceneMeshWithStyle:modelView:projection:associatedColorFrame:</a></code>
 </h3>
 
 	<div class="method-info">
@@ -1551,7 +1808,7 @@ Pressing Done dismisses the view.</p>
 			
 		    
 
-			<div class="method-subsection method-declaration"><code>- (void)renderSceneMeshWithStyle:(BEOpenGLRenderStyle)<em>glStyle</em> modelView:(GLKMatrix4)<em>modelView</em> projection:(GLKMatrix4)<em>projection</em></code></div>
+			<div class="method-subsection method-declaration"><code>- (void)renderSceneMeshWithStyle:(BEOpenGLRenderStyle)<em>glStyle</em> modelView:(GLKMatrix4)<em>modelView</em> projection:(GLKMatrix4)<em>projection</em> associatedColorFrame:(struct BEColorFrameReference *)<em>associatedColorFrame</em></code></div>
 
 		    
 			
@@ -1566,7 +1823,17 @@ Pressing Done dismisses the view.</p>
 				
 					<tr>
 						<th scope="row" class="argument-name"><code>modelView</code></th>
+						<td><p>the modelView matrix used to render the mesh.</p></td>
+					</tr>
+				
+					<tr>
+						<th scope="row" class="argument-name"><code>projection</code></th>
 						<td><p>the projection matrix used to render the mesh.</p></td>
+					</tr>
+				
+					<tr>
+						<th scope="row" class="argument-name"><code>associatedColorFrame</code></th>
+						<td><p>the color frame returned by predictColorCameraPoseForDisplayLinkStart</p></td>
 					</tr>
 				
 				</table>
@@ -1577,6 +1844,70 @@ Pressing Done dismisses the view.</p>
 
 			
 
+			
+
+			
+
+			
+
+			
+			<div class="method-subsection declared-in-section">
+				<h4 class="method-subtitle">Declared In</h4>
+				<p><code class="declared-in-ref">BEMixedRealityMode.h</code></p>
+			</div>
+			
+			
+		</div>
+	</div>
+</div><div class="section-method">
+	<a name="//api/name/renderSceneMeshFromColorCameraViewpointWithStyle:associatedColorFrame:" title="renderSceneMeshFromColorCameraViewpointWithStyle:associatedColorFrame:"></a>
+	<h3 class="method-title"><code><a href="#//api/name/renderSceneMeshFromColorCameraViewpointWithStyle:associatedColorFrame:">&ndash;&nbsp;renderSceneMeshFromColorCameraViewpointWithStyle:associatedColorFrame:</a></code>
+</h3>
+
+	<div class="method-info">
+		<div class="pointy-thing"></div>
+
+		<div class="method-info-container">
+			
+			
+			<div class="method-subsection brief-description">
+				<p>Render the scene mesh in the current GL context from the color camera viewpoint.</p>
+			</div>
+			
+		    
+
+			<div class="method-subsection method-declaration"><code>- (void)renderSceneMeshFromColorCameraViewpointWithStyle:(BEOpenGLRenderStyle)<em>glStyle</em> associatedColorFrame:(struct BEColorFrameReference *)<em>associatedColorFrame</em></code></div>
+
+		    
+			
+			<div class="method-subsection arguments-section parameters">
+				<h4 class="method-subtitle parameter-title">Parameters</h4>
+				<table class="argument-def parameter-def">
+				
+					<tr>
+						<th scope="row" class="argument-name"><code>glStyle</code></th>
+						<td><p>the rendering shader that will be used.</p></td>
+					</tr>
+				
+					<tr>
+						<th scope="row" class="argument-name"><code>associatedColorFrame</code></th>
+						<td><p>the color frame returned by predictColorCameraPoseForDisplayLinkStart</p></td>
+					</tr>
+				
+				</table>
+			</div>
+			
+
+			
+
+			
+
+			
+			<div class="method-subsection discussion-section">
+				<h4 class="method-subtitle">Discussion</h4>
+				<p>Use this method when you want to render the scene from the exact viewpoint of the color camera.
+This is best for monocular modes where the color background can fill the screen to avoid gaps.</p>
+			</div>
 			
 
 			
@@ -1605,7 +1936,7 @@ Pressing Done dismisses the view.</p>
 				<footer>
 					<div class="footer-copyright">
 						
-						<p class="copyright">Copyright &copy; 2017 Occipital. All rights reserved. Updated: 2017-02-24</p>
+						<p class="copyright">Copyright &copy; 2017 Occipital. All rights reserved. Updated: 2017-05-04</p>
 						
 						
 						<p class="generator">Generated by <a href="http://appledoc.gentlebytes.com">appledoc 2.2.1 (build 1333)</a>.</p>

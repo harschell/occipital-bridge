@@ -15,6 +15,8 @@
 + (NSString*)pathForImageResourceNamed:(NSString*)imageName;
 + (NSURL*)URLForResource:(NSString*)resourceName withExtension:(NSString*)ext;
 
++ (SCNNode*) loadNodeFromSceneNamed:(NSString*)sceneName;
+
 @end
 
 @interface SCNProgram (OpenBEExtensions)

@@ -10,6 +10,6 @@
 
 @protocol CoreMotionComponentProtocol
 
-- (bool) handleRotation:(GLKVector3)rotation;
+- (bool) handleMotionTransform:(GLKMatrix4)transform;
 
 @end

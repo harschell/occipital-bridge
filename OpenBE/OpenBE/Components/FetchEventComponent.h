@@ -7,7 +7,7 @@
 
 #import "../Core/EventComponentProtocol.h"
 #import "../Core/CoreMotionComponentProtocol.h"
-#import "../Core/Core.h"
+#import "../Core/GeometryComponent.h"
 
 #import "RobotBehaviourComponent.h"
 #import "PhysicsContactAudioComponent.h"
@@ -22,6 +22,6 @@
 @property(nonatomic) BOOL endExperience;
 @property(nonatomic) SelectableModelComponent *powerOutlet;
 
-- (bool) handleRotation:(GLKVector3)rotation;
+- (bool) handleMotionTransform:(GLKMatrix4)transform;
 
 @end

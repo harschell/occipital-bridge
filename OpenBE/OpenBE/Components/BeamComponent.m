@@ -128,6 +128,8 @@
 - (void) updateWithDeltaTime:(NSTimeInterval)seconds {
     if( !self.node.hidden && self.beamActive <= 0.f ) {
         self.node.hidden = YES;
+    } else {
+        _audioLoop.position = self.node.position;
     }
 }
 
@@ -135,6 +137,7 @@
     self.beamActive = active;
     self.beamWidth = width;
     self.beamHeight = height;
+    _audioLoop.position = self.node.position;
     _audioLoop.volume = saturatef(active);
     self.node.hidden = (active <= 0.f);
 }

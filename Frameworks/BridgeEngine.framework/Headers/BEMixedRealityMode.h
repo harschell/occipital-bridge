@@ -14,6 +14,8 @@
 
 @class EAGLSharegroup;
 
+@class BEMesh;
+
 //------------------------------------------------------------------------------
 
 typedef NSArray<NSString*> NSStringArray;
@@ -48,6 +50,12 @@ BE_API
 /// Notifies that the status of one of the sensors changed.
 - (void) mixedRealitySensorsStatusChanged:(BESensorsStatus)sensorsStatus;
 
+/** Called after the scene has been loaded.
+ This is a good place to access the BEMesh for example.
+ @param mappedAreaStatus indicates whether a previously scanned scene could be reloaded from the device successfully
+ */
+- (void) mixedRealityDidLoadScene:(BEMappedAreaStatus)mappedAreaStatus;
+
 @end
 
 //------------------------------------------------------------------------------
@@ -64,6 +72,7 @@ BE_API
  @param engineOptions The valid keys are:
  
  - `kBECaptureReplayMode`: Whether a previous capture should be replayed. Valid values are listed in BECaptureReplayMode. Default is BECaptureReplayModeDisabled.
+ - `kBECaptureReplayFile`: path to the OCC replay file, relative to the app documents folder. Default is "BridgeEngineScene/sceneReplay.occ", with a fallback on "BridgeEngineScene/capture.occ".
  - `kBETrackerFallbackOnIMUEnabled`: If YES, will fallback to IMU-based rotational-only pose updates if the visual tracker is lost. Default is NO.
  - `kBEVisualInertialPoseFilterEnabled`: If YES, the tracker output will be smoother, but with potentially a slightly higher latency. Default is NO.
  - `kBEUsingWideVisionLens`:  Whether a Wide Vision Lens is attached. Default is NO.
@@ -110,8 +119,23 @@ BE_API
 
 /** Start the engine, automatically loading the last mapped area and starting tracking.
  Note that the last scene is stored in the `BridgeEngineScene` subfolder of the App Documents folder.
+ @see startWithSavedSceneAtPath
  */
 - (void) startWithSavedScene;
+
+/** Start the engine, automatically loading the last mapped area in the given subfolder and starting tracking.
+ Note that the scenePath is relative to the app Documents folder.
+ @see startWithSavedScene
+ */
+- (void) startWithSavedSceneAtPath:(NSString*)scenePath;
+
+/** FIXME: document
+ */
+- (void) enterScanningMode;
+- (void) startScanning;
+- (void) stopScanningAndExportToPath:(NSString*)pathRelativeToDocumentsFolder;
+- (void) stopScanningAndExport; // using the default @"BridgeEngineScene" path.
+- (void) resetScanning;
 
 /// Stop the engine: tracking, rendering and camera. Use it for a graceful shutdown.
 - (void) stop;
@@ -197,7 +221,7 @@ BE_API
 
 /** Intersect a ray between the camera center and a given on-screen point with the mesh of the mapped area.
  @param point the screen-space point
- @param outputNormal a pointer to store the normal of the scene mesh at the intersection point
+ @param normal Normal at the intersection point of the scene mesh
  @note This is usually used for touch-based interaction.
  @note This does not collide with any SceneKit objects, only with the mesh of mapped area
  @warning For efficiency reasons the intersection point might be approximate
@@ -246,31 +270,62 @@ These coordinates can be used for UIKit operations like moving a UIView to a spe
 
 //------------------------------------------------------------------------------
 
+struct BEColorFrameReference;
+
+@interface BEMixedRealityPrediction : NSObject
+@property (nonatomic,readonly) BOOL couldPredict;
+@property (nonatomic,readonly) GLKMatrix4 predictedColorCameraPose;
+@property (nonatomic,readonly) NSTimeInterval predictedPoseTimestamp;
+@property (nonatomic,readonly) struct BEColorFrameReference* associatedColorFrame;
+@property (nonatomic,readonly) GLKMatrix4 associatedColorFramePose;
+@property (nonatomic,readonly) GLKMatrix4 colorFrameGLProjection;
+@end
+
 @interface BEMixedRealityMode(LowLevel)
+
+/** Lock the scene mesh (mapping updates will be blocked) and return its current content.
+ @return the scene mesh.
+*/
+- (BEMesh*)lockAndGetSceneMesh;
+
+/** Unlock the scene mesh.
+ @note You cannot safely use the BEMesh returned by lockAndGetSceneMesh after this.
+ */
+- (void)unlockSceneMesh;
 
 /** Return the best estimate of the color camera pose for a given a display link timestamp
  
  This is meant to be used in headless mode (when BEView==nil), e.g. from the Unity plugin.
  
  @param displayLinkStart host timestamp when displayLink was started. This information will be used to determine the best pose timestamp.
- @param colorCameraPose pose estimated by the tracker
- @param poseTimestamp timestamp at which the camera pose was estimated. This may be in the future to reduce latency.
- @return YES if a pose could be estimated.
+ @return pose estimated by the tracker with timestamp at which the camera pose was estimated.
  
  */
-- (BOOL)predictColorCameraPoseForDisplayLinkStart:(NSTimeInterval)displayLinkStart
-                                  colorCameraPose:(GLKMatrix4*)colorCameraPose
-                                    poseTimestamp:(NSTimeInterval*)poseTimestamp;
+- (BEMixedRealityPrediction*)predictColorCameraPoseForDisplayLinkStart:(NSTimeInterval)displayLinkStart;
 
 /** Render the scene mesh in the current GL context.
  
  @param glStyle the rendering shader that will be used.
  @param modelView the modelView matrix used to render the mesh.
- @param modelView the projection matrix used to render the mesh.
+ @param projection the projection matrix used to render the mesh.
+ @param associatedColorFrame the color frame returned by predictColorCameraPoseForDisplayLinkStart
  
  */
 - (void)renderSceneMeshWithStyle:(BEOpenGLRenderStyle)glStyle
                        modelView:(GLKMatrix4)modelView
-                      projection:(GLKMatrix4)projection;
+                      projection:(GLKMatrix4)projection
+            associatedColorFrame:(struct BEColorFrameReference*)associatedColorFrame;
+
+/** Render the scene mesh in the current GL context from the color camera viewpoint.
+ 
+ Use this method when you want to render the scene from the exact viewpoint of the color camera.
+ This is best for monocular modes where the color background can fill the screen to avoid gaps.
+ 
+ @param glStyle the rendering shader that will be used.
+ @param associatedColorFrame the color frame returned by predictColorCameraPoseForDisplayLinkStart
+ */
+- (void)renderSceneMeshFromColorCameraViewpointWithStyle:(BEOpenGLRenderStyle)glStyle
+                                    associatedColorFrame:(struct BEColorFrameReference*)associatedColorFrame;
+
 
 @end

@@ -8,9 +8,8 @@
 #import "SpawnPortalComponent.h"
 #import "VRWorldComponent.h"
 #import "RobotActionComponent.h"
+#import "../Core/Core.h"
 @import GLKit;
-
-//#define ENABLE_ROBOTROOM
 
 @interface SpawnPortalComponent()
 @property (nonatomic) bool pausing;
@@ -59,6 +58,7 @@
         GLKVector3 hitNormal = SCNVector3ToGLKVector3(hit.worldNormal);
         GLKVector3 up = GLKVector3Make(0, -1, 0);
         float upThreshold = cos(20.0*M_PI/180); // ~0.94
+#ifdef ENABLE_ROBOTROOM
         if( GLKVector3DotProduct(hitNormal, up) > upThreshold
            && hitPos.y > -0.2) {
             _vrWorldComponent.mode = VRWorldRobotRoom;
@@ -81,6 +81,19 @@
             // Look at the portal center.
             [_robotActionSequencer lookAtX:hitPos.x Y:hitPos.y Z:hitPos.z];
         }
+#else
+        if(!(GLKVector3DotProduct(hitNormal, up) > upThreshold && hitPos.y > -0.2))
+        {
+            _vrWorldComponent.mode = VRWorldBookstore;
+            [_vrWorldComponent setEnabled:YES];
+            [_portalComponent openPortalOnWallPosition:SCNVector3FromGLKVector3(hitPos)
+                                            wallNormal:SCNVector3FromGLKVector3(hitNormal)
+                                             toVRWorld:_vrWorldComponent];
+            
+            // Look at the portal center.
+            [_robotActionSequencer lookAtX:hitPos.x Y:hitPos.y Z:hitPos.z];
+        }
+#endif
     }
     return NO;
 }

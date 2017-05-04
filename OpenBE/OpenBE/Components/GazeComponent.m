@@ -48,14 +48,19 @@
     
     Scene *mainScene = [Scene main];
     SCNNode *gazeNode = mainScene.rootNodeForGaze;
-    NSArray<SCNHitTestResult *> *hitTestGazeResults = [gazeNode hitTestWithSegmentFromPoint:from toPoint:to options:nil];
+    NSDictionary *options = @{SCNHitTestSortResultsKey:@YES, SCNHitTestBackFaceCullingKey:@NO};
+    NSArray<SCNHitTestResult *> *hitTestGazeResults = [gazeNode hitTestWithSegmentFromPoint:from toPoint:to options:options];
 
     SCNPhysicsWorld *physicsWorld = mainScene.scene.physicsWorld;
 
     if( ![Scene main].rootNode.hidden ) {
         // TODO: couldn't figure out what this code does, but it can cause a crash.
         @try {
-            NSArray<SCNHitTestResult *> *hitTestPhysicsResults = [physicsWorld rayTestWithSegmentFromPoint:from toPoint:to options:nil];
+            NSDictionary *physicsRayOptions = @{
+                SCNPhysicsTestBackfaceCullingKey:@NO,
+                SCNPhysicsTestSearchModeKey:SCNPhysicsTestSearchModeAll};
+
+            NSArray<SCNHitTestResult *> *hitTestPhysicsResults = [physicsWorld rayTestWithSegmentFromPoint:from toPoint:to options:physicsRayOptions];
             
             if( [hitTestPhysicsResults count] ) {
                 for( SCNHitTestResult * hitTestResult in hitTestPhysicsResults ) {

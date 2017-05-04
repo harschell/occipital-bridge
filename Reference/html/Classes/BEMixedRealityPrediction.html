@@ -3,7 +3,7 @@
 <head>
 	<meta charset="utf-8">
 
-	<title>BEAudioEngine Class Reference</title>
+	<title>BEMixedRealityPrediction Class Reference</title>
 
 	<link rel="stylesheet" href="../css/style.css">
 	<meta name="viewport" content="initial-scale=1, maximum-scale=1.4">
@@ -43,8 +43,6 @@
 							<select id="jump-to">
 	<option value="top">Jump To&#133;</option>
 	
-	<option value="overview">Overview</option>
-	
 
 	
 	
@@ -56,29 +54,23 @@
 	
 	<optgroup label="Properties">
 		
-		<option value="//api/name/audioSession">audioSession</option>
+		<option value="//api/name/couldPredict">couldPredict</option>
 		
-		<option value="//api/name/audioEngine">audioEngine</option>
+		<option value="//api/name/predictedColorCameraPose">predictedColorCameraPose</option>
 		
-		<option value="//api/name/audioEnvironment">audioEnvironment</option>
+		<option value="//api/name/predictedPoseTimestamp">predictedPoseTimestamp</option>
 		
-	</optgroup>
-	
-
-	
-	<optgroup label="Class Methods">
+		<option value="//api/name/associatedColorFrame">associatedColorFrame</option>
 		
-		<option value="//api/name/sharedEngine">+ sharedEngine</option>
+		<option value="//api/name/associatedColorFramePose">associatedColorFramePose</option>
+		
+		<option value="//api/name/colorFrameGLProjection">colorFrameGLProjection</option>
 		
 	</optgroup>
 	
 
 	
-	<optgroup label="Instance Methods">
-		
-		<option value="//api/name/init">- init</option>
-		
-	</optgroup>
+
 	
 	
 </select>
@@ -93,7 +85,7 @@
 		<div id="overview_contents" class="container">
 			<div id="content">
 				<main role="main">
-					<h1 class="title">BEAudioEngine Class Reference</h1>
+					<h1 class="title">BEMixedRealityPrediction Class Reference</h1>
 
 					
 					<div class="section section-specification"><table cellspacing="0"><tbody>
@@ -102,22 +94,12 @@
 	<td>NSObject</td>
 </tr><tr>
 	<th>Declared in</th>
-	<td>BEAudioEngine.h</td>
+	<td>BEMixedRealityMode.h</td>
 </tr>
 						</tbody></table></div>
 					
 
                     
-					
-					<div class="section section-overview">
-						<a title="Overview" name="overview"></a>
-						<h2 class="subtitle subtitle-overview">Overview</h2>
-						<p>Bridge Engine Audio Engine Singleton</p>
-
-<p>Initializes a single AVAudioEngine in a Bridge Engine application.</p>
-					</div>
-					
-					
 
 					
 					
@@ -130,49 +112,8 @@
 
 						<div class="task-list">
 							<div class="section-method">
-	<a name="//api/name/sharedEngine" title="sharedEngine"></a>
-	<h3 class="method-title"><code><a href="#//api/name/sharedEngine">+&nbsp;sharedEngine</a></code>
-</h3>
-
-	<div class="method-info">
-		<div class="pointy-thing"></div>
-
-		<div class="method-info-container">
-			
-			
-			<div class="method-subsection brief-description">
-				<p>Singleton.</p>
-			</div>
-			
-		    
-
-			<div class="method-subsection method-declaration"><code>+ (BEAudioEngine *)sharedEngine</code></div>
-
-		    
-			
-
-			
-
-			
-
-			
-
-			
-
-			
-
-			
-			<div class="method-subsection declared-in-section">
-				<h4 class="method-subtitle">Declared In</h4>
-				<p><code class="declared-in-ref">BEAudioEngine.h</code></p>
-			</div>
-			
-			
-		</div>
-	</div>
-</div><div class="section-method">
-	<a name="//api/name/init" title="init"></a>
-	<h3 class="method-title"><code><a href="#//api/name/init">&ndash;&nbsp;init</a></code>
+	<a name="//api/name/couldPredict" title="couldPredict"></a>
+	<h3 class="method-title"><code><a href="#//api/name/couldPredict">&nbsp;&nbsp;couldPredict</a></code>
 </h3>
 
 	<div class="method-info">
@@ -181,14 +122,14 @@
 		<div class="method-info-container">
 			
 
-			<div class="method-subsection method-declaration"><code>- (instancetype)init</code></div>
+			<div class="method-subsection method-declaration"><code>@property (nonatomic, readonly) BOOL couldPredict</code></div>
 
 		    
 		</div>
 	</div>
 </div><div class="section-method">
-	<a name="//api/name/audioSession" title="audioSession"></a>
-	<h3 class="method-title"><code><a href="#//api/name/audioSession">&nbsp;&nbsp;audioSession</a></code>
+	<a name="//api/name/predictedColorCameraPose" title="predictedColorCameraPose"></a>
+	<h3 class="method-title"><code><a href="#//api/name/predictedColorCameraPose">&nbsp;&nbsp;predictedColorCameraPose</a></code>
 </h3>
 
 	<div class="method-info">
@@ -197,14 +138,14 @@
 		<div class="method-info-container">
 			
 
-			<div class="method-subsection method-declaration"><code>@property (nonatomic, strong) AVAudioSession *audioSession</code></div>
+			<div class="method-subsection method-declaration"><code>@property (nonatomic, readonly) GLKMatrix4 predictedColorCameraPose</code></div>
 
 		    
 		</div>
 	</div>
 </div><div class="section-method">
-	<a name="//api/name/audioEngine" title="audioEngine"></a>
-	<h3 class="method-title"><code><a href="#//api/name/audioEngine">&nbsp;&nbsp;audioEngine</a></code>
+	<a name="//api/name/predictedPoseTimestamp" title="predictedPoseTimestamp"></a>
+	<h3 class="method-title"><code><a href="#//api/name/predictedPoseTimestamp">&nbsp;&nbsp;predictedPoseTimestamp</a></code>
 </h3>
 
 	<div class="method-info">
@@ -213,14 +154,14 @@
 		<div class="method-info-container">
 			
 
-			<div class="method-subsection method-declaration"><code>@property (nonatomic, strong) AVAudioEngine *audioEngine</code></div>
+			<div class="method-subsection method-declaration"><code>@property (nonatomic, readonly) NSTimeInterval predictedPoseTimestamp</code></div>
 
 		    
 		</div>
 	</div>
 </div><div class="section-method">
-	<a name="//api/name/audioEnvironment" title="audioEnvironment"></a>
-	<h3 class="method-title"><code><a href="#//api/name/audioEnvironment">&nbsp;&nbsp;audioEnvironment</a></code>
+	<a name="//api/name/associatedColorFrame" title="associatedColorFrame"></a>
+	<h3 class="method-title"><code><a href="#//api/name/associatedColorFrame">&nbsp;&nbsp;associatedColorFrame</a></code>
 </h3>
 
 	<div class="method-info">
@@ -229,7 +170,39 @@
 		<div class="method-info-container">
 			
 
-			<div class="method-subsection method-declaration"><code>@property (nonatomic, strong) AVAudioEnvironmentNode *audioEnvironment</code></div>
+			<div class="method-subsection method-declaration"><code>@property (nonatomic, readonly) struct BEColorFrameReference *associatedColorFrame</code></div>
+
+		    
+		</div>
+	</div>
+</div><div class="section-method">
+	<a name="//api/name/associatedColorFramePose" title="associatedColorFramePose"></a>
+	<h3 class="method-title"><code><a href="#//api/name/associatedColorFramePose">&nbsp;&nbsp;associatedColorFramePose</a></code>
+</h3>
+
+	<div class="method-info">
+		<div class="pointy-thing"></div>
+
+		<div class="method-info-container">
+			
+
+			<div class="method-subsection method-declaration"><code>@property (nonatomic, readonly) GLKMatrix4 associatedColorFramePose</code></div>
+
+		    
+		</div>
+	</div>
+</div><div class="section-method">
+	<a name="//api/name/colorFrameGLProjection" title="colorFrameGLProjection"></a>
+	<h3 class="method-title"><code><a href="#//api/name/colorFrameGLProjection">&nbsp;&nbsp;colorFrameGLProjection</a></code>
+</h3>
+
+	<div class="method-info">
+		<div class="pointy-thing"></div>
+
+		<div class="method-info-container">
+			
+
+			<div class="method-subsection method-declaration"><code>@property (nonatomic, readonly) GLKMatrix4 colorFrameGLProjection</code></div>
 
 		    
 		</div>
@@ -247,7 +220,7 @@
 				<footer>
 					<div class="footer-copyright">
 						
-						<p class="copyright">Copyright &copy; 2017 Occipital. All rights reserved. Updated: 2017-02-24</p>
+						<p class="copyright">Copyright &copy; 2017 Occipital. All rights reserved. Updated: 2017-05-04</p>
 						
 						
 						<p class="generator">Generated by <a href="http://appledoc.gentlebytes.com">appledoc 2.2.1 (build 1333)</a>.</p>

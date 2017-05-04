@@ -5,15 +5,16 @@
  http://structure.io
  */
 
-#import <GameplayKit/GameplayKit.h>
+#import <GamePlayKit/GamePlayKit.h>
 #import <SceneKit/SceneKit.h>
 
-#import "../Core/Core.h"
-#import "NavigationComponent.h"
+#import "../Core/Component.h"
+#import "../Core/ComponentProtocol.h"
+@class NavigationComponent;
 
 @interface RobotBehaviourComponent : Component <ComponentProtocol>
 
-@property (strong) NavigationComponent * navigationComponent;
+@property (strong) NavigationComponent* navigationComponent;
 
 - (void) start;
 

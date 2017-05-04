@@ -86,7 +86,6 @@
 }
 
 - (void) start {
-//    self.geometryComponent = (GeometryComponent * )[ComponentUtils getComponentFromEntity:self.entity ofClass:[GeometryComponent class]];
     self.robotMeshComponent = (RobotMeshControllerComponent * )[ComponentUtils getComponentFromEntity:self.entity ofClass:[RobotMeshControllerComponent class]];
 }
 
@@ -100,47 +99,38 @@
 
 - (void) addAnimation:(nonnull CAAnimation*)animation forKey:(NSString*)animKey {
     [_robotMeshComponent.robotNode addAnimation:animation forKey:animKey];
-//    [_geometryComponent.node addAnimation:animation forKey:animKey];
 }
 
 - (void)removeAllAnimations {
     [_robotMeshComponent.robotNode removeAllAnimations];
-//    [_geometryComponent.node removeAllAnimations];
 }
 
 - (void)removeAnimationForKey:(NSString *)key {
     [_robotMeshComponent.robotNode removeAnimationForKey:key];
-//    [_geometryComponent.node removeAnimationForKey:key];
 }
 
 - (NSArray<NSString *> *) animationKeys {
     return [_robotMeshComponent.robotNode animationKeys];
-//    return [_geometryComponent.node animationKeys];
 }
 
 - (nullable CAAnimation *)animationForKey:(NSString *)key {
     return [_robotMeshComponent.robotNode animationForKey:key];
-//    return [_geometryComponent.node animationForKey:key];
 }
 
 - (void)pauseAnimationForKey:(NSString *)key {
     [_robotMeshComponent.robotNode pauseAnimationForKey:key];
-//    [_geometryComponent.node pauseAnimationForKey:key];
 }
 
 - (void)resumeAnimationForKey:(NSString *)key {
     [_robotMeshComponent.robotNode resumeAnimationForKey:key];
-//    [_geometryComponent.node resumeAnimationForKey:key];
 }
 
 - (BOOL)isAnimationForKeyPaused:(NSString *)key {
     return [_robotMeshComponent.robotNode isAnimationForKeyPaused:key];
-//    return [_geometryComponent.node isAnimationForKeyPaused:key];
 }
 
 - (void)removeAnimationForKey:(NSString *)key fadeOutDuration:(CGFloat)duration {
     [_robotMeshComponent.robotNode removeAnimationForKey:key fadeOutDuration:duration];
-//    [_geometryComponent.node removeAnimationForKey:key fadeOutDuration:duration];
 }
 
 @end

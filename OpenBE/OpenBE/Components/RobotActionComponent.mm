@@ -23,6 +23,7 @@
 #import "BehaviourComponents/LookAtCameraBehaviourComponent.h"
 #import "BehaviourComponents/LookAtNodeBehaviourComponent.h"
 #import "BehaviourComponents/PathFindMoveToBehaviourComponent.h"
+#import "BehaviourComponents/ScanBehaviourComponent.h"
 
 #define ROBOT_ACTION_BUFFER_KEY @"RobotActionBufferKey"
 
@@ -165,11 +166,11 @@
 - (SCNAction*)scanX:(float)x Y:(float)y Z:(float)z Radius:(float)radius {
     SCNAction *wait = [SCNAction waitForDuration:1.5]; // Default to 1.5sec, FIXME: pickup the duration from the Scan action block.
     SCNAction *action = [SCNAction runBlock:^(SCNNode * _Nonnull node) {
-//        ScanBehaviourComponent *scanBehaviour = (ScanBehaviourComponent * )[ComponentUtils getComponentFromEntity:self.entity ofClass:[ScanBehaviourComponent class]];
-//        [scanBehaviour runBehaviourFor:1.5 targetPosition:(GLKVector3){x,y,z} radius:radius callback:nil];
+        ScanBehaviourComponent *scanBehaviour = (ScanBehaviourComponent * )[ComponentUtils getComponentFromEntity:self.entity ofClass:[ScanBehaviourComponent class]];
+        [scanBehaviour runBehaviourFor:1.5 targetPosition:(GLKVector3){x,y,z} radius:radius callback:nil];
         
         // Adjust the wait action duration to the scan interval.
-//        wait.duration = scanBehaviour.intervalTime;
+        wait.duration = scanBehaviour.intervalTime;
     }];
     
     SCNAction *combined = [SCNAction sequence:@[action,wait]];
@@ -326,6 +327,8 @@
 - (SCNAction*)playAudio:(AudioNode*)audioNode waitForCompletion:(BOOL)wait {
 //    SCNAction *action = [SCNAction playAudioSource:audioSource waitForCompletion:wait];
     SCNAction *action = [SCNAction runBlock:^(SCNNode * _Nonnull node) {
+// TODO: Implement positional audio, from scene node.
+//        audioNode.position = 
         [audioNode play];
     }];
     

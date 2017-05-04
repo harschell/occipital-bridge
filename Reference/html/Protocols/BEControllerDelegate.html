@@ -64,6 +64,12 @@
 		
 		<option value="//api/name/controllerDidDisconnect">- controllerDidDisconnect</option>
 		
+		<option value="//api/name/controllerButtons:down:up:">- controllerButtons:down:up:</option>
+		
+		<option value="//api/name/controllerMotionTransform:">- controllerMotionTransform:</option>
+		
+		<option value="//api/name/controllerTouchPosition:status:">- controllerTouchPosition:status:</option>
+		
 		<option value="//api/name/controllerButtonDown">- controllerButtonDown</option>
 		
 		<option value="//api/name/controllerButtonUp">- controllerButtonUp</option>
@@ -71,6 +77,10 @@
 		<option value="//api/name/controllerDidPressButton">- controllerDidPressButton</option>
 		
 		<option value="//api/name/controllerDidHoldButton">- controllerDidHoldButton</option>
+		
+		<option value="//api/name/controllerDidOutputCoreMotionRotation:">- controllerDidOutputCoreMotionRotation:</option>
+		
+		<option value="//api/name/controllerDidOutputTouchpadPositionX:positionY:">- controllerDidOutputTouchpadPositionX:positionY:</option>
 		
 	</optgroup>
 	
@@ -206,6 +216,135 @@
 		</div>
 	</div>
 </div><div class="section-method">
+	<a name="//api/name/controllerButtons:down:up:" title="controllerButtons:down:up:"></a>
+	<h3 class="method-title"><code><a href="#//api/name/controllerButtons:down:up:">&ndash;&nbsp;controllerButtons:down:up:</a></code>
+</h3>
+
+	<div class="method-info">
+		<div class="pointy-thing"></div>
+
+		<div class="method-info-container">
+			
+			
+			<div class="method-subsection brief-description">
+				<p>Called when any button is pressed or released
+@parameter buttons Current state of all buttons (1 - held down, 0 - released)
+@parameter buttonsDown Buttons that have changed to down state (1 - click down, 0 - no change)
+@parameter buttonsUp Buttons that have changed to released state (1 - released, 0 - no change)</p>
+			</div>
+			
+		    
+
+			<div class="method-subsection method-declaration"><code>- (void)controllerButtons:(BEControllerButtons)<em>buttons</em> down:(BEControllerButtons)<em>buttonsDown</em> up:(BEControllerButtons)<em>buttonsUp</em></code></div>
+
+		    
+			
+
+			
+
+			
+
+			
+
+			
+
+			
+
+			
+			<div class="method-subsection declared-in-section">
+				<h4 class="method-subtitle">Declared In</h4>
+				<p><code class="declared-in-ref">BEController.h</code></p>
+			</div>
+			
+			
+		</div>
+	</div>
+</div><div class="section-method">
+	<a name="//api/name/controllerMotionTransform:" title="controllerMotionTransform:"></a>
+	<h3 class="method-title"><code><a href="#//api/name/controllerMotionTransform:">&ndash;&nbsp;controllerMotionTransform:</a></code>
+</h3>
+
+	<div class="method-info">
+		<div class="pointy-thing"></div>
+
+		<div class="method-info-container">
+			
+			
+			<div class="method-subsection brief-description">
+				<p>Controller motion event:
+@parameter orientation Controller orientation in world coordinate space</p>
+			</div>
+			
+		    
+
+			<div class="method-subsection method-declaration"><code>- (void)controllerMotionTransform:(GLKMatrix4)<em>transform</em></code></div>
+
+		    
+			
+
+			
+
+			
+
+			
+
+			
+
+			
+
+			
+			<div class="method-subsection declared-in-section">
+				<h4 class="method-subtitle">Declared In</h4>
+				<p><code class="declared-in-ref">BEController.h</code></p>
+			</div>
+			
+			
+		</div>
+	</div>
+</div><div class="section-method">
+	<a name="//api/name/controllerTouchPosition:status:" title="controllerTouchPosition:status:"></a>
+	<h3 class="method-title"><code><a href="#//api/name/controllerTouchPosition:status:">&ndash;&nbsp;controllerTouchPosition:status:</a></code>
+</h3>
+
+	<div class="method-info">
+		<div class="pointy-thing"></div>
+
+		<div class="method-info-container">
+			
+			
+			<div class="method-subsection brief-description">
+				<p>Controller touch events
+@parameter position relative position across the touch pad
+@parameter status Active tracking touch status</p>
+			</div>
+			
+		    
+
+			<div class="method-subsection method-declaration"><code>- (void)controllerTouchPosition:(GLKVector2)<em>position</em> status:(BEControllerTouchStatus)<em>status</em></code></div>
+
+		    
+			
+
+			
+
+			
+
+			
+
+			
+
+			
+
+			
+			<div class="method-subsection declared-in-section">
+				<h4 class="method-subtitle">Declared In</h4>
+				<p><code class="declared-in-ref">BEController.h</code></p>
+			</div>
+			
+			
+		</div>
+	</div>
+</div><div class="section-method">
 	<a name="//api/name/controllerButtonDown" title="controllerButtonDown"></a>
 	<h3 class="method-title"><code><a href="#//api/name/controllerButtonDown">&ndash;&nbsp;controllerButtonDown</a></code>
 </h3>
@@ -217,7 +356,7 @@
 			
 			
 			<div class="method-subsection brief-description">
-				<p>Called when the controller button is pressed</p>
+				<p>Controller button is pressed</p>
 			</div>
 			
 		    
@@ -258,7 +397,7 @@
 			
 			
 			<div class="method-subsection brief-description">
-				<p>Called when the controller button is released</p>
+				<p>Controller button is released</p>
 			</div>
 			
 		    
@@ -299,7 +438,7 @@
 			
 			
 			<div class="method-subsection brief-description">
-				<p>Called if the controller button was quickly pressed and released.</p>
+				<p>Controller primary button was quickly pressed and released.</p>
 			</div>
 			
 		    
@@ -340,12 +479,94 @@
 			
 			
 			<div class="method-subsection brief-description">
-				<p>Called if the controller button has been pressed for a long time.</p>
+				<p>Controller primary button has been pressed for a long time.</p>
 			</div>
 			
 		    
 
 			<div class="method-subsection method-declaration"><code>- (void)controllerDidHoldButton</code></div>
+
+		    
+			
+
+			
+
+			
+
+			
+
+			
+
+			
+
+			
+			<div class="method-subsection declared-in-section">
+				<h4 class="method-subtitle">Declared In</h4>
+				<p><code class="declared-in-ref">BEController.h</code></p>
+			</div>
+			
+			
+		</div>
+	</div>
+</div><div class="section-method">
+	<a name="//api/name/controllerDidOutputCoreMotionRotation:" title="controllerDidOutputCoreMotionRotation:"></a>
+	<h3 class="method-title"><code><a href="#//api/name/controllerDidOutputCoreMotionRotation:">&ndash;&nbsp;controllerDidOutputCoreMotionRotation:</a></code>
+</h3>
+
+	<div class="method-info">
+		<div class="pointy-thing"></div>
+
+		<div class="method-info-container">
+			
+			
+			<div class="method-subsection brief-description">
+				<p>Core motion input, but deprecated in favor of controllerMotionEventEulerAngles:</p>
+			</div>
+			
+		    
+
+			<div class="method-subsection method-declaration"><code>- (void)controllerDidOutputCoreMotionRotation:(GLKVector3)<em>rotation</em></code></div>
+
+		    
+			
+
+			
+
+			
+
+			
+
+			
+
+			
+
+			
+			<div class="method-subsection declared-in-section">
+				<h4 class="method-subtitle">Declared In</h4>
+				<p><code class="declared-in-ref">BEController.h</code></p>
+			</div>
+			
+			
+		</div>
+	</div>
+</div><div class="section-method">
+	<a name="//api/name/controllerDidOutputTouchpadPositionX:positionY:" title="controllerDidOutputTouchpadPositionX:positionY:"></a>
+	<h3 class="method-title"><code><a href="#//api/name/controllerDidOutputTouchpadPositionX:positionY:">&ndash;&nbsp;controllerDidOutputTouchpadPositionX:positionY:</a></code>
+</h3>
+
+	<div class="method-info">
+		<div class="pointy-thing"></div>
+
+		<div class="method-info-container">
+			
+			
+			<div class="method-subsection brief-description">
+				<p>Touchpad position, but deprecated in favor of controllerTouchEventPosition:status:</p>
+			</div>
+			
+		    
+
+			<div class="method-subsection method-declaration"><code>- (void)controllerDidOutputTouchpadPositionX:(float)<em>x</em> positionY:(float)<em>y</em></code></div>
 
 		    
 			
@@ -382,7 +603,7 @@
 				<footer>
 					<div class="footer-copyright">
 						
-						<p class="copyright">Copyright &copy; 2017 Occipital. All rights reserved. Updated: 2017-02-24</p>
+						<p class="copyright">Copyright &copy; 2017 Occipital. All rights reserved. Updated: 2017-05-04</p>
 						
 						
 						<p class="generator">Generated by <a href="http://appledoc.gentlebytes.com">appledoc 2.2.1 (build 1333)</a>.</p>

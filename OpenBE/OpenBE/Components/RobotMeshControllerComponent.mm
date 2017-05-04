@@ -386,9 +386,11 @@
             float progress = smoothstepf(0.f, 1.f, frac); // Try with basic accelerate/decelerate motion.
             GLKVector3 position = GLKVector3Lerp(self.moveToStart, self.moveToTarget, progress );
             self.node.position = SCNVector3FromGLKVector3(position);
+            self.movementAudio.position = self.node.position;
         } else {
             self.node.position = SCNVector3FromGLKVector3(self.moveToTarget); // Get precisely on target.
             self.movementAudio.player.volume = 0;
+            self.movementAudio.position = self.node.position;
             self.moveToTimer = self.moveToTimeInterval = 0; // Clear the timer, stop running movement ops.
         }
     }
@@ -729,6 +731,7 @@ float angleDifference(float a, float b) {
         _robotBoxUnfoldingAnim.speed = 1.0;
         [_robotBoxNode addAnimation:_robotBoxUnfoldingAnim forKey:ROBOT_BOX_ANIMATION_KEY];
         [SCNTransaction commit];
+        _robotBoxUnfoldingSound.position = self.node.position;
         [_robotBoxUnfoldingSound play];
         
         [[EventManager main] pauseGlobalEventComponents];
@@ -737,7 +740,8 @@ float angleDifference(float a, float b) {
 
 - (BOOL)robotBoxUnfolded {
     if( self.startWithUnboxingSequence ) {
-        return _robotBoxUnfolded && [_robotBoxNode animationForKey:ROBOT_BOX_ANIMATION_KEY] == nil;
+        BOOL completedUnfold = _robotBoxUnfolded && [_robotBoxNode animationForKey:ROBOT_BOX_ANIMATION_KEY] == nil; 
+        return completedUnfold;
     } else {
         return YES;
     }

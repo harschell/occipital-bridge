@@ -106,6 +106,7 @@
     }
 
     self.lastAudio = expr.audio;
+    expr.audio.position = SCNVector3FromGLKVector3(self.meshController.getPosition); 
     [expr.audio play];
     
     if( expr.vemojiSequence ) {

@@ -41,9 +41,9 @@ public class BESampleTestController : MonoBehaviour {
 		var materialId = beUnity.renderMaterial;
 		materialId++;
 
-		var MaxMaterialID = Enum.GetValues(typeof(BridgeEngineUnity.BERenderMaterial)).Cast<BridgeEngineUnity.BERenderMaterial> ().Max ();
+		var MaxMaterialID = Enum.GetValues(typeof(BERenderMaterial)).Cast<BERenderMaterial> ().Max ();
 		if (materialId > MaxMaterialID) {
-			materialId = BridgeEngineUnity.BERenderMaterial.None;
+			materialId = BERenderMaterial.None;
 		}
 
 		Debug.LogFormat ("Button Pressed, Advancing Material: <b>{0}</b>", materialId); 

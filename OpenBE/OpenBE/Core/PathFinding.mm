@@ -5,7 +5,7 @@
  http://structure.io
  */
 
-#include "../Core/PathFinding.h"
+#import "PathFinding.h"
 #import <BridgeEngine/BridgeEngine.h>
 #import <SceneKit/SceneKit.h>
 #import <GLKit/GLKit.h>
@@ -774,7 +774,9 @@ struct setNode
     int goalScore = -1;
     float minDistTravelled = -1;
     
+#if defined(DEBUG)
     NSDate* startTime = [NSDate date];
+#endif
     
     be_NSDbg(@"starting A*");
     

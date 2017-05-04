@@ -8,6 +8,9 @@
 #pragma once
 
 // Global settings.
+// #define ENABLE_ROBOTROOM - Moved to OpenBE Preprocessor Macros.
+
+#define USE_3DSPATIALIZED_AUDIO 1
 
 // Rendering And Ray-casting bits.
 #define RAYCAST_IGNORE_BIT (1<<16)
@@ -21,9 +24,19 @@
 #define CATEGORY_BIT_MASK_CASTS_SHADOWS_ONTO_AR 4
 #define CATEGORY_BIT_MASK_LIGHTING (CATEGORY_BIT_MASK_CASTS_SHADOWS_ONTO_ENVIRONMENT|CATEGORY_BIT_MASK_CASTS_SHADOWS_ONTO_AR)
 
-#define VR_WORLD_RENDERING_ORDER 110000
+/**
+ * Transaprency and world rendering is put at specific render order levels,
+ * relative to the background rendering
+ *
+ * Background (Real World, with Video passthru and shadow) is 100,000
+ *  See BEEnvironmentScanRenderingOrder and BEEnvironmentScanShadowRenderingOrder
+ *
+ * VRWorld for portal is Environment + 10,000
+ * Transparency for Bridge menus is Environment + 20,000
+ */
+#define VR_WORLD_RENDERING_ORDER (BEEnvironmentScanShadowRenderingOrder + 10000)
 // transparent objects must be rendered last
-#define TRANSPARENCY_RENDERING_ORDER 120000
+#define TRANSPARENCY_RENDERING_ORDER (BEEnvironmentScanShadowRenderingOrder + 20000)
 
 #define PORTAL_STENCIL_VALUE 4 // 1 is used internally by the engine currently
 

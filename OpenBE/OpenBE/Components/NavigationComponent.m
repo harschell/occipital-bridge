@@ -10,6 +10,7 @@
 
 #import "NavigationComponent.h"
 #import "../Utils/Math.h"
+#import <BridgeEngine/BEDebugging.h>
 
 @import GLKit;
 
@@ -49,7 +50,7 @@
         return;
     }
     
-    NSLog(@"size: %lu", sizeof(float) * width * height );
+    be_dbg("size: %lu", sizeof(float) * width * height );
     
     float* heightMap = malloc( sizeof(float) * width * height );
     
@@ -112,7 +113,7 @@
         }
     }
     
-    NSLog(@"Navigation Map is build, save to cached file %@", cachedDataFileName);
+    be_NSDbg(@"Navigation Map is build, save to cached file %@", cachedDataFileName);
     
     [self.navigationMap writeToFile:filePath atomically:YES];
 }

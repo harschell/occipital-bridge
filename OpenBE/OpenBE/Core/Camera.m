@@ -8,6 +8,7 @@
 #import "Core.h"
 #import "Camera.h"
 #import "../Utils/Math.h"
+#import "AudioEngine.h"
 
 @import GLKit;
 
@@ -63,6 +64,9 @@
     
     self.up = GLKQuaternionRotateVector3( orientation, self.tmpUp );
     self.position = SCNVector3ToGLKVector3( node.position );
+    
+    // Update positional and orientation of the AudioEngine.
+    [AudioEngine.main updateListenerFromCameraNode:node];
     
     float newSpeed = GLKVector3Distance(self.previousPosition, self.position) / seconds;
     if( !isnan(newSpeed)) {

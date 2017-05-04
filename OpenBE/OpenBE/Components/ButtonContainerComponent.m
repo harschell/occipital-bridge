@@ -30,7 +30,6 @@
         
         [self.node addChildNode:component.node];
     }
-    
 }
 
 - (void) updateWithDeltaTime:(NSTimeInterval)seconds {

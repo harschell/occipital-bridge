@@ -6,7 +6,8 @@
  */
 
 #import <BridgeEngine/BridgeEngine.h>
-#import "Core.h"
+
+@class GKEntity;
 
 @interface SceneManager : NSObject
 

@@ -60,6 +60,20 @@
 		
 		<option value="//api/name/isConnected">isConnected</option>
 		
+		<option value="//api/name/buttons">buttons</option>
+		
+		<option value="//api/name/transform">transform</option>
+		
+		<option value="//api/name/orientation">orientation</option>
+		
+		<option value="//api/name/touchPosition">touchPosition</option>
+		
+		<option value="//api/name/touchStatus">touchStatus</option>
+		
+		<option value="//api/name/cameraTransform">cameraTransform</option>
+		
+		<option value="//api/name/offsetFromCamera">offsetFromCamera</option>
+		
 	</optgroup>
 	
 
@@ -75,6 +89,8 @@
 	<optgroup label="Instance Methods">
 		
 		<option value="//api/name/init">- init</option>
+		
+		<option value="//api/name/resetYawToCameraTransform">- resetYawToCameraTransform</option>
 		
 	</optgroup>
 	
@@ -110,9 +126,8 @@
 					<div class="section section-overview">
 						<a title="Overview" name="overview"></a>
 						<h2 class="subtitle subtitle-overview">Overview</h2>
-						<p>Bridge Engine Bluetooth Controller</p>
-
-<p>The interface that your application-specific class must implement to receive events from the bluetooth controller.</p>
+						<p>Bridge Engine Controller
+The interface that your application-specific class must implement to receive events from Bridge compatible controllers.</p>
 					</div>
 					
 					
@@ -271,6 +286,338 @@
 			
 		</div>
 	</div>
+</div><div class="section-method">
+	<a name="//api/name/buttons" title="buttons"></a>
+	<h3 class="method-title"><code><a href="#//api/name/buttons">&nbsp;&nbsp;buttons</a></code>
+</h3>
+
+	<div class="method-info">
+		<div class="pointy-thing"></div>
+
+		<div class="method-info-container">
+			
+			
+			<div class="method-subsection brief-description">
+				<p>Currently held down buttons</p>
+			</div>
+			
+		    
+
+			<div class="method-subsection method-declaration"><code>@property (nonatomic, readonly) BEControllerButtons buttons</code></div>
+
+		    
+			
+
+			
+
+			
+
+			
+
+			
+
+			
+
+			
+			<div class="method-subsection declared-in-section">
+				<h4 class="method-subtitle">Declared In</h4>
+				<p><code class="declared-in-ref">BEController.h</code></p>
+			</div>
+			
+			
+		</div>
+	</div>
+</div><div class="section-method">
+	<a name="//api/name/transform" title="transform"></a>
+	<h3 class="method-title"><code><a href="#//api/name/transform">&nbsp;&nbsp;transform</a></code>
+</h3>
+
+	<div class="method-info">
+		<div class="pointy-thing"></div>
+
+		<div class="method-info-container">
+			
+			
+			<div class="method-subsection brief-description">
+				<p>Current controller <a href="#//api/name/orientation">orientation</a> in world coordinate space</p>
+			</div>
+			
+		    
+
+			<div class="method-subsection method-declaration"><code>@property (nonatomic, readonly) GLKMatrix4 transform</code></div>
+
+		    
+			
+
+			
+
+			
+
+			
+
+			
+
+			
+
+			
+			<div class="method-subsection declared-in-section">
+				<h4 class="method-subtitle">Declared In</h4>
+				<p><code class="declared-in-ref">BEController.h</code></p>
+			</div>
+			
+			
+		</div>
+	</div>
+</div><div class="section-method">
+	<a name="//api/name/orientation" title="orientation"></a>
+	<h3 class="method-title"><code><a href="#//api/name/orientation">&nbsp;&nbsp;orientation</a></code>
+</h3>
+
+	<div class="method-info">
+		<div class="pointy-thing"></div>
+
+		<div class="method-info-container">
+			
+			
+			<div class="method-subsection brief-description">
+				<p>Current controller orientation in world space, without the translation</p>
+			</div>
+			
+		    
+
+			<div class="method-subsection method-declaration"><code>@property (nonatomic, readonly) GLKMatrix3 orientation</code></div>
+
+		    
+			
+
+			
+
+			
+
+			
+
+			
+
+			
+
+			
+			<div class="method-subsection declared-in-section">
+				<h4 class="method-subtitle">Declared In</h4>
+				<p><code class="declared-in-ref">BEController.h</code></p>
+			</div>
+			
+			
+		</div>
+	</div>
+</div><div class="section-method">
+	<a name="//api/name/touchPosition" title="touchPosition"></a>
+	<h3 class="method-title"><code><a href="#//api/name/touchPosition">&nbsp;&nbsp;touchPosition</a></code>
+</h3>
+
+	<div class="method-info">
+		<div class="pointy-thing"></div>
+
+		<div class="method-info-container">
+			
+			
+			<div class="method-subsection brief-description">
+				<p>Current touch pad position.</p>
+			</div>
+			
+		    
+
+			<div class="method-subsection method-declaration"><code>@property (nonatomic, readonly) GLKVector2 touchPosition</code></div>
+
+		    
+			
+
+			
+
+			
+
+			
+
+			
+
+			
+
+			
+			<div class="method-subsection declared-in-section">
+				<h4 class="method-subtitle">Declared In</h4>
+				<p><code class="declared-in-ref">BEController.h</code></p>
+			</div>
+			
+			
+		</div>
+	</div>
+</div><div class="section-method">
+	<a name="//api/name/touchStatus" title="touchStatus"></a>
+	<h3 class="method-title"><code><a href="#//api/name/touchStatus">&nbsp;&nbsp;touchStatus</a></code>
+</h3>
+
+	<div class="method-info">
+		<div class="pointy-thing"></div>
+
+		<div class="method-info-container">
+			
+			
+			<div class="method-subsection brief-description">
+				<p>Current touch pad status.</p>
+			</div>
+			
+		    
+
+			<div class="method-subsection method-declaration"><code>@property (nonatomic, readonly) BEControllerTouchStatus touchStatus</code></div>
+
+		    
+			
+
+			
+
+			
+
+			
+
+			
+
+			
+
+			
+			<div class="method-subsection declared-in-section">
+				<h4 class="method-subtitle">Declared In</h4>
+				<p><code class="declared-in-ref">BEController.h</code></p>
+			</div>
+			
+			
+		</div>
+	</div>
+</div><div class="section-method">
+	<a name="//api/name/cameraTransform" title="cameraTransform"></a>
+	<h3 class="method-title"><code><a href="#//api/name/cameraTransform">&nbsp;&nbsp;cameraTransform</a></code>
+</h3>
+
+	<div class="method-info">
+		<div class="pointy-thing"></div>
+
+		<div class="method-info-container">
+			
+			
+			<div class="method-subsection brief-description">
+				<p>Updated camera <a href="#//api/name/transform">transform</a> from BE&rsquo;s camera tracking</p>
+			</div>
+			
+		    
+
+			<div class="method-subsection method-declaration"><code>@property (nonatomic) GLKMatrix4 cameraTransform</code></div>
+
+		    
+			
+
+			
+
+			
+
+			
+
+			
+
+			
+
+			
+			<div class="method-subsection declared-in-section">
+				<h4 class="method-subtitle">Declared In</h4>
+				<p><code class="declared-in-ref">BEController.h</code></p>
+			</div>
+			
+			
+		</div>
+	</div>
+</div><div class="section-method">
+	<a name="//api/name/offsetFromCamera" title="offsetFromCamera"></a>
+	<h3 class="method-title"><code><a href="#//api/name/offsetFromCamera">&nbsp;&nbsp;offsetFromCamera</a></code>
+</h3>
+
+	<div class="method-info">
+		<div class="pointy-thing"></div>
+
+		<div class="method-info-container">
+			
+			
+			<div class="method-subsection brief-description">
+				<p>Relative offset from camera&rsquo;s position, oriented along the camera&rsquo;s forward yaw on a level plane
+X - Distance to the right of camera&rsquo;s forward-level direction.
+Y - Vertical drop from camera height
+Z - Forward distance away from camera
+Default: (0, .30, .10) // Centered, down 30cm, and forward 10cm</p>
+			</div>
+			
+		    
+
+			<div class="method-subsection method-declaration"><code>@property (nonatomic) GLKVector3 offsetFromCamera</code></div>
+
+		    
+			
+
+			
+
+			
+
+			
+
+			
+
+			
+
+			
+			<div class="method-subsection declared-in-section">
+				<h4 class="method-subtitle">Declared In</h4>
+				<p><code class="declared-in-ref">BEController.h</code></p>
+			</div>
+			
+			
+		</div>
+	</div>
+</div><div class="section-method">
+	<a name="//api/name/resetYawToCameraTransform" title="resetYawToCameraTransform"></a>
+	<h3 class="method-title"><code><a href="#//api/name/resetYawToCameraTransform">&ndash;&nbsp;resetYawToCameraTransform</a></code>
+</h3>
+
+	<div class="method-info">
+		<div class="pointy-thing"></div>
+
+		<div class="method-info-container">
+			
+			
+			<div class="method-subsection brief-description">
+				<p>Center the controller&rsquo;s relative Yaw tracking to cameraTransform&rsquo;s</p>
+			</div>
+			
+		    
+
+			<div class="method-subsection method-declaration"><code>- (void)resetYawToCameraTransform</code></div>
+
+		    
+			
+
+			
+
+			
+
+			
+
+			
+
+			
+
+			
+			<div class="method-subsection declared-in-section">
+				<h4 class="method-subtitle">Declared In</h4>
+				<p><code class="declared-in-ref">BEController.h</code></p>
+			</div>
+			
+			
+		</div>
+	</div>
 </div>
 						</div>
 						
@@ -284,7 +631,7 @@
 				<footer>
 					<div class="footer-copyright">
 						
-						<p class="copyright">Copyright &copy; 2017 Occipital. All rights reserved. Updated: 2017-02-24</p>
+						<p class="copyright">Copyright &copy; 2017 Occipital. All rights reserved. Updated: 2017-05-04</p>
 						
 						
 						<p class="generator">Generated by <a href="http://appledoc.gentlebytes.com">appledoc 2.2.1 (build 1333)</a>.</p>

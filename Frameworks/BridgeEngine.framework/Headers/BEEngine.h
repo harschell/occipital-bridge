@@ -19,6 +19,9 @@
 /// if enabled, the app will attempt to load a replay of Structure Sensor data from device. This allows for debugging while the device is plugged in to a development machine.
 BE_API extern NSString* const kBECaptureReplayMode;
 
+/// optionally specifies a custom path to the OCC replay file.
+BE_API extern NSString* const kBECaptureReplayFile;
+
 /// if enabled, the tracker will still output rotation-only updates when it gets lost, based on the IMU.
 BE_API extern NSString* const kBETrackerFallbackOnIMUEnabled;
 
@@ -116,8 +119,14 @@ typedef NS_ENUM(NSInteger, BEOpenGLRenderStyle)
     /// Shaded grayscale.
     BEOpenGLRenderStyleShadedGray                    = 2,
     
+    /// Live iOS camera feed (with occlusions)
+    BEOpenGLRenderStyleColorCamera                   = 3,
+    
+    /// Live iOS camera feed and wireframe overlay on the mapped area
+    BEOpenGLRenderStyleColorCameraAndWireframe       = 4,
+    
     /// Won't apply any shader, assumes a GL program is already set.
-    BEOpenGLRenderStyleCustomShader                  = 3,
+    BEOpenGLRenderStyleCustomShader                  = 5,
 
     NumBEOpenGLRenderStyles
 };

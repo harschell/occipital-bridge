@@ -42,7 +42,7 @@
 
         // Create a hit target and parent it to this node.
         self.target = [[ButtonComponent alloc] initWithImage:[SceneKit pathForImageResourceNamed:@"target-white-128.png"] andBlock:nil];
-        [_target.node.geometry.firstMaterial setTransparency:0.4];
+        [_target.frontMaterial setTransparency:0.5*0.4];
         
         _target.node.categoryBitMask |= RAYCAST_IGNORE_BIT;
         _target.node.geometry.firstMaterial.lightingModelName = SCNLightingModelConstant;
@@ -248,7 +248,7 @@
 }
 
 - (void) gazeStart:(GazeComponent *)gazeComponent intersection:(SCNHitTestResult *)intersection {
-    NSLog(@"SelectableModelComponent - Gaze entered: %@", self.markupName);
+//    NSLog(@"SelectableModelComponent - Gaze entered: %@", self.markupName);
 
     self.gazeActive = YES;
     [self updateTarget];
@@ -258,7 +258,7 @@
 }
 
 - (void) gazeExit:(GazeComponent *)gazeComponent {
-    NSLog(@"SelectableModelComponent - Gaze exited: %@", self.markupName);
+//    NSLog(@"SelectableModelComponent - Gaze exited: %@", self.markupName);
 
     self.gazeActive = NO;
     [self updateTarget];

@@ -40,6 +40,7 @@
         }
         
         if( self.scanEnvironmentShader ) {
+            _scanSound.position = SCNVector3FromGLKVector3(_scanOrigin);
             self.scanEnvironmentShader.scanOrigin = self.scanOrigin;
             self.scanEnvironmentShader.scanRadius = self.scanRadius;
             self.scanEnvironmentShader.scanTime = self.scanTime;
@@ -57,6 +58,7 @@
     self.scanRadius = radius;
     
     if( active ) {
+        _scanSound.position = SCNVector3FromGLKVector3(_scanOrigin);
         [_scanSound play];
     }
 

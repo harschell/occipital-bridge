@@ -25,7 +25,7 @@
 namespace BE
 {
     
-    double nowInSeconds ();
+    BE_API double nowInSeconds ();
 
 } // BE
     
@@ -62,7 +62,7 @@ namespace BE
         TempTest4,
     };
     
-    class KDebugSign
+    class BE_API KDebugSign
     {
     public:
         // Sign post over a region.
@@ -73,7 +73,7 @@ namespace BE
         static void post (KDebugCode code, uintptr_t arg1 = 0, int colorCode = 0);
     };
     
-    class KDebugScopedSign
+    class BE_API KDebugScopedSign
     {
     public:
         KDebugScopedSign(KDebugCode code, uintptr_t arg1 = 0, int colorCode = 0, bool enabled = true)

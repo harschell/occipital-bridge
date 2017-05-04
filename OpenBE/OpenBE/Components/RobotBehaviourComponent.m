@@ -22,6 +22,7 @@
 #import "BehaviourComponents/LookAtCameraBehaviourComponent.h"
 #import "BehaviourComponents/MoveToBehaviourComponent.h"
 #import "BehaviourComponents/PathFindMoveToBehaviourComponent.h"
+#import "BehaviourComponents/ScanBehaviourComponent.h"
 
 #import "../Utils/ComponentUtils.h"
 #import "../Utils/Math.h"
@@ -177,9 +178,9 @@
      {
         MoveRobotEventComponent *moveEventComponent = (MoveRobotEventComponent *)[self.entity componentForClass:MoveRobotEventComponent.class];
         SpawnPortalComponent *spawnPortalComponent = (SpawnPortalComponent*)[self.entity componentForClass:SpawnPortalComponent.class];
-         BOOL canDance = [self isUnfolded] // Make sure Bridget isn't folded up still.
+        BOOL canDance = [self isUnfolded] // Make sure Bridget isn't folded up still.
          && (robotPos.y >= ROBOT_FLYING_THRESHOLD) // Make sure Bridget is not flying in the air.
-         && (self.isIdle || moveEventComponent.isEnabled || spawnPortalComponent.isEnabled );
+         && (self.isIdle || moveEventComponent.isEnabled || spawnPortalComponent.isEnabled);
 
         if( canDance && _duckAndDanceCooldownTime < 0 && _ducking == NO ) {
             NSLog(@"--==** Duck & Dance **==--");
@@ -235,19 +236,19 @@
         // handle special cases
         if( [idleComponent isKindOfClass:[LookAtCameraBehaviourComponent class]] ) {
             [idleComponent runBehaviourFor:attentionSpan callback:nil];
- //       }
-//        else if([idleComponent isKindOfClass:[ScanBehaviourComponent class]] ) {
-//            if(  self.navigationComponent ) {
-//                GLKVector3 target = [self.navigationComponent getRandomPoint:[self.meshControllerComponent getPosition] maxDistance:1.f minY:-2.f maxTry:20];
-//                if( target.y < 999.f ) {
-//                    [self startScan:target];
-//                }
-//            }else {
-//                self.pointsOfInterestIndex += (rand() % 3)-1 + NUM_POINTS_OF_INTEREST; // avoid index of -1
-//                self.pointsOfInterestIndex %= NUM_POINTS_OF_INTEREST;
-//                
-//                [self startScan:self.pointsOfInterest[self.pointsOfInterestIndex]];
-//            }
+        }
+        else if([idleComponent isKindOfClass:[ScanBehaviourComponent class]] ) {
+            if(  self.navigationComponent ) {
+                GLKVector3 target = [self.navigationComponent getRandomPoint:[self.meshControllerComponent getPosition] maxDistance:1.f minY:-2.f maxTry:20];
+                if( target.y < 999.f ) {
+                    [self startScan:target];
+                }
+            }else {
+                self.pointsOfInterestIndex += (rand() % 3)-1 + NUM_POINTS_OF_INTEREST; // avoid index of -1
+                self.pointsOfInterestIndex %= NUM_POINTS_OF_INTEREST;
+                
+                [self startScan:self.pointsOfInterest[self.pointsOfInterestIndex]];
+            }
         } else if([idleComponent isKindOfClass:[MoveToBehaviourComponent class]] ) {
             GLKVector3 target = [self.navigationComponent getRandomPoint:[self.meshControllerComponent getPosition] maxDistance:1.f minY:-.65f maxTry:30];
             if( target.y < 999.f ) {
@@ -284,9 +285,8 @@
 // start different behaviours - wrapper, you could also call the corresponding component direct
 
 - (void) startScan:(GLKVector3)targetPosition {
-
-//    ScanBehaviourComponent * component = (ScanBehaviourComponent *)[self.entity componentForClass:[ScanBehaviourComponent class]];
-//    [component runBehaviourFor:2.f targetPosition:targetPosition callback:nil];
+    ScanBehaviourComponent * component = (ScanBehaviourComponent *)[self.entity componentForClass:[ScanBehaviourComponent class]];
+    [component runBehaviourFor:2.f targetPosition:targetPosition callback:nil];
 }
 
 - (void) startMoveTo:(GLKVector3)targetPosition {

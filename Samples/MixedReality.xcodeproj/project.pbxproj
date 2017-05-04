@@ -200,7 +200,6 @@
 				TargetAttributes = {
 					6F5CA0981C751A4B00A33642 = {
 						CreatedOnToolsVersion = 7.2.1;
-						DevelopmentTeam = TP97HMW84Y;
 						SystemCapabilities = {
 							com.apple.ApplicationGroups.iOS = {
 								enabled = 0;
@@ -373,7 +372,7 @@
 				CLANG_WARN__DUPLICATE_METHOD_MATCH = YES;
 				CODE_SIGN_IDENTITY = "iPhone Developer";
 				"CODE_SIGN_IDENTITY[sdk=iphoneos*]" = "iPhone Developer";
-				DEVELOPMENT_TEAM = TP97HMW84Y;
+				DEVELOPMENT_TEAM = "";
 				ENABLE_STRICT_OBJC_MSGSEND = YES;
 				FRAMEWORK_SEARCH_PATHS = ../Frameworks;
 				GCC_C_LANGUAGE_STANDARD = gnu99;
@@ -418,7 +417,7 @@
 				CODE_SIGN_IDENTITY = "iPhone Developer";
 				"CODE_SIGN_IDENTITY[sdk=iphoneos*]" = "iPhone Developer";
 				COPY_PHASE_STRIP = NO;
-				DEVELOPMENT_TEAM = TP97HMW84Y;
+				DEVELOPMENT_TEAM = "";
 				ENABLE_STRICT_OBJC_MSGSEND = YES;
 				FRAMEWORK_SEARCH_PATHS = ../Frameworks;
 				GCC_C_LANGUAGE_STANDARD = gnu99;

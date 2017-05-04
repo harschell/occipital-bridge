@@ -14,15 +14,19 @@
 @class AudioNode;
 
 /**
-
- Audio Engine class built on top of the lower-level BEAudioEngine class.
- 
+ Audio Engine class built to render audio into the BridgeEngine scene environment.
+ Handles re-initialization based on audio configuration changes and interruptions.
 */
-
 @interface AudioEngine : NSObject
 
 /// Singleton.
 + (AudioEngine*) main;
+
+/**
+ * Check if AudioEngine is currently running.
+ */
+@property (nonatomic, getter=isRunning) BOOL running;
+
 
 /**
  * Single shot audio playback at volume.
@@ -33,6 +37,11 @@
  * Load an audio file and return an audio node.
  */
 - (AudioNode*) loadAudioNamed:(NSString*)name;
+
+/**
+ * Take in the Camera node, and update the listener position and orientation.
+ */
+- (void) updateListenerFromCameraNode:(SCNNode*)cameraNode;
 
 @end
 
@@ -54,6 +63,7 @@
 @property(nonatomic) float volume;
 @property(nonatomic, readonly) float duration;
 @property(nonatomic) BOOL looping;
+@property(nonatomic) SCNVector3 position;
 
 // Internal player object... useful for looping control in the RobotMeshControllerComponent, but normaly don't touch.
 @property(nonatomic, strong) AVAudioPlayerNode *player;

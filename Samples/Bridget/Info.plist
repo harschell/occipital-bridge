@@ -48,7 +48,9 @@
 	<array>
 		<string>io.structure.control</string>
 		<string>io.structure.depth</string>
+		<string>io.structure.visible</string>
 		<string>io.structure.infrared</string>
+		<string>io.structure.client</string>
 	</array>
 	<key>UISupportedInterfaceOrientations</key>
 	<array>

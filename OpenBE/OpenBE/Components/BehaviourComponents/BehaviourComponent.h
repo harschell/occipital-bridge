@@ -5,7 +5,6 @@
  http://structure.io
  */
 
-#import "../../Core/Core.h"
 #import "../../Core/Component.h"
 #import "../RobotBehaviourComponent.h"
 #import "../RobotMeshControllerComponent.h"

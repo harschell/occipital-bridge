@@ -123,9 +123,6 @@ static const SCNMatrix4 defaultPivot = SCNMatrix4MakeRotation(M_PI, 1.0, 0.0, 0.
             kBERecordingOptionsEnabled:
                 @([AppSettings booleanValueFromAppSetting:@"enableRecording"
                        defaultValueIfSettingIsNotInBundle:NO]),
-            kBEEnableStereoScanningBeta:
-                @([AppSettings booleanValueFromAppSetting:@"stereoScanning"
-                       defaultValueIfSettingIsNotInBundle:NO]),
             kBEMapperVolumeResolutionKey:
                 @([AppSettings floatValueFromAppSetting:@"mapperVoxelResolution"
                        defaultValueIfSettingIsNotInBundle:0.02]),
