@@ -1,2 +1,6 @@
-BridgeEngineSample.xcodeproj/project.xcworkspace/xcuserdata
-BridgeEngineSample.xcodeproj/xcuserdata
+## Xcode generated
+xcuserdata/
+
+## Build generated
+build/
+DerivedData/
