@@ -1,4 +1,4 @@
-/*
+    /*
     This file is part of the Structure SDK.
     Copyright © 2016 Occipital, Inc. All rights reserved.
     http://structure.io
@@ -11,6 +11,8 @@
 #import <BridgeEngine/BEController.h>
 #import "CustomRenderMode.h"
 #import <cassert>
+
+
 
 //------------------------------------------------------------------------------
 
@@ -29,6 +31,7 @@ static const SCNMatrix4 defaultPivot = SCNMatrix4MakeRotation(M_PI, 1.0, 0.0, 0.
 @property (strong) SCNNode *  treeNode;
 @property (strong) SCNNode * chairNode;
 @property (strong) SCNNode *  giftNode;
+@property (strong) SCNNode * skyNode;
 
 @property (strong) SCNNode *  highlightNode;
 @property (strong) SCNNode *  reticleNode;
@@ -51,6 +54,7 @@ static const SCNMatrix4 defaultPivot = SCNMatrix4MakeRotation(M_PI, 1.0, 0.0, 0.
 + (SCNNode*) loadNodeNamed:(NSString*)nodeName fromSceneNamed:(NSString*)sceneName
 {
     SCNScene* scene = [SCNScene sceneNamed:sceneName];
+    
     if (!scene)
     {
         NSLog(@"Could not load scene named: %@", sceneName);
@@ -96,7 +100,7 @@ static const SCNMatrix4 defaultPivot = SCNMatrix4MakeRotation(M_PI, 1.0, 0.0, 0.
     // Here is a list of markup we'll use for our sample.
     // If the user decides, the locations of this markup will be saved on device.
 
-    _markupNameList = @[ @"tree", @"chair", @"gift" ];
+    _markupNameList = @[ @"tree", @"chair", @"gift"];
 
     BECaptureReplayMode replayMode = BECaptureReplayModeDisabled;
     if ([AppSettings booleanValueFromAppSetting:@"replayCapture"
@@ -141,7 +145,7 @@ static const SCNMatrix4 defaultPivot = SCNMatrix4MakeRotation(M_PI, 1.0, 0.0, 0.
 - (void)viewDidAppear:(BOOL)animated
 {
     [super viewDidAppear:animated];
-    
+
     // Here we initialize two gesture recognizers as a way to expose features.
     
     {
@@ -179,7 +183,7 @@ static const SCNMatrix4 defaultPivot = SCNMatrix4MakeRotation(M_PI, 1.0, 0.0, 0.
 {
     // For this experience, let's switch to a mode with AR objects composited with the passthrough camera.
     
-    [_mixedReality setRenderStyle:BERenderStyleSceneKitAndColorCamera withDuration:0.5];
+    [_mixedReality setRenderStyle:BERenderStyleSceneKitAndColorCameraAndWireframe withDuration:0.5];
 
     _experienceIsRunning = YES;
 }
@@ -198,6 +202,7 @@ static const SCNMatrix4 defaultPivot = SCNMatrix4MakeRotation(M_PI, 1.0, 0.0, 0.
     NSLog(@"Markup Name is %@, at (%f, %f, %f)", markupName, markupNode.position.x, markupNode.position.y, markupNode.position.z);
     
     SCNNode * objectNode = nil;
+    
     
     if ([markupName isEqualToString: @"tree"])
     {
@@ -218,7 +223,6 @@ static const SCNMatrix4 defaultPivot = SCNMatrix4MakeRotation(M_PI, 1.0, 0.0, 0.
         objectNode = self.giftNode;
         objectNode.position = markupNode.position;
     }
-    
     // Regardless of which object was moved, let's set it visible now.
 
     objectNode.hidden = NO;
@@ -324,26 +328,30 @@ static const SCNMatrix4 defaultPivot = SCNMatrix4MakeRotation(M_PI, 1.0, 0.0, 0.
     if (foundAllMarkup)
     {
         [self startExperience];
+        _mixedReality.sceneKitCamera.zFar = 3000;
     }
     else
     {
         [_mixedReality startMarkupEditing];
     }
-    
-    // Load SceneKit assets.
 
+    // Load SceneKit assets.
     self.treeNode  = [[self class] loadNodeNamed:@"Tree"  fromSceneNamed:@ASSETS_DIR"/tree.dae"];
     self.chairNode = [[self class] loadNodeNamed:@"Chair" fromSceneNamed:@ASSETS_DIR"/chair.dae"];
     self.giftNode  = [[self class] loadNodeNamed:@"Gift"  fromSceneNamed:@ASSETS_DIR"/gift.dae"];
     
+    //Load Sky
+    self.skyNode = [[self class] loadNodeNamed:@"Sky" fromSceneNamed:@ASSETS_DIR"/sky.dae"];
+    self.skyNode.position = SCNVector3Zero;
+    self.skyNode.transform = SCNMatrix4Identity;
+    
     // Add assets to the world node.
-
     [_mixedReality.worldNodeWhenRelocalized addChildNode:self.treeNode];
     [_mixedReality.worldNodeWhenRelocalized addChildNode:self.chairNode];
     [_mixedReality.worldNodeWhenRelocalized addChildNode:self.giftNode];
+    [_mixedReality.worldNodeWhenRelocalized addChildNode:self.skyNode];
     
     // Hide all the objects initially (until markup positions them).
-
     [self.treeNode  setHidden:YES];
     [self.chairNode setHidden:YES];
     [self.giftNode  setHidden:YES];
@@ -380,13 +388,30 @@ static const SCNMatrix4 defaultPivot = SCNMatrix4MakeRotation(M_PI, 1.0, 0.0, 0.
     // add this as a child of Bridge, not of the scanned world. This will make it follow the user's gaze.
     [_mixedReality.localDeviceNode addChildNode:self.reticleNode];
     
+    
     // demonstrate using custom render modes
     CustomRenderMode *customRenderMode = [[CustomRenderMode alloc] init];
     [customRenderMode compile];
     [_mixedReality setCustomRenderStyle:customRenderMode];
     
+    // portal
+    ColorOverlayComponent *colorOverlay = [[ColorOverlayComponent alloc] init];
+    [[[SceneManager main] createEntity] addComponent:colorOverlay];
+    
+    _vrWorld = [[VRWorldComponent alloc] init];
+    [[[SceneManager main] createEntity] addComponent:_vrWorld];
+    _portal = [[PortalComponent alloc] init];
+    _portal.mixedReality = _mixedReality;
+    _portal.overlayComponent = colorOverlay;
+    _vrWorld.portalComponent = _portal;
+    _portal.robotEntity = self.robotEntity;
+    _portal.stereoRendering = stereo;
+    //_portal.interactive = [BEAppSettings booleanValueFromAppSetting:SETTING_PLAY_SCRIPT defaultValueIfSettingIsNotInBundle:NO] == NO;
+    [[[SceneManager main] createEntity] addComponent:_portal];
+
+    
     // uncomment this line to trigger the custom rendering mode.
-    // [_mixedReality setRenderStyle:BERenderStyleSceneKitAndCustomEnvironmentShader withDuration:1];
+    //[_mixedReality setRenderStyle:BERenderStyleSceneKitAndCustomEnvironmentShader withDuration:1];
 
 }
 
