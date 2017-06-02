@@ -117,6 +117,7 @@
 		6DD7C9481E5CF628006AAC6F /* ColorOverlayComponent.mm in Sources */ = {isa = PBXBuildFile; fileRef = 6DD7C9461E5CF628006AAC6F /* ColorOverlayComponent.mm */; };
 		6DD7C94B1E5CF646006AAC6F /* SpawnComponent.h in Headers */ = {isa = PBXBuildFile; fileRef = 6DD7C9491E5CF646006AAC6F /* SpawnComponent.h */; };
 		6DD7C94C1E5CF646006AAC6F /* SpawnComponent.m in Sources */ = {isa = PBXBuildFile; fileRef = 6DD7C94A1E5CF646006AAC6F /* SpawnComponent.m */; };
+		BA5F3F061EE0949D00D1DB9A /* OpenBE.xcodeproj in Frameworks */ = {isa = PBXBuildFile; fileRef = BA5F3F031EE0940200D1DB9A /* OpenBE.xcodeproj */; };
 /* End PBXBuildFile section */
 
 /* Begin PBXFileReference section */
@@ -232,6 +233,7 @@
 		6DD7C9461E5CF628006AAC6F /* ColorOverlayComponent.mm */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.cpp.objcpp; path = ColorOverlayComponent.mm; sourceTree = "<group>"; };
 		6DD7C9491E5CF646006AAC6F /* SpawnComponent.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; path = SpawnComponent.h; sourceTree = "<group>"; };
 		6DD7C94A1E5CF646006AAC6F /* SpawnComponent.m */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.objc; path = SpawnComponent.m; sourceTree = "<group>"; };
+		BA5F3F031EE0940200D1DB9A /* OpenBE.xcodeproj */ = {isa = PBXFileReference; lastKnownFileType = "wrapper.pb-project"; path = OpenBE.xcodeproj; sourceTree = "<group>"; };
 /* End PBXFileReference section */
 
 /* Begin PBXFrameworksBuildPhase section */
@@ -239,6 +241,7 @@
 			isa = PBXFrameworksBuildPhase;
 			buildActionMask = 2147483647;
 			files = (
+				BA5F3F061EE0949D00D1DB9A /* OpenBE.xcodeproj in Frameworks */,
 				6D11A5421E4954EF00EA8F3C /* CoreBluetooth.framework in Frameworks */,
 				2DE0874A1DFFF8C4000FF474 /* GameController.framework in Frameworks */,
 				2DC3EA431E005CC9007C3C02 /* BridgeEngine.framework in Frameworks */,
@@ -420,11 +423,17 @@
 		2DE087481DFFF8C4000FF474 /* Frameworks */ = {
 			isa = PBXGroup;
 			children = (
+				BA5F3F031EE0940200D1DB9A /* OpenBE.xcodeproj */,
 				6D11A5411E4954EF00EA8F3C /* CoreBluetooth.framework */,
 				2DC3EA421E005CC9007C3C02 /* BridgeEngine.framework */,
 				2DE087491DFFF8C4000FF474 /* GameController.framework */,
 			);
 			name = Frameworks;
+			sourceTree = "<group>";
+		};
+		BA5F3F041EE0940200D1DB9A /* Products */ = {
+			isa = PBXGroup;
+			name = Products;
 			sourceTree = "<group>";
 		};
 /* End PBXGroup section */
@@ -541,6 +550,12 @@
 			mainGroup = 2DCD6FE31DFFEED3003691AE;
 			productRefGroup = 2DCD6FEE1DFFEED3003691AE /* Products */;
 			projectDirPath = "";
+			projectReferences = (
+				{
+					ProductGroup = BA5F3F041EE0940200D1DB9A /* Products */;
+					ProjectRef = BA5F3F031EE0940200D1DB9A /* OpenBE.xcodeproj */;
+				},
+			);
 			projectRoot = "";
 			targets = (
 				2DCD6FEC1DFFEED3003691AE /* OpenBE */,

@@ -22,7 +22,19 @@
 		6F85C2751C7E69C600152850 /* Assets.scnassets in Resources */ = {isa = PBXBuildFile; fileRef = 6F85C2741C7E69C600152850 /* Assets.scnassets */; };
 		6FF00A3B1C812D61009A3BCD /* Settings.bundle in Resources */ = {isa = PBXBuildFile; fileRef = 6FF00A3A1C812D61009A3BCD /* Settings.bundle */; };
 		773DED7A1C8F8BF1006233EA /* AppSettings.mm in Sources */ = {isa = PBXBuildFile; fileRef = 773DED791C8F8BF1006233EA /* AppSettings.mm */; };
+		BA5F3F081EE094D800D1DB9A /* OpenBE.framework in Frameworks */ = {isa = PBXBuildFile; fileRef = BA5129151EE092980044E0F0 /* OpenBE.framework */; };
+		BA5F3F091EE094EB00D1DB9A /* OpenBE.framework in Embed Frameworks */ = {isa = PBXBuildFile; fileRef = BA5129151EE092980044E0F0 /* OpenBE.framework */; settings = {ATTRIBUTES = (CodeSignOnCopy, RemoveHeadersOnCopy, ); }; };
 /* End PBXBuildFile section */
+
+/* Begin PBXContainerItemProxy section */
+		BA5129141EE092980044E0F0 /* PBXContainerItemProxy */ = {
+			isa = PBXContainerItemProxy;
+			containerPortal = BA5129101EE092980044E0F0 /* OpenBE.xcodeproj */;
+			proxyType = 2;
+			remoteGlobalIDString = 2DCD6FED1DFFEED3003691AE;
+			remoteInfo = OpenBE;
+		};
+/* End PBXContainerItemProxy section */
 
 /* Begin PBXCopyFilesBuildPhase section */
 		6F958BFC1C752AF90029A3CE /* Embed Frameworks */ = {
@@ -31,6 +43,7 @@
 			dstPath = "";
 			dstSubfolderSpec = 10;
 			files = (
+				BA5F3F091EE094EB00D1DB9A /* OpenBE.framework in Embed Frameworks */,
 				2DC3EA0E1E005B72007C3C02 /* BridgeEngine.framework in Embed Frameworks */,
 			);
 			name = "Embed Frameworks";
@@ -79,6 +92,7 @@
 		773DED791C8F8BF1006233EA /* AppSettings.mm */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.cpp.objcpp; path = AppSettings.mm; sourceTree = "<group>"; };
 		7E5132211AEBF3D000B75178 /* Metal.framework */ = {isa = PBXFileReference; lastKnownFileType = wrapper.framework; name = Metal.framework; path = System/Library/Frameworks/Metal.framework; sourceTree = SDKROOT; };
 		94892A221BB20AA300E8C5E9 /* GameController.framework */ = {isa = PBXFileReference; lastKnownFileType = wrapper.framework; name = GameController.framework; path = System/Library/Frameworks/GameController.framework; sourceTree = SDKROOT; };
+		BA5129101EE092980044E0F0 /* OpenBE.xcodeproj */ = {isa = PBXFileReference; lastKnownFileType = "wrapper.pb-project"; name = OpenBE.xcodeproj; path = ../OpenBE/OpenBE.xcodeproj; sourceTree = "<group>"; };
 		DA28568D1C6E546E0030250A /* CoreBluetooth.framework */ = {isa = PBXFileReference; lastKnownFileType = wrapper.framework; name = CoreBluetooth.framework; path = System/Library/Frameworks/CoreBluetooth.framework; sourceTree = SDKROOT; };
 /* End PBXFileReference section */
 
@@ -87,6 +101,7 @@
 			isa = PBXFrameworksBuildPhase;
 			buildActionMask = 2147483647;
 			files = (
+				BA5F3F081EE094D800D1DB9A /* OpenBE.framework in Frameworks */,
 				2C7E5C7C1E1C61CF002F86AF /* OpenGLES.framework in Frameworks */,
 				2DC3EA0D1E005B5D007C3C02 /* BridgeEngine.framework in Frameworks */,
 				6F2E92131C7E735000C43E8A /* UIKit.framework in Frameworks */,
@@ -100,6 +115,7 @@
 		2AFC8D6B176F966000F7F3B5 = {
 			isa = PBXGroup;
 			children = (
+				BA5129101EE092980044E0F0 /* OpenBE.xcodeproj */,
 				6F5CA09A1C751A4B00A33642 /* MixedReality */,
 				2AFC8D76176F966000F7F3B5 /* Frameworks */,
 				2AFC8D75176F966000F7F3B5 /* Products */,
@@ -168,6 +184,14 @@
 			path = MixedReality;
 			sourceTree = "<group>";
 		};
+		BA5129111EE092980044E0F0 /* Products */ = {
+			isa = PBXGroup;
+			children = (
+				BA5129151EE092980044E0F0 /* OpenBE.framework */,
+			);
+			name = Products;
+			sourceTree = "<group>";
+		};
 /* End PBXGroup section */
 
 /* Begin PBXNativeTarget section */
@@ -221,12 +245,28 @@
 			mainGroup = 2AFC8D6B176F966000F7F3B5;
 			productRefGroup = 2AFC8D75176F966000F7F3B5 /* Products */;
 			projectDirPath = "";
+			projectReferences = (
+				{
+					ProductGroup = BA5129111EE092980044E0F0 /* Products */;
+					ProjectRef = BA5129101EE092980044E0F0 /* OpenBE.xcodeproj */;
+				},
+			);
 			projectRoot = "";
 			targets = (
 				6F5CA0981C751A4B00A33642 /* MixedReality */,
 			);
 		};
 /* End PBXProject section */
+
+/* Begin PBXReferenceProxy section */
+		BA5129151EE092980044E0F0 /* OpenBE.framework */ = {
+			isa = PBXReferenceProxy;
+			fileType = wrapper.framework;
+			path = OpenBE.framework;
+			remoteRef = BA5129141EE092980044E0F0 /* PBXContainerItemProxy */;
+			sourceTree = BUILT_PRODUCTS_DIR;
+		};
+/* End PBXReferenceProxy section */
 
 /* Begin PBXResourcesBuildPhase section */
 		6F5CA0971C751A4B00A33642 /* Resources */ = {
@@ -390,6 +430,7 @@
 				GCC_WARN_UNINITIALIZED_AUTOS = YES_AGGRESSIVE;
 				GCC_WARN_UNUSED_FUNCTION = YES;
 				GCC_WARN_UNUSED_VARIABLE = YES;
+				HEADER_SEARCH_PATHS = ../OpenBE;
 				INFOPLIST_FILE = MixedReality/Info.plist;
 				LD_RUNPATH_SEARCH_PATHS = "$(inherited) @executable_path/Frameworks";
 				MTL_ENABLE_DEBUG_INFO = YES;
@@ -429,6 +470,7 @@
 				GCC_WARN_UNINITIALIZED_AUTOS = YES_AGGRESSIVE;
 				GCC_WARN_UNUSED_FUNCTION = YES;
 				GCC_WARN_UNUSED_VARIABLE = YES;
+				HEADER_SEARCH_PATHS = ../OpenBE;
 				INFOPLIST_FILE = MixedReality/Info.plist;
 				LD_RUNPATH_SEARCH_PATHS = "$(inherited) @executable_path/Frameworks";
 				MTL_ENABLE_DEBUG_INFO = NO;

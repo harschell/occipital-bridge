@@ -48,7 +48,6 @@ typedef NS_ENUM (NSUInteger, PortalState) {
 
 @interface PortalComponent ()
 
-@property(nonatomic, strong) SCNNode *node;
 @property(nonatomic, readwrite) BOOL open;
 
 @property(nonatomic, strong) SCNNode *portalGeometryNode;
@@ -172,6 +171,7 @@ typedef NS_ENUM (NSUInteger, PortalState) {
         [_node addChildNode:self.portalFrameNode];
 # else
         self.portalFrameNode = [SCNNode firstNodeFromSceneNamed:@"Frame.dae"];
+        self.portalFrameNode.name = @"Frame";
         float scaleFrame = 1.0*PORTAL_HEIGHT/2.0;
         self.portalFrameNode.scale = SCNVector3Make(1.1, scaleFrame, 1);
         self.portalFrameNode.eulerAngles = SCNVector3Make(M_PI, 0, 0);
@@ -442,13 +442,13 @@ typedef NS_ENUM (NSUInteger, PortalState) {
         NSLog( _isInsideAR ? @"Inside AR" : @"Inside VR" );
         
 //         a hack, but if you're in VR, always render Robot:
-        if( !self.isInsideAR ) {
-           [((GeometryComponent *)[self.robotEntity componentForClass:[GeometryComponent class]]).node
-                setRenderingOrderRecursively:(VR_WORLD_RENDERING_ORDER+6)];
-        } else {
-           [((GeometryComponent *)[self.robotEntity componentForClass:[GeometryComponent class]]).node
-                setRenderingOrderRecursively:1];
-        }
+//        if( !self.isInsideAR ) {
+//           [((GeometryComponent *)[self.robotEntity componentForClass:[GeometryComponent class]]).node
+//                setRenderingOrderRecursively:(VR_WORLD_RENDERING_ORDER+6)];
+//        } else {
+//           [((GeometryComponent *)[self.robotEntity componentForClass:[GeometryComponent class]]).node
+//                setRenderingOrderRecursively:1];
+//        }
     }
     
     self.oldCameraPos = newCameraPos;
@@ -495,18 +495,18 @@ typedef NS_ENUM (NSUInteger, PortalState) {
     }
     
     // If we're interactive, then Enable/Disable the BeamUI component.
-    if( self.interactive ) {
-        BeamUIBehaviourComponent *beamUI = (BeamUIBehaviourComponent*)[self.robotEntity componentForClass:[BeamUIBehaviourComponent class]];
-        [beamUI setEnabled:_isInsideAR];
-        if( _isInsideAR == NO && _open == NO ) {
-            be_dbg("We're inside VR, and portal is open, re-open and stop BeamUI");
-            self.open = YES; // re-open on entering VR.
-            
-            if( [beamUI isRunning] ) {  // Also close up the BeamUI if it's currently running.
-                [beamUI stopRunning];
-            }
-        }
-    }
+//    if( self.interactive ) {
+//        BeamUIBehaviourComponent *beamUI = (BeamUIBehaviourComponent*)[self.robotEntity componentForClass:[BeamUIBehaviourComponent class]];
+//        [beamUI setEnabled:_isInsideAR];
+//        if( _isInsideAR == NO && _open == NO ) {
+//            be_dbg("We're inside VR, and portal is open, re-open and stop BeamUI");
+//            self.open = YES; // re-open on entering VR.
+//            
+//            if( [beamUI isRunning] ) {  // Also close up the BeamUI if it's currently running.
+//                [beamUI stopRunning];
+//            }
+//        }
+//    }
 }
 
 # ifdef USE_OLD_PORTAL_FRAME
@@ -542,6 +542,7 @@ typedef NS_ENUM (NSUInteger, PortalState) {
     _open = NO;
     
     self.node = [SCNNode node];
+    self.node.name = @"PortalNode";
     [[Scene main].rootNode addChildNode:_node];
 
     self.portalGeometryTransformNode = [SCNNode node];

@@ -81,7 +81,9 @@ typedef NS_ENUM (NSUInteger, PortalMode) {
 
 @property(nonatomic, weak) BEMixedRealityMode *mixedReality;
 // @property(nonatomic, strong) SCNNode *node; (protect the node)
-@property(nonatomic, strong) GKEntity *robotEntity;
+//@property(nonatomic, strong) GKEntity *robotEntity;
+
+@property(nonatomic, strong) SCNNode *node;
 @property(nonatomic) bool isInsideAR;
 @property(nonatomic) bool stereoRendering;
 @property(nonatomic) bool interactive;

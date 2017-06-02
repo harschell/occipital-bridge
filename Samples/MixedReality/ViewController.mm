@@ -12,7 +12,28 @@
 #import "CustomRenderMode.h"
 #import <cassert>
 
+#import <OpenBE/Components/RobotBehaviourComponent.h>
+#import <OpenBE/Components/RobotActionComponent.h>
+#import <OpenBE/Components/RobotMeshControllerComponent.h>
+#import <OpenBE/Components/AnimationComponent.h>
+#import <OpenBE/Components/GazeComponent.h>
+#import <OpenBE/Components/FixedSizeReticleComponent.h>
+#import <OpenBE/Components/BlockDemoReticleComponent.h>
+#import <OpenBE/Components/RobotSeesMeComponent.h>
+#import <OpenBE/Components/RobotBodyEmojiComponent.h>
+#import <OpenBE/Components/RobotVemojiComponent.h>
+#import <OpenBE/Components/ButtonContainerComponent.h>
+#import <OpenBE/Components/ButtonComponent.h>
+#import <OpenBE/Components/MoveRobotEventComponent.h>
+#import <OpenBE/Components/FetchEventComponent.h>
+#import <OpenBE/Components/BeamComponent.h>
+#import <OpenBE/Components/ScanEventComponent.h>
+#import <OpenBE/Components/ScanComponent.h>
+#import <OpenBE/Components/SpawnComponent.h>
+#import <OpenBE/Components/SpawnPortalComponent.h>
+#import <OpenBE/Components/VRWorldComponent.h>
 
+#import "OpenBE/Shaders/ScanEnvironmentShader.h"
 
 //------------------------------------------------------------------------------
 
@@ -32,6 +53,7 @@ static const SCNMatrix4 defaultPivot = SCNMatrix4MakeRotation(M_PI, 1.0, 0.0, 0.
 @property (strong) SCNNode * chairNode;
 @property (strong) SCNNode *  giftNode;
 @property (strong) SCNNode * skyNode;
+@property (strong) SCNNode * portalNode;
 
 @property (strong) SCNNode *  highlightNode;
 @property (strong) SCNNode *  reticleNode;
@@ -49,6 +71,9 @@ static const SCNMatrix4 defaultPivot = SCNMatrix4MakeRotation(M_PI, 1.0, 0.0, 0.
     BEMixedRealityMode* _mixedReality;
     NSArray*            _markupNameList;
     BOOL                _experienceIsRunning;
+    VRWorldComponent *_vrWorld;
+    PortalComponent *_portal;
+
 }
 
 + (SCNNode*) loadNodeNamed:(NSString*)nodeName fromSceneNamed:(NSString*)sceneName
@@ -100,7 +125,7 @@ static const SCNMatrix4 defaultPivot = SCNMatrix4MakeRotation(M_PI, 1.0, 0.0, 0.
     // Here is a list of markup we'll use for our sample.
     // If the user decides, the locations of this markup will be saved on device.
 
-    _markupNameList = @[ @"tree", @"chair", @"gift"];
+    _markupNameList = @[ @"tree", @"chair", @"gift", @"portal"];
 
     BECaptureReplayMode replayMode = BECaptureReplayModeDisabled;
     if ([AppSettings booleanValueFromAppSetting:@"replayCapture"
@@ -222,9 +247,12 @@ static const SCNMatrix4 defaultPivot = SCNMatrix4MakeRotation(M_PI, 1.0, 0.0, 0.
 
         objectNode = self.giftNode;
         objectNode.position = markupNode.position;
+    } else if ([markupName isEqualToString:@"portal"]) {
+        objectNode = self.portalNode;
+        objectNode.position = markupNode.position;
     }
+    
     // Regardless of which object was moved, let's set it visible now.
-
     objectNode.hidden = NO;
 }
 
@@ -404,15 +432,21 @@ static const SCNMatrix4 defaultPivot = SCNMatrix4MakeRotation(M_PI, 1.0, 0.0, 0.
     _portal.mixedReality = _mixedReality;
     _portal.overlayComponent = colorOverlay;
     _vrWorld.portalComponent = _portal;
-    _portal.robotEntity = self.robotEntity;
-    _portal.stereoRendering = stereo;
+    _portal.stereoRendering = YES;
     //_portal.interactive = [BEAppSettings booleanValueFromAppSetting:SETTING_PLAY_SCRIPT defaultValueIfSettingIsNotInBundle:NO] == NO;
-    [[[SceneManager main] createEntity] addComponent:_portal];
-
+    GKEntity* _portalEntity = [[SceneManager main] createEntity];
+    [_portalEntity addComponent:_portal];
+    
+    self.portalNode = [_portal node];
+    
+    
+    
     
     // uncomment this line to trigger the custom rendering mode.
     //[_mixedReality setRenderStyle:BERenderStyleSceneKitAndCustomEnvironmentShader withDuration:1];
 
+    // Ready to start the Scene Manager- this will start all the components in the scene.
+    [[SceneManager main] startWithMixedRealityMode:_mixedReality];
 }
 
 - (void)mixedRealityMarkupEditingEnded
@@ -429,6 +463,17 @@ static const SCNMatrix4 defaultPivot = SCNMatrix4MakeRotation(M_PI, 1.0, 0.0, 0.
 
 - (void)mixedRealityUpdateAtTime:(NSTimeInterval)time
 {
+    
+    // If we've waited for a second, spawn the portal:
+    {
+        static NSTimeInterval startTime = 0;
+        if (time - startTime > 1.0) {
+            [_portal openPortalOnFloorPosition:SCNVector3Zero
+                                  facingTarget:SCNVector3FromGLKVector3([Camera main].position)
+                                     toVRWorld:_vrWorld];
+
+        }
+    }
     // This method is called before rendering each frame.
     // It is safe to modify SceneKit objects from here.
     
