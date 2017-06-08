@@ -4,3 +4,5 @@ xcuserdata/
 ## Build generated
 build/
 DerivedData/
+workspace.xml
+tasks.xml
