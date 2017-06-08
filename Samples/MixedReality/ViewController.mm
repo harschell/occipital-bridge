@@ -438,6 +438,7 @@ static const SCNMatrix4 defaultPivot = SCNMatrix4MakeRotation(M_PI, 1.0, 0.0, 0.
     //_portal.interactive = [BEAppSettings booleanValueFromAppSetting:SETTING_PLAY_SCRIPT defaultValueIfSettingIsNotInBundle:NO] == NO;
     GKEntity* _portalEntity = [[SceneManager main] createEntity];
     [_portalEntity addComponent:_portal];
+    [[EventManager main] addGlobalEventComponent:_portal];
     
     self.portalNode = [_portal node];
     
@@ -465,15 +466,24 @@ static const SCNMatrix4 defaultPivot = SCNMatrix4MakeRotation(M_PI, 1.0, 0.0, 0.
 
 - (void)mixedRealityUpdateAtTime:(NSTimeInterval)time
 {
+    // this updates all components
+    [[SceneManager main] updateAtTime:time mixedRealityMode:_mixedReality];
     
     // If we've waited for a second, spawn the portal:
     {
-        static NSTimeInterval startTime = 0;
-        if (time - startTime > 1.0) {
-            [_portal openPortalOnFloorPosition:SCNVector3Zero
-                                  facingTarget:SCNVector3FromGLKVector3([Camera main].position)
-                                     toVRWorld:_vrWorld];
-
+        if (startTime == 0 && time > 1.0) {
+            startTime = time;
+        }
+        if (startTime != 0) {
+            static bool started = false;
+            if (time - startTime > 8.0 && !started) {
+                _vrWorld.mode = VRWorldRobotRoom;
+                [_vrWorld setEnabled:YES];
+                [_portal openPortalOnFloorPosition:SCNVector3Zero
+                                      facingTarget:SCNVector3FromGLKVector3([Camera main].position)
+                                         toVRWorld:_vrWorld];
+                started = true;
+            }
         }
     }
     // This method is called before rendering each frame.
