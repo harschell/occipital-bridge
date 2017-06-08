@@ -101,21 +101,25 @@ static const SCNMatrix4 defaultPivot = SCNMatrix4MakeRotation(M_PI, 1.0, 0.0, 0.
     return node;
 }
 
-+ (void) printSceneNodes:(SCNNode*)rootNode
++ (void) printSceneNodes:(SCNNode*)rootNode showHidden:(bool)hidden
 {
-    [self printSceneNodes:rootNode withLevel:0];
+    [self printSceneNodes:rootNode withLevel:0 showHidden:hidden];
 }
 
-+ (void) printSceneNodes:(SCNNode*)rootNode withLevel:(int)level
++ (void) printSceneNodes:(SCNNode*)rootNode withLevel:(int)level showHidden:(bool)hidden
 {
-    for (int i = 0; i < level * 4; i++)
-    {
+    for (int i = 0; i < level * 4; i++) {
         printf(" ");
     }
-    printf("%s\n", [[rootNode name] UTF8String]);
-    for (SCNNode* child in [rootNode childNodes])
-    {
-        [self printSceneNodes:child withLevel:level + 1];
+    
+    if (hidden && [rootNode isHidden]) {
+        printf("%s [Hidden]\n", [[rootNode name] UTF8String]);
+    } else {
+        printf("%s\n", [[rootNode name] UTF8String]);
+    }
+    
+    for (SCNNode* child in [rootNode childNodes]) {
+        [self printSceneNodes:child withLevel:level + 1 showHidden:hidden];
     }
 }
 
