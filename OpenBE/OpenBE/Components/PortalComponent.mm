@@ -546,9 +546,11 @@ typedef NS_ENUM (NSUInteger, PortalState) {
     [[Scene main].rootNode addChildNode:_node];
 
     self.portalGeometryTransformNode = [SCNNode node];
+    self.portalGeometryTransformNode.name = @"portalGeometryTransform";
     [_node addChildNode:self.portalGeometryTransformNode];
 
     self.portalCrossingTransformNode = [SCNNode node];
+    self.portalCrossingTransformNode.name = @"portalCrossingTransform";
     [_node addChildNode:_portalCrossingTransformNode];
 
     
@@ -654,5 +656,11 @@ typedef NS_ENUM (NSUInteger, PortalState) {
     }
 
 }
+
+
+- (bool) touchBeganButton:(uint8_t)button forward:(GLKVector3)touchForward hit:(SCNHitTestResult *) hit { return YES; };
+- (bool) touchMovedButton:(uint8_t)button forward:(GLKVector3)touchForward hit:(SCNHitTestResult *) hit { return YES; };
+- (bool) touchEndedButton:(uint8_t)button forward:(GLKVector3)touchForward hit:(SCNHitTestResult *) hit { return YES; };
+- (bool) touchCancelledButton:(uint8_t)button forward:(GLKVector3)touchForward hit:(SCNHitTestResult *) hit { return YES; };
 
 @end

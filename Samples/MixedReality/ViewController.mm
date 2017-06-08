@@ -34,6 +34,7 @@
 #import <OpenBE/Components/VRWorldComponent.h>
 
 #import "OpenBE/Shaders/ScanEnvironmentShader.h"
+#import "OpenBE/Utils/SceneKitExtensions.h"
 
 //------------------------------------------------------------------------------
 
@@ -73,6 +74,7 @@ static const SCNMatrix4 defaultPivot = SCNMatrix4MakeRotation(M_PI, 1.0, 0.0, 0.
     BOOL                _experienceIsRunning;
     VRWorldComponent *_vrWorld;
     PortalComponent *_portal;
+    NSTimeInterval startTime;
 
 }
 
@@ -90,7 +92,7 @@ static const SCNMatrix4 defaultPivot = SCNMatrix4MakeRotation(M_PI, 1.0, 0.0, 0.
     if (!node)
     {
         NSLog(@"Could not find node (%@) in scene named: %@\nHere's all the nodes I could find in the scene:\n", nodeName, sceneName);
-        [self printSceneNodes:scene.rootNode];
+        [self printSceneNodes:scene.rootNode showHidden:false];
         assert(node);
     }
 

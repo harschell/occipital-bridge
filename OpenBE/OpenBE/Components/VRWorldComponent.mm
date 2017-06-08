@@ -78,14 +78,17 @@
     [super start];
     
     self.node = [[SCNNode alloc] init];
+    self.node.name = @"VR World";
     _node.position = SCNVector3Make(0, .01, 0); // Give a 1cm offset, so we don't get co-planar z-fighting between VR world and real world floor.
 #ifdef ENABLE_ROBOTROOM
     // ------ Robot Room ----
     self.robotRoomNode = [SCNNode firstNodeFromSceneNamed:@"RobotRoom.dae"];
+    self.robotRoomNode.name = @"Robot Room";
     //    _robotRoomNode.rotation = SCNVector4Make(1, 0, 0, M_PI);
     [_node addChildNode:_robotRoomNode];
     
     NSAssert(_node != nil, @"Could not load the room scene");
+    
     // Look for the hinge objects.
     NSArray *hingeNames = @[@"Hinge_1",@"Hinge_2",@"Hinge_3",@"Hinge_4",@"Hinge_5",@"Hinge_6",@"Hinge_7",@"Hinge_8",
                             @"Hinge_9",@"Hinge_10",@"Hinge_11",@"Hinge_12",@"Hinge_13",@"Hinge_14",@"Hinge_15",@"Hinge_16"];
@@ -135,6 +138,7 @@
     
     // ------ Bookstore ----
     self.bookstoreNode = [SCNNode firstNodeFromSceneNamed:@"bookstore.dae"];
+    self.bookstoreNode.name = @"Bookstore";
     [_node addChildNode:_bookstoreNode];
     [_node setRenderingOrderRecursively:VR_WORLD_RENDERING_ORDER];
     [_node setCastsShadowRecursively:NO];

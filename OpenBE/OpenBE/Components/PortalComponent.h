@@ -77,8 +77,7 @@ typedef NS_ENUM (NSUInteger, PortalMode) {
  *
  * These nodes require manual updates to their transform if the portal node's transform changes.
  */
-@interface PortalComponent : Component  <SCNNodeRendererDelegate, PortalComponentJS>
-
+@interface PortalComponent : Component  <EventComponentProtocol, SCNNodeRendererDelegate, PortalComponentJS>
 @property(nonatomic, weak) BEMixedRealityMode *mixedReality;
 // @property(nonatomic, strong) SCNNode *node; (protect the node)
 //@property(nonatomic, strong) GKEntity *robotEntity;
