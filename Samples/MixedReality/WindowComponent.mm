@@ -18,15 +18,16 @@
 // Rendering order
 
 
-#import "PortalComponent.h"
-#import "../Core/GeometryComponent.h"
-#import "../Core/AudioEngine.h"
+#import "WindowComponent.h"
+#import "GeometryComponent.h"
+#import "AudioEngine.h"
 #import "BehaviourComponents/BeamUIBehaviourComponent.h"
 #import "VRWorldComponent.h"
 #import <GLKit/GLKit.h>
-#import "../Utils/SceneKitTools.h"
-#import "../Utils/SceneKitExtensions.h"
-#import "../Utils/Math.h"
+#import "SceneKitTools.h"
+#import "SceneKitExtensions.h"
+#import "OpenBE/Utils/Math.h"
+#import "OutsideWorldComponent.h"
 
 //#define PORTAL_WIDTH 1.0
 //#define PORTAL_HEIGHT 1.8
@@ -46,7 +47,7 @@ typedef NS_ENUM (NSUInteger, PortalState) {
     PORTAL_CLOSE
 };
 
-@interface PortalComponent ()
+@interface WindowComponent ()
 
 @property(nonatomic, readwrite) BOOL open;
 
@@ -93,12 +94,12 @@ typedef NS_ENUM (NSUInteger, PortalState) {
 
 @end
 
-@implementation PortalComponent
+@implementation WindowComponent
 
 /**
  * Set the mode, and rebuild the portal stack for that mode.
  */
-- (void) setMode:(PortalMode)mode {
+- (void) setMode:(WindowMode)mode {
     _mode = mode;
 
     [_portalGeometryNode removeFromParentNode];
@@ -109,7 +110,7 @@ typedef NS_ENUM (NSUInteger, PortalState) {
     _portalFrameNode = nil;
     
     // Create the appropriate portal for mode.
-    if( _mode == VRRectangleOnFloor ) {
+    if( _mode == WindowRectangleOnFloor ) {
         self.portalGeometryNode = [SCNNode nodeWithGeometry:[SCNBox boxWithWidth:PORTAL_WIDTH height:PORTAL_HEIGHT length:0.001 chamferRadius:0]];
         self.portalCrossingPlaneNode = [SCNNode nodeWithGeometry:[SCNBox boxWithWidth:PORTAL_WIDTH height:PORTAL_HEIGHT length:.0 chamferRadius:0]];
         self.portalGeometryNode.position = SCNVector3Make(0, -(0.5*PORTAL_HEIGHT), 0);
@@ -152,7 +153,7 @@ typedef NS_ENUM (NSUInteger, PortalState) {
     [self.portalCrossingTransformNode addChildNode:self.portalCrossingPlaneNode];
 
     // Create a frame for the portal.
-    if( _mode == VRRectangleOnFloor ) {
+    if( _mode == WindowRectangleOnFloor ) {
 # ifdef USE_OLD_PORTAL_FRAME
         SCNNode *doorParts = [SCNNode  firstNodeFromSceneNamed:@"RobotDoorParts.dae"];
         self.portalFrameTop = [doorParts childNodeWithName:@"FrameTop" recursively:NO];
@@ -218,10 +219,10 @@ typedef NS_ENUM (NSUInteger, PortalState) {
  * Open the portal on the floor.
  * Sets the position (anchored to the floor) and rotate the opening on the y-axis.
  */
-- (BOOL) openPortalOnFloorPosition:(SCNVector3)position facingTarget:(SCNVector3)target toVRWorld:(VRWorldComponent*)vrWorld {
+- (BOOL) openPortalOnFloorPosition:(SCNVector3)position facingTarget:(SCNVector3)target toVRWorld:(OutsideWorldComponent*)vrWorld {
     if( [self isFullyClosed] == NO ) return NO; // Abort opening the portal.
 
-    self.mode = VRRectangleOnFloor;
+    self.mode = WindowRectangleOnFloor;
     
     position.y = 0; // Anchor to ground.
     self.node.position = position;
@@ -243,10 +244,10 @@ typedef NS_ENUM (NSUInteger, PortalState) {
  * Open a circular portal on the wall.
  * Use the hit location (position) against a wall, rotate and offset the opening to lay against the wall.
  */
-- (BOOL) openPortalOnWallPosition:(SCNVector3)position wallNormal:(SCNVector3)normal toVRWorld:(VRWorldComponent*)vrWorld {
+- (BOOL) openPortalOnWallPosition:(SCNVector3)position wallNormal:(SCNVector3)normal toVRWorld:(OutsideWorldComponent*)vrWorld {
     if( [self isFullyClosed] == NO ) return NO; // Abort opening the portal.
     
-    self.mode = VRCircleOnWall;
+    self.mode = WindowCircleOnWall;
 
     GLKVector3 hitPos = SCNVector3ToGLKVector3(position);
     GLKVector3 hitNormal = SCNVector3ToGLKVector3(normal);
@@ -287,7 +288,7 @@ typedef NS_ENUM (NSUInteger, PortalState) {
         [self setEnabled:YES];
         float open = smoothstepf(0, 1, self.time/_audioWarpIn.duration);
         
-        if( self.mode == VRCircleOnWall ) {
+        if( self.mode == WindowCircleOnWall ) {
             self.node.scale = SCNVector3Make(open,open,open);
         } else {
             self.node.scale = SCNVector3Make(1,open,1);
@@ -394,7 +395,7 @@ typedef NS_ENUM (NSUInteger, PortalState) {
             open = 1;
         }
 
-        if( _mode == VRRectangleOnFloor ) {
+        if( _mode == WindowRectangleOnFloor ) {
             self.node.scale = SCNVector3Make(1, open, 1);
         } else {
             self.node.scale = SCNVector3Make(open, open, open);
@@ -411,7 +412,7 @@ typedef NS_ENUM (NSUInteger, PortalState) {
             open = 0;
         }
 
-        if( _mode == VRRectangleOnFloor ) {
+        if( _mode == WindowRectangleOnFloor ) {
             self.node.scale = SCNVector3Make(1, open, 1);
         } else {
             self.node.scale = SCNVector3Make(open, open, open);

@@ -22,6 +22,8 @@
 		6F85C2751C7E69C600152850 /* Assets.scnassets in Resources */ = {isa = PBXBuildFile; fileRef = 6F85C2741C7E69C600152850 /* Assets.scnassets */; };
 		6FF00A3B1C812D61009A3BCD /* Settings.bundle in Resources */ = {isa = PBXBuildFile; fileRef = 6FF00A3A1C812D61009A3BCD /* Settings.bundle */; };
 		773DED7A1C8F8BF1006233EA /* AppSettings.mm in Sources */ = {isa = PBXBuildFile; fileRef = 773DED791C8F8BF1006233EA /* AppSettings.mm */; };
+		AA9826259567130803CC5946 /* WindowComponent.mm in Sources */ = {isa = PBXBuildFile; fileRef = AA98239CA4AD4A5E44C3268F /* WindowComponent.mm */; };
+		AA982BD71B76B0D7C80D3FB8 /* OutsideWorldComponent.mm in Sources */ = {isa = PBXBuildFile; fileRef = AA9824783C2BFADF22A472F8 /* OutsideWorldComponent.mm */; };
 		BA5F3F081EE094D800D1DB9A /* OpenBE.framework in Frameworks */ = {isa = PBXBuildFile; fileRef = BA5129151EE092980044E0F0 /* OpenBE.framework */; };
 		BA5F3F091EE094EB00D1DB9A /* OpenBE.framework in Embed Frameworks */ = {isa = PBXBuildFile; fileRef = BA5129151EE092980044E0F0 /* OpenBE.framework */; settings = {ATTRIBUTES = (CodeSignOnCopy, RemoveHeadersOnCopy, ); }; };
 /* End PBXBuildFile section */
@@ -92,6 +94,10 @@
 		773DED791C8F8BF1006233EA /* AppSettings.mm */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.cpp.objcpp; path = AppSettings.mm; sourceTree = "<group>"; };
 		7E5132211AEBF3D000B75178 /* Metal.framework */ = {isa = PBXFileReference; lastKnownFileType = wrapper.framework; name = Metal.framework; path = System/Library/Frameworks/Metal.framework; sourceTree = SDKROOT; };
 		94892A221BB20AA300E8C5E9 /* GameController.framework */ = {isa = PBXFileReference; lastKnownFileType = wrapper.framework; name = GameController.framework; path = System/Library/Frameworks/GameController.framework; sourceTree = SDKROOT; };
+		AA98234AF6981CAFD6A26E67 /* WindowComponent.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; path = WindowComponent.h; sourceTree = "<group>"; };
+		AA98239CA4AD4A5E44C3268F /* WindowComponent.mm */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.cpp.objcpp; path = WindowComponent.mm; sourceTree = "<group>"; };
+		AA9824783C2BFADF22A472F8 /* OutsideWorldComponent.mm */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.cpp.objcpp; path = OutsideWorldComponent.mm; sourceTree = "<group>"; };
+		AA9829EBF9E10F44D1F00054 /* OutsideWorldComponent.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; path = OutsideWorldComponent.h; sourceTree = "<group>"; };
 		BA5129101EE092980044E0F0 /* OpenBE.xcodeproj */ = {isa = PBXFileReference; lastKnownFileType = "wrapper.pb-project"; name = OpenBE.xcodeproj; path = ../OpenBE/OpenBE.xcodeproj; sourceTree = "<group>"; };
 		DA28568D1C6E546E0030250A /* CoreBluetooth.framework */ = {isa = PBXFileReference; lastKnownFileType = wrapper.framework; name = CoreBluetooth.framework; path = System/Library/Frameworks/CoreBluetooth.framework; sourceTree = SDKROOT; };
 /* End PBXFileReference section */
@@ -180,6 +186,10 @@
 				6F5CA0A21C751A4B00A33642 /* ViewController.mm */,
 				773DED761C8F8BDC006233EA /* AppSettings.h */,
 				773DED791C8F8BF1006233EA /* AppSettings.mm */,
+				AA98234AF6981CAFD6A26E67 /* WindowComponent.h */,
+				AA98239CA4AD4A5E44C3268F /* WindowComponent.mm */,
+				AA9829EBF9E10F44D1F00054 /* OutsideWorldComponent.h */,
+				AA9824783C2BFADF22A472F8 /* OutsideWorldComponent.mm */,
 			);
 			path = MixedReality;
 			sourceTree = "<group>";
@@ -293,6 +303,8 @@
 				6F5CA09D1C751A4B00A33642 /* main.mm in Sources */,
 				773DED7A1C8F8BF1006233EA /* AppSettings.mm in Sources */,
 				2C7E5C7A1E1C5ECB002F86AF /* CustomRenderMode.mm in Sources */,
+				AA9826259567130803CC5946 /* WindowComponent.mm in Sources */,
+				AA982BD71B76B0D7C80D3FB8 /* OutsideWorldComponent.mm in Sources */,
 			);
 			runOnlyForDeploymentPostprocessing = 0;
 		};
@@ -439,6 +451,7 @@
 				PRODUCT_BUNDLE_IDENTIFIER = "com.example.occipital-samplecode.MixedReality";
 				PRODUCT_NAME = "$(TARGET_NAME)";
 				PROVISIONING_PROFILE = "";
+				USER_HEADER_SEARCH_PATHS = "\"${PROJECT_DIR}/../OpenBE\"/**";
 			};
 			name = Debug;
 		};
@@ -479,6 +492,7 @@
 				PRODUCT_BUNDLE_IDENTIFIER = "com.example.occipital-samplecode.MixedReality";
 				PRODUCT_NAME = "$(TARGET_NAME)";
 				PROVISIONING_PROFILE = "";
+				USER_HEADER_SEARCH_PATHS = "\"${PROJECT_DIR}/../OpenBE\"/**";
 			};
 			name = Release;
 		};

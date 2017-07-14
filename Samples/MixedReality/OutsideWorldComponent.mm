@@ -18,14 +18,14 @@
 //  5) Wait a brief openBayDoorsDelay
 //  6) Open the bay door hinges.
 
-#import <SceneKit/SceneKit.h>
-#import "VRWorldComponent.h"
+#import "OutsideWorldComponent.h"
 #import "PortalComponent.h"
-#import "../Utils/SceneKitTools.h"
-#import "../Utils/SceneKitExtensions.h"
-#import "../Utils/Math.h"
-#import "../Core/Core.h"
-#import "../Core/AudioEngine.h"
+#import "SceneKitTools.h"
+#import "SceneKitExtensions.h"
+#import "Math.h"
+#import "Core.h"
+#import "AudioEngine.h"
+#import "WindowComponent.h"
 #import <GLKit/GLKit.h>
 
 #define VR_LIGHTS_MAX 3
@@ -39,7 +39,7 @@
 #define VR_LIGHT_LEVEL_OUTSIDE .01f
 #define VR_LIGHT_LEVEL_SPEED 2.f
 
-@interface VRWorldComponent()
+@interface OutsideWorldComponent()
 @property(nonatomic, strong) SCNNode *node;
 @property (nonatomic, strong) SCNNode *bookstoreNode;
 #ifdef ENABLE_ROBOTROOM
@@ -68,7 +68,7 @@
 @end
 
 
-@implementation VRWorldComponent
+@implementation OutsideWorldComponent
 - (void) setEnabled:(bool)enabled {
     [super setEnabled:enabled];
 
@@ -167,21 +167,21 @@
 /**
  * Set which World we're showing.
  */
-- (void) setMode:(VRWorldMode)mode {
+- (void) setMode:(OutsideWorldMode)mode {
     _mode = mode;
 #ifdef ENABLE_ROBOTROOM
-    _robotRoomNode.hidden = mode!=VRWorldRobotRoom;
+    _robotRoomNode.hidden = mode!=WindowWorldRobotRoom;
 #endif
-    _bookstoreNode.hidden = mode!=VRWorldBookstore;
+    _bookstoreNode.hidden = mode!=WindowWorldBookstore;
 }
 
 
 // Attach a KVO on the portalComponent enabled state.
-- (void) setPortalComponent:(PortalComponent *)portalComponent {
-    [_portalComponent removeObserver:self forKeyPath:@"enabled"];
-    _portalComponent = portalComponent;
+- (void) setPortalComponent:(WindowComponent *)portalComponent {
+    [_windowComponent removeObserver:self forKeyPath:@"enabled"];
+    _windowComponent = portalComponent;
     
-    [_portalComponent addObserver:self
+    [_windowComponent addObserver:self
                        forKeyPath:@"enabled"
                           options:(NSKeyValueObservingOptionInitial|NSKeyValueObservingOptionNew)
                           context:nil];
@@ -189,8 +189,8 @@
 
 // Follow changes to the portal's enabled state.
 - (void) observeValueForKeyPath:(NSString *)keyPath ofObject:(id)object change:(NSDictionary<NSKeyValueChangeKey,id> *)change context:(void *)context {
-    if( object == _portalComponent && [keyPath isEqualToString:@"enabled"] ) {
-        self.node.hidden = !_portalComponent.isEnabled;
+    if( object == _windowComponent && [keyPath isEqualToString:@"enabled"] ) {
+        self.node.hidden = !_windowComponent.isEnabled;
     }
 }
 
@@ -263,7 +263,7 @@
         [self flickerDisplayCubes:seconds];
     }
 #endif
-    float grayness = 1.0 - 2.0 * _portalComponent.mixedReality.lastTrackerHints.modelVisibilityPercentage;
+    float grayness = 1.0 - 2.0 * _windowComponent.mixedReality.lastTrackerHints.modelVisibilityPercentage;
     if ( isnan(grayness))
         grayness = 1.0;
     

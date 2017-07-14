@@ -34,21 +34,21 @@
 //    WorldViz if in AR: render absolutely last
 //    worldViz if in VR: render just after VR and portalDone is run
 
-#import "../Core/Core.h"
 #import "ColorOverlayComponent.h"
 #import <JavascriptCore/JavascriptCore.h>
 
 /**
  * Enums for selecting the current portal mode.
  */
-typedef NS_ENUM (NSUInteger, PortalMode) {
-    VRRectangleOnFloor = 0,
-    VRCircleOnWall,
+typedef NS_ENUM (NSUInteger, WindowMode) {
+    WindowRectangleOnFloor = 0,
+    WindowCircleOnWall,
 };
 
 @class VRWorldComponent;
+@class OutsideWorldComponent;
 
-@protocol PortalComponentJS <JSExport>
+@protocol WindowComponentJS <JSExport>
 // @property(nonatomic, strong) SCNNode *node; (protect the node)
 @property(nonatomic) bool isInsideAR;
 @property(nonatomic, readonly) BOOL open;
@@ -77,7 +77,7 @@ typedef NS_ENUM (NSUInteger, PortalMode) {
  *
  * These nodes require manual updates to their transform if the portal node's transform changes.
  */
-@interface PortalComponent : Component  <EventComponentProtocol, SCNNodeRendererDelegate, PortalComponentJS>
+@interface WindowComponent : Component  <EventComponentProtocol, SCNNodeRendererDelegate, WindowComponentJS>
 @property(nonatomic, weak) BEMixedRealityMode *mixedReality;
 // @property(nonatomic, strong) SCNNode *node; (protect the node)
 //@property(nonatomic, strong) GKEntity *robotEntity;
@@ -87,7 +87,7 @@ typedef NS_ENUM (NSUInteger, PortalMode) {
 @property(nonatomic) bool stereoRendering;
 @property(nonatomic) bool interactive;
 @property(nonatomic, readonly) BOOL open;
-@property(nonatomic) PortalMode mode;
+@property(nonatomic) WindowMode mode;
 @property(nonatomic) BOOL emergencyExitVR;
 
 // Overlay is used for casting a white overlay, when emergencyExit is animating.
@@ -100,14 +100,14 @@ typedef NS_ENUM (NSUInteger, PortalMode) {
  * Open the portal on the floor.
  * Sets the position (anchored to the floor) and rotate the opening to face the target.
  */
-- (BOOL) openPortalOnFloorPosition:(SCNVector3)position facingTarget:(SCNVector3)target toVRWorld:(VRWorldComponent*)vrWorld;
+- (BOOL) openPortalOnFloorPosition:(SCNVector3)position facingTarget:(SCNVector3)target toVRWorld:(OutsideWorldComponent*)vrWorld;
 
 /**
  * NOTE: Won't open the portal if we're not isFullyClosed.
  * Open a circular portal on the wall.
  * Use the hit location (position) against a wall, rotate and offset the opening to lay against the wall.
  */
-- (BOOL) openPortalOnWallPosition:(SCNVector3)position wallNormal:(SCNVector3)normal toVRWorld:(VRWorldComponent*)vrWorld;
+- (BOOL) openPortalOnWallPosition:(SCNVector3)position wallNormal:(SCNVector3)normal toVRWorld:(OutsideWorldComponent*)vrWorld;
 
 /**
  * Begin closing the portal.
