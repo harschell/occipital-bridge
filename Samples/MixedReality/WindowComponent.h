@@ -63,8 +63,8 @@ typedef NS_ENUM (NSUInteger, WindowMode) {
 - (float) openDuration;
 - (float) closeDuration;
 
-- (BOOL) openPortalOnFloorPosition:(SCNVector3)position facingTarget:(SCNVector3)target toVRWorld:(VRWorldComponent*)vrWorld;
-- (BOOL) openPortalOnWallPosition:(SCNVector3)position wallNormal:(SCNVector3)normal toVRWorld:(VRWorldComponent*)vrWorld;
+- (BOOL) openPortalOnFloorPosition:(SCNVector3)position facingTarget:(SCNVector3)target toVRWorld:(OutsideWorldComponent*)vrWorld;
+- (BOOL) openPortalOnWallPosition:(SCNVector3)position wallNormal:(SCNVector3)normal toVRWorld:(OutsideWorldComponent*)vrWorld;
 - (void) closePortal;
 
 @end
