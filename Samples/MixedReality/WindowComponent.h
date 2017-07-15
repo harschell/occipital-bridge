@@ -41,7 +41,6 @@
  * Enums for selecting the current portal mode.
  */
 typedef NS_ENUM (NSUInteger, WindowMode) {
-    WindowRectangleOnFloor = 0,
     WindowCircleOnWall,
 };
 
