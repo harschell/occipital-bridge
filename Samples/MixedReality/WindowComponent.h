@@ -37,13 +37,6 @@
 #import "ColorOverlayComponent.h"
 #import <JavascriptCore/JavascriptCore.h>
 
-/**
- * Enums for selecting the current portal mode.
- */
-typedef NS_ENUM (NSUInteger, WindowMode) {
-    WindowCircleOnWall,
-};
-
 @class VRWorldComponent;
 @class OutsideWorldComponent;
 
@@ -62,8 +55,8 @@ typedef NS_ENUM (NSUInteger, WindowMode) {
 - (float) openDuration;
 - (float) closeDuration;
 
-- (BOOL) openPortalOnFloorPosition:(SCNVector3)position facingTarget:(SCNVector3)target toVRWorld:(OutsideWorldComponent*)vrWorld;
-- (BOOL) openPortalOnWallPosition:(SCNVector3)position wallNormal:(SCNVector3)normal toVRWorld:(OutsideWorldComponent*)vrWorld;
+- (bool) openPortalOnFloorPosition:(SCNVector3)position facingTarget:(SCNVector3)target toVRWorld:(OutsideWorldComponent*)vrWorld;
+- (bool) openPortalOnWallPosition:(SCNVector3)position wallNormal:(GLKVector3)normal toVRWorld:(OutsideWorldComponent*)vrWorld;
 - (void) closePortal;
 
 @end
@@ -85,28 +78,21 @@ typedef NS_ENUM (NSUInteger, WindowMode) {
 @property(nonatomic) bool isInsideAR;
 @property(nonatomic) bool stereoRendering;
 @property(nonatomic) bool interactive;
-@property(nonatomic, readonly) BOOL open;
-@property(nonatomic) WindowMode mode;
-@property(nonatomic) BOOL emergencyExitVR;
+@property(nonatomic, readonly) bool open;
+@property(nonatomic) bool emergencyExitVR;
 
 // Overlay is used for casting a white overlay, when emergencyExit is animating.
 @property(nonatomic, weak) ColorOverlayComponent *overlayComponent;
 
 - (void) setEnabled:(bool)enabled;
 
-/**
- * NOTE: Won't open the portal if we're not isFullyClosed.
- * Open the portal on the floor.
- * Sets the position (anchored to the floor) and rotate the opening to face the target.
- */
-- (BOOL) openPortalOnFloorPosition:(SCNVector3)position facingTarget:(SCNVector3)target toVRWorld:(OutsideWorldComponent*)vrWorld;
 
 /**
  * NOTE: Won't open the portal if we're not isFullyClosed.
  * Open a circular portal on the wall.
  * Use the hit location (position) against a wall, rotate and offset the opening to lay against the wall.
  */
-- (BOOL) openPortalOnWallPosition:(SCNVector3)position wallNormal:(SCNVector3)normal toVRWorld:(OutsideWorldComponent*)vrWorld;
+- (bool)openPortalOnWallPosition:(SCNVector3)position wallNormal:(GLKVector3)normal toVRWorld:(OutsideWorldComponent*)vrWorld;
 
 /**
  * Begin closing the portal.
@@ -116,6 +102,6 @@ typedef NS_ENUM (NSUInteger, WindowMode) {
 /**
  * Check if the portal is fully closed and no longer animating.
  */
-- (BOOL) isFullyClosed;
+- (bool) isFullyClosed;
 
 @end

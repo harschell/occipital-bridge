@@ -13,9 +13,7 @@ http://structure.io
 
 #import <OpenBE/Components/RobotBehaviourComponent.h>
 #import <OpenBE/Components/RobotActionComponent.h>
-#import <OpenBE/Components/FixedSizeReticleComponent.h>
 #import <OpenBE/Components/SpawnPortalComponent.h>
-#import <OpenBE/Components/VRWorldComponent.h>
 
 #import "WindowComponent.h"
 #import "OutsideWorldComponent.h"
@@ -440,9 +438,14 @@ static const SCNMatrix4 defaultPivot = SCNMatrix4MakeRotation(M_PI, 1.0, 0.0, 0.
             if (time - startTime > 8.0 && !started) {
                 _outsideWorld.mode = WindowWorldRobotRoom;
                 [_outsideWorld setEnabled:YES];
-                [_portal openPortalOnFloorPosition:SCNVector3Zero
-                                      facingTarget:SCNVector3FromGLKVector3([Camera main].position)
-                                         toVRWorld:_outsideWorld];
+//                [_portal openPortalOnFloorPosition:SCNVector3Zero
+//                                      facingTarget:SCNVector3FromGLKVector3([Camera main].position)
+//                                         toVRWorld:_outsideWorld];
+
+
+//                GLKVector3 normal = GLKVector3Subtract([Camera main].position, SCNVector3ToGLKVector3(SCNVector3Zero));
+                GLKVector3 normal = GLKVector3Make(0, 0, 1);
+                [_portal openPortalOnWallPosition:SCNVector3Make(0, 0, 0) wallNormal:normal toVRWorld:_outsideWorld];
                 started = true;
             }
         }

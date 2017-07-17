@@ -77,7 +77,7 @@
 
 - (void) start{
     [super start];
-    
+
     self.node = [[SCNNode alloc] init];
     self.node.name = @"VR World";
     _node.position = SCNVector3Make(0, .01, 0); // Give a 1cm offset, so we don't get co-planar z-fighting between VR world and real world floor.
@@ -87,9 +87,9 @@
     self.robotRoomNode.name = @"Robot Room";
     //    _robotRoomNode.rotation = SCNVector4Make(1, 0, 0, M_PI);
     [_node addChildNode:_robotRoomNode];
-    
+
     NSAssert(_node != nil, @"Could not load the room scene");
-    
+
     // Look for the hinge objects.
     NSArray *hingeNames = @[@"Hinge_1",@"Hinge_2",@"Hinge_3",@"Hinge_4",@"Hinge_5",@"Hinge_6",@"Hinge_7",@"Hinge_8",
                             @"Hinge_9",@"Hinge_10",@"Hinge_11",@"Hinge_12",@"Hinge_13",@"Hinge_14",@"Hinge_15",@"Hinge_16"];
@@ -102,7 +102,7 @@
         }
     }
     self.hinges = [NSArray arrayWithArray:foundhinges];
-    
+
     NSMutableArray *foundCubes = [NSMutableArray array];
     [_robotRoomNode enumerateChildNodesUsingBlock:^(SCNNode * _Nonnull child, BOOL * _Nonnull stop) {
         if ([child.name containsString:@"DisplayCube"])
@@ -118,9 +118,9 @@
         }
     }];
     self.displayCubes = [NSArray arrayWithArray:foundCubes];
-    
+
     SCNNode *SphereNode = [_robotRoomNode childNodeWithName:@"Sphere" recursively:YES];
-    
+
     //need to populate arrays.
     [SphereNode.geometry.firstMaterial.reflective setContents:@[[SceneKit pathForImageResourceNamed:@"Space_right.jpg"],
                                                                 [SceneKit pathForImageResourceNamed:@"Space_left.jpg"],
@@ -128,24 +128,24 @@
                                                                 [SceneKit pathForImageResourceNamed:@"Space_down.jpg"],
                                                                 [SceneKit pathForImageResourceNamed:@"Space_back.jpg"],
                                                                 [SceneKit pathForImageResourceNamed:@"Space_front.jpg"]]];
-    
+
     self.lightsOnAudio = [[AudioEngine main] loadAudioNamed:@"VRWorld_LightsOn.caf"];
     _targetLightLevel = VR_LIGHT_LEVEL_OUTSIDE;
     [self setLightLevel:VR_LIGHT_LEVEL_OUTSIDE];
-    
+
     self.openBayDoorsAudio = [[AudioEngine main] loadAudioNamed:@"VRWorld_BayDoorsOpening.caf"];
 // ------ /Robot Room ----
 #endif
-    
+
     // ------ Bookstore ----
     self.bookstoreNode = [SCNNode firstNodeFromSceneNamed:@"bookstore.dae"];
     self.bookstoreNode.name = @"Bookstore";
     [_node addChildNode:_bookstoreNode];
     [_node setRenderingOrderRecursively:VR_WORLD_RENDERING_ORDER];
     [_node setCastsShadowRecursively:NO];
-    
+
     [[Scene main].rootNode addChildNode:_node];
-    
+
     // this is for greying out the VR world as tracking feedback
     [self.node enumerateChildNodesUsingBlock:^(SCNNode * _Nonnull child, BOOL * _Nonnull stop) {
         for( SCNMaterial * material in child.geometry.materials ) {
@@ -156,7 +156,7 @@
                "_output.color.rgb = (1.0 - grayAmount) * _output.color.rgb + grayAmount * grayColor;\n "};
         };
     }];
-    
+
     // Start off the rooms hidden.
 #ifdef ENABLE_ROBOTROOM
     _robotRoomNode.hidden = YES;
@@ -180,7 +180,7 @@
 - (void) setPortalComponent:(PortalComponent *)portalComponent {
     [_portalComponent removeObserver:self forKeyPath:@"enabled"];
     _portalComponent = portalComponent;
-    
+
     [_portalComponent addObserver:self
                        forKeyPath:@"enabled"
                           options:(NSKeyValueObservingOptionInitial|NSKeyValueObservingOptionNew)
@@ -207,8 +207,8 @@
     _bookstoreNode.position = SCNVector3Make(0, -0.5, -2.4); // Adjust the vr world to be a little more centred.
     _bookstoreNode.eulerAngles = SCNVector3Make(0, M_PI, 0); // Turn the bookstore around.
 #endif
-    
-    SCNVector3 targetPos = targetNode.position; 
+
+    SCNVector3 targetPos = targetNode.position;
     targetPos.y = 0.0; // Remove the y-offset from the target node, and align to its x/z position only.
     _node.position = targetPos;
     _node.orientation = targetNode.orientation;
@@ -223,7 +223,7 @@
                 self.lightsEnabledDelay = VR_LIGHTS_ENABLED_DELAY;
             self.turnOnLights = YES;
         }
-        
+
         if( self.turnOnLights ) {
             self.lightsEnabledDelay -= seconds;
             if ( self.lightsEnabledDelay <= 0)
@@ -238,7 +238,7 @@
                 }
             }
         }
-        
+
         if( self.portalComponent.isInsideAR == NO
          && _lights == VR_LIGHTS_MAX
          && _openBayDoors == NO ) {
@@ -246,14 +246,14 @@
             self.openBayDoorsDelay = VR_OPEN_BAY_DOORS_DELAY;
             self.openBayDoorsTimer = 0;
         }
-        
+
         if( _openBayDoors ) {
             self.openBayDoorsDelay-=seconds;
             if( _openBayDoorsDelay < 0 ) {
                 if( _openBayDoorsTimer == 0 ) {
                     [_openBayDoorsAudio play];
                 }
-            
+
                 _openBayDoorsTimer += seconds;
                 [self setBayDoors:smoothstepf(0, 1, _openBayDoorsTimer / VR_OPEN_BAY_DOORS_INTERVAL)];
             }
@@ -266,9 +266,9 @@
     float grayness = 1.0 - 2.0 * _portalComponent.mixedReality.lastTrackerHints.modelVisibilityPercentage;
     if ( isnan(grayness))
         grayness = 1.0;
-    
+
     grayness = fmaxf(fminf(grayness, 1.0), 0.0);
-    
+
     [self.node enumerateChildNodesUsingBlock:^(SCNNode * _Nonnull child, BOOL * _Nonnull stop) {
         for( SCNMaterial * material in child.geometry.materials ) {
             [material setValue: @(grayness) forKeyPath:@"grayAmount"];
@@ -279,7 +279,7 @@
 #ifdef ENABLE_ROBOTROOM
 - (void) updateLights:(NSTimeInterval)seconds {
     float lightLevel = self.currentLightLevel;
-    
+
     if( self.currentLightLevel < self.targetLightLevel ) {
         lightLevel += VR_LIGHT_LEVEL_SPEED * seconds;
         if( lightLevel > _targetLightLevel ) {
@@ -291,7 +291,7 @@
             lightLevel = _targetLightLevel;
         }
     }
-    
+
     lightLevel = clampf( lightLevel, VR_LIGHT_LEVEL_OUTSIDE, VR_LIGHT_LEVEL_INSIDE);
 
     if( lightLevel != self.currentLightLevel ) {
@@ -302,7 +302,7 @@
 - (void) setLightLevel:(float)lightLevel {
     self.currentLightLevel = lightLevel;
     be_dbg("Light level: %.2f", lightLevel);
-    
+
     [self.node enumerateChildNodesUsingBlock:^(SCNNode * _Nonnull child, BOOL * _Nonnull stop) {
         for( SCNMaterial * material in child.geometry.materials ) {
             if( [material.name containsString:@"Default"] || [material.name isEqualToString:@"PrimaryTrim"] ) {
@@ -317,7 +317,7 @@
     for(SCNNode *node in self.hinges) {
         [node setEulerAngles:SCNVector3Make((M_PI/2)*open, 0, 0)];
     }
-} 
+}
 
 - (void) flickerDisplayCubes:(float)time {
     self.displayTime += time;

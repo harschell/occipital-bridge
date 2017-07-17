@@ -6,14 +6,14 @@
  */
 
 // How the node hierarchy works:
-// _node - base node, that can be placed and scaled to expand the open portal
-// _node.portalFrameNode - outer portal geometry
+// self.node - base node, that can be placed and scaled to expand the open portal
+// self.node.portalFrameNode - outer portal geometry
 //       - portalFrameNode needs to be visible and lit.
-// _node.portalGeometryTransformNode - The special rendering stack base node. Offset and rotated into place.
-// _node.portalGeometryTransformNode.portalNode - Portal hole geometry which gets cloned
-// _node.portalGeometryTransformNode.occlude - clone of portalNode - Renders the depth occlusion
-// _node.portalGeometryTransformNode.stencil - clone of portalNode - Renders the stencil mask for keeping pixels in view
-// _node.portalCrossingTransformNode.portalCrossingPlaneNode - Flat intersection testing node, for determining camera movement passing between MR and VR.
+// self.node.portalGeometryTransformNode - The special rendering stack base node. Offset and rotated into place.
+// self.node.portalGeometryTransformNode.portalNode - Portal hole geometry which gets cloned
+// self.node.portalGeometryTransformNode.occlude - clone of portalNode - Renders the depth occlusion
+// self.node.portalGeometryTransformNode.stencil - clone of portalNode - Renders the stencil mask for keeping pixels in view
+// self.node.portalCrossingTransformNode.portalCrossingPlaneNode - Flat intersection testing node, for determining camera movement passing between MR and VR.
 //
 // Rendering order
 
@@ -91,73 +91,6 @@ typedef NS_ENUM (NSUInteger, PortalState) {
 
 @implementation WindowComponent
 
-/**
- * Set the mode, and rebuild the portal stack for that mode.
- */
-- (void)setMode:(WindowMode)mode {
-    _mode = mode;
-
-    [_portalGeometryNode removeFromParentNode];
-    _portalGeometryNode = nil;
-    [_portalCrossingPlaneNode removeFromParentNode];
-    _portalCrossingPlaneNode = nil;
-    [_portalFrameNode removeFromParentNode];
-    _portalFrameNode = nil;
-
-    // Setup the geometry for the portal rendering geometry
-    self.portalGeometryNode =
-            [SCNNode nodeWithGeometry:[SCNCylinder cylinderWithRadius:PORTAL_CIRCLE_RADIUS height:0.001]];
-    self.portalCrossingPlaneNode =
-            [SCNNode nodeWithGeometry:[SCNCylinder cylinderWithRadius:PORTAL_CIRCLE_RADIUS height:0.0]];
-    self.portalGeometryNode.rotation = SCNVector4Make(1, 0, 0, M_PI_2);
-    self.portalCrossingPlaneNode.transform = _portalGeometryNode.transform;
-
-    // Re-make the occlude and depth nodes.
-    [_occlude removeFromParentNode];
-    [_depth removeFromParentNode];
-
-    // Clone the portalNode into an occlusion and depth copy.
-    // NOTE: Attach the PortalGeometryNode after it's been cloned, or flattenedClone will inherit the _node.scale
-    _occlude = [_portalGeometryNode flattenedClone];
-    _occlude.transform = _portalGeometryNode.transform;
-    [_occlude setRenderingOrderRecursively:(VR_WORLD_RENDERING_ORDER - 4)];
-    [_portalGeometryTransformNode addChildNode:_occlude];
-
-    _depth = [_portalGeometryNode flattenedClone];
-    _depth.transform = _portalGeometryNode.transform;
-    [_depth setRenderingOrderRecursively:(VR_WORLD_RENDERING_ORDER + 4)];
-//    [_portalGeometryTransformNode addChildNode:_depth];
-
-    self.occlude.geometry.firstMaterial.cullMode = SCNCullFront;
-    self.depth.geometry.firstMaterial.cullMode = SCNCullFront;
-
-    self.portalGeometryNode.geometry.firstMaterial.doubleSided = true;
-    self.portalGeometryNode.categoryBitMask = RAYCAST_IGNORE_BIT;
-    self.portalGeometryNode.hidden = true;
-    [self.portalGeometryTransformNode addChildNode:self.portalGeometryNode];
-
-    // Portal Plane Node is used for ray testing if camera passes through the portal.
-    self.portalCrossingPlaneNode.categoryBitMask = RAYCAST_IGNORE_BIT;
-    self.portalCrossingPlaneNode.geometry.firstMaterial.diffuse.contents = [UIColor clearColor];
-    self.portalCrossingPlaneNode.hidden = false;
-    [self.portalCrossingTransformNode addChildNode:self.portalCrossingPlaneNode];
-
-    // round frame for portal ont he wall.
-    //self.portalFrameNode =
-    //        [SCNNode nodeWithGeometry:[SCNBox boxWithWidth:PORTAL_CIRCLE_RADIUS * 2 height:PORTAL_CIRCLE_RADIUS
-    //                * 2                             length:.1 chamferRadius:0]];
-    self.portalFrameNode = [SCNNode nodeWithGeometry:[SCNTorus torusWithRingRadius:PORTAL_CIRCLE_RADIUS pipeRadius:0.0075f]];
-
-    [self.portalFrameNode.geometry.firstMaterial
-            .diffuse setContents:[UIColor colorWithRed:0.678f green:0.678f blue:0.678f alpha:1]];
-    self.portalFrameNode.rotation = SCNVector4Make(1, 1, 0, (float) M_PI_2);
-    self.portalFrameNode.transform = _portalGeometryNode.transform;
-    [self.portalFrameNode setCategoryBitMask:RAYCAST_IGNORE_BIT | CATEGORY_BIT_MASK_LIGHTING];
-    [self.portalGeometryTransformNode addChildNode:self.portalFrameNode];
-
-    [self.node setCastsShadowRecursively:false];
-}
-
 - (void)setEnabled:(bool)enabled {
     [super setEnabled:enabled];
 
@@ -178,13 +111,39 @@ typedef NS_ENUM (NSUInteger, PortalState) {
 
 /**
  * NOTE: Won't open the portal if we're not isFullyClosed.
+ * Open a circular portal on the wall.
+ * Use the hit location (position) against a wall, rotate and offset the opening to lay against the wall.
+ */
+- (bool)openPortalOnWallPosition:(SCNVector3)position wallNormal:(GLKVector3)normal toVRWorld:(OutsideWorldComponent *)vrWorld {
+    if (![self isFullyClosed]) return false; // Abort opening the portal.
+
+    GLKVector3 hitPos = SCNVector3ToGLKVector3(position);
+
+    // offset from the wall a bit
+    GLKVector3 portalPos =
+            GLKVector3Add(hitPos, GLKVector3MultiplyScalar(normal, PORTAL_FRUSTUM_CROSSING_WIDTH + 0.1F));
+
+    // position portal node
+    self.node.position = SCNVector3FromGLKVector3(portalPos);
+
+    // rotate portal to face away from the wall
+    float yRot = atan2f(normal.x, normal.z);
+    self.node.rotation = SCNVector4Make(0, 1, 0, yRot);
+
+    // Align the VR world to match our portal.
+    [vrWorld alignVRWorldToNode:self.node];
+    [self setOpen:true];
+    return true;
+}
+
+/**
+ * NOTE: Won't open the portal if we're not isFullyClosed.
  * Open the portal on the floor.
  * Sets the position (anchored to the floor) and rotate the opening on the y-axis.
  */
-- (BOOL)openPortalOnFloorPosition:(SCNVector3)position facingTarget:(SCNVector3)target toVRWorld:(OutsideWorldComponent *)vrWorld {
+- (bool)openPortalOnFloorPosition:(SCNVector3)position facingTarget:(SCNVector3)target toVRWorld:(OutsideWorldComponent *)vrWorld {
     if (![self isFullyClosed]) return false; // Abort opening the portal.
 
-    self.mode = WindowCircleOnWall;
 
     position.y = 0; // Anchor to ground.
     self.node.position = position;
@@ -201,61 +160,6 @@ typedef NS_ENUM (NSUInteger, PortalState) {
     return true;
 }
 
-/**
- * NOTE: Won't open the portal if we're not isFullyClosed.
- * Open a circular portal on the wall.
- * Use the hit location (position) against a wall, rotate and offset the opening to lay against the wall.
- */
-- (BOOL)openPortalOnWallPosition:(SCNVector3)position wallNormal:(SCNVector3)normal toVRWorld:(OutsideWorldComponent *)vrWorld {
-    if (![self isFullyClosed]) return false; // Abort opening the portal.
-
-    self.mode = WindowCircleOnWall;
-
-    GLKVector3 hitPos = SCNVector3ToGLKVector3(position);
-    GLKVector3 hitNormal = SCNVector3ToGLKVector3(normal);
-
-    // offset from the wall a bit
-    GLKVector3 portalPos =
-            GLKVector3Add(hitPos, GLKVector3MultiplyScalar(hitNormal, PORTAL_FRUSTUM_CROSSING_WIDTH + 0.1F));
-
-    // position portal node
-    self.node.position = SCNVector3FromGLKVector3(portalPos);
-
-    // rotate portal to face away from the wall
-    float yRot = atan2f(hitNormal.x, hitNormal.z);
-    self.node.rotation = SCNVector4Make(0, 1, 0, yRot);
-
-    // Align the VR world to match our portal.
-    [vrWorld alignVRWorldToNode:self.node];
-    [self setOpen:true];
-    return true;
-}
-
-- (BOOL)openPortalAtPosition:(SCNVector3)position wallNormal:(SCNVector3)normal toVRWorld:(OutsideWorldComponent *)vrWorld {
-    if (![self isFullyClosed]) return false; // Abort opening the portal.
-
-    self.mode = WindowCircleOnWall;
-
-    GLKVector3 hitPos = SCNVector3ToGLKVector3(position);
-    GLKVector3 hitNormal = SCNVector3ToGLKVector3(normal);
-
-    // offset from the wall a bit
-    GLKVector3 portalPos =
-            GLKVector3Add(hitPos, GLKVector3MultiplyScalar(hitNormal, PORTAL_FRUSTUM_CROSSING_WIDTH + 0.1F));
-
-    // position portal node
-    self.node.position = SCNVector3FromGLKVector3(portalPos);
-
-    // rotate portal to face away from the wall
-    float yRot = atan2f(hitNormal.x, hitNormal.z);
-    self.node.rotation = SCNVector4Make(0, 1, 0, yRot);
-
-    // Align the VR world to match our portal.
-    [vrWorld alignVRWorldToNode:self.node];
-    [self setOpen:true];
-    return true;
-
-}
 
 /**
  * Begin closing the portal.
@@ -491,29 +395,72 @@ typedef NS_ENUM (NSUInteger, PortalState) {
 //    }
 }
 
-# ifdef USE_OLD_PORTAL_FRAME
-- (void) setPortalWidth:(float)width height:(float)height {
-    [SCNTransaction begin];
-    [SCNTransaction setAnimationDuration:0];
-    _portalFrameTop.position = SCNVector3Make(0, height, 0);
-    _portalFrameTop.scale = SCNVector3Make(width, 1, 1);
-    
-    _portalFrameLeft.position = SCNVector3Make(-width*0.5, height*0.5, 0);
-    _portalFrameLeft.scale = SCNVector3Make(1, height*1.15, 1);
-
-    _portalFrameRight.position = SCNVector3Make(width*0.5, height*0.5, 0);
-    _portalFrameRight.scale = SCNVector3Make(1, height*1.15, 1);
-
-    _portalFrameBottom.scale = SCNVector3Make(width, 1, 1);
-
-    [SCNTransaction commit];
-}
-# endif
-
 #pragma mark - Component Methods
+
+- (void)regenerateGeometry {
+    [self.portalGeometryNode removeFromParentNode];
+    self.portalGeometryNode = nil;
+
+    [self.portalCrossingPlaneNode removeFromParentNode];
+    self.portalCrossingPlaneNode = nil;
+
+    [self.portalFrameNode removeFromParentNode];
+    self.portalFrameNode = nil;
+
+    // Setup the geometry for the portal rendering geometry
+    self.portalGeometryNode =
+            [SCNNode nodeWithGeometry:[SCNCylinder cylinderWithRadius:PORTAL_CIRCLE_RADIUS height:0.001]];
+    self.portalCrossingPlaneNode =
+            [SCNNode nodeWithGeometry:[SCNCylinder cylinderWithRadius:PORTAL_CIRCLE_RADIUS height:0.0]];
+    self.portalGeometryNode.rotation = SCNVector4Make(1, 0, 0, M_PI_2);
+    self.portalCrossingPlaneNode.transform = self.portalGeometryNode.transform;
+
+    // Re-make the occlude and depth nodes.
+    [_occlude removeFromParentNode];
+    [_depth removeFromParentNode];
+
+    // Clone the portalNode into an occlusion and depth copy.
+    // NOTE: Attach the PortalGeometryNode after it's been cloned, or flattenedClone will inherit the _node.scale
+    _occlude = [self.portalGeometryNode flattenedClone];
+    _occlude.transform = self.portalGeometryNode.transform;
+    [_occlude setRenderingOrderRecursively:(VR_WORLD_RENDERING_ORDER - 4)];
+    [self.portalGeometryTransformNode addChildNode:_occlude];
+
+    _depth = [self.portalGeometryNode flattenedClone];
+    _depth.transform = self.portalGeometryNode.transform;
+    [_depth setRenderingOrderRecursively:(VR_WORLD_RENDERING_ORDER + 4)];
+
+    self.occlude.geometry.firstMaterial.cullMode = SCNCullFront;
+    self.depth.geometry.firstMaterial.cullMode = SCNCullFront;
+
+    self.portalGeometryNode.geometry.firstMaterial.doubleSided = true;
+    self.portalGeometryNode.categoryBitMask = RAYCAST_IGNORE_BIT;
+    self.portalGeometryNode.hidden = true;
+    [self.portalGeometryTransformNode addChildNode:self.portalGeometryNode];
+
+    // Portal Plane Node is used for ray testing if camera passes through the portal.
+    self.portalCrossingPlaneNode.categoryBitMask = RAYCAST_IGNORE_BIT;
+    self.portalCrossingPlaneNode.geometry.firstMaterial.diffuse.contents = [UIColor clearColor];
+    self.portalCrossingPlaneNode.hidden = false;
+    [self.portalCrossingTransformNode addChildNode:self.portalCrossingPlaneNode];
+
+    // Rounded Frame
+    self.portalFrameNode =
+            [SCNNode nodeWithGeometry:[SCNBox boxWithWidth:PORTAL_CIRCLE_RADIUS * 2 height:PORTAL_CIRCLE_RADIUS
+                    * 2                             length:.1 chamferRadius:0]];
+    [self.portalFrameNode.geometry.firstMaterial
+            .diffuse setContents:[UIColor colorWithRed:0.678f green:0.678f blue:0.678f alpha:1]];
+    self.portalFrameNode.rotation = SCNVector4Make(1, 1, 0, (float) M_PI_2);
+    self.portalFrameNode.transform = self.portalGeometryNode.transform;
+    [self.portalFrameNode setCategoryBitMask:RAYCAST_IGNORE_BIT | CATEGORY_BIT_MASK_LIGHTING];
+    [self.portalGeometryTransformNode addChildNode:self.portalFrameNode];
+
+    [self.node setCastsShadowRecursively:false];
+}
 
 - (void)start {
     [super start];
+
 
     self.audioWarpIn = [[AudioEngine main] loadAudioNamed:@"Robot_WarpIn.caf"];
     self.audioWarpOut = [[AudioEngine main] loadAudioNamed:@"Robot_WarpOut.caf"];
@@ -521,19 +468,19 @@ typedef NS_ENUM (NSUInteger, PortalState) {
     self.emergencyExitPowerUp = [[AudioEngine main] loadAudioNamed:@"ExitVR_PowerUp.caf"];
     self.emergencyExitPowerAbort = [[AudioEngine main] loadAudioNamed:@"ExitVR_PowerAbort.caf"];
 
-    _open = false;
+    self.open = false;
 
     self.node = [SCNNode node];
     self.node.name = @"PortalNode";
-    [[Scene main].rootNode addChildNode:_node];
+    [[Scene main].rootNode addChildNode:self.node];
 
     self.portalGeometryTransformNode = [SCNNode node];
     self.portalGeometryTransformNode.name = @"portalGeometryTransform";
-    [_node addChildNode:self.portalGeometryTransformNode];
+    [self.node addChildNode:self.portalGeometryTransformNode];
 
     self.portalCrossingTransformNode = [SCNNode node];
     self.portalCrossingTransformNode.name = @"portalCrossingTransform";
-    [_node addChildNode:_portalCrossingTransformNode];
+    [self.node addChildNode:self.portalCrossingTransformNode];
 
 
     // Set the stencil State
@@ -541,7 +488,7 @@ typedef NS_ENUM (NSUInteger, PortalState) {
     [self.prePortal setName:@"PrePortal"];
     [self.prePortal setRenderingOrder:VR_WORLD_RENDERING_ORDER - 5];
     [self.prePortal setRendererDelegate:self];
-    [_node addChildNode:self.prePortal];
+    [self.node addChildNode:self.prePortal];
 
     // Render _occlude node
     // Write the stencil of the portal, masking the areas that the world can render into.
@@ -551,7 +498,7 @@ typedef NS_ENUM (NSUInteger, PortalState) {
     [self.postPortal setName:@"PostPortal"];
     [self.postPortal setRenderingOrder:VR_WORLD_RENDERING_ORDER - 3];
     [self.postPortal setRendererDelegate:self];
-    [_node addChildNode:self.postPortal];
+    [self.node addChildNode:self.postPortal];
 
     // VR world is renderingOrder VR_WORLD_RENDERING_ORDER
     // Will only render with correct stencil test
@@ -560,7 +507,7 @@ typedef NS_ENUM (NSUInteger, PortalState) {
     [self.postVR setName:@"PostVRScene"];
     [self.postVR setRenderingOrder:VR_WORLD_RENDERING_ORDER + 3];
     [self.postVR setRendererDelegate:self];
-    [_node addChildNode:self.postVR];
+    [self.node addChildNode:self.postVR];
 
     // Render _depth node
     // Write the portal depth over the portal plane
@@ -571,7 +518,7 @@ typedef NS_ENUM (NSUInteger, PortalState) {
     [self.portalDone setName:@"portalDone"];
     [self.portalDone setRenderingOrder:VR_WORLD_RENDERING_ORDER + 5];
     [self.portalDone setRendererDelegate:self];
-    [_node addChildNode:self.portalDone];
+    [self.node addChildNode:self.portalDone];
 
     self.isInsideAR = true;
     self.time = 0;

@@ -22,6 +22,7 @@
 		6F85C2751C7E69C600152850 /* Assets.scnassets in Resources */ = {isa = PBXBuildFile; fileRef = 6F85C2741C7E69C600152850 /* Assets.scnassets */; };
 		6FF00A3B1C812D61009A3BCD /* Settings.bundle in Resources */ = {isa = PBXBuildFile; fileRef = 6FF00A3A1C812D61009A3BCD /* Settings.bundle */; };
 		773DED7A1C8F8BF1006233EA /* AppSettings.mm in Sources */ = {isa = PBXBuildFile; fileRef = 773DED791C8F8BF1006233EA /* AppSettings.mm */; };
+		AA9820484CB12B22F67CCCA1 /* OpenWindowComponent.m in Sources */ = {isa = PBXBuildFile; fileRef = AA98277693B9993E0F213DA8 /* OpenWindowComponent.m */; };
 		AA9826259567130803CC5946 /* WindowComponent.mm in Sources */ = {isa = PBXBuildFile; fileRef = AA98239CA4AD4A5E44C3268F /* WindowComponent.mm */; };
 		AA982BD71B76B0D7C80D3FB8 /* OutsideWorldComponent.mm in Sources */ = {isa = PBXBuildFile; fileRef = AA9824783C2BFADF22A472F8 /* OutsideWorldComponent.mm */; };
 		BA5F3F081EE094D800D1DB9A /* OpenBE.framework in Frameworks */ = {isa = PBXBuildFile; fileRef = BA5129151EE092980044E0F0 /* OpenBE.framework */; };
@@ -97,6 +98,8 @@
 		AA98234AF6981CAFD6A26E67 /* WindowComponent.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; path = WindowComponent.h; sourceTree = "<group>"; };
 		AA98239CA4AD4A5E44C3268F /* WindowComponent.mm */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.cpp.objcpp; path = WindowComponent.mm; sourceTree = "<group>"; };
 		AA9824783C2BFADF22A472F8 /* OutsideWorldComponent.mm */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.cpp.objcpp; path = OutsideWorldComponent.mm; sourceTree = "<group>"; };
+		AA98277693B9993E0F213DA8 /* OpenWindowComponent.m */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.objc; path = OpenWindowComponent.m; sourceTree = "<group>"; };
+		AA982874FCCFD35F04DAD730 /* OpenWindowComponent.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; path = OpenWindowComponent.h; sourceTree = "<group>"; };
 		AA9829EBF9E10F44D1F00054 /* OutsideWorldComponent.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; path = OutsideWorldComponent.h; sourceTree = "<group>"; };
 		BA5129101EE092980044E0F0 /* OpenBE.xcodeproj */ = {isa = PBXFileReference; lastKnownFileType = "wrapper.pb-project"; name = OpenBE.xcodeproj; path = ../OpenBE/OpenBE.xcodeproj; sourceTree = "<group>"; };
 		DA28568D1C6E546E0030250A /* CoreBluetooth.framework */ = {isa = PBXFileReference; lastKnownFileType = wrapper.framework; name = CoreBluetooth.framework; path = System/Library/Frameworks/CoreBluetooth.framework; sourceTree = SDKROOT; };
@@ -190,6 +193,8 @@
 				AA98239CA4AD4A5E44C3268F /* WindowComponent.mm */,
 				AA9829EBF9E10F44D1F00054 /* OutsideWorldComponent.h */,
 				AA9824783C2BFADF22A472F8 /* OutsideWorldComponent.mm */,
+				AA982874FCCFD35F04DAD730 /* OpenWindowComponent.h */,
+				AA98277693B9993E0F213DA8 /* OpenWindowComponent.m */,
 			);
 			path = MixedReality;
 			sourceTree = "<group>";
@@ -305,6 +310,7 @@
 				2C7E5C7A1E1C5ECB002F86AF /* CustomRenderMode.mm in Sources */,
 				AA9826259567130803CC5946 /* WindowComponent.mm in Sources */,
 				AA982BD71B76B0D7C80D3FB8 /* OutsideWorldComponent.mm in Sources */,
+				AA9820484CB12B22F67CCCA1 /* OpenWindowComponent.m in Sources */,
 			);
 			runOnlyForDeploymentPostprocessing = 0;
 		};
@@ -435,7 +441,7 @@
 				GCC_C_LANGUAGE_STANDARD = gnu99;
 				GCC_DYNAMIC_NO_PIC = NO;
 				GCC_NO_COMMON_BLOCKS = YES;
-				GCC_OPTIMIZATION_LEVEL = s;
+				GCC_OPTIMIZATION_LEVEL = 0;
 				GCC_PREPROCESSOR_DEFINITIONS = (
 					"DEBUG=1",
 					"$(inherited)",
