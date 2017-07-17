@@ -116,19 +116,25 @@ typedef NS_ENUM (NSUInteger, PortalState) {
  */
 - (bool)openPortalOnWallPosition:(SCNVector3)position wallNormal:(GLKVector3)normal toVRWorld:(OutsideWorldComponent *)vrWorld {
     if (![self isFullyClosed]) return false; // Abort opening the portal.
+    normal = GLKVector3Normalize(normal);
+    
+    [self regenerateGeometry];
 
     GLKVector3 hitPos = SCNVector3ToGLKVector3(position);
 
     // offset from the wall a bit
     GLKVector3 portalPos =
-            GLKVector3Add(hitPos, GLKVector3MultiplyScalar(normal, PORTAL_FRUSTUM_CROSSING_WIDTH + 0.1F));
+            GLKVector3Add(hitPos, GLKVector3MultiplyScalar(normal, -1.0F * (PORTAL_FRUSTUM_CROSSING_WIDTH + 0.1F)));
 
     // position portal node
     self.node.position = SCNVector3FromGLKVector3(portalPos);
 
-    // rotate portal to face away from the wall
-    float yRot = atan2f(normal.x, normal.z);
-    self.node.rotation = SCNVector4Make(0, 1, 0, yRot);
+    // portal starts facing upwards, rotate such that faces normal
+    const GLKVector3 up = GLKVector3Make(0, 1, 0);
+    auto rotationAxis = GLKVector3CrossProduct(up, normal);
+    auto rotationAmount = (float) acos(GLKVector3DotProduct(normal, up));
+    auto q = GLKQuaternionMakeWithAngleAndVector3Axis(rotationAmount, rotationAxis);
+    self.node.orientation = SCNVector4Make(q.x, q.y, q.z, q.w);
 
     // Align the VR world to match our portal.
     [vrWorld alignVRWorldToNode:self.node];
@@ -144,6 +150,7 @@ typedef NS_ENUM (NSUInteger, PortalState) {
 - (bool)openPortalOnFloorPosition:(SCNVector3)position facingTarget:(SCNVector3)target toVRWorld:(OutsideWorldComponent *)vrWorld {
     if (![self isFullyClosed]) return false; // Abort opening the portal.
 
+    [self regenerateGeometry];
 
     position.y = 0; // Anchor to ground.
     self.node.position = position;
@@ -159,7 +166,6 @@ typedef NS_ENUM (NSUInteger, PortalState) {
     [self setOpen:true];
     return true;
 }
-
 
 /**
  * Begin closing the portal.
@@ -412,7 +418,7 @@ typedef NS_ENUM (NSUInteger, PortalState) {
             [SCNNode nodeWithGeometry:[SCNCylinder cylinderWithRadius:PORTAL_CIRCLE_RADIUS height:0.001]];
     self.portalCrossingPlaneNode =
             [SCNNode nodeWithGeometry:[SCNCylinder cylinderWithRadius:PORTAL_CIRCLE_RADIUS height:0.0]];
-    self.portalGeometryNode.rotation = SCNVector4Make(1, 0, 0, M_PI_2);
+    self.portalGeometryNode.rotation = SCNVector4Make(1, 0, 0, 0);
     self.portalCrossingPlaneNode.transform = self.portalGeometryNode.transform;
 
     // Re-make the occlude and depth nodes.
@@ -430,8 +436,8 @@ typedef NS_ENUM (NSUInteger, PortalState) {
     _depth.transform = self.portalGeometryNode.transform;
     [_depth setRenderingOrderRecursively:(VR_WORLD_RENDERING_ORDER + 4)];
 
-    self.occlude.geometry.firstMaterial.cullMode = SCNCullFront;
-    self.depth.geometry.firstMaterial.cullMode = SCNCullFront;
+    //self.occlude.geometry.firstMaterial.cullMode = SCNCullFront;
+    //self.depth.geometry.firstMaterial.cullMode = SCNCullFront;
 
     self.portalGeometryNode.geometry.firstMaterial.doubleSided = true;
     self.portalGeometryNode.categoryBitMask = RAYCAST_IGNORE_BIT;
@@ -446,12 +452,14 @@ typedef NS_ENUM (NSUInteger, PortalState) {
 
     // Rounded Frame
     self.portalFrameNode =
-            [SCNNode nodeWithGeometry:[SCNBox boxWithWidth:PORTAL_CIRCLE_RADIUS * 2 height:PORTAL_CIRCLE_RADIUS
-                    * 2                             length:.1 chamferRadius:0]];
+            [SCNNode nodeWithGeometry:[SCNBox boxWithWidth:PORTAL_CIRCLE_RADIUS * .2 height:.03 length:
+                    PORTAL_CIRCLE_RADIUS * .2 chamferRadius:0]];
     [self.portalFrameNode.geometry.firstMaterial
             .diffuse setContents:[UIColor colorWithRed:0.678f green:0.678f blue:0.678f alpha:1]];
-    self.portalFrameNode.rotation = SCNVector4Make(1, 1, 0, (float) M_PI_2);
     self.portalFrameNode.transform = self.portalGeometryNode.transform;
+    auto pos = self.portalFrameNode.position;
+
+    self.portalFrameNode.position = SCNVector3Make(pos.x, pos.y, pos.z + .1F);
     [self.portalFrameNode setCategoryBitMask:RAYCAST_IGNORE_BIT | CATEGORY_BIT_MASK_LIGHTING];
     [self.portalGeometryTransformNode addChildNode:self.portalFrameNode];
 
@@ -460,7 +468,6 @@ typedef NS_ENUM (NSUInteger, PortalState) {
 
 - (void)start {
     [super start];
-
 
     self.audioWarpIn = [[AudioEngine main] loadAudioNamed:@"Robot_WarpIn.caf"];
     self.audioWarpOut = [[AudioEngine main] loadAudioNamed:@"Robot_WarpOut.caf"];
