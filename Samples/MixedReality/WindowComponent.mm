@@ -436,8 +436,8 @@ typedef NS_ENUM (NSUInteger, PortalState) {
     _depth.transform = self.portalGeometryNode.transform;
     [_depth setRenderingOrderRecursively:(VR_WORLD_RENDERING_ORDER + 4)];
 
-    //self.occlude.geometry.firstMaterial.cullMode = SCNCullFront;
-    //self.depth.geometry.firstMaterial.cullMode = SCNCullFront;
+    self.occlude.geometry.firstMaterial.cullMode = SCNCullFront;
+    self.depth.geometry.firstMaterial.cullMode = SCNCullFront;
 
     self.portalGeometryNode.geometry.firstMaterial.doubleSided = true;
     self.portalGeometryNode.categoryBitMask = RAYCAST_IGNORE_BIT;
