@@ -196,10 +196,10 @@
 
 - (void)alignVRWorldToNode:(SCNNode*)targetNode {
 #ifdef ENABLE_ROBOTROOM
-    if( self.mode == VRWorldRobotRoom ) {
+    if( self.mode == WindowWorldRobotRoom ) {
         _robotRoomNode.position = SCNVector3Make(0, 0, 1.5);
         _robotRoomNode.eulerAngles = SCNVector3Make(M_PI, 0, 0); // Rotate around Y-axis to look the other way.
-    } else if( self.mode == VRWorldBookstore ) {
+    } else if( self.mode == WindowWorldBookstore ) {
         _bookstoreNode.position = SCNVector3Make(0, -0.5, -2.4); // Adjust the vr world to be a little more centred.
         _bookstoreNode.eulerAngles = SCNVector3Make(0, M_PI, 0); // Turn the bookstore around.
     }
@@ -217,8 +217,8 @@
 - (void) updateWithDeltaTime:(NSTimeInterval)seconds {
     [super updateWithDeltaTime:seconds];
 #ifdef ENABLE_ROBOTROOM
-    if( _mode == VRWorldRobotRoom ) {
-        if( self.portalComponent.isInsideAR == NO ){
+    if( _mode == WindowWorldRobotRoom ) {
+        if( self.windowComponent.isInsideAR == NO ){
             if ( !self.turnOnLights)
                 self.lightsEnabledDelay = VR_LIGHTS_ENABLED_DELAY;
             self.turnOnLights = YES;
@@ -239,7 +239,7 @@
             }
         }
         
-        if( self.portalComponent.isInsideAR == NO
+        if( self.windowComponent.isInsideAR == NO
          && _lights == VR_LIGHTS_MAX
          && _openBayDoors == NO ) {
             self.openBayDoors = YES;

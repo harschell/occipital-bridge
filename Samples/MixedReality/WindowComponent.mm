@@ -109,7 +109,7 @@ typedef NS_ENUM (NSUInteger, PortalState) {
             [SCNNode nodeWithGeometry:[SCNCylinder cylinderWithRadius:PORTAL_CIRCLE_RADIUS height:0.001]];
     self.portalCrossingPlaneNode =
             [SCNNode nodeWithGeometry:[SCNCylinder cylinderWithRadius:PORTAL_CIRCLE_RADIUS height:0.0]];
-    self.portalGeometryNode.rotation = SCNVector4Make(1, 0, 0, 0);
+    self.portalGeometryNode.rotation = SCNVector4Make(1, 0, 0, M_PI_2);
     self.portalCrossingPlaneNode.transform = _portalGeometryNode.transform;
 
     // Re-make the occlude and depth nodes.
@@ -143,9 +143,11 @@ typedef NS_ENUM (NSUInteger, PortalState) {
     [self.portalCrossingTransformNode addChildNode:self.portalCrossingPlaneNode];
 
     // round frame for portal ont he wall.
-    self.portalFrameNode =
-            [SCNNode nodeWithGeometry:[SCNBox boxWithWidth:PORTAL_CIRCLE_RADIUS * 2 height:PORTAL_CIRCLE_RADIUS
-                    * 2                             length:.1 chamferRadius:0]];
+    //self.portalFrameNode =
+    //        [SCNNode nodeWithGeometry:[SCNBox boxWithWidth:PORTAL_CIRCLE_RADIUS * 2 height:PORTAL_CIRCLE_RADIUS
+    //                * 2                             length:.1 chamferRadius:0]];
+    self.portalFrameNode = [SCNNode nodeWithGeometry:[SCNTorus torusWithRingRadius:PORTAL_CIRCLE_RADIUS pipeRadius:0.0075f]];
+
     [self.portalFrameNode.geometry.firstMaterial
             .diffuse setContents:[UIColor colorWithRed:0.678f green:0.678f blue:0.678f alpha:1]];
     self.portalFrameNode.rotation = SCNVector4Make(1, 1, 0, (float) M_PI_2);
