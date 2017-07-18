@@ -398,7 +398,6 @@ static const SCNMatrix4 defaultPivot = SCNMatrix4MakeRotation(M_PI, 1.0, 0.0, 0.
     _portal = [[WindowComponent alloc] init];
     _portal.mixedReality = _mixedReality;
     _portal.overlayComponent = colorOverlay;
-    _outsideWorld.windowComponent = _portal;
     _portal.stereoRendering = YES;
     //_portal.interactive = [BEAppSettings booleanValueFromAppSetting:SETTING_PLAY_SCRIPT defaultValueIfSettingIsNotInBundle:NO] == NO;
     GKEntity *_portalEntity = [[SceneManager main] createEntity];
@@ -436,7 +435,6 @@ static const SCNMatrix4 defaultPivot = SCNMatrix4MakeRotation(M_PI, 1.0, 0.0, 0.
         if (startTime!=0) {
             static bool started = false;
             if (time - startTime > 8.0 && !started) {
-                _outsideWorld.mode = WindowWorldRobotRoom;
                 [_outsideWorld setEnabled:YES];
 //                [_portal openPortalOnFloorPosition:SCNVector3Zero
 //                                      facingTarget:SCNVector3FromGLKVector3([Camera main].position)

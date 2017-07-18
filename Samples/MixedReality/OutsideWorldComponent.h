@@ -9,18 +9,8 @@
 #import "Core.h"
 #import "WindowComponent.h"
 
-/**
- * Enums for selecting the current portal mode.
- */
-typedef NS_ENUM (NSUInteger, OutsideWorldMode) {
-    WindowWorldRobotRoom = 0,
-    WindowWorldBookstore,
-};
-
 @interface OutsideWorldComponent : Component
 
-@property(nonatomic, strong) WindowComponent *windowComponent;
-@property(nonatomic) OutsideWorldMode mode;
 
 /**
  * Align the VRWorld to a movable node, like a Portal, so our entry/exit is consistenly oriented.

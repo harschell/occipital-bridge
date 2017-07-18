@@ -365,6 +365,8 @@ typedef NS_ENUM (NSUInteger, PortalState) {
 - (void)setIsInsideAR:(bool)isInsideAR {
     if (_isInsideAR==isInsideAR) return; // Early exit, redudant hits causes the screen to fade out.
 
+    // TODO: Update the outside world component when this happens so that the lights turn on.
+
     _isInsideAR = isInsideAR;
 
     SCNNode *scanNode = [_mixedReality.sceneKitScene.rootNode childNodeWithName:@"customVizNode" recursively:true];
