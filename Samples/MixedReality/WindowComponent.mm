@@ -124,18 +124,22 @@ typedef NS_ENUM (NSUInteger, PortalState) {
 
     // offset from the wall a bit
     GLKVector3 portalPos =
-            GLKVector3Add(hitPos, GLKVector3MultiplyScalar(normal, -1.0F * (PORTAL_FRUSTUM_CROSSING_WIDTH + 0.1F)));
+            GLKVector3Add(hitPos, GLKVector3MultiplyScalar(normal, PORTAL_FRUSTUM_CROSSING_WIDTH));
 
     // position portal node
     self.node.position = SCNVector3FromGLKVector3(portalPos);
 
     // portal starts facing upwards, rotate such that faces normal
-    const GLKVector3 up = GLKVector3Make(0, 1, 0);
+    const GLKVector3 up = GLKVector3Make(0, -1, 0);
     auto rotationAxis = GLKVector3CrossProduct(up, normal);
     auto rotationAmount = (float) acos(GLKVector3DotProduct(normal, up));
     auto q = GLKQuaternionMakeWithAngleAndVector3Axis(rotationAmount, rotationAxis);
+    auto qq = self.node.orientation;
+    NSLog(@"\t orientation %f,%f,%f,%f", qq.x, qq.y, qq.z, qq.w);
     self.node.orientation = SCNVector4Make(q.x, q.y, q.z, q.w);
 
+
+    //self.node.rotation = SCNVector4Make(rotationAxis.x, rotationAxis.y, rotationAxis.z, rotationAmount);
     // Align the VR world to match our portal.
     [vrWorld alignVRWorldToNode:self.node];
     [self setOpen:true];

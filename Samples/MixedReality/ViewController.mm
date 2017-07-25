@@ -114,7 +114,8 @@ static const SCNMatrix4 defaultPivot = SCNMatrix4MakeRotation(M_PI, 1.0, 0.0, 0.
     // Here is a list of markup we'll use for our sample.
     // If the user decides, the locations of this markup will be saved on device.
 
-    _markupNameList = @[@"tree", @"chair", @"gift", @"portal"];
+//    _markupNameList = @[@"tree", @"chair", @"gift", @"portal"];
+    _markupNameList = @[];
 
     BECaptureReplayMode replayMode = BECaptureReplayModeDisabled;
     if ([AppSettings booleanValueFromAppSetting:@"replayCapture"
@@ -161,6 +162,7 @@ static const SCNMatrix4 defaultPivot = SCNMatrix4MakeRotation(M_PI, 1.0, 0.0, 0.
     // Here we initialize two gesture recognizers as a way to expose features.
 
     {
+        // todo: This gesture recongnizer doesn't seem to work.
         // Allocate and initialize the first tap gesture.
 
         UITapGestureRecognizer
@@ -181,7 +183,7 @@ static const SCNMatrix4 defaultPivot = SCNMatrix4MakeRotation(M_PI, 1.0, 0.0, 0.
         UITapGestureRecognizer *twoFingerTapRecognizer =
                 [[UITapGestureRecognizer alloc] initWithTarget:self action:@selector(changeRenderMode)];
 
-        twoFingerTapRecognizer.numberOfTouchesRequired = 1;
+        twoFingerTapRecognizer.numberOfTouchesRequired = 2;
 
         [self.view addGestureRecognizer:twoFingerTapRecognizer];
     }
@@ -195,7 +197,7 @@ static const SCNMatrix4 defaultPivot = SCNMatrix4MakeRotation(M_PI, 1.0, 0.0, 0.
 - (void)startExperience {
     // For this experience, let's switch to a mode with AR objects composited with the passthrough camera.
 
-    [_mixedReality setRenderStyle:BERenderStyleSceneKitAndColorCameraAndWireframe withDuration:0.5];
+    [_mixedReality setRenderStyle:BERenderStyleSceneKitAndColorCamera withDuration:0.5];
 
     _experienceIsRunning = YES;
 }
@@ -541,71 +543,19 @@ static const SCNMatrix4 defaultPivot = SCNMatrix4MakeRotation(M_PI, 1.0, 0.0, 0.
     BERenderStyle nextRenderStyle = BERenderStyle((renderStyle + 1) % NumBERenderStyles);
 
     [_mixedReality setRenderStyle:nextRenderStyle withDuration:0.5];
-
 }
 
 - (void)userSelection:(CGPoint)tapPoint {
-    // An example of what you can do when the user taps.
-    NSLog(@"Bridge Engine Sample handleTap %@", NSStringFromCGPoint(tapPoint));
-
-    // First, hit test against any SceneKit objects.
-    NSArray<SCNHitTestResult *> *hitTestResults = [_mixedReality hitTestSceneKitFrom2DScreenPoint:tapPoint options:nil];
-
-    SCNNode *tappedObjectNode = nil;
-
-    for (SCNHitTestResult *result in hitTestResults) {
-        SCNNode *node = [result node];
-
-        // We could have hit a child node of one of the nodes we are actually looking for.
-        // We must traverse up the hierarchy until we find it or reach the root node.
-
-        do {
-            NSString *nodeNameLower = node.name.lowercaseString;
-
-            if ([_markupNameList containsObject:nodeNameLower]) {
-                // We hit one of our markup objects.
-
-                tappedObjectNode = node;
-
-                break;
-            }
-
-            node = node.parentNode;
-
-        } while (node!=nil);
-
-        if (tappedObjectNode)
-            break;
-    }
-
-    if (tappedObjectNode) {
-        NSLog(@"tappedObjectNode: %@", tappedObjectNode.name);
-
-        [self highlightGivenNode:tappedObjectNode];
-
-        return;
-    }
-
-    // Remove the highlight.
-
-    [self highlightGivenNode:nil];
-
-    // If we don't hit any SceneKit objects, let's set the location of the gift based on the mesh.
-    // Even though the gift's location is set by markup at the start of the experience, we're showing off moving it around with a tap.
-
     SCNVector3 meshNormal{NAN, NAN, NAN};
     SCNVector3 mesh3DPoint = [_mixedReality mesh3DFrom2DPoint:tapPoint outputNormal:&meshNormal];
 
-    NSLog(@"\t mesh3DPoint %f,%f,%f", mesh3DPoint.x, mesh3DPoint.y, mesh3DPoint.z);
+    if (mesh3DPoint.x != NAN && mesh3DPoint.y != NAN && mesh3DPoint.z != NAN) {
+        NSLog(@"\t mesh3DPoint %f,%f,%f", mesh3DPoint.x, mesh3DPoint.y, mesh3DPoint.z);
 
-    mesh3DPoint.y -= .1;
-    
-    
-    GLKVector3 normal = SCNVector3ToGLKVector3(meshNormal);
-    [_portal openPortalOnWallPosition:SCNVector3Make(0, -.1F, 0) wallNormal:GLKVector3Make(0, 0, 1) toVRWorld:_outsideWorld];
-
-    self.giftNode.position = mesh3DPoint;
-
+        GLKVector3 normal = GLKVector3Make(-meshNormal.x, -meshNormal.y, -meshNormal.z);
+        [_portal openPortalOnWallPosition:mesh3DPoint wallNormal:SCNVector3ToGLKVector3(meshNormal) toVRWorld:_outsideWorld];
+//        [_portal openPortalOnWallPosition:SCNVector3Make(0, -.10F, 0) wallNormal:SCNVector3ToGLKVector3(meshNormal) toVRWorld:_outsideWorld];
+    }
 }
 
 
