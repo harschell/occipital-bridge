@@ -91,6 +91,11 @@ static const SCNMatrix4 defaultPivot = SCNMatrix4MakeRotation(M_PI, 1.0, 0.0, 0.
         printf(" ");
     }
 
+    if (rootNode.camera != nil) {
+
+        printf(" [Camera] ");
+    }
+
     if (hidden && [rootNode isHidden]) {
         printf("%s [Hidden]\n", [[rootNode name] UTF8String]);
     } else {
@@ -324,7 +329,7 @@ static const SCNMatrix4 defaultPivot = SCNMatrix4MakeRotation(M_PI, 1.0, 0.0, 0.
 
     if (foundAllMarkup) {
         [self startExperience];
-        _mixedReality.sceneKitCamera.zFar = 3000;
+        //_mixedReality.sceneKitCamera.zFar = 100;
     } else {
         [_mixedReality startMarkupEditing];
     }
@@ -335,7 +340,7 @@ static const SCNMatrix4 defaultPivot = SCNMatrix4MakeRotation(M_PI, 1.0, 0.0, 0.
     self.giftNode = [[self class] loadNodeNamed:@"Gift" fromSceneNamed:@ASSETS_DIR"/gift.dae"];
 
     //Load Sky
-    self.skyNode = [[self class] loadNodeNamed:@"Sky" fromSceneNamed:@ASSETS_DIR"/sky.dae"];
+    //self.skyNode = [[self class] loadNodeNamed:@"Sky" fromSceneNamed:@ASSETS_DIR"/sky.dae"];
     self.skyNode.position = SCNVector3Zero;
     self.skyNode.transform = SCNMatrix4Identity;
 
@@ -406,11 +411,15 @@ static const SCNMatrix4 defaultPivot = SCNMatrix4MakeRotation(M_PI, 1.0, 0.0, 0.
 
     self.portalNode = [_portal node];
 
+    // Setup the near/far clipping planes to be large enough for the mountains world.
+    //[Camera main].camera.zFar = 10000;
+
     // uncomment this line to trigger the custom rendering mode.
-    [_mixedReality setRenderStyle:BERenderStyleSceneKitAndCustomEnvironmentShader withDuration:1];
+//    [_mixedReality setRenderStyle:BERenderStyleSceneKitAndCustomEnvironmentShader withDuration:1];
     //[_mixedReality setCustomRenderStyle: ];
     // Ready to start the Scene Manager- this will start all the components in the scene.
     [[SceneManager main] startWithMixedRealityMode:_mixedReality];
+
 }
 
 - (void)mixedRealityMarkupEditingEnded {
@@ -427,6 +436,7 @@ static const SCNMatrix4 defaultPivot = SCNMatrix4MakeRotation(M_PI, 1.0, 0.0, 0.
     // this updates all components
     [[SceneManager main] updateAtTime:time mixedRealityMode:_mixedReality];
 
+//    [ViewController printSceneNodes:[[Scene main].scene rootNode] showHidden:true];
     // If we've waited for a second, spawn the portal:
     {
         if (startTime==0 && time > 1.0) {
@@ -434,7 +444,7 @@ static const SCNMatrix4 defaultPivot = SCNMatrix4MakeRotation(M_PI, 1.0, 0.0, 0.
         }
         if (startTime!=0) {
             static bool started = false;
-            if (time - startTime > 8.0 && !started) {
+            if (time - startTime > 1.0 && !started) {
                 [_outsideWorld setEnabled:YES];
 //                [_portal openPortalOnFloorPosition:SCNVector3Zero
 //                                      facingTarget:SCNVector3FromGLKVector3([Camera main].position)
@@ -442,9 +452,7 @@ static const SCNMatrix4 defaultPivot = SCNMatrix4MakeRotation(M_PI, 1.0, 0.0, 0.
 
 
 //                GLKVector3 normal = GLKVector3Subtract([Camera main].position, SCNVector3ToGLKVector3(SCNVector3Zero));
-                GLKVector3 normal = GLKVector3Make(0, 0, 1);
-                [_portal openPortalOnWallPosition:SCNVector3Make(0, 0, 0) wallNormal:normal toVRWorld:_outsideWorld];
-                started = true;
+                                started = true;
             }
         }
     }
@@ -589,6 +597,10 @@ static const SCNMatrix4 defaultPivot = SCNMatrix4MakeRotation(M_PI, 1.0, 0.0, 0.
     SCNVector3 mesh3DPoint = [_mixedReality mesh3DFrom2DPoint:tapPoint outputNormal:&meshNormal];
 
     NSLog(@"\t mesh3DPoint %f,%f,%f", mesh3DPoint.x, mesh3DPoint.y, mesh3DPoint.z);
+    
+    
+    GLKVector3 normal = GLKVector3Make(0, 0, 1);
+    //[_portal openPortalOnWallPosition:SCNVector3Make(0, -.1F, 0) wallNormal:normal toVRWorld:_outsideWorld];
 
     self.giftNode.position = mesh3DPoint;
 

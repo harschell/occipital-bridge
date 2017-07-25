@@ -4,8 +4,8 @@
   <contributor>
    <authoring_tool>SceneKit Collada Exporter v1.0</authoring_tool>
   </contributor>
-  <created>2017-05-31T00:50:05Z</created>
-  <modified>2017-05-31T00:50:05Z</modified>
+  <created>2017-07-24T23:55:42Z</created>
+  <modified>2017-07-24T23:55:42Z</modified>
   <unit meter="0.010000"/>
   <up_axis>Y_UP</up_axis>
  </asset>
@@ -38,27 +38,29 @@
      </sampler2D>
     </newparam>
     <technique sid="common">
-     <lambert>
-      <ambient>
-       <color>0 0 0 1</color>
-      </ambient>
-      <diffuse>
-       <texture texture="ID2_image1" texcoord="CHANNEL2"/>
-      </diffuse>
+     <constant>
       <transparent opaque="RGB_ZERO">
        <color>1 1 1 1</color>
       </transparent>
       <transparency>
        <float>0</float>
       </transparency>
-      <index_of_refraction>
-       <float>1</float>
-      </index_of_refraction>
-     </lambert>
+     </constant>
+     <extra>
+      <technique profile="SceneKit">
+       <constant_ambient>
+        <color>0 0 0 1</color>
+       </constant_ambient>
+       <constant_diffuse>
+        <texture texture="ID2_image1" texcoord="CHANNEL2"/>
+       </constant_diffuse>
+      </technique>
+     </extra>
     </technique>
    </profile_COMMON>
    <extra>
     <technique profile="SceneKit">
+     <double_sided>1</double_sided>
      <litPerPixel>1</litPerPixel>
      <ambient_diffuse_lock>1</ambient_diffuse_lock>
     </technique>
@@ -113,7 +115,7 @@
  <library_visual_scenes>
   <visual_scene id="scene7">
    <node id="Sky" name="Sky">
-    <matrix>100 0 0 0 0 100 0 0 0 0 100 0 0 0 0 1 </matrix>
+    <matrix>10 0 0 0 0 10 0 0 0 0 10 0 0 0 0 1 </matrix>
     <instance_geometry url="#Sky-lib">
      <bind_material>
       <technique_common>
