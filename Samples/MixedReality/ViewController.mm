@@ -32,14 +32,8 @@ static const SCNMatrix4 defaultPivot = SCNMatrix4MakeRotation(M_PI, 1.0, 0.0, 0.
 
 @interface ViewController ()<BEMixedRealityModeDelegate, BEControllerDelegate>
 
-@property(strong) SCNNode *treeNode;
-@property(strong) SCNNode *chairNode;
-@property(strong) SCNNode *giftNode;
-@property(strong) SCNNode *skyNode;
-@property(strong) SCNNode *portalNode;
-
-@property(strong) SCNNode *highlightNode;
 @property(strong) SCNNode *reticleNode;
+@property(strong) SCNNode *portalNode;
 
 @property bool runningInStereo;
 
@@ -53,10 +47,9 @@ static const SCNMatrix4 defaultPivot = SCNMatrix4MakeRotation(M_PI, 1.0, 0.0, 0.
     BEMixedRealityMode *_mixedReality;
     NSArray *_markupNameList;
     BOOL _experienceIsRunning;
-    OutsideWorldComponent *_outsideWorld;
     WindowComponent *_portal;
-    NSTimeInterval startTime;
-
+    OutsideWorldComponent *_outsideWorld;
+    ColorOverlayComponent *_colorOverlay;
 }
 
 + (SCNNode *)loadNodeNamed:(NSString *)nodeName fromSceneNamed:(NSString *)sceneName {
@@ -91,7 +84,7 @@ static const SCNMatrix4 defaultPivot = SCNMatrix4MakeRotation(M_PI, 1.0, 0.0, 0.
         printf(" ");
     }
 
-    if (rootNode.camera != nil) {
+    if (rootNode.camera!=nil) {
 
         printf(" [Camera] ");
     }
@@ -205,90 +198,8 @@ static const SCNMatrix4 defaultPivot = SCNMatrix4MakeRotation(M_PI, 1.0, 0.0, 0.
 - (void)updateObjectPositionWithMarkupName:(NSString *)markupName {
     // Here, we're using markup to set the location of static objects.
     // However, you could do something much more sophisticated, like have multiple markup points be waypoints for a virtual character.
-
-    SCNNode *markupNode = [_mixedReality markupNodeForName:markupName];
-
-    // Early-return if this markup node hasn't been positioned yet.
-    if (!markupNode)
-        return;
-
-    NSLog(@"Markup Name is %@, at (%f, %f, %f)",
-          markupName,
-          markupNode.position.x,
-          markupNode.position.y,
-          markupNode.position.z);
-
-    SCNNode *objectNode = nil;
-
-    if ([markupName isEqualToString:@"tree"]) {
-        objectNode = self.treeNode;
-        objectNode.scale = SCNVector3Make(0.2f, 0.2f, 0.2f);
-        objectNode.position = markupNode.position;
-        objectNode.eulerAngles = markupNode.eulerAngles;
-    } else if ([markupName isEqualToString:@"chair"]) {
-        objectNode = self.chairNode;
-        objectNode.transform = markupNode.transform;
-    } else if ([markupName isEqualToString:@"gift"]) {
-        // The gift's rotation will be determined in the updateAtTime method.
-
-        objectNode = self.giftNode;
-        objectNode.position = markupNode.position;
-    } else if ([markupName isEqualToString:@"portal"]) {
-        objectNode = self.portalNode;
-        objectNode.position = markupNode.position;
-    }
-
-    // Regardless of which object was moved, let's set it visible now.
-    objectNode.hidden = NO;
 }
 
-- (void)highlightGivenNode:(SCNNode *)nodeToHighlight {
-    if (!nodeToHighlight) {
-        [self.highlightNode setHidden:YES];
-
-        return;
-    }
-
-    // Scale the highlightNode based on the size of the nodeToHighlight.
-
-    SCNVector3 boundingBoxMin, boundingBoxMax;
-    [nodeToHighlight getBoundingBoxMin:&boundingBoxMin max:&boundingBoxMax];
-
-    // [SCNNode getBoundingBoxMin] does not take into account the object scale, so we must do it ourselves.
-
-    boundingBoxMin = SCNVector3Make(
-            boundingBoxMin.x * nodeToHighlight.scale.x,
-            boundingBoxMin.y * nodeToHighlight.scale.y,
-            boundingBoxMin.z * nodeToHighlight.scale.z
-    );
-
-    boundingBoxMax = SCNVector3Make(
-            boundingBoxMax.x * nodeToHighlight.scale.x,
-            boundingBoxMax.y * nodeToHighlight.scale.y,
-            boundingBoxMax.z * nodeToHighlight.scale.z
-    );
-
-    float horizontalBoundingLength = sqrtf(
-            powf(boundingBoxMin.x - boundingBoxMax.x, 2)
-                    + powf(boundingBoxMin.z - boundingBoxMax.z, 2)
-    );
-
-    // Slightly shrink the bounding length.
-
-    horizontalBoundingLength *= 0.95f;
-
-    self.highlightNode.scale = SCNVector3Make(horizontalBoundingLength, 1, horizontalBoundingLength);
-
-    // Place it on the floor under the highlighted Node
-
-    self.highlightNode.position = SCNVector3Make(
-            nodeToHighlight.position.x,
-            nodeToHighlight.position.y,
-            nodeToHighlight.position.z
-    );
-
-    [self.highlightNode setHidden:NO];
-}
 // --------------------------------------------
 // MixedReality Delegate Methods
 
@@ -336,41 +247,10 @@ static const SCNMatrix4 defaultPivot = SCNMatrix4MakeRotation(M_PI, 1.0, 0.0, 0.
         [_mixedReality startMarkupEditing];
     }
 
-    // Load SceneKit assets.
-    self.treeNode = [[self class] loadNodeNamed:@"Tree" fromSceneNamed:@ASSETS_DIR"/tree.dae"];
-    self.chairNode = [[self class] loadNodeNamed:@"Chair" fromSceneNamed:@ASSETS_DIR"/chair.dae"];
-    self.giftNode = [[self class] loadNodeNamed:@"Gift" fromSceneNamed:@ASSETS_DIR"/gift.dae"];
-
-    //Load Sky
-    //self.skyNode = [[self class] loadNodeNamed:@"Sky" fromSceneNamed:@ASSETS_DIR"/sky.dae"];
-    self.skyNode.position = SCNVector3Zero;
-    self.skyNode.transform = SCNMatrix4Identity;
-
-    // Add assets to the world node.
-//    [_mixedReality.worldNodeWhenRelocalized addChildNode:self.treeNode];
-//    [_mixedReality.worldNodeWhenRelocalized addChildNode:self.chairNode];
-//    [_mixedReality.worldNodeWhenRelocalized addChildNode:self.giftNode];
-//    [_mixedReality.worldNodeWhenRelocalized addChildNode:self.skyNode];
-
-    // Hide all the objects initially (until markup positions them).
-    [self.treeNode setHidden:YES];
-    [self.chairNode setHidden:YES];
-    [self.giftNode setHidden:YES];
-
     // Set any initial objects based on markup.
 
     for (id markupName in _markupNameList)
         [self updateObjectPositionWithMarkupName:markupName];
-
-    // Add a custom node that we can use to highlight an object
-
-    self.highlightNode = [SCNNode nodeWithGeometry:[SCNCylinder cylinderWithRadius:0.5 height:0.05]];
-    self.highlightNode.geometry.firstMaterial.diffuse.contents =
-            [UIColor colorWithRed:255 / 255.0 green:105 / 255.0 blue:180 / 255.0 alpha:1];
-    self.highlightNode.hidden = YES;
-
-    // Add the highlight node to the world.
-    [_mixedReality.worldNodeWhenRelocalized addChildNode:self.highlightNode];
 
 
     // Add a custom node to indicate where a click will take place in stereo, using the controller.
@@ -397,14 +277,14 @@ static const SCNMatrix4 defaultPivot = SCNMatrix4MakeRotation(M_PI, 1.0, 0.0, 0.
     [_mixedReality setCustomRenderStyle:customRenderMode];
 
     // portal
-    ColorOverlayComponent *colorOverlay = [[ColorOverlayComponent alloc] init];
-    [[[SceneManager main] createEntity] addComponent:colorOverlay];
+    _colorOverlay = [[ColorOverlayComponent alloc] init];
+    [[[SceneManager main] createEntity] addComponent:_colorOverlay];
 
     _outsideWorld = [[OutsideWorldComponent alloc] init];
     [[[SceneManager main] createEntity] addComponent:_outsideWorld];
     _portal = [[WindowComponent alloc] init];
     _portal.mixedReality = _mixedReality;
-    _portal.overlayComponent = colorOverlay;
+    _portal.overlayComponent = _colorOverlay;
     _portal.stereoRendering = YES;
     //_portal.interactive = [BEAppSettings booleanValueFromAppSetting:SETTING_PLAY_SCRIPT defaultValueIfSettingIsNotInBundle:NO] == NO;
     GKEntity *_portalEntity = [[SceneManager main] createEntity];
@@ -438,51 +318,8 @@ static const SCNMatrix4 defaultPivot = SCNMatrix4MakeRotation(M_PI, 1.0, 0.0, 0.
     // this updates all components
     [[SceneManager main] updateAtTime:time mixedRealityMode:_mixedReality];
 
-//    [ViewController printSceneNodes:[[Scene main].scene rootNode] showHidden:true];
-    // If we've waited for a second, spawn the portal:
-    {
-        if (startTime==0 && time > 1.0) {
-            startTime = time;
-        }
-        if (startTime!=0) {
-            static bool started = false;
-            if (time - startTime > 1.0 && !started) {
-                [_outsideWorld setEnabled:YES];
-//                [_portal openPortalOnFloorPosition:SCNVector3Zero
-//                                      facingTarget:SCNVector3FromGLKVector3([Camera main].position)
-//                                         toVRWorld:_outsideWorld];
-
-
-//                GLKVector3 normal = GLKVector3Subtract([Camera main].position, SCNVector3ToGLKVector3(SCNVector3Zero));
-                                started = true;
-            }
-        }
-    }
     // This method is called before rendering each frame.
     // It is safe to modify SceneKit objects from here.
-
-    {
-        // Let's spin the gift a little at every frame.
-
-        static NSTimeInterval lastUpdateTime = NAN;
-
-        if (!isnan(lastUpdateTime)) {
-            float deltaTime = (time - lastUpdateTime);
-
-            // Only spin the gift once our experience begins (after markup complete)
-
-            if (_experienceIsRunning) {
-                const float SPINNY_GIFT_RATE = 0.5; // rad/sec
-
-                SCNVector3 currentEuler = self.giftNode.eulerAngles;
-                currentEuler.y += SPINNY_GIFT_RATE * deltaTime;
-
-                self.giftNode.eulerAngles = currentEuler;
-            }
-        }
-
-        lastUpdateTime = time;
-    }
 
     {
         // Here, you can control an interaction using the location of the device.
@@ -549,12 +386,21 @@ static const SCNMatrix4 defaultPivot = SCNMatrix4MakeRotation(M_PI, 1.0, 0.0, 0.
     SCNVector3 meshNormal{NAN, NAN, NAN};
     SCNVector3 mesh3DPoint = [_mixedReality mesh3DFrom2DPoint:tapPoint outputNormal:&meshNormal];
 
-    if (mesh3DPoint.x != NAN && mesh3DPoint.y != NAN && mesh3DPoint.z != NAN) {
+    if (mesh3DPoint.x!=NAN && mesh3DPoint.y!=NAN && mesh3DPoint.z!=NAN) {
         NSLog(@"\t mesh3DPoint %f,%f,%f", mesh3DPoint.x, mesh3DPoint.y, mesh3DPoint.z);
 
         GLKVector3 normal = GLKVector3Make(-meshNormal.x, -meshNormal.y, -meshNormal.z);
+
+//        WindowComponent *_portal = [[WindowComponent alloc] init];
+//        _portal.mixedReality = _mixedReality;
+//        _portal.overlayComponent = _colorOverlay;
+//        _portal.stereoRendering = YES;
+//        GKEntity *_portalEntity = [[SceneManager main] createEntity];
+//        [_portalEntity addComponent:_portal];
+//        [[EventManager main] addGlobalEventComponent:_portal];
+//
+//        SCNNode *portalNode = [_portal node];
         [_portal openPortalOnWallPosition:mesh3DPoint wallNormal:SCNVector3ToGLKVector3(meshNormal) toVRWorld:_outsideWorld];
-//        [_portal openPortalOnWallPosition:SCNVector3Make(0, -.10F, 0) wallNormal:SCNVector3ToGLKVector3(meshNormal) toVRWorld:_outsideWorld];
     }
 }
 
