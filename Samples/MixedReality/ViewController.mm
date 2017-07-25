@@ -181,7 +181,7 @@ static const SCNMatrix4 defaultPivot = SCNMatrix4MakeRotation(M_PI, 1.0, 0.0, 0.
         UITapGestureRecognizer *twoFingerTapRecognizer =
                 [[UITapGestureRecognizer alloc] initWithTarget:self action:@selector(changeRenderMode)];
 
-        twoFingerTapRecognizer.numberOfTouchesRequired = 2;
+        twoFingerTapRecognizer.numberOfTouchesRequired = 1;
 
         [self.view addGestureRecognizer:twoFingerTapRecognizer];
     }
@@ -345,10 +345,10 @@ static const SCNMatrix4 defaultPivot = SCNMatrix4MakeRotation(M_PI, 1.0, 0.0, 0.
     self.skyNode.transform = SCNMatrix4Identity;
 
     // Add assets to the world node.
-    [_mixedReality.worldNodeWhenRelocalized addChildNode:self.treeNode];
-    [_mixedReality.worldNodeWhenRelocalized addChildNode:self.chairNode];
-    [_mixedReality.worldNodeWhenRelocalized addChildNode:self.giftNode];
-    [_mixedReality.worldNodeWhenRelocalized addChildNode:self.skyNode];
+//    [_mixedReality.worldNodeWhenRelocalized addChildNode:self.treeNode];
+//    [_mixedReality.worldNodeWhenRelocalized addChildNode:self.chairNode];
+//    [_mixedReality.worldNodeWhenRelocalized addChildNode:self.giftNode];
+//    [_mixedReality.worldNodeWhenRelocalized addChildNode:self.skyNode];
 
     // Hide all the objects initially (until markup positions them).
     [self.treeNode setHidden:YES];
@@ -415,7 +415,7 @@ static const SCNMatrix4 defaultPivot = SCNMatrix4MakeRotation(M_PI, 1.0, 0.0, 0.
     //[Camera main].camera.zFar = 10000;
 
     // uncomment this line to trigger the custom rendering mode.
-//    [_mixedReality setRenderStyle:BERenderStyleSceneKitAndCustomEnvironmentShader withDuration:1];
+    [_mixedReality setRenderStyle:BERenderStyleSceneKitAndColorCamera withDuration:1];
     //[_mixedReality setCustomRenderStyle: ];
     // Ready to start the Scene Manager- this will start all the components in the scene.
     [[SceneManager main] startWithMixedRealityMode:_mixedReality];
@@ -597,10 +597,12 @@ static const SCNMatrix4 defaultPivot = SCNMatrix4MakeRotation(M_PI, 1.0, 0.0, 0.
     SCNVector3 mesh3DPoint = [_mixedReality mesh3DFrom2DPoint:tapPoint outputNormal:&meshNormal];
 
     NSLog(@"\t mesh3DPoint %f,%f,%f", mesh3DPoint.x, mesh3DPoint.y, mesh3DPoint.z);
+
+    mesh3DPoint.y -= .1;
     
     
-    GLKVector3 normal = GLKVector3Make(0, 0, 1);
-    //[_portal openPortalOnWallPosition:SCNVector3Make(0, -.1F, 0) wallNormal:normal toVRWorld:_outsideWorld];
+    GLKVector3 normal = SCNVector3ToGLKVector3(meshNormal);
+    [_portal openPortalOnWallPosition:SCNVector3Make(0, -.1F, 0) wallNormal:GLKVector3Make(0, 0, 1) toVRWorld:_outsideWorld];
 
     self.giftNode.position = mesh3DPoint;
 

@@ -64,17 +64,17 @@ unsigned int const LIGHTING_BITMASK = 0x01000000;
 //    self.geometryNode = [[SCNScene sceneNamed:@"Assets.scnassets/sky.dae"]
 //            .rootNode childNodeWithName:@"Sky" recursively:true];
     self.geometryNode = [[SCNScene sceneNamed:@"Assets.scnassets/mountains_scene_full.dae"]
-    .rootNode childNodeWithName:@"Scene" recursively:true];
+            .rootNode childNodeWithName:@"Scene" recursively:true];
     self.geometryNode.name = @"GeometryNode";
 
     self.geometryNode.rotation = SCNVector4Make(1, 0, 0, (float) M_PI);
     //self.geometryNode.scale = SCNVector3Make(.02, .02, .02);
-    
-    SCNNode* materialnode = [[SCNScene sceneNamed:@"Assets.scnassets/sky.dae"]
-                         .rootNode childNodeWithName:@"Sky" recursively:true];
-    
+
+    SCNNode *materialnode = [[SCNScene sceneNamed:@"Assets.scnassets/sky.dae"]
+            .rootNode childNodeWithName:@"Sky" recursively:true];
+
     //self.geometryNode.geometry.firstMaterial = materialnode.geometry.firstMaterial;
-    
+
     [self.node addChildNode:self.geometryNode];
     NSAssert(self.node!=nil, @"Could not load the scene");
 
@@ -91,8 +91,7 @@ unsigned int const LIGHTING_BITMASK = 0x01000000;
     NSAssert(cnode != nil, @"Could not find child node");
     cnode.hidden = true;*/
 
-    //todo enable
-    // [self.node setRenderingOrderRecursively:VR_WORLD_RENDERING_ORDER];
+    [self.node setRenderingOrderRecursively:VR_WORLD_RENDERING_ORDER];
     [self.node setCastsShadowRecursively:NO];
 
     [[Scene main].rootNode addChildNode:self.node];
@@ -122,7 +121,9 @@ unsigned int const LIGHTING_BITMASK = 0x01000000;
     SCNVector3 angles = targetNode.eulerAngles;
     angles.z = 0;
     angles.x = 0;
+    angles.y -= M_PI_2;
     self.node.eulerAngles = angles;
+
 }
 
 - (void)updateWithDeltaTime:(NSTimeInterval)seconds {
