@@ -33,7 +33,7 @@ static const SCNMatrix4 defaultPivot = SCNMatrix4MakeRotation(M_PI, 1.0, 0.0, 0.
 @interface ViewController ()<BEMixedRealityModeDelegate, BEControllerDelegate>
 
 @property(strong) SCNNode *reticleNode;
-@property(strong) SCNNode *portalNode;
+//@property(strong) SCNNode *portalNode;
 
 @property bool runningInStereo;
 
@@ -47,7 +47,7 @@ static const SCNMatrix4 defaultPivot = SCNMatrix4MakeRotation(M_PI, 1.0, 0.0, 0.
     BEMixedRealityMode *_mixedReality;
     NSArray *_markupNameList;
     BOOL _experienceIsRunning;
-    WindowComponent *_portal;
+//    WindowComponent *_portal;
     OutsideWorldComponent *_outsideWorld;
     ColorOverlayComponent *_colorOverlay;
 }
@@ -282,16 +282,17 @@ static const SCNMatrix4 defaultPivot = SCNMatrix4MakeRotation(M_PI, 1.0, 0.0, 0.
 
     _outsideWorld = [[OutsideWorldComponent alloc] init];
     [[[SceneManager main] createEntity] addComponent:_outsideWorld];
-    _portal = [[WindowComponent alloc] init];
-    _portal.mixedReality = _mixedReality;
-    _portal.overlayComponent = _colorOverlay;
-    _portal.stereoRendering = YES;
-    //_portal.interactive = [BEAppSettings booleanValueFromAppSetting:SETTING_PLAY_SCRIPT defaultValueIfSettingIsNotInBundle:NO] == NO;
-    GKEntity *_portalEntity = [[SceneManager main] createEntity];
-    [_portalEntity addComponent:_portal];
-    [[EventManager main] addGlobalEventComponent:_portal];
 
-    self.portalNode = [_portal node];
+//    _portal = [[WindowComponent alloc] init];
+//    _portal.mixedReality = _mixedReality;
+//    _portal.overlayComponent = _colorOverlay;
+//    _portal.stereoRendering = YES;
+//    //_portal.interactive = [BEAppSettings booleanValueFromAppSetting:SETTING_PLAY_SCRIPT defaultValueIfSettingIsNotInBundle:NO] == NO;
+//    GKEntity *_portalEntity = [[SceneManager main] createEntity];
+//    [_portalEntity addComponent:_portal];
+//    [[EventManager main] addGlobalEventComponent:_portal];
+//
+//    self.portalNode = [_portal node];
 
     // Setup the near/far clipping planes to be large enough for the mountains world.
     //[Camera main].camera.zFar = 10000;
@@ -391,15 +392,17 @@ static const SCNMatrix4 defaultPivot = SCNMatrix4MakeRotation(M_PI, 1.0, 0.0, 0.
 
         GLKVector3 normal = GLKVector3Make(-meshNormal.x, -meshNormal.y, -meshNormal.z);
 
-//        WindowComponent *_portal = [[WindowComponent alloc] init];
-//        _portal.mixedReality = _mixedReality;
-//        _portal.overlayComponent = _colorOverlay;
-//        _portal.stereoRendering = YES;
-//        GKEntity *_portalEntity = [[SceneManager main] createEntity];
-//        [_portalEntity addComponent:_portal];
-//        [[EventManager main] addGlobalEventComponent:_portal];
-//
-//        SCNNode *portalNode = [_portal node];
+        WindowComponent *_portal = [[WindowComponent alloc] init];
+        _portal.mixedReality = _mixedReality;
+        _portal.overlayComponent = _colorOverlay;
+        _portal.stereoRendering = YES;
+        [_portal start];
+
+        GKEntity *_portalEntity = [[SceneManager main] createEntity];
+        [_portalEntity addComponent:_portal];
+
+        [[EventManager main] addGlobalEventComponent:_portal];
+
         [_portal openPortalOnWallPosition:mesh3DPoint wallNormal:SCNVector3ToGLKVector3(meshNormal) toVRWorld:_outsideWorld];
     }
 }
