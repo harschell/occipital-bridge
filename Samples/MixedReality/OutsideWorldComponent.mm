@@ -63,8 +63,7 @@ unsigned int const LIGHTING_BITMASK = 0x01000000;
     // ------ Robot Room ----
 //    self.geometryNode = [[SCNScene sceneNamed:@"Assets.scnassets/sky.dae"]
 //            .rootNode childNodeWithName:@"Sky" recursively:true];
-    self.geometryNode = [[SCNScene sceneNamed:@"Assets.scnassets/mountains_scene_full.dae"]
-            .rootNode childNodeWithName:@"Scene" recursively:true];
+    self.geometryNode = [[SCNScene sceneNamed:@"Assets.scnassets/mountains_scene_full.dae"].rootNode clone];
     self.geometryNode.name = @"GeometryNode";
 
     self.geometryNode.rotation = SCNVector4Make(1, 0, 0, (float) M_PI);
