@@ -270,7 +270,6 @@ static const SCNMatrix4 defaultPivot = SCNMatrix4MakeRotation(M_PI, 1.0, 0.0, 0.
     // add this as a child of Bridge, not of the scanned world. This will make it follow the user's gaze.
     [_mixedReality.localDeviceNode addChildNode:self.reticleNode];
 
-
     // demonstrate using custom render modes
     CustomRenderMode *customRenderMode = [[CustomRenderMode alloc] init];
     [customRenderMode compile];

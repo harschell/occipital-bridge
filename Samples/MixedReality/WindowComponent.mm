@@ -24,12 +24,9 @@
 #import "OpenBE/Utils/Math.h"
 #import "OutsideWorldComponent.h"
 
-//#define PORTAL_WIDTH 1.0
-//#define PORTAL_HEIGHT 1.8
-
 static float const PORTAL_FRUSTUM_CROSSING_WIDTH = 0.03;
 
-static float const PORTAL_CIRCLE_RADIUS = 0.4;
+static float const PORTAL_CIRCLE_RADIUS = .4;
 static float const PORTAL_WIDTH = 1.0;
 static float const PORTAL_HEIGHT = 1.8;
 
@@ -457,16 +454,13 @@ typedef NS_ENUM (NSUInteger, PortalState) {
     [self.portalCrossingTransformNode addChildNode:self.portalCrossingPlaneNode];
 
     // Rounded Frame
-    self.portalFrameNode =
-            [SCNNode nodeWithGeometry:[SCNBox boxWithWidth:PORTAL_CIRCLE_RADIUS * .2 height:.03 length:
-                    PORTAL_CIRCLE_RADIUS * .2 chamferRadius:0]];
+    self.portalFrameNode = [[SCNScene sceneNamed:@"Assets.scnassets/maya_files/window_frame.dae"]
+            .rootNode clone];
     [self.portalFrameNode.geometry.firstMaterial
             .diffuse setContents:[UIColor colorWithRed:0.678f green:0.678f blue:0.678f alpha:1]];
     self.portalFrameNode.transform = self.portalGeometryNode.transform;
-    auto pos = self.portalFrameNode.position;
+    self.portalFrameNode.scale = SCNVector3Make(PORTAL_CIRCLE_RADIUS, PORTAL_CIRCLE_RADIUS, PORTAL_CIRCLE_RADIUS);
 
-    self.portalFrameNode.position = SCNVector3Make(pos.x, pos.y, pos.z + .1F);
-    [self.portalFrameNode setCategoryBitMask:RAYCAST_IGNORE_BIT | CATEGORY_BIT_MASK_LIGHTING];
     [self.portalGeometryTransformNode addChildNode:self.portalFrameNode];
 
     [self.node setCastsShadowRecursively:false];
