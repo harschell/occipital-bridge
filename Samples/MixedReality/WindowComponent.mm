@@ -63,6 +63,8 @@ typedef NS_ENUM (NSUInteger, PortalState) {
 @property(nonatomic, strong) SCNNode *depth;
 
 // OpenGL Renderer shim nodes
+@property(nonatomic, strong) SCNNode *preEnvironment;
+@property(nonatomic, strong) SCNNode *postEnvironment;
 @property(nonatomic, strong) SCNNode *prePortal;
 @property(nonatomic, strong) SCNNode *postPortal;
 @property(nonatomic, strong) SCNNode *postVR;
@@ -96,6 +98,8 @@ typedef NS_ENUM (NSUInteger, PortalState) {
     self.portalFrameNode.hidden = !enabled;
 
     // Hide/show all the render stage nodes.
+    self.preEnvironment.hidden = !enabled;
+    self.postEnvironment.hidden = !enabled;
     self.prePortal.hidden = !enabled;
     self.postPortal.hidden = !enabled;
     self.postVR.hidden = !enabled;
@@ -432,7 +436,7 @@ typedef NS_ENUM (NSUInteger, PortalState) {
     // NOTE: Attach the PortalGeometryNode after it's been cloned, or flattenedClone will inherit the _node.scale
     _occlude = [self.portalGeometryNode flattenedClone];
     _occlude.transform = self.portalGeometryNode.transform;
-    [_occlude setRenderingOrderRecursively:(VR_WORLD_RENDERING_ORDER - 4)];
+    [_occlude setRenderingOrderRecursively:(BEEnvironmentScanShadowRenderingOrder - 4)];
     [self.portalGeometryTransformNode addChildNode:_occlude];
 
     _depth = [self.portalGeometryNode flattenedClone];
@@ -489,11 +493,24 @@ typedef NS_ENUM (NSUInteger, PortalState) {
     self.portalCrossingTransformNode.name = @"portalCrossingTransform";
     [self.node addChildNode:self.portalCrossingTransformNode];
 
+    // node to change environment render settings
+    self.preEnvironment = [SCNNode node];
+    [self.preEnvironment setName:@"PreEnvironment"];
+    [self.preEnvironment setRenderingOrder: BEEnvironmentScanShadowRenderingOrder - 1];
+    [self.preEnvironment setRendererDelegate:self];
+    [self.node addChildNode:self.preEnvironment];
+
+    // node to replace environment render settings
+    self.preEnvironment = [SCNNode node];
+    [self.preEnvironment setName:@"PostEnvironment"];
+    [self.preEnvironment setRenderingOrder: BEEnvironmentScanShadowRenderingOrder + 1];
+    [self.preEnvironment setRendererDelegate:self];
+    [self.node addChildNode:self.preEnvironment];
 
     // Set the stencil State
     self.prePortal = [SCNNode node];
     [self.prePortal setName:@"PrePortal"];
-    [self.prePortal setRenderingOrder:VR_WORLD_RENDERING_ORDER - 5];
+    [self.prePortal setRenderingOrder:BEEnvironmentScanShadowRenderingOrder - 5];
     [self.prePortal setRendererDelegate:self];
     [self.node addChildNode:self.prePortal];
 
@@ -503,7 +520,7 @@ typedef NS_ENUM (NSUInteger, PortalState) {
     // Set Stencil Test Func
     self.postPortal = [SCNNode node];
     [self.postPortal setName:@"PostPortal"];
-    [self.postPortal setRenderingOrder:VR_WORLD_RENDERING_ORDER - 3];
+    [self.postPortal setRenderingOrder:BEEnvironmentScanShadowRenderingOrder - 3];
     [self.postPortal setRendererDelegate:self];
     [self.node addChildNode:self.postPortal];
 
@@ -546,10 +563,20 @@ typedef NS_ENUM (NSUInteger, PortalState) {
     if ([passName isEqualToString:@"SceneKit_renderSceneFromLight"])
         return;
 
+    if ([node.name isEqualToString:@"PreEnvironment"]) {
+        glEnable(GL_STENCIL_TEST);
+        glStencilMask(0x0);
+    }
+
+    if ([node.name isEqualToString:@"PostEnvironment"]) {
+        glDisable(GL_STENCIL_TEST);
+    }
+
+
     if ([node.name isEqualToString:@"PrePortal"]) {
         glEnable(GL_STENCIL_TEST);
         glStencilFunc(GL_ALWAYS, PORTAL_STENCIL_VALUE, 0xFF);
-        glStencilOp(GL_KEEP, GL_KEEP, GL_REPLACE);
+        glStencilOp(GL_REPLACE, GL_REPLACE, GL_REPLACE);
 
         // only write to stencil, not depth or color
         glStencilMask(0xFF);
@@ -557,19 +584,18 @@ typedef NS_ENUM (NSUInteger, PortalState) {
         glDepthMask(GL_FALSE);
     }
 
-    // portal renders to stencil here
+    // portal renders here -- cuts hole in depth buffer
+
     if ([node.name isEqualToString:@"PostPortal"]) {
         glColorMask(GL_TRUE, GL_TRUE, GL_TRUE, GL_TRUE);
         glDepthMask(GL_TRUE);
         glStencilMask(0x0);
 
-        glClear(GL_DEPTH_BUFFER_BIT); // always clear now that stencil buffer has ben rendered to
-
         if (self.isInsideAR) {
-            // only draw where the stencil == PORTAL_STENCIL_VALUE
-            glStencilFunc(GL_EQUAL, PORTAL_STENCIL_VALUE, 0xFF);
+            // only draw where the stencil != PORTAL_STENCIL_VALUE
+            glStencilFunc(GL_NOTEQUAL, PORTAL_STENCIL_VALUE, 0xFF);
         } else {
-            glStencilFunc(GL_NOTEQUAL, PORTAL_STENCIL_VALUE, PORTAL_STENCIL_VALUE);
+            glStencilFunc(GL_EQUAL, PORTAL_STENCIL_VALUE, PORTAL_STENCIL_VALUE);
         }
     }
 
