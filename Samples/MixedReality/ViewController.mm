@@ -113,7 +113,7 @@ static const SCNMatrix4 defaultPivot = SCNMatrix4MakeRotation(M_PI, 1.0, 0.0, 0.
     BECaptureReplayMode replayMode = BECaptureReplayModeDisabled;
     if ([AppSettings booleanValueFromAppSetting:@"replayCapture"
              defaultValueIfSettingIsNotInBundle:NO]) {
-        replayMode = BECaptureReplayModeRealTime;
+        replayMode = BECaptureReplayModeDeterministic;
     }
 
     self.runningInStereo = [AppSettings booleanValueFromAppSetting:@"stereoRendering"
