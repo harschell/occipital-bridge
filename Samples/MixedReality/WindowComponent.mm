@@ -127,7 +127,7 @@ typedef NS_ENUM (NSUInteger, PortalState) {
     self.node.position = SCNVector3FromGLKVector3(portalPos);
 
     // portal starts facing upwards, rotate such that faces normal
-    const GLKVector3 up = GLKVector3Make(0, -1, 0);
+    const GLKVector3 up = GLKVector3Make(0, 1, 0);
     auto rotationAxis = GLKVector3CrossProduct(up, normal);
     auto rotationAmount = (float) acos(GLKVector3DotProduct(normal, up));
     auto q = GLKQuaternionMakeWithAngleAndVector3Axis(rotationAmount, rotationAxis);
