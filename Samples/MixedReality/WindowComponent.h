@@ -42,7 +42,6 @@
 
 @protocol WindowComponentJS <JSExport>
 // @property(nonatomic, strong) SCNNode *node; (protect the node)
-@property(nonatomic) bool isInsideAR;
 @property(nonatomic, readonly) BOOL open;
 
 /**
@@ -75,11 +74,9 @@
 //@property(nonatomic, strong) GKEntity *robotEntity;
 
 @property(nonatomic, strong) SCNNode *node;
-@property(nonatomic) bool isInsideAR;
 @property(nonatomic) bool stereoRendering;
 @property(nonatomic) bool interactive;
 @property(nonatomic, readonly) bool open;
-@property(nonatomic) bool emergencyExitVR;
 
 // Overlay is used for casting a white overlay, when emergencyExit is animating.
 @property(nonatomic, weak) ColorOverlayComponent *overlayComponent;
@@ -105,3 +102,8 @@
 - (bool) isFullyClosed;
 
 @end
+static const long prePortalRenderOrder = BEEnvironmentScanShadowRenderingOrder - 17;
+static const long portalOccludeRenderOrder = BEEnvironmentScanShadowRenderingOrder - 16;
+static const long postPortalRenderOrder = BEEnvironmentScanShadowRenderingOrder - 15;
+static const long preEnvironmentRenderOrder = BEEnvironmentScanShadowRenderingOrder - 10;
+static const long postEnvironmentRenderOrder = BEEnvironmentScanShadowRenderingOrder + 10;

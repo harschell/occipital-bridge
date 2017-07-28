@@ -30,9 +30,6 @@ static float const PORTAL_CIRCLE_RADIUS = .4;
 static float const PORTAL_WIDTH = 1.0;
 static float const PORTAL_HEIGHT = 1.8;
 
-static float const EMERGENCYEXIT_ABORT_DURATION = 2;
-static float const EMERGENCYEXIT_TELEPORT_DURATION = 0.5;
-
 typedef NS_ENUM (NSUInteger, PortalState) {
     PORTAL_IDLE,
     PORTAL_OPEN,
@@ -52,26 +49,14 @@ typedef NS_ENUM (NSUInteger, PortalState) {
 
 @property(nonatomic, strong) SCNNode *portalFrameNode;
 
-# ifdef USE_OLD_PORTAL_FRAME
-@property(nonatomic, strong) SCNNode *portalFrameTop;
-@property(nonatomic, strong) SCNNode *portalFrameLeft;
-@property(nonatomic, strong) SCNNode *portalFrameRight;
-@property(nonatomic, strong) SCNNode *portalFrameBottom;
-# endif
-
+// Contains the geometry that represents the plane of the window. This is the geometry that cuts into other meshes.
 @property(nonatomic, strong) SCNNode *occlude;
-@property(nonatomic, strong) SCNNode *depth;
 
 // OpenGL Renderer shim nodes
 @property(nonatomic, strong) SCNNode *preEnvironment;
 @property(nonatomic, strong) SCNNode *postEnvironment;
 @property(nonatomic, strong) SCNNode *prePortal;
 @property(nonatomic, strong) SCNNode *postPortal;
-@property(nonatomic, strong) SCNNode *postVR;
-@property(nonatomic, strong) SCNNode *portalDone;
-@property(nonatomic, strong) SCNNode *portalCleanup;
-
-// @property(nonatomic) BOOL collisionAvoidance;
 
 @property(atomic) GLKVector3 oldCameraPos;
 @property(atomic) float time;
@@ -79,12 +64,6 @@ typedef NS_ENUM (NSUInteger, PortalState) {
 
 @property(nonatomic, strong) AudioNode *audioWarpIn;
 @property(nonatomic, strong) AudioNode *audioWarpOut;
-
-// Emergency exit sound-effects.
-@property(nonatomic, strong) AudioNode *emergencyExitPowerUp;
-@property(nonatomic, strong) AudioNode *emergencyExitPowerAbort;
-@property(nonatomic) float emergencyExitTimer;
-
 
 @end
 
@@ -102,9 +81,6 @@ typedef NS_ENUM (NSUInteger, PortalState) {
     self.postEnvironment.hidden = !enabled;
     self.prePortal.hidden = !enabled;
     self.postPortal.hidden = !enabled;
-    self.postVR.hidden = !enabled;
-    self.portalDone.hidden = !enabled;
-    self.portalCleanup.hidden = !enabled;
 
     self.oldCameraPos = [Camera main].position;
     self.portalState = PORTAL_IDLE;
@@ -219,69 +195,6 @@ typedef NS_ENUM (NSUInteger, PortalState) {
     return !_open && (_portalState==PORTAL_IDLE);
 }
 
-- (void)setEmergencyExitVR:(BOOL)emergencyExitVR {
-
-    if (emergencyExitVR) {
-        // Don't allow emergency exit if we're not already in VR.
-        // Or we're already doing the emergency exit sequence.
-        if (self.isInsideAR || _emergencyExitVR) {
-            return;
-        }
-
-        be_dbg("Emergency Exit VR -- Powering Up");
-        self.emergencyExitTimer = 0;
-        [_emergencyExitPowerUp play];
-        _emergencyExitVR = true;
-    } else {
-        // Disabling, so power-down.
-        if (_emergencyExitVR && _emergencyExitTimer < EMERGENCYEXIT_ABORT_DURATION) {
-            be_dbg("Emergency Exit VR -- Abort");
-            [_emergencyExitPowerUp stop];
-            [_emergencyExitPowerAbort play];
-            _emergencyExitVR = false;
-            _overlayComponent.color = [UIColor clearColor];
-        }
-    }
-}
-
-- (void)updateEmergencyExitSequence:(NSTimeInterval)dt {
-    if (self.emergencyExitVR) {
-        self.emergencyExitTimer += dt;
-
-        if (self.emergencyExitTimer < EMERGENCYEXIT_ABORT_DURATION) {
-            // Fade level ramps from 0 to 0.7, over the EMERGENCYEXIT_ABORT_DURATION
-            float fadeLevel = smoothstepf(0, 1, _emergencyExitTimer / EMERGENCYEXIT_ABORT_DURATION) * 0.7F;
-            _overlayComponent.color = [UIColor colorWithWhite:1.0 alpha:fadeLevel];
-        } else if (self.emergencyExitTimer >= EMERGENCYEXIT_ABORT_DURATION
-                && self.emergencyExitTimer < (EMERGENCYEXIT_ABORT_DURATION + EMERGENCYEXIT_TELEPORT_DURATION)) {
-            if (!self.isInsideAR) {
-                be_dbg("Emergency Exit VR -- Transfer to AR");
-                self.open = false;
-                self.isInsideAR = true;
-
-                // Force off the CollisionAvoidance mesh. Return environment rendering order to normal.
-                SCNNode *scanNode =
-                        [_mixedReality.sceneKitScene.rootNode childNodeWithName:@"customVizNode" recursively:true];
-                [scanNode setRenderingOrder:BEEnvironmentScanRenderingOrder];
-                [_mixedReality setRenderStyle:BERenderStyleSceneKitAndColorCamera withDuration:0];
-
-            }
-
-            // Fade-level ramps from 1 to 0, over the remaining EMERGENCYEXIT_TELEPORT_DURATION
-            float fadeLevel = 1 - smoothstepf(0,
-                                              1,
-                                              (_emergencyExitTimer - EMERGENCYEXIT_ABORT_DURATION)
-                                                      / EMERGENCYEXIT_TELEPORT_DURATION);
-            _overlayComponent.color = [UIColor colorWithWhite:1.0 alpha:fadeLevel];
-        } else {
-            be_dbg("Emergency Exit VR -- Complete");
-            _emergencyExitVR = false;
-            self.emergencyExitTimer = 0;
-            _overlayComponent.color = [UIColor clearColor];
-        }
-    }
-}
-
 #pragma mark - Inner Methods
 
 - (void)updateWithDeltaTime:(NSTimeInterval)seconds {
@@ -290,8 +203,6 @@ typedef NS_ENUM (NSUInteger, PortalState) {
     if (![self isEnabled]) return;
 
     self.time += seconds;
-
-    [self updateEmergencyExitSequence:seconds];
 
     if (self.portalState==PORTAL_OPEN) {
         float open = smoothstepf(0, 1, self.time / _audioWarpIn.duration);
@@ -316,7 +227,6 @@ typedef NS_ENUM (NSUInteger, PortalState) {
 
         if (self.time > _audioWarpOut.duration) {
             self.portalState = PORTAL_IDLE;
-            self.isInsideAR = true;
             [self setEnabled:false];
             return;
         }
@@ -337,20 +247,6 @@ typedef NS_ENUM (NSUInteger, PortalState) {
     NSArray<SCNHitTestResult *> *hitTestResults =
             [self.portalCrossingTransformNode hitTestWithSegmentFromPoint:from toPoint:to options:nil];
 
-    if ([hitTestResults count]) {
-        self.isInsideAR = !self.isInsideAR;
-        NSLog(_isInsideAR ? @"Inside AR" : @"Inside VR");
-
-//         a hack, but if you're in VR, always render Robot:
-//        if( !self.isInsideAR ) {
-//           [((GeometryComponent *)[self.robotEntity componentForClass:[GeometryComponent class]]).node
-//                setRenderingOrderRecursively:(VR_WORLD_RENDERING_ORDER+6)];
-//        } else {
-//           [((GeometryComponent *)[self.robotEntity componentForClass:[GeometryComponent class]]).node
-//                setRenderingOrderRecursively:1];
-//        }
-    }
-
     self.oldCameraPos = newCameraPos;
 
     [SCNTransaction begin];
@@ -365,47 +261,6 @@ typedef NS_ENUM (NSUInteger, PortalState) {
     _portalGeometryTransformNode.position = SCNVector3Make(0, 0, zoffset);
 
     [SCNTransaction commit];
-}
-
-- (void)setIsInsideAR:(bool)isInsideAR {
-    if (_isInsideAR==isInsideAR) return; // Early exit, redudant hits causes the screen to fade out.
-
-    // TODO: Update the outside world component when this happens so that the lights turn on.
-
-    _isInsideAR = isInsideAR;
-
-    SCNNode *scanNode = [_mixedReality.sceneKitScene.rootNode childNodeWithName:@"customVizNode" recursively:true];
-
-    if (_isInsideAR) {
-        [scanNode setRenderingOrder:BEEnvironmentScanRenderingOrder];
-        [_mixedReality setRenderStyle:BERenderStyleSceneKitAndColorCamera withDuration:0];
-    } else {
-        // make the room mesh render after the vr world so that we get transparency on collision avoidance to work
-        [scanNode setRenderingOrder:VR_WORLD_RENDERING_ORDER + 100];
-        [_mixedReality setRenderStyle:BERenderStyleSceneKitAndCollisionAvoidance withDuration:0];
-    }
-//     self.collisionAvoidance = !_isInsideAR;
-
-    if (isInsideAR && _emergencyExitVR) {
-        // Attempt to abort the emergency exit if we left AR early.
-        // NOTE: Interaction with emergencyExitVR is extremely tricky here,
-        //  this only works because there's a no-return threshold that locks out the recursion.
-        self.emergencyExitVR = false;
-    }
-
-    // If we're interactive, then Enable/Disable the BeamUI component.
-//    if( self.interactive ) {
-//        BeamUIBehaviourComponent *beamUI = (BeamUIBehaviourComponent*)[self.robotEntity componentForClass:[BeamUIBehaviourComponent class]];
-//        [beamUI setEnabled:_isInsideAR];
-//        if( _isInsideAR == false && _open == false ) {
-//            be_dbg("We're inside VR, and portal is open, re-open and stop BeamUI");
-//            self.open = true; // re-open on entering VR.
-//            
-//            if( [beamUI isRunning] ) {  // Also close up the BeamUI if it's currently running.
-//                [beamUI stopRunning];
-//            }
-//        }
-//    }
 }
 
 #pragma mark - Component Methods
@@ -428,23 +283,17 @@ typedef NS_ENUM (NSUInteger, PortalState) {
     self.portalGeometryNode.rotation = SCNVector4Make(1, 0, 0, 0);
     self.portalCrossingPlaneNode.transform = self.portalGeometryNode.transform;
 
-    // Re-make the occlude and depth nodes.
+    // Re-make the occlude node.
     [_occlude removeFromParentNode];
-    [_depth removeFromParentNode];
 
     // Clone the portalNode into an occlusion and depth copy.
     // NOTE: Attach the PortalGeometryNode after it's been cloned, or flattenedClone will inherit the _node.scale
     _occlude = [self.portalGeometryNode flattenedClone];
     _occlude.transform = self.portalGeometryNode.transform;
-    [_occlude setRenderingOrderRecursively:(BEEnvironmentScanShadowRenderingOrder - 4)];
+    [_occlude setRenderingOrderRecursively:portalOccludeRenderOrder];
     [self.portalGeometryTransformNode addChildNode:_occlude];
 
-    _depth = [self.portalGeometryNode flattenedClone];
-    _depth.transform = self.portalGeometryNode.transform;
-    [_depth setRenderingOrderRecursively:(VR_WORLD_RENDERING_ORDER + 4)];
-
     self.occlude.geometry.firstMaterial.cullMode = SCNCullFront;
-    self.depth.geometry.firstMaterial.cullMode = SCNCullFront;
 
     self.portalGeometryNode.geometry.firstMaterial.doubleSided = true;
     self.portalGeometryNode.categoryBitMask = RAYCAST_IGNORE_BIT;
@@ -476,9 +325,6 @@ typedef NS_ENUM (NSUInteger, PortalState) {
     self.audioWarpIn = [[AudioEngine main] loadAudioNamed:@"Robot_WarpIn.caf"];
     self.audioWarpOut = [[AudioEngine main] loadAudioNamed:@"Robot_WarpOut.caf"];
 
-    self.emergencyExitPowerUp = [[AudioEngine main] loadAudioNamed:@"ExitVR_PowerUp.caf"];
-    self.emergencyExitPowerAbort = [[AudioEngine main] loadAudioNamed:@"ExitVR_PowerAbort.caf"];
-
     self.open = false;
 
     self.node = [SCNNode node];
@@ -493,24 +339,10 @@ typedef NS_ENUM (NSUInteger, PortalState) {
     self.portalCrossingTransformNode.name = @"portalCrossingTransform";
     [self.node addChildNode:self.portalCrossingTransformNode];
 
-    // node to change environment render settings
-    self.preEnvironment = [SCNNode node];
-    [self.preEnvironment setName:@"PreEnvironment"];
-    [self.preEnvironment setRenderingOrder: BEEnvironmentScanShadowRenderingOrder - 1];
-    [self.preEnvironment setRendererDelegate:self];
-    [self.node addChildNode:self.preEnvironment];
-
-    // node to replace environment render settings
-    self.preEnvironment = [SCNNode node];
-    [self.preEnvironment setName:@"PostEnvironment"];
-    [self.preEnvironment setRenderingOrder: BEEnvironmentScanShadowRenderingOrder + 1];
-    [self.preEnvironment setRendererDelegate:self];
-    [self.node addChildNode:self.preEnvironment];
-
-    // Set the stencil State
+    // Enable rendering to the stencil buffer for portal rendering.
     self.prePortal = [SCNNode node];
     [self.prePortal setName:@"PrePortal"];
-    [self.prePortal setRenderingOrder:BEEnvironmentScanShadowRenderingOrder - 5];
+    [self.prePortal setRenderingOrder:prePortalRenderOrder];
     [self.prePortal setRendererDelegate:self];
     [self.node addChildNode:self.prePortal];
 
@@ -520,31 +352,26 @@ typedef NS_ENUM (NSUInteger, PortalState) {
     // Set Stencil Test Func
     self.postPortal = [SCNNode node];
     [self.postPortal setName:@"PostPortal"];
-    [self.postPortal setRenderingOrder:BEEnvironmentScanShadowRenderingOrder - 3];
+    [self.postPortal setRenderingOrder:postPortalRenderOrder];
     [self.postPortal setRendererDelegate:self];
     [self.node addChildNode:self.postPortal];
 
-    // VR world is renderingOrder VR_WORLD_RENDERING_ORDER
-    // Will only render with correct stencil test
+    // Change the environment opengl rendering state to use skip rendering where portals have rendered to the stencil
+    // buffer
+    self.preEnvironment = [SCNNode node];
+    [self.preEnvironment setName:@"PreEnvironment"];
+    [self.preEnvironment setRenderingOrder:preEnvironmentRenderOrder];
+    [self.preEnvironment setRendererDelegate:self];
+    [self.node addChildNode:self.preEnvironment];
 
-    self.postVR = [SCNNode node];
-    [self.postVR setName:@"PostVRScene"];
-    [self.postVR setRenderingOrder:VR_WORLD_RENDERING_ORDER + 3];
-    [self.postVR setRendererDelegate:self];
-    [self.node addChildNode:self.postVR];
+    // Reset the rendering state after rendering the environment.
+    self.preEnvironment = [SCNNode node];
+    [self.preEnvironment setName:@"PostEnvironment"];
+    [self.preEnvironment setRenderingOrder:postEnvironmentRenderOrder];
+    [self.preEnvironment setRendererDelegate:self];
+    [self.node addChildNode:self.preEnvironment];
 
-    // Render _depth node
-    // Write the portal depth over the portal plane
-    // so that the environment isn't rendered back in there
-    // This may not be necessary but can't figure out a smarter way...
 
-    self.portalDone = [SCNNode node];
-    [self.portalDone setName:@"portalDone"];
-    [self.portalDone setRenderingOrder:VR_WORLD_RENDERING_ORDER + 5];
-    [self.portalDone setRendererDelegate:self];
-    [self.node addChildNode:self.portalDone];
-
-    self.isInsideAR = true;
     self.time = 0;
     self.portalState = PORTAL_IDLE;
     self.oldCameraPos = [Camera main].position;
@@ -563,15 +390,6 @@ typedef NS_ENUM (NSUInteger, PortalState) {
     if ([passName isEqualToString:@"SceneKit_renderSceneFromLight"])
         return;
 
-    if ([node.name isEqualToString:@"PreEnvironment"]) {
-        glEnable(GL_STENCIL_TEST);
-        glStencilMask(0x0);
-    }
-
-    if ([node.name isEqualToString:@"PostEnvironment"]) {
-        glDisable(GL_STENCIL_TEST);
-    }
-
 
     if ([node.name isEqualToString:@"PrePortal"]) {
         glEnable(GL_STENCIL_TEST);
@@ -584,32 +402,27 @@ typedef NS_ENUM (NSUInteger, PortalState) {
         glDepthMask(GL_FALSE);
     }
 
-    // portal renders here -- cuts hole in depth buffer
+    // portal renders here -- stencil buffer contains all portal pixels
 
     if ([node.name isEqualToString:@"PostPortal"]) {
         glColorMask(GL_TRUE, GL_TRUE, GL_TRUE, GL_TRUE);
         glDepthMask(GL_TRUE);
         glStencilMask(0x0);
 
-        if (self.isInsideAR) {
-            // only draw where the stencil != PORTAL_STENCIL_VALUE
-            glStencilFunc(GL_NOTEQUAL, PORTAL_STENCIL_VALUE, 0xFF);
-        } else {
-            glStencilFunc(GL_EQUAL, PORTAL_STENCIL_VALUE, PORTAL_STENCIL_VALUE);
-        }
     }
 
-    // VR world renders here
-    if ([node.name isEqualToString:@"PostVRScene"]) {
+    if ([node.name isEqualToString:@"PreEnvironment"]) {
+        glEnable(GL_STENCIL_TEST);
+
+        // only draw where the stencil != PORTAL_STENCIL_VALUE
+        glStencilFunc(GL_NOTEQUAL, PORTAL_STENCIL_VALUE, 0xFF);
+    }
+
+    // the environment mesh renders here
+
+    if ([node.name isEqualToString:@"PostEnvironment"]) {
         glDisable(GL_STENCIL_TEST);
-
-        glColorMask(GL_FALSE, GL_FALSE, GL_FALSE, GL_FALSE);
     }
-
-    if ([node.name isEqualToString:@"portalDone"]) {
-        glColorMask(GL_TRUE, GL_TRUE, GL_TRUE, GL_TRUE);
-    }
-
 }
 
 - (bool)touchBeganButton:(uint8_t)button forward:(GLKVector3)touchForward hit:(SCNHitTestResult *)hit { return true; };
