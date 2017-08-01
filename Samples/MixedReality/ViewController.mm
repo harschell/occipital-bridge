@@ -293,16 +293,30 @@ static const SCNMatrix4 defaultPivot = SCNMatrix4MakeRotation(M_PI, 1.0, 0.0, 0.
 
     material.program = program;
 
+    [material handleBindingOfSymbol:@"u_resolution" usingBlock:^(unsigned int programID,
+                                                                 unsigned int location,
+                                                                 SCNNode *renderedNode,
+                                                                 SCNRenderer *renderer) {
+        GLint vp[4];
+        glGetIntegerv(GL_VIEWPORT, vp);
+        glUniform2f(location, vp[2], vp[3]);
+    }];
+
     [material handleBindingOfSymbol:@"cameraSampler" usingBlock:^(unsigned int programID,
                                                                   unsigned int location,
                                                                   SCNNode *renderedNode,
                                                                   SCNRenderer *renderer) {
-        glColorMask(GL_TRUE, GL_TRUE, GL_TRUE, GL_TRUE);
-        glClear(GL_COLOR_BUFFER_BIT);
-//        NSLog(@"Settings uniform");
+
+        if (customRenderMode.cameraTextureName!=-1) {
+            glActiveTexture(GL_TEXTURE7);
+            glBindTexture(GL_TEXTURE_2D, customRenderMode.cameraTextureName);
+            glUniform1i(location, GL_TEXTURE7 - GL_TEXTURE0);
+        }
+
     }];
-//    geometry.firstMaterial = material;
-    
+
+
+
     [_cameraDisplayMesh setRenderingOrder:BEEnvironmentScanRenderingOrder + 10000];
 
 //    SCNNode *cameraDisplayMesh = [[SCNScene sceneNamed:@"Assets.scnassets/inverted_sphere.dae"].rootNode clone];
@@ -421,7 +435,7 @@ static const SCNMatrix4 defaultPivot = SCNMatrix4MakeRotation(M_PI, 1.0, 0.0, 0.
 
 - (void)program:(SCNProgram *)program handleError:(NSError *)error {
     NSLog(@"ERROR: -------------------------------:");
-    NSLog(@"%@",[error localizedDescription]);
+    NSLog(@"%@", [error localizedDescription]);
 }
 
 @end

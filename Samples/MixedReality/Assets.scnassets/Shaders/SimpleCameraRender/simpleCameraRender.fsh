@@ -10,12 +10,13 @@
 
 precision mediump float;
 
-//uniform vec2 u_resolution;
+uniform vec2 u_resolution;
 uniform sampler2D cameraSampler;
 
 void main(void)
 {
-    vec4 col = texture2D( cameraSampler, vec2(0,0));
+    vec2 uv = gl_FragCoord.xy / u_resolution;
+    vec4 col = texture2D(cameraSampler, fract(uv));
     
     gl_FragColor = col;
 }

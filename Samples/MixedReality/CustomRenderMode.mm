@@ -8,48 +8,43 @@
 
 #import "CustomRenderMode.h"
 
-#include <OpenGLES/ES2/gl.h>
-
-
 @implementation CustomRenderMode
 
-- (id) init {
+- (id)init {
     self = [super init];
-    
+
+    self.cameraTextureName = (GLuint) -1;
+
     return self;
 }
 
-
 //delegate methods
-- (void) compile
-{
+- (void)compile {
     const int NUM_ATTRIBS = 2;
     // Vertex and Normal Layout
     GLuint attributeIds[NUM_ATTRIBS] = {0, 2};
-    const char *attributeNames[NUM_ATTRIBS] = { "a_position", "a_normal" };
-    
-    _glProgram = BEShaderLoadProgramFromString ([self vertexShaderSource],
-                                                [self fragmentShaderSource],
-                                                NUM_ATTRIBS,
-                                                attributeIds,
-                                                attributeNames);
-    
+    const char *attributeNames[NUM_ATTRIBS] = {"a_position", "a_normal"};
+
+    _glProgram = BEShaderLoadProgramFromString([self vertexShaderSource],
+                                               [self fragmentShaderSource],
+                                               NUM_ATTRIBS,
+                                               attributeIds,
+                                               attributeNames);
+
     self.projectionMatrixLocation = glGetUniformLocation(_glProgram, "u_perspective_projection");
     self.modelviewMatrixLocation = glGetUniformLocation(_glProgram, "u_modelview");
-    
+
     self.depthSamplerLocation = glGetUniformLocation(_glProgram, "u_depthSampler");
     self.cameraSamplerLocation = glGetUniformLocation(_glProgram, "u_colorSampler");
     self.renderResolutionLocation = glGetUniformLocation(_glProgram, "u_resolution");
-    
+
     self.loaded = true;
 }
 
-
-- (void) prepareWithProjection:(const float*)projection
-                     modelview:(const float*)modelView
-            depthBufferTexture:(const GLuint)depthTexture
-            cameraImageTexture:(const GLuint)cameraTexture
-{
+- (void)prepareWithProjection:(const float *)projection
+                    modelview:(const float *)modelView
+           depthBufferTexture:(const GLuint)depthTexture
+           cameraImageTexture:(const GLuint)cameraTexture {
     glUseProgram(_glProgram);
 
     glUniformMatrix4fv(self.modelviewMatrixLocation, 1, GL_FALSE, modelView);
@@ -58,13 +53,15 @@
     // Load mesh depth into texture unit 6.
     glActiveTexture(GL_TEXTURE6);
     glBindTexture(GL_TEXTURE_2D, depthTexture);
-    glUniform1i (self.depthSamplerLocation, GL_TEXTURE6 - GL_TEXTURE0);
+    glUniform1i(self.depthSamplerLocation, GL_TEXTURE6 - GL_TEXTURE0);
 
     // Load camera image into texture unit 7.
-    NSLog(@"Allocated a camera texture into integer: %d", cameraTexture);
+    //NSLog(@"Allocated a camera texture into integer: %d", cameraTexture);
+    self.cameraTextureName = cameraTexture;
+
     glActiveTexture(GL_TEXTURE7);
     glBindTexture(GL_TEXTURE_2D, cameraTexture);
-    glUniform1i (self.cameraSamplerLocation, GL_TEXTURE7 - GL_TEXTURE0);
+    glUniform1i(self.cameraSamplerLocation, GL_TEXTURE7 - GL_TEXTURE0);
 
     // update resolution
     GLint vp[4];
@@ -74,9 +71,9 @@
     glEnable(GL_DEPTH_TEST);
 }
 
--(const char *) vertexShaderSource
-{
-    NSString *shader = @R"(
+- (const char *)vertexShaderSource {
+    NSString *shader = @
+    R"(
     
     attribute vec4 a_position;
     attribute vec3 a_normal;
@@ -93,14 +90,14 @@
         v_normal = a_normal;
         v_worldPos = a_position.xyz;
     }
-    )" ;
-    
+    )";
+
     return [shader UTF8String];
 }
 
--(const char *) fragmentShaderSource
-{
-    NSString *shader = @R"(
+- (const char *)fragmentShaderSource {
+    NSString *shader = @
+    R"(
     
     precision mediump float;
 
@@ -124,12 +121,13 @@
         vec4 depth = texture2D( u_depthSampler, fract(uv) ) ;
         
         gl_FragColor =  warpedColor;
+        gl_FragColor.a = 0;
         
         // invert color, for effect
         //gl_FragColor.rgb = abs(v_normal);
     }
     )";
-    
+
     return [shader UTF8String];
 }
 @end

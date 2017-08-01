@@ -12,18 +12,16 @@
 #import <BridgeEngine/BridgeEngine.h>
 #import "BridgeEngine/BEShader.h"
 
-@interface CustomRenderMode : NSObject <BridgeEngineShaderDelegate>
+@interface CustomRenderMode : NSObject<BridgeEngineShaderDelegate>
 
+- (void)compile;
+- (void)prepareWithProjection:(const float *)projection
+                    modelview:(const float *)modelView
+           depthBufferTexture:(const GLuint)depthTexture
+           cameraImageTexture:(const GLuint)cameraTexture;
 
-
-- (void) compile;
-- (void) prepareWithProjection:(const float*)projection
-                     modelview:(const float*)modelView
-            depthBufferTexture:(const GLuint)depthTexture
-            cameraImageTexture:(const GLuint)cameraTexture;
-
-- (const char *) fragmentShaderSource;
-- (const char *) vertexShaderSource;
+- (const char *)fragmentShaderSource;
+- (const char *)vertexShaderSource;
 
 @property GLuint projectionMatrixLocation;
 @property GLuint modelviewMatrixLocation;
@@ -31,10 +29,12 @@
 @property GLuint cameraSamplerLocation;
 @property GLuint renderResolutionLocation;
 
+// The OpenGL name for the camera texture.
+@property GLuint cameraTextureName;
+
 @property GLuint glProgram;
 @property bool loaded;
 
 @end
-
 
 #endif /* EnvironmentShader_h */
