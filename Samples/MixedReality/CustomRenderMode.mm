@@ -121,7 +121,7 @@
         vec4 depth = texture2D( u_depthSampler, fract(uv) ) ;
         
         gl_FragColor =  warpedColor;
-        gl_FragColor.a = 0;
+        //gl_FragColor.a = 0;
         
         // invert color, for effect
         //gl_FragColor.rgb = abs(v_normal);

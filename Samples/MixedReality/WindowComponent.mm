@@ -22,6 +22,7 @@
 #import "AudioEngine.h"
 #import "SceneKitExtensions.h"
 #import "OpenBE/Utils/Math.h"
+#import "Utils.h"
 #import "OutsideWorldComponent.h"
 
 static float const PORTAL_FRUSTUM_CROSSING_WIDTH = 0.03;
@@ -111,8 +112,7 @@ typedef NS_ENUM (NSUInteger, PortalState) {
     auto rotationAxis = GLKVector3CrossProduct(up, normal);
     auto rotationAmount = (float) acos(GLKVector3DotProduct(normal, up));
     auto q = GLKQuaternionMakeWithAngleAndVector3Axis(rotationAmount, rotationAxis);
-    auto qq = self.node.orientation;
-    NSLog(@"\t orientation %f,%f,%f,%f", qq.x, qq.y, qq.z, qq.w);
+    q = [Utils SCNQuaternionMakeFromRotation:up to:normal];
     self.node.orientation = SCNVector4Make(q.x, q.y, q.z, q.w);
 
 
@@ -307,12 +307,20 @@ typedef NS_ENUM (NSUInteger, PortalState) {
     [self.portalCrossingTransformNode addChildNode:self.portalCrossingPlaneNode];
 
     // Rounded Frame
-    self.portalFrameNode = [[SCNScene sceneNamed:@"Assets.scnassets/maya_files/window_frame.dae"]
-            .rootNode clone];
-    [self.portalFrameNode.geometry.firstMaterial
-            .diffuse setContents:[UIColor colorWithRed:0.678f green:0.678f blue:0.678f alpha:1]];
-    self.portalFrameNode.transform = self.portalGeometryNode.transform;
-    self.portalFrameNode.scale = SCNVector3Make(PORTAL_CIRCLE_RADIUS, PORTAL_CIRCLE_RADIUS, PORTAL_CIRCLE_RADIUS);
+    // Testing a new portal mesh
+    GLKVector3 meshForward = GLKVector3Make(0, 0, 1); // Which direction is forward in the exported mesh.
+    SCNNode *portalFrameMesh = [[SCNScene sceneNamed:@"Assets.scnassets/maya_files/window.dae"].rootNode clone];
+    portalFrameMesh.position = SCNVector3Make(0,0,0);
+    GLKQuaternion q = [Utils SCNQuaternionMakeFromRotation:meshForward to:GLKVector3Make(0, 1, 0)];
+    portalFrameMesh.orientation = SCNVector4Make(q.x, q.y, q.z, q.w);
+    self.portalFrameNode = portalFrameMesh;
+    
+//    self.portalFrameNode = [[SCNScene sceneNamed:@"Assets.scnassets/maya_files/window_frame.dae"]
+//            .rootNode clone];
+//    [self.portalFrameNode.geometry.firstMaterial
+//            .diffuse setContents:[UIColor colorWithRed:0.678f green:0.678f blue:0.678f alpha:1]];
+//    self.portalFrameNode.transform = self.portalGeometryNode.transform;
+//    self.portalFrameNode.scale = SCNVector3Make(PORTAL_CIRCLE_RADIUS, PORTAL_CIRCLE_RADIUS, PORTAL_CIRCLE_RADIUS);
 
     [self.portalGeometryTransformNode addChildNode:self.portalFrameNode];
 

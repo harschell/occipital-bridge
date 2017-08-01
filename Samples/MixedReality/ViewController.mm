@@ -17,6 +17,7 @@ http://structure.io
 #import <OpenBE/Components/SpawnPortalComponent.h>
 
 #import "WindowComponent.h"
+#import "Utils.h"
 #import "OutsideWorldComponent.h"
 
 //------------------------------------------------------------------------------
@@ -316,11 +317,10 @@ static const SCNMatrix4 defaultPivot = SCNMatrix4MakeRotation(M_PI, 1.0, 0.0, 0.
     }];
 
 
-
     [_cameraDisplayMesh setRenderingOrder:BEEnvironmentScanRenderingOrder + 10000];
 
 //    SCNNode *cameraDisplayMesh = [[SCNScene sceneNamed:@"Assets.scnassets/inverted_sphere.dae"].rootNode clone];
-    [_mixedReality.worldNodeWhenRelocalized addChildNode:_cameraDisplayMesh];
+    //[_mixedReality.worldNodeWhenRelocalized addChildNode:_cameraDisplayMesh];
 
     // uncomment this line to trigger the custom rendering mode.
     [_mixedReality setRenderStyle:BERenderStyleSceneKitAndCustomEnvironmentShader withDuration:1];
