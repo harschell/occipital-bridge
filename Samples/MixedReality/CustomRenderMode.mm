@@ -61,6 +61,7 @@
     glUniform1i (self.depthSamplerLocation, GL_TEXTURE6 - GL_TEXTURE0);
 
     // Load camera image into texture unit 7.
+    NSLog(@"Allocated a camera texture into integer: %d", cameraTexture);
     glActiveTexture(GL_TEXTURE7);
     glBindTexture(GL_TEXTURE_2D, cameraTexture);
     glUniform1i (self.cameraSamplerLocation, GL_TEXTURE7 - GL_TEXTURE0);
@@ -125,7 +126,7 @@
         gl_FragColor =  warpedColor;
         
         // invert color, for effect
-        gl_FragColor.rgb = abs(v_normal);
+        //gl_FragColor.rgb = abs(v_normal);
     }
     )";
     

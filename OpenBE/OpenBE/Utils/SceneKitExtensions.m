@@ -20,24 +20,28 @@
 {
     NSString* resourcePath = nil;
 //    NSLog(@"looking for %@", resourceName);
-    for (NSBundle* resourceBundle in @[
-                                       [NSBundle mainBundle], // The app bundle.
-                                       [NSBundle bundleForClass:[BEMixedRealityMode class]], // The Bridge Engine framework bundle.
-                                       [NSBundle bundleForClass:self] // The bundle that contains the final target including this code. It may be one the two above.
-                                       ])
-    {
-        // inDirectory:nil makes the search run recursively through folders
+    for (NSString* prefix in @[
+            @"OpenBE.scnassets/",
+            @"Assets.scnassets/"
+    ]) {
+        for (NSBundle *resourceBundle in @[
+                [NSBundle mainBundle], // The app bundle.
+                [NSBundle bundleForClass:[BEMixedRealityMode class]], // The Bridge Engine framework bundle.
+                [NSBundle bundleForClass:self] // The bundle that contains the final target including this code. It may be one the two above.
+        ]) {
+            // inDirectory:nil makes the search run recursively through folders
 
-        resourcePath = [resourceBundle pathForResource:resourceName ofType:type ];
-        
-        if (resourcePath)
-            return resourcePath;
-        
-        NSString *assetName = [@"OpenBE.scnassets/" stringByAppendingString:resourceName];
-        assetName = [resourceBundle pathForResource:assetName ofType:type inDirectory:nil];
-        
-        if (assetName)
-            return assetName;
+            resourcePath = [resourceBundle pathForResource:resourceName ofType:type];
+
+            if (resourcePath)
+                return resourcePath;
+
+            NSString *assetName = [prefix stringByAppendingString:resourceName];
+            assetName = [resourceBundle pathForResource:assetName ofType:type inDirectory:nil];
+
+            if (assetName)
+                return assetName;
+        }
     }
     
     return resourcePath;
@@ -124,7 +128,7 @@
     [program setSemantic:SCNProjectionTransform
                forSymbol:@"projection"
                  options:nil];
-    
+
     return program;
 }
 

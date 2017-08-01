@@ -6,6 +6,7 @@ http://structure.io
 
 #import "ViewController.h"
 #import "AppSettings.h"
+#import "SceneKitExtensions.h"
 
 #import <BridgeEngine/BridgeEngine.h>
 #import "CustomRenderMode.h"
@@ -30,10 +31,9 @@ static const SCNMatrix4 defaultPivot = SCNMatrix4MakeRotation(M_PI, 1.0, 0.0, 0.
 
 #pragma mark - ViewController ()
 
-@interface ViewController ()<BEMixedRealityModeDelegate, BEControllerDelegate>
+@interface ViewController ()<BEMixedRealityModeDelegate, BEControllerDelegate, SCNProgramDelegate>
 
 @property(strong) SCNNode *reticleNode;
-//@property(strong) SCNNode *portalNode;
 
 @property bool runningInStereo;
 
@@ -50,6 +50,7 @@ static const SCNMatrix4 defaultPivot = SCNMatrix4MakeRotation(M_PI, 1.0, 0.0, 0.
 //    WindowComponent *_portal;
     OutsideWorldComponent *_outsideWorld;
     ColorOverlayComponent *_colorOverlay;
+    SCNNode *_cameraDisplayMesh;
 }
 
 + (SCNNode *)loadNodeNamed:(NSString *)nodeName fromSceneNamed:(NSString *)sceneName {
@@ -190,7 +191,7 @@ static const SCNMatrix4 defaultPivot = SCNMatrix4MakeRotation(M_PI, 1.0, 0.0, 0.
 - (void)startExperience {
     // For this experience, let's switch to a mode with AR objects composited with the passthrough camera.
 
-    [_mixedReality setRenderStyle:BERenderStyleSceneKitAndColorCamera withDuration:0.5];
+    //[_mixedReality setRenderStyle:BERenderStyleSceneKitAndColorCamera withDuration:0.5];
 
     _experienceIsRunning = YES;
 }
@@ -282,26 +283,36 @@ static const SCNMatrix4 defaultPivot = SCNMatrix4MakeRotation(M_PI, 1.0, 0.0, 0.
     _outsideWorld = [[OutsideWorldComponent alloc] init];
     [[[SceneManager main] createEntity] addComponent:_outsideWorld];
 
-//    _portal = [[WindowComponent alloc] init];
-//    _portal.mixedReality = _mixedReality;
-//    _portal.overlayComponent = _colorOverlay;
-//    _portal.stereoRendering = YES;
-//    //_portal.interactive = [BEAppSettings booleanValueFromAppSetting:SETTING_PLAY_SCRIPT defaultValueIfSettingIsNotInBundle:NO] == NO;
-//    GKEntity *_portalEntity = [[SceneManager main] createEntity];
-//    [_portalEntity addComponent:_portal];
-//    [[EventManager main] addGlobalEventComponent:_portal];
-//
-//    self.portalNode = [_portal node];
+    // Setup a node to render the camera even where there is no mesh
+    _cameraDisplayMesh = [[SCNScene sceneNamed:@"Assets.scnassets/maya_files/inverted_sphere.dae"].rootNode clone];
+    SCNProgram *program = [SCNProgram programWithShader:@"Shaders/SimpleCameraRender/simpleCameraRender"];
+    [program setDelegate:self];
 
-    // Setup the near/far clipping planes to be large enough for the mountains world.
-    //[Camera main].camera.zFar = 10000;
+    SCNGeometry *geometry = [_cameraDisplayMesh childNodeWithName:@"pSphere1" recursively:true].geometry;
+    SCNMaterial *material = geometry.firstMaterial;
+
+    material.program = program;
+
+    [material handleBindingOfSymbol:@"cameraSampler" usingBlock:^(unsigned int programID,
+                                                                  unsigned int location,
+                                                                  SCNNode *renderedNode,
+                                                                  SCNRenderer *renderer) {
+        glColorMask(GL_TRUE, GL_TRUE, GL_TRUE, GL_TRUE);
+        glClear(GL_COLOR_BUFFER_BIT);
+//        NSLog(@"Settings uniform");
+    }];
+//    geometry.firstMaterial = material;
+    
+    [_cameraDisplayMesh setRenderingOrder:BEEnvironmentScanRenderingOrder + 10000];
+
+//    SCNNode *cameraDisplayMesh = [[SCNScene sceneNamed:@"Assets.scnassets/inverted_sphere.dae"].rootNode clone];
+    [_mixedReality.worldNodeWhenRelocalized addChildNode:_cameraDisplayMesh];
 
     // uncomment this line to trigger the custom rendering mode.
-    [_mixedReality setRenderStyle:BERenderStyleSceneKitAndColorCamera withDuration:1];
-    //[_mixedReality setCustomRenderStyle: ];
+    [_mixedReality setRenderStyle:BERenderStyleSceneKitAndCustomEnvironmentShader withDuration:1];
+
     // Ready to start the Scene Manager- this will start all the components in the scene.
     [[SceneManager main] startWithMixedRealityMode:_mixedReality];
-
 }
 
 - (void)mixedRealityMarkupEditingEnded {
@@ -323,7 +334,6 @@ static const SCNMatrix4 defaultPivot = SCNMatrix4MakeRotation(M_PI, 1.0, 0.0, 0.
 
     {
         // Here, you can control an interaction using the location of the device.
-
         SCNNode *localDeviceNode = _mixedReality.localDeviceNode;
 
         // For now, let's just log its position every 5 seconds.
@@ -339,6 +349,9 @@ static const SCNMatrix4 defaultPivot = SCNMatrix4MakeRotation(M_PI, 1.0, 0.0, 0.
 
             lastDeviceNodeLoggingTime = time;
         }
+
+        // Set the camera sphere surrounding the viewer to the transform of the camera every frame
+
     }
 }
 
@@ -406,5 +419,9 @@ static const SCNMatrix4 defaultPivot = SCNMatrix4MakeRotation(M_PI, 1.0, 0.0, 0.
     }
 }
 
+- (void)program:(SCNProgram *)program handleError:(NSError *)error {
+    NSLog(@"ERROR: -------------------------------:");
+    NSLog(@"%@",[error localizedDescription]);
+}
 
 @end

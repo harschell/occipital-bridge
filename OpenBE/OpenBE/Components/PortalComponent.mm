@@ -626,6 +626,7 @@ typedef NS_ENUM (NSUInteger, PortalState) {
     }
     
     // portal renders to stencil here
+
     if ([node.name isEqualToString:@"PostPortal"] )
     {
         glColorMask(GL_TRUE, GL_TRUE, GL_TRUE, GL_TRUE);

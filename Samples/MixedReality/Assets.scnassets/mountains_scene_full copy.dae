@@ -4,11 +4,34 @@
   <contributor>
    <authoring_tool>SceneKit Collada Exporter v1.0</authoring_tool>
   </contributor>
-  <created>2017-07-31T18:46:54Z</created>
-  <modified>2017-07-31T18:46:54Z</modified>
+  <created>2017-07-26T21:34:51Z</created>
+  <modified>2017-07-26T21:34:51Z</modified>
   <unit meter="1.000000"/>
   <up_axis>Y_UP</up_axis>
  </asset>
+ <library_cameras>
+  <camera id="house_camera" name="house_camera">
+   <optics>
+    <technique_common>
+     <perspective>
+      <xfov>83.4699</xfov>
+      <znear>0.1</znear>
+      <zfar>6000</zfar>
+     </perspective>
+    </technique_common>
+   </optics>
+   <extra>
+    <technique profile="SceneKit">
+     <depth_of_field>
+      <focal_depth>10</focal_depth>
+      <sample_radius>0</sample_radius>
+      <focal_size>0</focal_size>
+      <focal_aperture>0.125</focal_aperture>
+     </depth_of_field>
+    </technique>
+   </extra>
+  </camera>
+ </library_cameras>
  <library_images>
   <image id="image1">
    <init_from>../../../../occipital-unity/Assets/mountain2uv-colored.psd</init_from>
@@ -1028,8 +1051,27 @@
  </library_geometries>
  <library_visual_scenes>
   <visual_scene id="scene78">
+   <node id="locator1" name="locator1">
+    <matrix>0.01 0 0 -13.36483 0 0.01 0 9.363121 0 0 0.01 -56.58521 0 0 0 1 </matrix>
+   </node>
+   <node id="locator2" name="locator2">
+    <matrix>0.01 0 0 -4.934624 0 0.01 0 0.013169 0 0 0.01 58.65203 0 0 0 1 </matrix>
+   </node>
+   <node id="distanceDimension1" name="distanceDimension1">
+    <matrix>0.01 0 0 0 0 0.01 0 0 0 0 0.01 0 0 0 0 1 </matrix>
+   </node>
+   <node id="House_Camera" name="House_Camera">
+    <matrix>0 0 -0.01 0 0 0.01 0 0 0.01 0 0 0 0 0 0 1 </matrix>
+    <node id="node79" name="house_camera">
+     <matrix>0 0 -1 0 0 1 0 0 1 0 0 176.8628 0 0 0 1 </matrix>
+     <instance_camera url="#house_camera"/>
+    </node>
+    <node id="camera1_aim" name="camera1_aim">
+     <matrix>0.450947 -0.525946 0.721129 0 -0.479422 0.538764 0.69274 0 -0.752862 -0.658114 -0.009196 -3851.437 0 0 0 1 </matrix>
+    </node>
+   </node>
    <node id="Scene" name="Scene">
-    <matrix>0.004123 0 0 0 0 0.004123 0 0 0 0 0.004123 0 0 0 0 1 </matrix>
+    <matrix>0.01 0 0 0 0 0.01 0 0 0 0 0.01 0 0 0 0 1 </matrix>
     <node id="polySurface7" name="polySurface7">
      <matrix>-0.01595 0.000268 -0.032184 4329.406 0 0.003989 0.002686 -665.665 0.032274 0.000132 -0.015906 -9025.849 0 0 0 1 </matrix>
      <instance_geometry url="#polySurface7-lib">
@@ -1167,7 +1209,7 @@
      </instance_geometry>
     </node>
     <node id="cloudfloor" name="cloudfloor">
-     <matrix>0.02314 0 0 -5.095458 0 0.02314 0 -2882.944 0 0 0.02314 0 0 0 0 1 </matrix>
+     <matrix>0.021504 0 0 -5.095458 0 0.021504 0 -1027.405 0 0 0.021504 0 0 0 0 1 </matrix>
      <instance_geometry url="#cloudfloor-lib">
       <bind_material>
        <technique_common>
