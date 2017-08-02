@@ -293,7 +293,7 @@ typedef NS_ENUM (NSUInteger, PortalState) {
     [_occlude setRenderingOrderRecursively:portalOccludeRenderOrder];
     [self.portalGeometryTransformNode addChildNode:_occlude];
 
-//    self.occlude.geometry.firstMaterial.cullMode = SCNCullFront;
+    self.occlude.geometry.firstMaterial.cullMode = SCNCullFront;
 
     self.portalGeometryNode.geometry.firstMaterial.doubleSided = true;
     self.portalGeometryNode.categoryBitMask = RAYCAST_IGNORE_BIT;
@@ -306,30 +306,18 @@ typedef NS_ENUM (NSUInteger, PortalState) {
     self.portalCrossingPlaneNode.hidden = false;
     [self.portalCrossingTransformNode addChildNode:self.portalCrossingPlaneNode];
 
-    // Rounded Frame
-    // Testing a new portal mesh
+    // Load the mesh for the window.
     GLKVector3 meshForward = GLKVector3Make(0, 0, 1); // Which direction is forward in the exported mesh.
     SCNNode *portalFrameMesh = [[SCNScene sceneNamed:@"Assets.scnassets/maya_files/window.dae"].rootNode clone];
-//    SCNNode *portalFrameMesh = [_portalGeometryNode clone];
     portalFrameMesh.position = SCNVector3Make(0,0,0);
     GLKQuaternion q = [Utils SCNQuaternionMakeFromRotation:meshForward to:GLKVector3Make(0, 1, 0)];
     portalFrameMesh.orientation = SCNVector4Make(q.x, q.y, q.z, q.w);
 
+    // Make the cut plane render as part of the stencil pass.
     SCNNode *cutPlane = [portalFrameMesh childNodeWithName:@"cut_plane" recursively:true];
-//    [cutPlane removeFromParentNode];
-//    cutPlane.orientation = SCNVector4Make(q.x, q.y, q.z, q.w);
-//    [self.occlude addChildNode: cutPlane];
     [cutPlane setRenderingOrderRecursively:portalOccludeRenderOrder];
 
     self.portalFrameNode = portalFrameMesh;
-
-//    self.portalFrameNode = [[SCNScene sceneNamed:@"Assets.scnassets/maya_files/window_frame.dae"]
-//            .rootNode clone];
-//    [self.portalFrameNode.geometry.firstMaterial
-//            .diffuse setContents:[UIColor colorWithRed:0.678f green:0.678f blue:0.678f alpha:1]];
-//    self.portalFrameNode.transform = self.portalGeometryNode.transform;
-//    self.portalFrameNode.scale = SCNVector3Make(PORTAL_CIRCLE_RADIUS, PORTAL_CIRCLE_RADIUS, PORTAL_CIRCLE_RADIUS);
-
     [self.portalGeometryTransformNode addChildNode:self.portalFrameNode];
 
     [self.node setCastsShadowRecursively:false];
@@ -424,7 +412,7 @@ typedef NS_ENUM (NSUInteger, PortalState) {
         glColorMask(GL_TRUE, GL_TRUE, GL_TRUE, GL_TRUE);
         glDepthMask(GL_TRUE);
         glStencilMask(0x0);
-//        glDisable(GL_STENCIL_TEST);
+        glDisable(GL_STENCIL_TEST);
     }
 
     if ([node.name isEqualToString:@"PreEnvironment"]) {
