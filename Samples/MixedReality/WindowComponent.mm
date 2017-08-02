@@ -277,7 +277,7 @@ typedef NS_ENUM (NSUInteger, PortalState) {
 
     // Setup the geometry for the portal rendering geometry
     self.portalGeometryNode =
-            [SCNNode nodeWithGeometry:[SCNCylinder cylinderWithRadius:PORTAL_CIRCLE_RADIUS height:0.001]];
+            [SCNNode nodeWithGeometry:[SCNCylinder cylinderWithRadius:.1 height:0.001]];
     self.portalCrossingPlaneNode =
             [SCNNode nodeWithGeometry:[SCNCylinder cylinderWithRadius:PORTAL_CIRCLE_RADIUS height:0.0]];
     self.portalGeometryNode.rotation = SCNVector4Make(1, 0, 0, 0);
@@ -293,7 +293,7 @@ typedef NS_ENUM (NSUInteger, PortalState) {
     [_occlude setRenderingOrderRecursively:portalOccludeRenderOrder];
     [self.portalGeometryTransformNode addChildNode:_occlude];
 
-    self.occlude.geometry.firstMaterial.cullMode = SCNCullFront;
+//    self.occlude.geometry.firstMaterial.cullMode = SCNCullFront;
 
     self.portalGeometryNode.geometry.firstMaterial.doubleSided = true;
     self.portalGeometryNode.categoryBitMask = RAYCAST_IGNORE_BIT;
@@ -310,11 +310,19 @@ typedef NS_ENUM (NSUInteger, PortalState) {
     // Testing a new portal mesh
     GLKVector3 meshForward = GLKVector3Make(0, 0, 1); // Which direction is forward in the exported mesh.
     SCNNode *portalFrameMesh = [[SCNScene sceneNamed:@"Assets.scnassets/maya_files/window.dae"].rootNode clone];
+//    SCNNode *portalFrameMesh = [_portalGeometryNode clone];
     portalFrameMesh.position = SCNVector3Make(0,0,0);
     GLKQuaternion q = [Utils SCNQuaternionMakeFromRotation:meshForward to:GLKVector3Make(0, 1, 0)];
     portalFrameMesh.orientation = SCNVector4Make(q.x, q.y, q.z, q.w);
+
+    SCNNode *cutPlane = [portalFrameMesh childNodeWithName:@"cut_plane" recursively:true];
+//    [cutPlane removeFromParentNode];
+//    cutPlane.orientation = SCNVector4Make(q.x, q.y, q.z, q.w);
+//    [self.occlude addChildNode: cutPlane];
+    [cutPlane setRenderingOrderRecursively:portalOccludeRenderOrder];
+
     self.portalFrameNode = portalFrameMesh;
-    
+
 //    self.portalFrameNode = [[SCNScene sceneNamed:@"Assets.scnassets/maya_files/window_frame.dae"]
 //            .rootNode clone];
 //    [self.portalFrameNode.geometry.firstMaterial
@@ -416,7 +424,7 @@ typedef NS_ENUM (NSUInteger, PortalState) {
         glColorMask(GL_TRUE, GL_TRUE, GL_TRUE, GL_TRUE);
         glDepthMask(GL_TRUE);
         glStencilMask(0x0);
-
+//        glDisable(GL_STENCIL_TEST);
     }
 
     if ([node.name isEqualToString:@"PreEnvironment"]) {

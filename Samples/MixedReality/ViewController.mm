@@ -285,42 +285,42 @@ static const SCNMatrix4 defaultPivot = SCNMatrix4MakeRotation(M_PI, 1.0, 0.0, 0.
     [[[SceneManager main] createEntity] addComponent:_outsideWorld];
 
     // Setup a node to render the camera even where there is no mesh
-    _cameraDisplayMesh = [[SCNScene sceneNamed:@"Assets.scnassets/maya_files/inverted_sphere.dae"].rootNode clone];
-    SCNProgram *program = [SCNProgram programWithShader:@"Shaders/SimpleCameraRender/simpleCameraRender"];
-    [program setDelegate:self];
-
-    SCNGeometry *geometry = [_cameraDisplayMesh childNodeWithName:@"pSphere1" recursively:true].geometry;
-    SCNMaterial *material = geometry.firstMaterial;
-
-    material.program = program;
-
-    [material handleBindingOfSymbol:@"u_resolution" usingBlock:^(unsigned int programID,
-                                                                 unsigned int location,
-                                                                 SCNNode *renderedNode,
-                                                                 SCNRenderer *renderer) {
-        GLint vp[4];
-        glGetIntegerv(GL_VIEWPORT, vp);
-        glUniform2f(location, vp[2], vp[3]);
-    }];
-
-    [material handleBindingOfSymbol:@"cameraSampler" usingBlock:^(unsigned int programID,
-                                                                  unsigned int location,
-                                                                  SCNNode *renderedNode,
-                                                                  SCNRenderer *renderer) {
-
-        if (customRenderMode.cameraTextureName!=-1) {
-            glActiveTexture(GL_TEXTURE7);
-            glBindTexture(GL_TEXTURE_2D, customRenderMode.cameraTextureName);
-            glUniform1i(location, GL_TEXTURE7 - GL_TEXTURE0);
-        }
-
-    }];
-
-
-    [_cameraDisplayMesh setRenderingOrder:BEEnvironmentScanRenderingOrder + 10000];
+//    _cameraDisplayMesh = [[SCNScene sceneNamed:@"Assets.scnassets/maya_files/inverted_sphere.dae"].rootNode clone];
+//    SCNProgram *program = [SCNProgram programWithShader:@"Shaders/SimpleCameraRender/simpleCameraRender"];
+//    [program setDelegate:self];
+//
+//    SCNGeometry *geometry = [_cameraDisplayMesh childNodeWithName:@"pSphere1" recursively:true].geometry;
+//    SCNMaterial *material = geometry.firstMaterial;
+//
+//    material.program = program;
+//
+//    [material handleBindingOfSymbol:@"u_resolution" usingBlock:^(unsigned int programID,
+//                                                                 unsigned int location,
+//                                                                 SCNNode *renderedNode,
+//                                                                 SCNRenderer *renderer) {
+//        GLint vp[4];
+//        glGetIntegerv(GL_VIEWPORT, vp);
+//        glUniform2f(location, vp[2], vp[3]);
+//    }];
+//
+//    [material handleBindingOfSymbol:@"cameraSampler" usingBlock:^(unsigned int programID,
+//                                                                  unsigned int location,
+//                                                                  SCNNode *renderedNode,
+//                                                                  SCNRenderer *renderer) {
+//
+//        if (customRenderMode.cameraTextureName!=-1) {
+//            glActiveTexture(GL_TEXTURE7);
+//            glBindTexture(GL_TEXTURE_2D, customRenderMode.cameraTextureName);
+//            glUniform1i(location, GL_TEXTURE7 - GL_TEXTURE0);
+//        }
+//
+//    }];
+//
+//
+//    [_cameraDisplayMesh setRenderingOrder:BEEnvironmentScanRenderingOrder + 10000];
 
 //    SCNNode *cameraDisplayMesh = [[SCNScene sceneNamed:@"Assets.scnassets/inverted_sphere.dae"].rootNode clone];
-    //[_mixedReality.worldNodeWhenRelocalized addChildNode:_cameraDisplayMesh];
+//    [_mixedReality.worldNodeWhenRelocalized addChildNode:_cameraDisplayMesh];
 
     // uncomment this line to trigger the custom rendering mode.
     [_mixedReality setRenderStyle:BERenderStyleSceneKitAndCustomEnvironmentShader withDuration:1];
