@@ -102,6 +102,7 @@
 - (bool) isFullyClosed;
 
 @end
+
 static const long prePortalRenderOrder = BEEnvironmentScanShadowRenderingOrder - 17;
 static const long portalOccludeRenderOrder = BEEnvironmentScanShadowRenderingOrder - 16;
 static const long postPortalRenderOrder = BEEnvironmentScanShadowRenderingOrder - 15;

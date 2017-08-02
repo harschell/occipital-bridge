@@ -285,7 +285,7 @@ static const SCNMatrix4 defaultPivot = SCNMatrix4MakeRotation(M_PI, 1.0, 0.0, 0.
     [[[SceneManager main] createEntity] addComponent:_outsideWorld];
 
     // Setup a node to render the camera even where there is no mesh
-//    _cameraDisplayMesh = [[SCNScene sceneNamed:@"Assets.scnassets/maya_files/inverted_sphere.dae"].rootNode clone];
+    _cameraDisplayMesh = [[SCNScene sceneNamed:@"Assets.scnassets/maya_files/inverted_sphere.dae"].rootNode clone];
 //    SCNProgram *program = [SCNProgram programWithShader:@"Shaders/SimpleCameraRender/simpleCameraRender"];
 //    [program setDelegate:self];
 //
@@ -315,12 +315,12 @@ static const SCNMatrix4 defaultPivot = SCNMatrix4MakeRotation(M_PI, 1.0, 0.0, 0.
 //        }
 //
 //    }];
-//
-//
-//    [_cameraDisplayMesh setRenderingOrder:BEEnvironmentScanRenderingOrder + 10000];
 
-//    SCNNode *cameraDisplayMesh = [[SCNScene sceneNamed:@"Assets.scnassets/inverted_sphere.dae"].rootNode clone];
-//    [_mixedReality.worldNodeWhenRelocalized addChildNode:_cameraDisplayMesh];
+    SCNGeometry *geometry = [_cameraDisplayMesh childNodeWithName:@"pSphere1" recursively:true].geometry;
+    geometry.firstMaterial.diffuse.contents = [UIColor blackColor];
+    [_cameraDisplayMesh setScale:SCNVector3Make(4, 4, 4)];
+    [_cameraDisplayMesh setRenderingOrderRecursively: BEEnvironmentScanRenderingOrder + 1];
+    [_mixedReality.worldNodeWhenRelocalized addChildNode:_cameraDisplayMesh];
 
     // uncomment this line to trigger the custom rendering mode.
     [_mixedReality setRenderStyle:BERenderStyleSceneKitAndCustomEnvironmentShader withDuration:1];
@@ -410,11 +410,13 @@ static const SCNMatrix4 defaultPivot = SCNMatrix4MakeRotation(M_PI, 1.0, 0.0, 0.
 }
 
 - (void)userSelection:(CGPoint)tapPoint {
+
     SCNVector3 meshNormal{NAN, NAN, NAN};
     SCNVector3 mesh3DPoint = [_mixedReality mesh3DFrom2DPoint:tapPoint outputNormal:&meshNormal];
 
     if (mesh3DPoint.x!=NAN && mesh3DPoint.y!=NAN && mesh3DPoint.z!=NAN) {
         NSLog(@"\t mesh3DPoint %f,%f,%f", mesh3DPoint.x, mesh3DPoint.y, mesh3DPoint.z);
+
 
         GLKVector3 normal = GLKVector3Make(-meshNormal.x, -meshNormal.y, -meshNormal.z);
 
