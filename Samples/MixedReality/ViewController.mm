@@ -285,14 +285,13 @@ static const SCNMatrix4 defaultPivot = SCNMatrix4MakeRotation(M_PI, 1.0, 0.0, 0.
     [[[SceneManager main] createEntity] addComponent:_outsideWorld];
 
     // Setup a node to render the camera even where there is no mesh
-//    _cameraDisplayMesh = [[SCNScene sceneNamed:@"Assets.scnassets/maya_files/inverted_sphere.dae"].rootNode clone];
+    _cameraDisplayMesh = [[SCNScene sceneNamed:@"Assets.scnassets/maya_files/inverted_sphere.dae"].rootNode clone];
 
-
-//    SCNGeometry *geometry = [_cameraDisplayMesh childNodeWithName:@"pSphere1" recursively:true].geometry;
-//    geometry.firstMaterial.diffuse.contents = [UIColor blackColor];
-//    [_cameraDisplayMesh setScale:SCNVector3Make(4, 4, 4)];
-//    [_cameraDisplayMesh setRenderingOrderRecursively: BEEnvironmentScanRenderingOrder + 1];
-//    [_mixedReality.worldNodeWhenRelocalized addChildNode:_cameraDisplayMesh];
+    SCNGeometry *geometry = [_cameraDisplayMesh childNodeWithName:@"pSphere1" recursively:true].geometry;
+    geometry.firstMaterial.diffuse.contents = [UIColor blackColor];
+    [_cameraDisplayMesh setScale:SCNVector3Make(4, 4, 4)];
+    [_cameraDisplayMesh setRenderingOrderRecursively: BEEnvironmentScanRenderingOrder + 1];
+    [_mixedReality.worldNodeWhenRelocalized addChildNode:_cameraDisplayMesh];
 
     // uncomment this line to trigger the custom rendering mode.
     [_mixedReality setRenderStyle:BERenderStyleSceneKitAndCustomEnvironmentShader withDuration:1];
