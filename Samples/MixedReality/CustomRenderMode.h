@@ -12,6 +12,9 @@
 #import <BridgeEngine/BridgeEngine.h>
 #import "BridgeEngine/BEShader.h"
 
+// The OpenGL name for the camera texture.
+extern GLuint CUSTOM_RENDER_MODE_CAMERA_TEXTURE_NAME;
+
 @interface CustomRenderMode : NSObject<BridgeEngineShaderDelegate>
 
 - (void)compile;
@@ -28,9 +31,6 @@
 @property GLuint depthSamplerLocation;
 @property GLuint cameraSamplerLocation;
 @property GLuint renderResolutionLocation;
-
-// The OpenGL name for the camera texture.
-@property GLuint cameraTextureName;
 
 @property GLuint glProgram;
 @property bool loaded;

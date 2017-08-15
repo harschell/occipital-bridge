@@ -24,6 +24,7 @@
 #import "OpenBE/Utils/Math.h"
 #import "Utils.h"
 #import "OutsideWorldComponent.h"
+#import "CustomRenderMode.h"
 
 static float const PORTAL_FRUSTUM_CROSSING_WIDTH = 0.03;
 
@@ -95,7 +96,7 @@ typedef NS_ENUM (NSUInteger, PortalState) {
 - (bool)openPortalOnWallPosition:(SCNVector3)position wallNormal:(GLKVector3)normal toVRWorld:(OutsideWorldComponent *)vrWorld {
     if (![self isFullyClosed]) return false; // Abort opening the portal.
     normal = GLKVector3Normalize(normal);
-    
+
     [self regenerateGeometry];
 
     GLKVector3 hitPos = SCNVector3ToGLKVector3(position);
@@ -309,13 +310,45 @@ typedef NS_ENUM (NSUInteger, PortalState) {
     // Load the mesh for the window.
     GLKVector3 meshForward = GLKVector3Make(0, 0, 1); // Which direction is forward in the exported mesh.
     SCNNode *portalFrameMesh = [[SCNScene sceneNamed:@"Assets.scnassets/maya_files/window.dae"].rootNode clone];
-    portalFrameMesh.position = SCNVector3Make(0,0,0);
+    portalFrameMesh.position = SCNVector3Make(0, 0, 0);
     GLKQuaternion q = [Utils SCNQuaternionMakeFromRotation:meshForward to:GLKVector3Make(0, 1, 0)];
     portalFrameMesh.orientation = SCNVector4Make(q.x, q.y, q.z, q.w);
 
     // Make the cut plane render as part of the stencil pass.
     SCNNode *cutPlane = [portalFrameMesh childNodeWithName:@"cut_plane" recursively:true];
     [cutPlane setRenderingOrderRecursively:portalOccludeRenderOrder];
+
+    // Setup the shader on the frame geometry object to blend it with the walls
+    SCNProgram *program = [SCNProgram programWithShader:@"Shaders/SimpleCameraRender/simpleCameraRender"];
+    [program setDelegate:self];
+
+    SCNNode *frameNode = [portalFrameMesh childNodeWithName:@"polySurface1" recursively:true];
+    SCNMaterial *material = frameNode.geometry.firstMaterial;
+
+    material.program = program;
+
+    [material handleBindingOfSymbol:@"u_resolution" usingBlock:^(unsigned int programID,
+                                                                 unsigned int location,
+                                                                 SCNNode *renderedNode,
+                                                                 SCNRenderer *renderer) {
+        GLint vp[4];
+        glGetIntegerv(GL_VIEWPORT, vp);
+        glUniform2f(location, vp[2], vp[3]);
+    }];
+
+    [material handleBindingOfSymbol:@"cameraSampler" usingBlock:^(unsigned int programID,
+                                                                  unsigned int location,
+                                                                  SCNNode *renderedNode,
+                                                                  SCNRenderer *renderer) {
+
+        if (CUSTOM_RENDER_MODE_CAMERA_TEXTURE_NAME!=-1) {
+            glActiveTexture(GL_TEXTURE7);
+            glBindTexture(GL_TEXTURE_2D, CUSTOM_RENDER_MODE_CAMERA_TEXTURE_NAME);
+            glUniform1i(location, GL_TEXTURE7 - GL_TEXTURE0);
+        }
+    }];
+
+    [frameNode setRenderingOrderRecursively:postEnvironmentRenderOrder + 10000];
 
     self.portalFrameNode = portalFrameMesh;
     [self.portalGeometryTransformNode addChildNode:self.portalFrameNode];
@@ -375,7 +408,6 @@ typedef NS_ENUM (NSUInteger, PortalState) {
     [self.preEnvironment setRendererDelegate:self];
     [self.node addChildNode:self.preEnvironment];
 
-
     self.time = 0;
     self.portalState = PORTAL_IDLE;
     self.oldCameraPos = [Camera main].position;
@@ -393,7 +425,6 @@ typedef NS_ENUM (NSUInteger, PortalState) {
     // note in stereo this gets called twice with pass names sceneLeft and sceneRight
     if ([passName isEqualToString:@"SceneKit_renderSceneFromLight"])
         return;
-
 
     if ([node.name isEqualToString:@"PrePortal"]) {
         glEnable(GL_STENCIL_TEST);
@@ -434,4 +465,8 @@ typedef NS_ENUM (NSUInteger, PortalState) {
 - (bool)touchEndedButton:(uint8_t)button forward:(GLKVector3)touchForward hit:(SCNHitTestResult *)hit { return true; };
 - (bool)touchCancelledButton:(uint8_t)button forward:(GLKVector3)touchForward hit:(SCNHitTestResult *)hit { return true; };
 
+- (void)program:(SCNProgram *)program handleError:(NSError *)error {
+    NSLog(@"ERROR: -------------------------------:");
+    NSLog(@"%@", [error localizedDescription]);
+}
 @end

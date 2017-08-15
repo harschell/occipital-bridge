@@ -8,12 +8,12 @@
 
 #import "CustomRenderMode.h"
 
+GLuint CUSTOM_RENDER_MODE_CAMERA_TEXTURE_NAME = -1;
+
 @implementation CustomRenderMode
 
 - (id)init {
     self = [super init];
-
-    self.cameraTextureName = (GLuint) -1;
 
     return self;
 }
@@ -57,7 +57,7 @@
 
     // Load camera image into texture unit 7.
     //NSLog(@"Allocated a camera texture into integer: %d", cameraTexture);
-    self.cameraTextureName = cameraTexture;
+    CUSTOM_RENDER_MODE_CAMERA_TEXTURE_NAME = cameraTexture;
 
     glActiveTexture(GL_TEXTURE7);
     glBindTexture(GL_TEXTURE_2D, cameraTexture);

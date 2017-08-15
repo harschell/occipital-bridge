@@ -68,7 +68,7 @@
  *
  * These nodes require manual updates to their transform if the portal node's transform changes.
  */
-@interface WindowComponent : Component  <EventComponentProtocol, SCNNodeRendererDelegate, WindowComponentJS>
+@interface WindowComponent : Component  <EventComponentProtocol, SCNNodeRendererDelegate, WindowComponentJS, SCNProgramDelegate>
 @property(nonatomic, weak) BEMixedRealityMode *mixedReality;
 // @property(nonatomic, strong) SCNNode *node; (protect the node)
 //@property(nonatomic, strong) GKEntity *robotEntity;
