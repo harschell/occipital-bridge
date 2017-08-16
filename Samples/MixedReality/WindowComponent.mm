@@ -318,37 +318,15 @@ typedef NS_ENUM (NSUInteger, PortalState) {
     SCNNode *cutPlane = [portalFrameMesh childNodeWithName:@"cut_plane" recursively:true];
     [cutPlane setRenderingOrderRecursively:portalOccludeRenderOrder];
 
-    // Setup the shader on the frame geometry object to blend it with the walls
-    SCNProgram *program = [SCNProgram programWithShader:@"Shaders/SimpleCameraRender/simpleCameraRender"];
-    [program setDelegate:self];
-
     SCNNode *frameNode = [portalFrameMesh childNodeWithName:@"polySurface1" recursively:true];
-    SCNMaterial *material = frameNode.geometry.firstMaterial;
+    [self bakeWorldSpacePositionsIntoGeometry:frameNode];
 
-    material.program = program;
-
-    [material handleBindingOfSymbol:@"u_resolution" usingBlock:^(unsigned int programID,
-                                                                 unsigned int location,
-                                                                 SCNNode *renderedNode,
-                                                                 SCNRenderer *renderer) {
-        GLint vp[4];
-        glGetIntegerv(GL_VIEWPORT, vp);
-        glUniform2f(location, vp[2], vp[3]);
-    }];
-
-    [material handleBindingOfSymbol:@"cameraSampler" usingBlock:^(unsigned int programID,
-                                                                  unsigned int location,
-                                                                  SCNNode *renderedNode,
-                                                                  SCNRenderer *renderer) {
-
-        if (CUSTOM_RENDER_MODE_CAMERA_TEXTURE_NAME!=-1) {
-            glActiveTexture(GL_TEXTURE7);
-            glBindTexture(GL_TEXTURE_2D, CUSTOM_RENDER_MODE_CAMERA_TEXTURE_NAME);
-            glUniform1i(location, GL_TEXTURE7 - GL_TEXTURE0);
-        }
-    }];
+    // Create a new geometry for frameNode
+    [self setupCameraMaterial:frameNode.geometry.firstMaterial];
 
     [frameNode setRenderingOrderRecursively:postEnvironmentRenderOrder + 10000];
+    [[portalFrameMesh childNodeWithName:@"window_piece" recursively:true]
+            setRenderingOrderRecursively:postEnvironmentRenderOrder + 10000];
 
     self.portalFrameNode = portalFrameMesh;
     [self.portalGeometryTransformNode addChildNode:self.portalFrameNode];
@@ -468,5 +446,130 @@ typedef NS_ENUM (NSUInteger, PortalState) {
 - (void)program:(SCNProgram *)program handleError:(NSError *)error {
     NSLog(@"ERROR: -------------------------------:");
     NSLog(@"%@", [error localizedDescription]);
+}
+
+- (void)setupCameraMaterial:(SCNMaterial *)material {
+    // Setup the shader on the frame geometry object to blend it with the walls
+    SCNProgram *program = [SCNProgram programWithShader:@"Shaders/SimpleCameraRender/simpleCameraRender"];
+    [program setSemantic:SCNGeometrySourceSemanticColor forSymbol:@"a_color" options:nil];
+    [program setDelegate:self];
+
+    material.program = program;
+
+    [material handleBindingOfSymbol:@"u_resolution" usingBlock:^(unsigned int programID,
+                                                                 unsigned int location,
+                                                                 SCNNode *renderedNode,
+                                                                 SCNRenderer *renderer) {
+        GLint vp[4];
+        glGetIntegerv(GL_VIEWPORT, vp);
+        glUniform2f(location, vp[2], vp[3]);
+    }];
+
+    [material handleBindingOfSymbol:@"cameraSampler" usingBlock:^(unsigned int programID,
+                                                                  unsigned int location,
+                                                                  SCNNode *renderedNode,
+                                                                  SCNRenderer *renderer) {
+
+        if (CUSTOM_RENDER_MODE_CAMERA_TEXTURE_NAME!=-1) {
+            glActiveTexture(GL_TEXTURE7);
+            glBindTexture(GL_TEXTURE_2D, CUSTOM_RENDER_MODE_CAMERA_TEXTURE_NAME);
+            glUniform1i(location, GL_TEXTURE7 - GL_TEXTURE0);
+        }
+    }];
+
+}
+
+- (void)bakeWorldSpacePositionsIntoGeometry:(SCNNode *)node {
+    NSArray<SCNGeometrySource *>
+            *vertexSources = [node.geometry geometrySourcesForSemantic:SCNGeometrySourceSemanticVertex];
+    NSAssert([vertexSources count]==1, @"Not one vertex geometry source.");
+    SCNGeometrySource *vertexSource = vertexSources[0]; // check the data offsets and things
+
+    NSInteger stride = vertexSource.dataStride; // in bytes
+    NSInteger offset = vertexSource.dataOffset; // in bytes
+
+    NSInteger componentsPerVector = vertexSource.componentsPerVector;
+    NSInteger bytesPerVector = componentsPerVector * vertexSource.bytesPerComponent;
+    NSInteger vectorCount = vertexSource.vectorCount;
+
+    SCNVector3 vertices_object[vectorCount]; // A new array for vertices
+
+    // Read the vertex information out of the vertex data array.
+    for (NSInteger i = 0; i < vectorCount; i++) {
+
+        // Assuming that bytes per component is 4 (a float)
+        // If it was 8 then it would be a double (aka CGFloat)
+        float vectorData[componentsPerVector];
+
+        // The range of bytes for this vector
+        NSRange byteRange = NSMakeRange(i * stride + offset, // Start at current stride + offset
+                                        bytesPerVector);   // and read the lenght of one vector
+
+        // Read into the vector data buffer
+        [vertexSource.data getBytes:&vectorData range:byteRange];
+
+        // At this point you can read the data from the float array
+        float x = vectorData[0];
+        float y = vectorData[1];
+        float z = vectorData[2];
+
+        // ... Maybe even save it as an SCNVector3 for later use ...
+        vertices_object[i] = SCNVector3Make(x, y, z);
+
+        // ... or just log it
+        NSLog(@"x:%f, y:%f, z:%f", x, y, z);
+    }
+
+
+    // Calculate the world positions of all of these vertices.
+    SCNVector3 vertices_world[vectorCount];
+
+    for (NSInteger i = 0; i < vectorCount; i++) {
+        vertices_world[i] = SCNVector3Make(0,1,0);//[node convertPosition:vertices_object[i] toNode:nil];
+    }
+
+    NSData *colorData = [NSData dataWithBytes:vertices_world length:sizeof(vertices_world)];
+    SCNGeometrySource *colorSource = [SCNGeometrySource geometrySourceWithData:colorData
+                                                                      semantic:SCNGeometrySourceSemanticColor
+                                                                   vectorCount:vectorCount
+                                                               floatComponents:YES
+                                                           componentsPerVector:3
+                                                             bytesPerComponent:sizeof(float)
+                                                                    dataOffset:0
+                                                                    dataStride:sizeof(SCNVector3)];
+
+//    [node.geometry geometrySources][0] = 5;
+//
+//    // Set the color values on all vertexes to be the positions of the current object.
+//    for (NSInteger i = 0; i < vectorCount; i++) {
+//
+//        // Assuming that bytes per component is 4 (a float)
+//        // If it was 8 then it would be a double (aka CGFloat)
+//        float vectorData[componentsPerVector];
+//
+//        // The range of bytes for this vector
+//        NSRange byteRange = NSMakeRange(i * stride + offset, // Start at current stride + offset
+//                                        bytesPerVector);   // and read the lenght of one vector
+//
+//        // Read into the vector data buffer
+//        [colorSource.data getBytes:&vectorData range:byteRange];
+//
+//        // At this point you can read the data from the float array
+//        float x = vectorData[0];
+//        float y = vectorData[1];
+//        float z = vectorData[2];
+//
+//        // ... Maybe even save it as an SCNVector3 for later use ...
+//        vertices_object[i] = SCNVector3Make(x, y, z);
+//
+//        // ... or just log it
+//        NSLog(@"x:%f, y:%f, z:%f", x, y, z);
+//    }
+
+    NSArray* sourcesWithColor = [node.geometry.geometrySources arrayByAddingObject:colorSource];
+
+    SCNGeometry *newGeometry = [SCNGeometry geometryWithSources:sourcesWithColor elements:node.geometry.geometryElements];
+    newGeometry.materials = node.geometry.materials.copy;
+    node.geometry = newGeometry;
 }
 @end

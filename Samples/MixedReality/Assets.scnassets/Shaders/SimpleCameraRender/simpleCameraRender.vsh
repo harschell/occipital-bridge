@@ -10,13 +10,17 @@
 
 uniform mat4 modelViewProjection;
 attribute vec3 position;
+attribute vec3 a_color;
 
 varying vec2 uv;
+varying vec3 v_color;
 
 void main(void)
 {
     
     gl_Position =  modelViewProjection * vec4(position, 1.0);
+
+    v_color = a_color;
 
     uv = sign(position.xy);
 }
