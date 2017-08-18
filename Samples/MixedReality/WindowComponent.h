@@ -54,7 +54,7 @@
 - (float) openDuration;
 - (float) closeDuration;
 
-- (bool) openPortalOnFloorPosition:(SCNVector3)position facingTarget:(SCNVector3)target toVRWorld:(OutsideWorldComponent*)vrWorld;
+//- (bool) openPortalOnFloorPosition:(SCNVector3)position facingTarget:(SCNVector3)target toVRWorld:(OutsideWorldComponent*)vrWorld;
 - (bool) openPortalOnWallPosition:(SCNVector3)position wallNormal:(GLKVector3)normal toVRWorld:(OutsideWorldComponent*)vrWorld;
 - (void) closePortal;
 

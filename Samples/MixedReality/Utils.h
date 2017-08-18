@@ -13,4 +13,8 @@
 
 + (GLKQuaternion) SCNQuaternionMakeFromRotation:(GLKVector3)from to:(GLKVector3)dest;
 
+
+// Creates a quaternion that rotates [0,0,1] to the give vector and up direction.
++ (GLKQuaternion)SCNQuaternionLookRotation:(GLKVector3)forward up:(GLKVector3)up;
+
 @end

@@ -108,46 +108,50 @@ typedef NS_ENUM (NSUInteger, PortalState) {
     // position portal node
     self.node.position = SCNVector3FromGLKVector3(portalPos);
 
-    // portal starts facing upwards, rotate such that faces normal
-    const GLKVector3 up = GLKVector3Make(0, 1, 0);
-    auto rotationAxis = GLKVector3CrossProduct(up, normal);
-    auto rotationAmount = (float) acos(GLKVector3DotProduct(normal, up));
-    auto q = GLKQuaternionMakeWithAngleAndVector3Axis(rotationAmount, rotationAxis);
-    q = [Utils SCNQuaternionMakeFromRotation:up to:normal];
+    // portal starts facing towards z, rotate such that faces normal
+    const GLKVector3 facing = GLKVector3Make(0, 0, 1);
+    GLKQuaternion rotateNormal = [Utils SCNQuaternionLookRotation:normal up:GLKVector3Make(0,-1,0)];
+    rotateNormal = GLKQuaternionNormalize(rotateNormal);
+    GLKQuaternion q = rotateNormal;
     self.node.orientation = SCNVector4Make(q.x, q.y, q.z, q.w);
 
-
-    //self.node.rotation = SCNVector4Make(rotationAxis.x, rotationAxis.y, rotationAxis.z, rotationAmount);
-    // Align the VR world to match our portal.
-    [vrWorld alignVRWorldToNode:self.node];
-    [self setOpen:true];
-    return true;
-}
-
-/**
- * NOTE: Won't open the portal if we're not isFullyClosed.
- * Open the portal on the floor.
- * Sets the position (anchored to the floor) and rotate the opening on the y-axis.
- */
-- (bool)openPortalOnFloorPosition:(SCNVector3)position facingTarget:(SCNVector3)target toVRWorld:(OutsideWorldComponent *)vrWorld {
-    if (![self isFullyClosed]) return false; // Abort opening the portal.
-
-    [self regenerateGeometry];
-
-    position.y = 0; // Anchor to ground.
-    self.node.position = position;
-
-    // rotate portal towards target (on ground)
-    target.y = 0;
-    GLKVector3 forward = GLKVector3Subtract(SCNVector3ToGLKVector3(position), SCNVector3ToGLKVector3(target));
-    float yRot = atan2f(forward.x, forward.z);
-    self.node.rotation = SCNVector4Make(0, 1, 0, yRot);
+    // bake the new position into the vertex attributes
+    [self bakeWorldSpacePositionsIntoGeometry:[self
+            .portalFrameNode childNodeWithName:@"polySurface1" recursively:true]];
+    [self bakeWorldSpacePositionsIntoGeometry:[self
+            .portalFrameNode childNodeWithName:@"window_piece" recursively:true]];
 
     // Align the VR world to match our portal.
     [vrWorld alignVRWorldToNode:self.node];
     [self setOpen:true];
+
     return true;
 }
+
+///**
+// * NOTE: Won't open the portal if we're not isFullyClosed.
+// * Open the portal on the floor.
+// * Sets the position (anchored to the floor) and rotate the opening on the y-axis.
+// */
+//- (bool)openPortalOnFloorPosition:(SCNVector3)position facingTarget:(SCNVector3)target toVRWorld:(OutsideWorldComponent *)vrWorld {
+//    if (![self isFullyClosed]) return false; // Abort opening the portal.
+//
+//    [self regenerateGeometry];
+//
+//    position.y = 0; // Anchor to ground.
+//    self.node.position = position;
+//
+//    // rotate portal towards target (on ground)
+//    target.y = 0;
+//    GLKVector3 forward = GLKVector3Subtract(SCNVector3ToGLKVector3(position), SCNVector3ToGLKVector3(target));
+//    float yRot = atan2f(forward.x, forward.z);
+//    self.node.rotation = SCNVector4Make(0, 1, 0, yRot);
+//
+//    // Align the VR world to match our portal.
+//    [vrWorld alignVRWorldToNode:self.node];
+//    [self setOpen:true];
+//    return true;
+//}
 
 /**
  * Begin closing the portal.
@@ -312,24 +316,28 @@ typedef NS_ENUM (NSUInteger, PortalState) {
     SCNNode *portalFrameMesh = [[SCNScene sceneNamed:@"Assets.scnassets/maya_files/window.dae"].rootNode clone];
     portalFrameMesh.position = SCNVector3Make(0, 0, 0);
     GLKQuaternion q = [Utils SCNQuaternionMakeFromRotation:meshForward to:GLKVector3Make(0, 1, 0)];
-    portalFrameMesh.orientation = SCNVector4Make(q.x, q.y, q.z, q.w);
+//    portalFrameMesh.orientation = SCNVector4Make(q.x, q.y, q.z, q.w);
 
     // Make the cut plane render as part of the stencil pass.
     SCNNode *cutPlane = [portalFrameMesh childNodeWithName:@"cut_plane" recursively:true];
     [cutPlane setRenderingOrderRecursively:portalOccludeRenderOrder];
 
-    SCNNode *frameNode = [portalFrameMesh childNodeWithName:@"polySurface1" recursively:true];
-    [self bakeWorldSpacePositionsIntoGeometry:frameNode];
-
-    // Create a new geometry for frameNode
-    [self setupCameraMaterial:frameNode.geometry.firstMaterial];
-
-    [frameNode setRenderingOrderRecursively:postEnvironmentRenderOrder + 10000];
     [[portalFrameMesh childNodeWithName:@"window_piece" recursively:true]
             setRenderingOrderRecursively:postEnvironmentRenderOrder + 10000];
 
     self.portalFrameNode = portalFrameMesh;
     [self.portalGeometryTransformNode addChildNode:self.portalFrameNode];
+
+    // Setup the special camera mapping and rendering for the frame
+    SCNNode *frameNode = [portalFrameMesh childNodeWithName:@"polySurface1" recursively:true];
+
+    // Create a new geometry for frameNode
+    [self setupCameraMaterial:frameNode.geometry.firstMaterial];
+
+    [self bakeWorldSpacePositionsIntoGeometry:[self
+            .portalFrameNode childNodeWithName:@"polySurface1" recursively:true]];
+
+    [frameNode setRenderingOrderRecursively:postEnvironmentRenderOrder + 10000];
 
     [self.node setCastsShadowRecursively:false];
 }
@@ -452,6 +460,9 @@ typedef NS_ENUM (NSUInteger, PortalState) {
     // Setup the shader on the frame geometry object to blend it with the walls
     SCNProgram *program = [SCNProgram programWithShader:@"Shaders/SimpleCameraRender/simpleCameraRender"];
     [program setSemantic:SCNGeometrySourceSemanticColor forSymbol:@"a_color" options:nil];
+    [program setSemantic:SCNViewTransform forSymbol:@"viewTransform" options:nil];
+    [program setSemantic:SCNProjectionTransform forSymbol:@"projectionTransform" options:nil];
+    [program setSemantic:SCNModelTransform forSymbol:@"modelTransform" options:nil];
     [program setDelegate:self];
 
     material.program = program;
@@ -525,7 +536,7 @@ typedef NS_ENUM (NSUInteger, PortalState) {
     SCNVector3 vertices_world[vectorCount];
 
     for (NSInteger i = 0; i < vectorCount; i++) {
-        vertices_world[i] = SCNVector3Make(0,1,0);//[node convertPosition:vertices_object[i] toNode:nil];
+        vertices_world[i] = [node convertPosition:vertices_object[i] toNode:nil];
     }
 
     NSData *colorData = [NSData dataWithBytes:vertices_world length:sizeof(vertices_world)];
