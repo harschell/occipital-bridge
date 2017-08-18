@@ -128,37 +128,13 @@ typedef NS_ENUM (NSUInteger, PortalState) {
     return true;
 }
 
-///**
-// * NOTE: Won't open the portal if we're not isFullyClosed.
-// * Open the portal on the floor.
-// * Sets the position (anchored to the floor) and rotate the opening on the y-axis.
-// */
-//- (bool)openPortalOnFloorPosition:(SCNVector3)position facingTarget:(SCNVector3)target toVRWorld:(OutsideWorldComponent *)vrWorld {
-//    if (![self isFullyClosed]) return false; // Abort opening the portal.
-//
-//    [self regenerateGeometry];
-//
-//    position.y = 0; // Anchor to ground.
-//    self.node.position = position;
-//
-//    // rotate portal towards target (on ground)
-//    target.y = 0;
-//    GLKVector3 forward = GLKVector3Subtract(SCNVector3ToGLKVector3(position), SCNVector3ToGLKVector3(target));
-//    float yRot = atan2f(forward.x, forward.z);
-//    self.node.rotation = SCNVector4Make(0, 1, 0, yRot);
-//
-//    // Align the VR world to match our portal.
-//    [vrWorld alignVRWorldToNode:self.node];
-//    [self setOpen:true];
-//    return true;
-//}
-
 /**
  * Begin closing the portal.
  */
 - (void)closePortal {
     self.open = false;
 }
+
 /**
  * internal: open property
  */
@@ -168,11 +144,10 @@ typedef NS_ENUM (NSUInteger, PortalState) {
     _open = open;
 
     if (_open) {
-        self.time = (_portalState==PORTAL_CLOSE) ? (_audioWarpOut.duration - _time) :
-                0.f; // Re-target if portal was closing.
+        // Re-target if portal was closing.
+        self.time = (_portalState==PORTAL_CLOSE) ? (_audioWarpOut.duration - _time) : 0.f;
+
         [self setEnabled:true];
-        float open = smoothstepf(0, 1, self.time / _audioWarpIn.duration);
-        self.node.scale = SCNVector3Make(open, open, open);
 
         _audioWarpIn.position = self.node.position;
         [_audioWarpIn play];
@@ -196,7 +171,7 @@ typedef NS_ENUM (NSUInteger, PortalState) {
     return _audioWarpOut.duration;
 }
 
-- (BOOL)isFullyClosed {
+- (bool)isFullyClosed {
     return !_open && (_portalState==PORTAL_IDLE);
 }
 
@@ -210,26 +185,12 @@ typedef NS_ENUM (NSUInteger, PortalState) {
     self.time += seconds;
 
     if (self.portalState==PORTAL_OPEN) {
-        float open = smoothstepf(0, 1, self.time / _audioWarpIn.duration);
-        if (self.time > _audioWarpIn.duration) {
-            open = 1;
-        }
-
-        self.node.scale = SCNVector3Make(open, open, open);
-
         if (self.time > _audioWarpIn.duration) {
             self.portalState = PORTAL_IDLE;
         }
     }
 
     if (self.portalState==PORTAL_CLOSE) {
-        float open = smoothstepf(1, 0, self.time / _audioWarpOut.duration);
-        if (self.time > _audioWarpOut.duration) {
-            open = 0;
-        }
-
-        self.node.scale = SCNVector3Make(open, open, open);
-
         if (self.time > _audioWarpOut.duration) {
             self.portalState = PORTAL_IDLE;
             [self setEnabled:false];
