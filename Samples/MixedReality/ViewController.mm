@@ -17,7 +17,6 @@ http://structure.io
 #import <OpenBE/Components/SpawnPortalComponent.h>
 
 #import "WindowComponent.h"
-#import "Utils.h"
 #import "OutsideWorldComponent.h"
 
 //------------------------------------------------------------------------------
@@ -27,6 +26,7 @@ http://structure.io
 // Since -Y is up in Bridge Engine convention, the pivot rotates from the typical convention.
 
 static const SCNMatrix4 defaultPivot = SCNMatrix4MakeRotation(M_PI, 1.0, 0.0, 0.0);
+static float const MIN_DISTANCE_BETWEEN_PORTALS = .52f;
 
 //------------------------------------------------------------------------------
 
@@ -191,7 +191,6 @@ static const SCNMatrix4 defaultPivot = SCNMatrix4MakeRotation(M_PI, 1.0, 0.0, 0.
 
 - (void)startExperience {
     // For this experience, let's switch to a mode with AR objects composited with the passthrough camera.
-
     //[_mixedReality setRenderStyle:BERenderStyleSceneKitAndColorCamera withDuration:0.5];
 
     _experienceIsRunning = YES;
@@ -290,7 +289,7 @@ static const SCNMatrix4 defaultPivot = SCNMatrix4MakeRotation(M_PI, 1.0, 0.0, 0.
     SCNGeometry *geometry = [_cameraDisplayMesh childNodeWithName:@"pSphere1" recursively:true].geometry;
     geometry.firstMaterial.diffuse.contents = [UIColor blackColor];
     [_cameraDisplayMesh setScale:SCNVector3Make(4, 4, 4)];
-    [_cameraDisplayMesh setRenderingOrderRecursively: BEEnvironmentScanRenderingOrder + 1];
+    [_cameraDisplayMesh setRenderingOrderRecursively:BEEnvironmentScanRenderingOrder + 1];
     [_mixedReality.worldNodeWhenRelocalized addChildNode:_cameraDisplayMesh];
 
     // uncomment this line to trigger the custom rendering mode.
@@ -382,27 +381,53 @@ static const SCNMatrix4 defaultPivot = SCNMatrix4MakeRotation(M_PI, 1.0, 0.0, 0.
 
 - (void)userSelection:(CGPoint)tapPoint {
 
-    SCNVector3 meshNormal{NAN, NAN, NAN};
-    SCNVector3 mesh3DPoint = [_mixedReality mesh3DFrom2DPoint:tapPoint outputNormal:&meshNormal];
+    SCNVector3 outNormal{NAN, NAN, NAN};
+    SCNVector3 mesh3DPoint = [_mixedReality mesh3DFrom2DPoint:tapPoint outputNormal:&outNormal];
 
+    GLKVector3 meshNormal = GLKVector3Normalize(SCNVector3ToGLKVector3(outNormal));
     if (mesh3DPoint.x!=NAN && mesh3DPoint.y!=NAN && mesh3DPoint.z!=NAN) {
-        NSLog(@"\t mesh3DPoint %f,%f,%f", mesh3DPoint.x, mesh3DPoint.y, mesh3DPoint.z);
 
+        // No placing windows on upward / downward facing surfaces.
+        if (fabs(meshNormal.y) < .4) {
+            // Test to see if there already exists a portal in this location
+            NSArray<SCNNode *> *toplevelObjects = [[[Scene main] rootNode] childNodes];
 
-        GLKVector3 normal = GLKVector3Make(-meshNormal.x, -meshNormal.y, -meshNormal.z);
+            NSArray<SCNNode *> *overlappingPortals =
+                    [toplevelObjects objectsAtIndexes:[toplevelObjects indexesOfObjectsPassingTest:^BOOL(id obj,
+                                                                                                         NSUInteger idx,
+                                                                                                         BOOL *stop) {
+                        SCNNode *node = obj;
+                        if (![[node name] isEqualToString:@"PortalNode"]) { return false; }
 
-        WindowComponent *_portal = [[WindowComponent alloc] init];
-        _portal.mixedReality = _mixedReality;
-        _portal.overlayComponent = _colorOverlay;
-        _portal.stereoRendering = YES;
-        [_portal start];
+//                        SCNVector3 boundingSphereCenter = SCNVector3Make(0, 0, 0);
+//                        CGFloat boundingSphereRadius = 0.0f;
+//                        [node getBoundingSphereCenter:&boundingSphereCenter radius:&boundingSphereRadius];
 
-        GKEntity *_portalEntity = [[SceneManager main] createEntity];
-        [_portalEntity addComponent:_portal];
+//                        NSLog(@"Bounding sphere radius: %f", boundingSphereRadius);
 
-        [[EventManager main] addGlobalEventComponent:_portal];
+                        float dx = mesh3DPoint.x - node.position.x;
+                        float dy = mesh3DPoint.y - node.position.y;
+                        float dz = mesh3DPoint.z - node.position.z;
 
-        [_portal openPortalOnWallPosition:mesh3DPoint wallNormal:SCNVector3ToGLKVector3(meshNormal) toVRWorld:_outsideWorld];
+                        float distanceBetweenNodeAndPosition = (float) sqrt(dx * dx + dy * dy + dz * dz);
+                        return distanceBetweenNodeAndPosition < MIN_DISTANCE_BETWEEN_PORTALS;
+                    }]];
+
+            if (overlappingPortals.count==0) {
+                WindowComponent *_portal = [[WindowComponent alloc] init];
+                _portal.mixedReality = _mixedReality;
+                _portal.overlayComponent = _colorOverlay;
+                _portal.stereoRendering = YES;
+                [_portal start];
+
+                GKEntity *_portalEntity = [[SceneManager main] createEntity];
+                [_portalEntity addComponent:_portal];
+
+                [[EventManager main] addGlobalEventComponent:_portal];
+
+                [_portal openPortalOnWallPosition:mesh3DPoint wallNormal:meshNormal toVRWorld:_outsideWorld];
+            }
+        }
     }
 }
 

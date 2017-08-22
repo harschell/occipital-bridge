@@ -21,7 +21,6 @@
 #import "WindowComponent.h"
 #import "AudioEngine.h"
 #import "SceneKitExtensions.h"
-#import "OpenBE/Utils/Math.h"
 #import "Utils.h"
 #import "OutsideWorldComponent.h"
 #import "CustomRenderMode.h"
@@ -109,8 +108,7 @@ typedef NS_ENUM (NSUInteger, PortalState) {
     self.node.position = SCNVector3FromGLKVector3(portalPos);
 
     // portal starts facing towards z, rotate such that faces normal
-    const GLKVector3 facing = GLKVector3Make(0, 0, 1);
-    GLKQuaternion rotateNormal = [Utils SCNQuaternionLookRotation:normal up:GLKVector3Make(0,-1,0)];
+    GLKQuaternion rotateNormal = [Utils SCNQuaternionLookRotation:normal up:GLKVector3Make(0, -1, 0)];
     rotateNormal = GLKQuaternionNormalize(rotateNormal);
     GLKQuaternion q = rotateNormal;
     self.node.orientation = SCNVector4Make(q.x, q.y, q.z, q.w);
@@ -205,13 +203,9 @@ typedef NS_ENUM (NSUInteger, PortalState) {
             .portalCrossingTransformNode];
     GLKVector3 forward = GLKVector3Subtract(newCameraPos, self.oldCameraPos);
     forward = GLKVector3Normalize(forward);
-    forward = GLKVector3Add(self.oldCameraPos, forward);
 
     SCNVector3 to = [[Scene main].rootNode convertPosition:SCNVector3FromGLKVector3(newCameraPos) toNode:self
             .portalCrossingTransformNode];
-
-    NSArray<SCNHitTestResult *> *hitTestResults =
-            [self.portalCrossingTransformNode hitTestWithSegmentFromPoint:from toPoint:to options:nil];
 
     self.oldCameraPos = newCameraPos;
 
@@ -275,15 +269,25 @@ typedef NS_ENUM (NSUInteger, PortalState) {
     // Load the mesh for the window.
     GLKVector3 meshForward = GLKVector3Make(0, 0, 1); // Which direction is forward in the exported mesh.
     SCNNode *portalFrameMesh = [[SCNScene sceneNamed:@"Assets.scnassets/maya_files/window.dae"].rootNode clone];
+
+    // Stop animation after 1 loop
+    SCNNode *window_piece = [portalFrameMesh childNodeWithName:@"window_piece" recursively:true];
+
+    CAAnimation *animation = [window_piece animationForKey:@"window_piece-anim"];
+    [window_piece removeAnimationForKey:@"window_piece-anim"];
+
+    [animation setRepeatCount:1];
+    [animation setRemovedOnCompletion:false];
+    [animation setDelegate:<#(id<CAAnimationDelegate>)delegate#>];
+    [window_piece addAnimation:animation forKey:@"window_piece-anim"];
+
     portalFrameMesh.position = SCNVector3Make(0, 0, 0);
-    GLKQuaternion q = [Utils SCNQuaternionMakeFromRotation:meshForward to:GLKVector3Make(0, 1, 0)];
-//    portalFrameMesh.orientation = SCNVector4Make(q.x, q.y, q.z, q.w);
 
     // Make the cut plane render as part of the stencil pass.
     SCNNode *cutPlane = [portalFrameMesh childNodeWithName:@"cut_plane" recursively:true];
     [cutPlane setRenderingOrderRecursively:portalOccludeRenderOrder];
 
-    [[portalFrameMesh childNodeWithName:@"window_piece" recursively:true]
+    [window_piece
             setRenderingOrderRecursively:postEnvironmentRenderOrder + 10000];
 
     self.portalFrameNode = portalFrameMesh;
@@ -301,6 +305,12 @@ typedef NS_ENUM (NSUInteger, PortalState) {
     [frameNode setRenderingOrderRecursively:postEnvironmentRenderOrder + 10000];
 
     [self.node setCastsShadowRecursively:false];
+
+    // Setup the collision mesh on each portal
+    self.node.physicsBody = [SCNPhysicsBody staticBody];
+    self.node.physicsBody.categoryBitMask = 1 << 4;
+    self.node.physicsBody.physicsShape =
+            [SCNPhysicsShape shapeWithGeometry:[SCNBox boxWithWidth:100 height:100 length:100 chamferRadius:0] options:nil];
 }
 
 - (void)start {
@@ -485,11 +495,8 @@ typedef NS_ENUM (NSUInteger, PortalState) {
         float y = vectorData[1];
         float z = vectorData[2];
 
-        // ... Maybe even save it as an SCNVector3 for later use ...
+        // save it as an SCNVector3 for later use ...
         vertices_object[i] = SCNVector3Make(x, y, z);
-
-        // ... or just log it
-        NSLog(@"x:%f, y:%f, z:%f", x, y, z);
     }
 
 
@@ -538,9 +545,10 @@ typedef NS_ENUM (NSUInteger, PortalState) {
 //        NSLog(@"x:%f, y:%f, z:%f", x, y, z);
 //    }
 
-    NSArray* sourcesWithColor = [node.geometry.geometrySources arrayByAddingObject:colorSource];
+    NSArray *sourcesWithColor = [node.geometry.geometrySources arrayByAddingObject:colorSource];
 
-    SCNGeometry *newGeometry = [SCNGeometry geometryWithSources:sourcesWithColor elements:node.geometry.geometryElements];
+    SCNGeometry
+            *newGeometry = [SCNGeometry geometryWithSources:sourcesWithColor elements:node.geometry.geometryElements];
     newGeometry.materials = node.geometry.materials.copy;
     node.geometry = newGeometry;
 }
