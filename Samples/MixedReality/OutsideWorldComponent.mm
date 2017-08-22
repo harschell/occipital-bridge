@@ -63,7 +63,12 @@ unsigned int const LIGHTING_BITMASK = 0x01000000;
     // ------ Robot Room ----
 //    self.geometryNode = [[SCNScene sceneNamed:@"Assets.scnassets/sky.dae"]
 //            .rootNode childNodeWithName:@"Sky" recursively:true];
-    self.geometryNode = [[SCNScene sceneNamed:@"Assets.scnassets/mountains_scene_full.dae"].rootNode clone];
+    auto mountainsScene = [SCNScene sceneNamed:@"Assets.scnassets/maya_files/mountains3.scn"];
+    self.geometryNode = [mountainsScene.rootNode clone];
+    [[Scene main] scene].fogColor = mountainsScene.fogColor;
+    [[Scene main] scene].fogEndDistance = mountainsScene.fogEndDistance;
+    [[Scene main] scene].fogStartDistance = mountainsScene.fogStartDistance;
+    [[Scene main] scene].fogDensityExponent = mountainsScene.fogDensityExponent;
     self.geometryNode.name = @"GeometryNode";
 
     self.geometryNode.rotation = SCNVector4Make(1, 0, 0, (float) M_PI);
