@@ -278,7 +278,6 @@ typedef NS_ENUM (NSUInteger, PortalState) {
 
     [animation setRepeatCount:1];
     [animation setRemovedOnCompletion:false];
-    [animation setDelegate:<#(id<CAAnimationDelegate>)delegate#>];
     [window_piece addAnimation:animation forKey:@"window_piece-anim"];
 
     portalFrameMesh.position = SCNVector3Make(0, 0, 0);
