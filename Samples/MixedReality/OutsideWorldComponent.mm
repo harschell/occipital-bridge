@@ -40,6 +40,7 @@ unsigned int const LIGHTING_BITMASK = 0x01000000;
 @property(nonatomic, strong) SCNNode *node;
 @property(nonatomic, strong) SCNNode *geometryNode;
 @property(nonatomic) double accumulatedTime;
+@property(nonatomic) bool aligned; // if the outside world is aligned to a window.
 
 @end
 
@@ -63,7 +64,7 @@ unsigned int const LIGHTING_BITMASK = 0x01000000;
     // ------ Robot Room ----
 //    self.geometryNode = [[SCNScene sceneNamed:@"Assets.scnassets/sky.dae"]
 //            .rootNode childNodeWithName:@"Sky" recursively:true];
-    auto mountainsScene = [SCNScene sceneNamed:@"Assets.scnassets/maya_files/mountains3.scn"];
+    auto mountainsScene = [SCNScene sceneNamed:@"Assets.scnassets/maya_files/mountains4.scn"];
     self.geometryNode = [mountainsScene.rootNode clone];
     [[Scene main] scene].fogColor = mountainsScene.fogColor;
     [[Scene main] scene].fogEndDistance = mountainsScene.fogEndDistance;
@@ -84,12 +85,12 @@ unsigned int const LIGHTING_BITMASK = 0x01000000;
 
     CABasicAnimation *movementAnimation = [CABasicAnimation animationWithKeyPath:@"position"];
 
-    movementAnimation.toValue = [NSValue valueWithSCNVector3:SCNVector3Make(5, 0, 0)];
-    movementAnimation.fromValue = [NSValue valueWithSCNVector3:SCNVector3Make(-5, 0, 0)];
+    movementAnimation.toValue = [NSValue valueWithSCNVector3:SCNVector3Make(0, 0, -5)];
+    movementAnimation.fromValue = [NSValue valueWithSCNVector3:SCNVector3Make(0, 0, 5)];
     movementAnimation.repeatCount = FLT_MAX;
     movementAnimation.duration = 45;
     movementAnimation.autoreverses = true;
-    [self.node addAnimation:movementAnimation forKey:nil];
+    [self.geometryNode addAnimation:movementAnimation forKey:nil];
 
     /*SCNNode *cnode = [self.geometryNode childNodeWithName:@"mountains" recursively:true];
     NSAssert(cnode != nil, @"Could not find child node");
@@ -127,6 +128,8 @@ unsigned int const LIGHTING_BITMASK = 0x01000000;
 }
 
 - (void)alignVRWorldToNode:(SCNNode *)targetNode {
+    if (self.aligned) {return;}
+
     SCNVector3 targetPos = targetNode.position;
     targetPos.y = 0.0; // Remove the y-offset from the target node, and align to its x/z position only.
     self.node.position = targetPos;
@@ -137,6 +140,7 @@ unsigned int const LIGHTING_BITMASK = 0x01000000;
     angles.y -= M_PI_2;
     self.node.eulerAngles = angles;
 
+    self.aligned = true;
 }
 
 - (void)updateWithDeltaTime:(NSTimeInterval)seconds {
