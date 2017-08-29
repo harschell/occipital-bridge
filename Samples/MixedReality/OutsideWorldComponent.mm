@@ -82,6 +82,15 @@ unsigned int const LIGHTING_BITMASK = 0x01000000;
     [self.node addChildNode:self.geometryNode];
     NSAssert(self.node!=nil, @"Could not load the scene");
 
+    CABasicAnimation *movementAnimation = [CABasicAnimation animationWithKeyPath:@"position"];
+
+    movementAnimation.toValue = [NSValue valueWithSCNVector3:SCNVector3Make(5, 0, 0)];
+    movementAnimation.fromValue = [NSValue valueWithSCNVector3:SCNVector3Make(-5, 0, 0)];
+    movementAnimation.repeatCount = FLT_MAX;
+    movementAnimation.duration = 45;
+    movementAnimation.autoreverses = true;
+    [self.node addAnimation:movementAnimation forKey:nil];
+
     /*SCNNode *cnode = [self.geometryNode childNodeWithName:@"mountains" recursively:true];
     NSAssert(cnode != nil, @"Could not find child node");
     cnode.hidden = true;
