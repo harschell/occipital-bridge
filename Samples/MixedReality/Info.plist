@@ -17,17 +17,19 @@
 	<key>CFBundlePackageType</key>
 	<string>APPL</string>
 	<key>CFBundleShortVersionString</key>
-	<string>1.0</string>
+	<string>1.01</string>
 	<key>CFBundleSignature</key>
 	<string>????</string>
 	<key>CFBundleVersion</key>
-	<string>1</string>
+	<string>2</string>
 	<key>LSApplicationQueriesSchemes</key>
 	<array>
 		<string>structure-sensor-calibrator</string>
 	</array>
 	<key>LSRequiresIPhoneOS</key>
 	<true/>
+	<key>NSBluetoothPeripheralUsageDescription</key>
+	<string>Requires bluetooth to connect to Bridge controller.</string>
 	<key>NSCameraUsageDescription</key>
 	<string>Camera is used for tracking and mixed reality.</string>
 	<key>UIApplicationExitsOnSuspend</key>
