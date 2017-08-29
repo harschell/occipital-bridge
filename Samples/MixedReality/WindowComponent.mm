@@ -25,7 +25,7 @@
 #import "OutsideWorldComponent.h"
 #import "CustomRenderMode.h"
 
-static float const PORTAL_FRUSTUM_CROSSING_WIDTH = 0.03;
+static float const PORTAL_FRUSTUM_CROSSING_WIDTH = 0.008;
 
 static float const PORTAL_CIRCLE_RADIUS = .4;
 static float const PORTAL_WIDTH = 1.0;

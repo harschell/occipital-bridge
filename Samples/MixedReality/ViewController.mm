@@ -27,6 +27,7 @@ http://structure.io
 
 static const SCNMatrix4 defaultPivot = SCNMatrix4MakeRotation(M_PI, 1.0, 0.0, 0.0);
 static float const MIN_DISTANCE_BETWEEN_PORTALS = .52f;
+static float const MAX_DISTANCE_FOR_DELETION = .3f;
 
 //------------------------------------------------------------------------------
 
@@ -399,12 +400,6 @@ static float const MIN_DISTANCE_BETWEEN_PORTALS = .52f;
                         SCNNode *node = obj;
                         if (![[node name] isEqualToString:@"PortalNode"]) { return false; }
 
-//                        SCNVector3 boundingSphereCenter = SCNVector3Make(0, 0, 0);
-//                        CGFloat boundingSphereRadius = 0.0f;
-//                        [node getBoundingSphereCenter:&boundingSphereCenter radius:&boundingSphereRadius];
-
-//                        NSLog(@"Bounding sphere radius: %f", boundingSphereRadius);
-
                         float dx = mesh3DPoint.x - node.position.x;
                         float dy = mesh3DPoint.y - node.position.y;
                         float dz = mesh3DPoint.z - node.position.z;
@@ -413,6 +408,7 @@ static float const MIN_DISTANCE_BETWEEN_PORTALS = .52f;
                         return distanceBetweenNodeAndPosition < MIN_DISTANCE_BETWEEN_PORTALS;
                     }]];
 
+            // If we're not overlapping an existing portal
             if (overlappingPortals.count==0) {
                 WindowComponent *_portal = [[WindowComponent alloc] init];
                 _portal.mixedReality = _mixedReality;
@@ -426,6 +422,45 @@ static float const MIN_DISTANCE_BETWEEN_PORTALS = .52f;
                 [[EventManager main] addGlobalEventComponent:_portal];
 
                 [_portal openPortalOnWallPosition:mesh3DPoint wallNormal:meshNormal toVRWorld:_outsideWorld];
+            }
+
+            // The number of portals that are very close to the target position (elegible for deletion).
+            NSArray<SCNNode *> *closeOverlappingPortals =
+                    [toplevelObjects objectsAtIndexes:[toplevelObjects indexesOfObjectsPassingTest:^BOOL(id obj,
+                                                                                                         NSUInteger idx,
+                                                                                                         BOOL *stop) {
+                        SCNNode *node = obj;
+                        if (![[node name] isEqualToString:@"PortalNode"]) { return false; }
+
+                        float dx = mesh3DPoint.x - node.position.x;
+                        float dy = mesh3DPoint.y - node.position.y;
+                        float dz = mesh3DPoint.z - node.position.z;
+
+                        float distanceBetweenNodeAndPosition = (float) sqrt(dx * dx + dy * dy + dz * dz);
+                        return distanceBetweenNodeAndPosition < MAX_DISTANCE_FOR_DELETION;
+                    }]];
+
+            if (closeOverlappingPortals.count > 0) {
+                // The number of portals that are very close to the target position (elegible for deletion).
+                NSArray<GKComponent *> *foundComponent = [[[EventManager main] getAllComponents]
+                        objectsAtIndexes:[[[EventManager main] getAllComponents] indexesOfObjectsPassingTest:^BOOL(id obj,
+                                                                                            NSUInteger idx,
+                                                                                            BOOL *stop) {
+                            if ([obj isKindOfClass:[WindowComponent class]]) {
+                                WindowComponent *component = obj;
+                                return component.node==closeOverlappingPortals[0];
+                            }
+                            return false;
+                        }]];
+                if (foundComponent.count!=1) {
+                    NSLog(@"Didn't find the right amount of components for the clicked on portal.");
+
+                    return;
+                }
+
+                // Actually remove the portal element
+                [[EventManager main] removeGlobalEventComponent:foundComponent[0]];
+                [closeOverlappingPortals[0] removeFromParentNode];
             }
         }
     }

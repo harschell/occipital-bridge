@@ -119,6 +119,19 @@
     }
 }
 
+- (void) removeGlobalEventComponent:(GKComponent *)component {
+    if( [component conformsToProtocol:@protocol(EventComponentProtocol)]) {
+        [self.globalEventComponents removeObjectIdenticalTo:component];
+    } else {
+        NSLog(@"Removing a globalEventComponent to EventManager which doesn't conforms to EventcomponentProtocol");
+    }
+}
+
+- (NSMutableArray*) getAllComponents {
+    return self.globalEventComponents;
+
+}
+
 - (TouchEventResponders *) getTouchEventRespondersForTouch:(UITouch *)touch {
     for( TouchEventResponders * touchEventResponder in self.touchEventResponders ) {
         if( touchEventResponder.touch == touch ) {

@@ -10,6 +10,8 @@
 
 @interface EventManager : NSObject
 
+- (NSMutableArray *)getAllComponents;
+- (void)removeGlobalEventComponent:(GKComponent *)component;
 @property (weak) BEMixedRealityMode* mixedRealityMode;
 
 @property (atomic) bool useReticleAsTouchLocation;
