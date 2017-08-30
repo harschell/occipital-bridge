@@ -53,6 +53,12 @@ static float const MAX_DISTANCE_FOR_DELETION = .3f;
     OutsideWorldComponent *_outsideWorld;
     ColorOverlayComponent *_colorOverlay;
     SCNNode *_cameraDisplayMesh;
+
+    AudioNode *_music;
+    AudioNode *_wind;
+    AudioNode *_wind_rustling;
+
+    bool musicPlaying;
 }
 
 + (SCNNode *)loadNodeNamed:(NSString *)nodeName fromSceneNamed:(NSString *)sceneName {
@@ -250,10 +256,13 @@ static float const MAX_DISTANCE_FOR_DELETION = .3f;
     }
 
     // Set any initial objects based on markup.
-
     for (id markupName in _markupNameList)
         [self updateObjectPositionWithMarkupName:markupName];
 
+    // Load music
+    _music = [[AudioEngine main] loadAudioNamed:@"theme_from_the_ocean.mp3"];
+    _wind = [[AudioEngine main] loadAudioNamed:@"wind.mp3"];
+    _wind_rustling = [[AudioEngine main] loadAudioNamed:@"wind_rustling.mp3"];
 
     // Add a custom node to indicate where a click will take place in stereo, using the controller.
     self.reticleNode = [SCNNode nodeWithGeometry:[SCNCylinder cylinderWithRadius:0.01 height:0.01]];
@@ -338,6 +347,26 @@ static float const MAX_DISTANCE_FOR_DELETION = .3f;
         // Set the camera sphere surrounding the viewer to the transform of the camera every frame
 
     }
+
+
+    // Update audio fade ins
+
+    float increment = (1.0f / 30.0f) / 5 /* seconds */;
+    float music_volume = .05f;
+    if ([_music volume] < music_volume && [[_music player] isPlaying]) {
+        [_music setVolume:[_music volume] + increment * music_volume];
+        NSLog(@"volume: %f %f", [_music volume], time);
+    }
+
+    float wind_rustle_volume = 0.08f;
+    if ([_wind_rustling volume] < wind_rustle_volume && [[_wind_rustling player] isPlaying]) {
+        [_wind_rustling setVolume:[_wind_rustling volume] + increment * wind_rustle_volume];
+    }
+
+    float wind_volume = 0.2f;
+    if ([_wind volume] < wind_volume && [[_wind player] isPlaying]) {
+        [_wind setVolume:[_wind volume] + increment * wind_volume];
+    }
 }
 
 // end MixedReality Delegate Methods
@@ -408,7 +437,7 @@ static float const MAX_DISTANCE_FOR_DELETION = .3f;
                         return distanceBetweenNodeAndPosition < MIN_DISTANCE_BETWEEN_PORTALS;
                     }]];
 
-            // If we're not overlapping an existing portal
+            // If we're not overlapping an existing portal, place one!
             if (overlappingPortals.count==0) {
                 WindowComponent *_portal = [[WindowComponent alloc] init];
                 _portal.mixedReality = _mixedReality;
@@ -422,6 +451,35 @@ static float const MAX_DISTANCE_FOR_DELETION = .3f;
                 [[EventManager main] addGlobalEventComponent:_portal];
 
                 [_portal openPortalOnWallPosition:mesh3DPoint wallNormal:meshNormal toVRWorld:_outsideWorld];
+
+                if (!musicPlaying) {
+                    double delayInSeconds = 2.0;
+                    dispatch_time_t
+                            popTime = dispatch_time(DISPATCH_TIME_NOW, (uint64_t) (delayInSeconds * NSEC_PER_SEC));
+                    dispatch_after(popTime, dispatch_get_main_queue(), ^(void) {
+                        [_wind setPosition:mesh3DPoint];
+                        [_wind setVolume:0];
+                        [_wind setLooping:true];
+                        [_wind play];
+
+                        [_wind_rustling setPosition:mesh3DPoint];
+                        [_wind_rustling setVolume:0];
+                        [_wind_rustling setLooping:true];
+                        [_wind_rustling play];
+                        [_wind_rustling player];
+                    });
+
+                    delayInSeconds = 10.0;
+                    popTime = dispatch_time(DISPATCH_TIME_NOW, (uint64_t) (delayInSeconds * NSEC_PER_SEC));
+                    dispatch_after(popTime, dispatch_get_main_queue(), ^(void) {
+                        [_music setPosition:mesh3DPoint];
+                        [_music setVolume:0];
+                        [_music setLooping:true];
+                        [_music play];
+                    });
+
+                    musicPlaying = true;
+                }
             }
 
             // The number of portals that are very close to the target position (elegible for deletion).
@@ -443,15 +501,16 @@ static float const MAX_DISTANCE_FOR_DELETION = .3f;
             if (closeOverlappingPortals.count > 0) {
                 // The number of portals that are very close to the target position (elegible for deletion).
                 NSArray<GKComponent *> *foundComponent = [[[EventManager main] getAllComponents]
-                        objectsAtIndexes:[[[EventManager main] getAllComponents] indexesOfObjectsPassingTest:^BOOL(id obj,
-                                                                                            NSUInteger idx,
-                                                                                            BOOL *stop) {
-                            if ([obj isKindOfClass:[WindowComponent class]]) {
-                                WindowComponent *component = obj;
-                                return component.node==closeOverlappingPortals[0];
-                            }
-                            return false;
-                        }]];
+                        objectsAtIndexes:[[[EventManager main] getAllComponents]
+                                indexesOfObjectsPassingTest:^BOOL(id obj,
+                                                                  NSUInteger idx,
+                                                                  BOOL *stop) {
+                                    if ([obj isKindOfClass:[WindowComponent class]]) {
+                                        WindowComponent *component = obj;
+                                        return component.node==closeOverlappingPortals[0];
+                                    }
+                                    return false;
+                                }]];
                 if (foundComponent.count!=1) {
                     NSLog(@"Didn't find the right amount of components for the clicked on portal.");
 

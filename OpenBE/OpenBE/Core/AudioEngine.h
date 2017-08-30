@@ -53,6 +53,7 @@
 @property(nonatomic) float volume;
 @property(nonatomic, readonly) float duration;
 @property(nonatomic) BOOL looping;
+@property(nonatomic, strong) AVAudioPlayerNode *player;
 
 - (void)play;
 - (void)stop;

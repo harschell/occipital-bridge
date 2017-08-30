@@ -148,7 +148,7 @@ typedef NS_ENUM (NSUInteger, PortalState) {
         [self setEnabled:true];
 
         _audioWarpIn.position = self.node.position;
-        [_audioWarpIn play];
+//        [_audioWarpIn play];
         self.portalState = PORTAL_OPEN;
 
     } else {
@@ -156,7 +156,7 @@ typedef NS_ENUM (NSUInteger, PortalState) {
         self.time =
                 (_portalState==PORTAL_OPEN) ? (_audioWarpIn.duration - _time) : 0.f; // Re-target if portal was opening.
         _audioWarpOut.position = self.node.position;
-        [_audioWarpOut play];
+//        [_audioWarpOut play];
         self.portalState = PORTAL_CLOSE;
     }
 }
