@@ -364,18 +364,18 @@ static float const MAX_DISTANCE_FOR_DELETION = .3f;
     // Update audio fade ins
 
     float increment = (1.0f / 30.0f) / 5 /* seconds */;
-    float music_volume = .05f;
+    float music_volume = .04f;
     if ([_music volume] < music_volume && [[_music player] isPlaying]) {
         [_music setVolume:[_music volume] + increment * music_volume];
         NSLog(@"volume: %f %f", [_music volume], time);
     }
 
-    float wind_rustle_volume = 0.08f;
+    float wind_rustle_volume = 0.01f;
     if ([_wind_rustling volume] < wind_rustle_volume && [[_wind_rustling player] isPlaying]) {
         [_wind_rustling setVolume:[_wind_rustling volume] + increment * wind_rustle_volume];
     }
 
-    float wind_volume = 0.2f;
+    float wind_volume = 0.15f;
     if ([_wind volume] < wind_volume && [[_wind player] isPlaying]) {
         [_wind setVolume:[_wind volume] + increment * wind_volume];
     }
