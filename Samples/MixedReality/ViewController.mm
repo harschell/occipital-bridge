@@ -53,6 +53,7 @@ static float const MAX_DISTANCE_FOR_DELETION = .3f;
     OutsideWorldComponent *_outsideWorld;
     ColorOverlayComponent *_colorOverlay;
     SCNNode *_cameraDisplayMesh;
+    SCNNode *_cullingBoundaryMesh;
 
     AudioNode *_music;
     AudioNode *_wind;
@@ -256,8 +257,9 @@ static float const MAX_DISTANCE_FOR_DELETION = .3f;
     }
 
     // Set any initial objects based on markup.
-    for (id markupName in _markupNameList)
+    for (id markupName in _markupNameList) {
         [self updateObjectPositionWithMarkupName:markupName];
+    }
 
     // Load music
     _music = [[AudioEngine main] loadAudioNamed:@"theme_from_the_ocean.mp3"];
@@ -295,6 +297,16 @@ static float const MAX_DISTANCE_FOR_DELETION = .3f;
 
     // Setup a node to render the camera even where there is no mesh
     _cameraDisplayMesh = [[SCNScene sceneNamed:@"Assets.scnassets/maya_files/inverted_sphere.dae"].rootNode clone];
+
+    // Setup a sphere that draws just before the culling boundary so that fog renders on anything that would be culled
+    _cullingBoundaryMesh = [[SCNScene sceneNamed:@"Assets.scnassets/maya_files/inverted_sphere.dae"].rootNode clone];
+    [_cullingBoundaryMesh childNodeWithName:@"pSphere1" recursively:true].geometry.firstMaterial.lightingModelName =
+            SCNLightingModelConstant;
+    [_cullingBoundaryMesh childNodeWithName:@"pSphere1" recursively:true].geometry.firstMaterial.diffuse.contents =
+            [UIColor whiteColor];
+    [_cullingBoundaryMesh setRenderingOrderRecursively:VR_WORLD_RENDERING_ORDER];
+    _cullingBoundaryMesh.scale = SCNVector3Make(29, 29, 29);
+    [_mixedReality.worldNodeWhenRelocalized addChildNode:_cullingBoundaryMesh];
 
     SCNGeometry *geometry = [_cameraDisplayMesh childNodeWithName:@"pSphere1" recursively:true].geometry;
     geometry.firstMaterial.diffuse.contents = [UIColor blackColor];
