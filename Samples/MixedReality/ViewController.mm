@@ -26,7 +26,7 @@ http://structure.io
 // Since -Y is up in Bridge Engine convention, the pivot rotates from the typical convention.
 
 static const SCNMatrix4 defaultPivot = SCNMatrix4MakeRotation(M_PI, 1.0, 0.0, 0.0);
-static float const MIN_DISTANCE_BETWEEN_PORTALS = .52f;
+static float const MIN_DISTANCE_BETWEEN_PORTALS = .65f;
 static float const MAX_DISTANCE_FOR_DELETION = .3f;
 
 //------------------------------------------------------------------------------
@@ -262,9 +262,9 @@ static float const MAX_DISTANCE_FOR_DELETION = .3f;
     }
 
     // Load music
-    _music = [[AudioEngine main] loadAudioNamed:@"theme_from_the_ocean.mp3"];
-    _wind = [[AudioEngine main] loadAudioNamed:@"wind.mp3"];
-    _wind_rustling = [[AudioEngine main] loadAudioNamed:@"wind_rustling.mp3"];
+    _music = [[AudioEngine main] loadAudioNamed:@"chimes.wav"];
+    _wind = [[AudioEngine main] loadAudioNamed:@"wind.wav"];
+    _wind_rustling = [[AudioEngine main] loadAudioNamed:@"wind_rustling.wav"];
 
     // Add a custom node to indicate where a click will take place in stereo, using the controller.
     self.reticleNode = [SCNNode nodeWithGeometry:[SCNCylinder cylinderWithRadius:0.01 height:0.01]];
@@ -452,9 +452,7 @@ static float const MAX_DISTANCE_FOR_DELETION = .3f;
             // If we're not overlapping an existing portal, place one!
             if (overlappingPortals.count==0) {
                 WindowComponent *_portal = [[WindowComponent alloc] init];
-                _portal.mixedReality = _mixedReality;
                 _portal.overlayComponent = _colorOverlay;
-                _portal.stereoRendering = YES;
                 [_portal start];
 
                 GKEntity *_portalEntity = [[SceneManager main] createEntity];

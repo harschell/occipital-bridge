@@ -31,9 +31,7 @@
         [[[SceneManager main] createEntity] addComponent:self.outsideComponent];
 
         WindowComponent *newPortal = [[WindowComponent alloc] init];
-        newPortal.mixedReality = self.mixedReality;
         newPortal.overlayComponent = colorOverlay;
-        newPortal.stereoRendering = true;
 
 
 
