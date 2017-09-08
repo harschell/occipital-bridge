@@ -19,6 +19,7 @@
 */
 @interface AudioEngine : NSObject
 
+- (AudioNode *)loadAudioNamed:(NSString *)named allocateNew:(bool)allocateNew;
 /// Singleton.
 + (AudioEngine*) main;
 

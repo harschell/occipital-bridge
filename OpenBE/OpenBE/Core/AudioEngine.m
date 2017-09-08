@@ -35,12 +35,12 @@
 + (AudioEngine*) main {
     static AudioEngine *mainEngine = nil;
     static dispatch_once_t onceToken;
-    
+
     dispatch_once(&onceToken, ^{
         void (^initEngine)() = ^{
             mainEngine = [[AudioEngine alloc] init];
         };
-        
+
         // Avoid dead-locking and make sure we init AudioEngine on main thread.
         if( [NSThread mainThread] ) {
             initEngine();
@@ -48,7 +48,7 @@
             dispatch_sync(dispatch_get_main_queue(), initEngine);
         }
     });
-    
+
     return mainEngine;
 }
 
@@ -62,7 +62,7 @@
 
         // Set up the audio category so we always hear the sound.
         [[AVAudioSession sharedInstance] setCategory:AVAudioSessionCategoryPlayback error:nil];
-    
+
         //create audio engine to play sounds
         _engine = [[AVAudioEngine alloc] init];
         _environment = [[AVAudioEnvironmentNode alloc] init];
@@ -76,11 +76,11 @@
             queue:nil
             usingBlock:^(NSNotification *note)
         {
-            
+
             // if we've received this notification, something has changed and the engine has been stopped
             // re-wire all the connections and start the engine
             _isConfigChangePending = YES;
-            
+
             if (!_isSessionInterrupted) {
                 NSLog(@"Received a %@ notification!", AVAudioEngineConfigurationChangeNotification);
                 NSLog(@"Re-wiring connections and starting once again");
@@ -118,10 +118,10 @@
 - (void)makeEngineConnections
 {
     [_engine connect:_environment to:_engine.outputNode format:[self constructOutputConnectionFormatForEnvironment]];
-    
+
     // Set up the 3d audio environment
     AVAudio3DMixingRenderingAlgorithm renderingAlgo = self.audioRenderingAlgo;
-    
+
     // Connect all of the players to the audio environment, and reset the rendering algorithm to match.
     for( NSString *playerName in _playerDictionary ) {
         AVAudioPlayerNode* player = _playerDictionary[playerName];
@@ -145,11 +145,11 @@
     AVAudioFormat *environmentOutputConnectionFormat = nil;
     AVAudioChannelCount numHardwareOutputChannels = [_engine.outputNode outputFormatForBus:0].channelCount;
     const double hardwareSampleRate = [_engine.outputNode outputFormatForBus:0].sampleRate;
-    
+
     // if we're connected to multichannel hardware, create a compatible multichannel format for the environment node
     if (numHardwareOutputChannels > 2 && numHardwareOutputChannels != 3) {
         if (numHardwareOutputChannels > 8) numHardwareOutputChannels = 8;
-        
+
         // find an AudioChannelLayoutTag that the environment node knows how to render to
         // this is documented in AVAudioEnvironmentNode.h
         AudioChannelLayoutTag environmentOutputLayoutTag;
@@ -157,29 +157,29 @@
             case 4:
                 environmentOutputLayoutTag = kAudioChannelLayoutTag_AudioUnit_4;
                 break;
-                
+
             case 5:
                 environmentOutputLayoutTag = kAudioChannelLayoutTag_AudioUnit_5_0;
                 break;
-                
+
             case 6:
                 environmentOutputLayoutTag = kAudioChannelLayoutTag_AudioUnit_6_0;
                 break;
-                
+
             case 7:
                 environmentOutputLayoutTag = kAudioChannelLayoutTag_AudioUnit_7_0;
                 break;
-                
+
             case 8:
                 environmentOutputLayoutTag = kAudioChannelLayoutTag_AudioUnit_8;
                 break;
-                
+
             default:
                 // based on our logic, we shouldn't hit this case
                 environmentOutputLayoutTag = kAudioChannelLayoutTag_Stereo;
                 break;
         }
-        
+
         // using that layout tag, now construct a format
         AVAudioChannelLayout *environmentOutputChannelLayout = [[AVAudioChannelLayout alloc] initWithLayoutTag:environmentOutputLayoutTag];
         environmentOutputConnectionFormat = [[AVAudioFormat alloc] initStandardFormatWithSampleRate:hardwareSampleRate channelLayout:environmentOutputChannelLayout];
@@ -190,7 +190,7 @@
         environmentOutputConnectionFormat = [[AVAudioFormat alloc] initStandardFormatWithSampleRate:hardwareSampleRate channels:2];
         _multichannelOutputEnabled = false;
     }
-    
+
     return environmentOutputConnectionFormat;
 }
 
@@ -207,20 +207,20 @@
         // Attempt loading the audio subfolder.
         NSString *soundPath = [SceneKit pathForResourceNamed:[@"Sounds" stringByAppendingPathComponent:named]];
         NSURL *aURL = [NSURL fileURLWithPath:soundPath];
-        
+
         AVAudioFile *aFile = [[AVAudioFile alloc] initForReading:aURL error:nil];
         if( aFile == nil ) {
             return nil;
         }
-        
+
         //read file to buffer
         aBuff = [[AVAudioPCMBuffer alloc] initWithPCMFormat:[aFile processingFormat] frameCapacity:(unsigned int)[aFile length]];
         [aFile readIntoBuffer:aBuff error:nil];
-        
+
         // Keep buffers cached.
         _bufferDictionary[named] = aBuff;
     }
-    
+
     return aBuff;
 }
 
@@ -230,17 +230,7 @@
 - (AVAudioPlayerNode*) playerWithBuffer:(AVAudioPCMBuffer*)buffer named:(NSString*)named {
     AVAudioPlayerNode *player = _playerDictionary[named];
     if(player == nil) {
-        //make a node for the sound
-        player = [[AVAudioPlayerNode alloc] init];
-        
-        //attach the node to audio engine first
-        [_engine attachNode:player];
-        
-        //assign format to node
-        [_engine connect:player to:_environment format:[buffer format]];
-
-        // Assign the current rendering algorithm of choice.
-        player.renderingAlgorithm = self.audioRenderingAlgo;
+        player = [self createNewPlayer:buffer];
 
         // Add this to the player pool.
         _playerDictionary[named] = player;
@@ -248,6 +238,22 @@
 
     return player;
 }
+
+- (AVAudioPlayerNode *)createNewPlayer:(AVAudioPCMBuffer *)buffer {
+    //make a node for the sound
+    AVAudioPlayerNode* player = [[AVAudioPlayerNode alloc] init];
+
+    //attach the node to audio engine first
+    [_engine attachNode:player];
+
+    //assign format to node
+    [_engine connect:player to:_environment format:[buffer format]];
+
+    // Assign the current rendering algorithm of choice.
+    player.renderingAlgorithm = self.audioRenderingAlgo;
+    return player;
+}
+
 
 /**
  * Single shot audio playback at volume.
@@ -258,13 +264,13 @@
         NSLog(@"AudioEngine: AudioEngine not running, could not play audio: %@", named);
         return;
     }
-    
+
     AVAudioPCMBuffer  *buffer = [self bufferForName:named];
     if( buffer==nil ) {
         NSLog(@"AudioEngine: Could not play, missing audio: %@", named);
         return;
     }
-    
+
     AVAudioPlayerNode *player = [self playerWithBuffer:buffer named:named];
 
     //  Schedule the one-shot for immediate playback.
@@ -276,7 +282,7 @@
 /**
  * Load an audio file and return an audio node.
  */
-- (AudioNode*) loadAudioNamed:(NSString*)named {
+- (AudioNode*) loadAudioNamed:(NSString*)named allocateNew:(bool)allocateNew {
 
     AVAudioPCMBuffer  *buffer = [self bufferForName:named];
     if( buffer==nil ) {
@@ -285,11 +291,23 @@
     }
 
     // Prep the player.
-    AVAudioPlayerNode *player = [self playerWithBuffer:buffer named:named];
-    
+    AVAudioPlayerNode *player;
+    if (allocateNew) {
+        player = [self createNewPlayer:buffer];
+    } else {
+        player = [self playerWithBuffer:buffer named:named];
+    }
+
     // Make a stand-alone AudioNode.
     AudioNode *audioNode = [[AudioNode alloc] initWithName:named buffer:buffer player:player];
     return audioNode;
+}
+
+/**
+ * Load an audio file and return an audio node.
+ */
+- (AudioNode*) loadAudioNamed:(NSString*)named {
+    return [self loadAudioNamed:named allocateNew:false];
 }
 
 /**
@@ -303,7 +321,7 @@
     GLKQuaternion go = GLKQuaternionMake( so.x, so.y, so.z, so.w );
     GLKVector3 gfwd = GLKQuaternionRotateVector3(go, GLKVector3Make(0, 0, -1));
     GLKVector3 gup = GLKQuaternionRotateVector3(go, GLKVector3Make(0, 1, 0));
-    
+
 
     AVAudio3DVector afwd = AVAudioMake3DVector(gfwd.x, gfwd.y, gfwd.z);
     AVAudio3DVector aup = AVAudioMake3DVector(gup.x, gup.y, gup.z);
@@ -317,39 +335,39 @@
 - (void)initAVAudioSession
 {
     NSError *error;
-    
+
     // Configure the audio session
     AVAudioSession *sessionInstance = [AVAudioSession sharedInstance];
 
     // set the session category
     bool success = [sessionInstance setCategory:AVAudioSessionCategoryPlayback error:&error];
     if (!success) NSLog(@"Error setting AVAudioSession category! %@\n", [error localizedDescription]);
-     
+
     const NSInteger desiredNumChannels = 8; // for 7.1 rendering
     const NSInteger maxChannels = sessionInstance.maximumOutputNumberOfChannels;
     if (maxChannels >= desiredNumChannels) {
         success = [sessionInstance setPreferredOutputNumberOfChannels:desiredNumChannels error:&error];
         if (!success) NSLog(@"Error setting PreferredOuputNumberOfChannels! %@", [error localizedDescription]);
     }
-    
-    
+
+
     // add interruption handler
     [[NSNotificationCenter defaultCenter] addObserver:self
                                              selector:@selector(handleInterruption:)
                                                  name:AVAudioSessionInterruptionNotification
                                                object:sessionInstance];
-    
+
     // we don't do anything special in the route change notification
     [[NSNotificationCenter defaultCenter] addObserver:self
                                              selector:@selector(handleRouteChange:)
                                                  name:AVAudioSessionRouteChangeNotification
                                                object:sessionInstance];
-    
+
     [[NSNotificationCenter defaultCenter] addObserver:self
                                              selector:@selector(handleMediaServicesReset:)
                                                  name:AVAudioSessionMediaServicesWereResetNotification
                                                object:sessionInstance];
-    
+
     // activate the audio session
     success = [sessionInstance setActive:YES error:&error];
     if (!success) NSLog(@"Error setting session active! %@\n", [error localizedDescription]);
@@ -358,12 +376,12 @@
 - (void)handleInterruption:(NSNotification *)notification
 {
     UInt8 theInterruptionType = [[notification.userInfo valueForKey:AVAudioSessionInterruptionTypeKey] intValue];
-    
+
     NSLog(@"Session interrupted > --- %s ---\n", theInterruptionType == AVAudioSessionInterruptionTypeBegan ? "Begin Interruption" : "End Interruption");
-    
+
     if (theInterruptionType == AVAudioSessionInterruptionTypeBegan) {
         _isSessionInterrupted = YES;
-        
+
         //stop the playback of the nodes
         for( NSString *playerName in _playerDictionary ) {
             AVAudioPlayerNode* player = _playerDictionary[playerName];
@@ -384,7 +402,7 @@
                 NSLog(@"Responding to earlier engine config changed notification. Re-wiring connections and starting once again");
                 [self makeEngineConnections];
                 [self startEngine];
-                
+
                 _isConfigChangePending = NO;
             }
             else {
@@ -399,7 +417,7 @@
 {
     UInt8 reasonValue = [[notification.userInfo valueForKey:AVAudioSessionRouteChangeReasonKey] intValue];
     AVAudioSessionRouteDescription *routeDescription = [notification.userInfo valueForKey:AVAudioSessionRouteChangePreviousRouteKey];
-    
+
     NSLog(@"Route change:");
     switch (reasonValue) {
         case AVAudioSessionRouteChangeReasonNewDeviceAvailable:
@@ -424,7 +442,7 @@
         default:
             NSLog(@"     ReasonUnknown");
     }
-    
+
     NSLog(@"Previous route:\n");
     NSLog(@"%@", routeDescription);
 }
@@ -435,7 +453,7 @@
     // re-wire all the connections and start the engine
     NSLog(@"Media services have been reset!");
     NSLog(@"Re-wiring connections and starting once again");
-    
+
     [self initAVAudioSession];
     [self createEngineAndAttachNodes];
     [self makeEngineConnections];
@@ -449,7 +467,7 @@
 {
     _engine = [[AVAudioEngine alloc] init];
     [_engine attachNode:_environment];
-    
+
     for( NSString *nodeName in _playerDictionary ) {
         AVAudioPlayerNode *playerNode = _playerDictionary[nodeName];
         [_engine attachNode:playerNode];

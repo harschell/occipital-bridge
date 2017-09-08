@@ -56,6 +56,7 @@ typedef NS_ENUM (NSUInteger, PortalState) {
 // OpenGL Renderer shim nodes
 @property(nonatomic, strong) SCNNode *preEnvironment;
 @property(nonatomic, strong) SCNNode *postEnvironment;
+@property(nonatomic, strong) SCNNode *saveState;
 @property(nonatomic, strong) SCNNode *prePortal;
 @property(nonatomic, strong) SCNNode *postPortal;
 
@@ -68,7 +69,16 @@ typedef NS_ENUM (NSUInteger, PortalState) {
 
 @end
 
-@implementation WindowComponent
+@implementation WindowComponent {
+    GLboolean prevSTENCIL_TEST;
+    GLenum prevGL_STENCIL_FAIL;
+    GLenum prevGL_STENCIL_PASS_DEPTH_PASS;
+    GLenum prevGL_STENCIL_PASS_DEPTH_FAIL;
+    GLenum prevGL_STENCIL_FUNC;
+    GLuint prevGL_STENCIL_VALUE_MASK;
+    GLint prevGL_STENCIL_REF;
+    GLuint prevGL_STENCIL_WRITEMASK;
+}
 
 - (void)setEnabled:(bool)enabled {
     [super setEnabled:enabled];
@@ -315,8 +325,8 @@ typedef NS_ENUM (NSUInteger, PortalState) {
 - (void)start {
     [super start];
 
-    self.audioWarpIn = [[AudioEngine main] loadAudioNamed:@"sliding.wav"];
-    self.audioWarpOut = [[AudioEngine main] loadAudioNamed:@"close_window.wav"];
+    self.audioWarpIn = [[AudioEngine main] loadAudioNamed:@"sliding.wav" allocateNew:true];
+    self.audioWarpOut = [[AudioEngine main] loadAudioNamed:@"close_window.wav" allocateNew:true];
 
     self.open = false;
 
@@ -331,6 +341,13 @@ typedef NS_ENUM (NSUInteger, PortalState) {
     self.portalCrossingTransformNode = [SCNNode node];
     self.portalCrossingTransformNode.name = @"portalCrossingTransform";
     [self.node addChildNode:self.portalCrossingTransformNode];
+
+    // A node that just saves some of the current GL state so we can reset it later
+    self.saveState = [SCNNode node];
+    [self.saveState setName:@"SaveState"];
+    [self.saveState setRenderingOrder:saveStateRenderOrder];
+    [self.saveState setRendererDelegate:self];
+    [self.node addChildNode:self.saveState];
 
     // Enable rendering to the stencil buffer for portal rendering.
     self.prePortal = [SCNNode node];
@@ -382,6 +399,17 @@ typedef NS_ENUM (NSUInteger, PortalState) {
     if ([passName isEqualToString:@"SceneKit_renderSceneFromLight"])
         return;
 
+    if ([node.name isEqualToString:@"SaveState"]) {
+        glGetBooleanv(GL_STENCIL_TEST, &prevSTENCIL_TEST);
+        glGetIntegerv(GL_STENCIL_FAIL, (GLint*)&prevGL_STENCIL_FAIL);
+        glGetIntegerv(GL_STENCIL_PASS_DEPTH_FAIL, (GLint*)&prevGL_STENCIL_PASS_DEPTH_FAIL);
+        glGetIntegerv(GL_STENCIL_PASS_DEPTH_PASS, (GLint*)&prevGL_STENCIL_PASS_DEPTH_PASS);
+        glGetIntegerv(GL_STENCIL_FUNC, (GLint*)&prevGL_STENCIL_FUNC);
+        glGetIntegerv(GL_STENCIL_VALUE_MASK, (GLint*)&prevGL_STENCIL_VALUE_MASK);
+        glGetIntegerv(GL_STENCIL_REF, &prevGL_STENCIL_REF);
+        glGetIntegerv(GL_STENCIL_WRITEMASK, (GLint*)&prevGL_STENCIL_WRITEMASK);
+    }
+
     if ([node.name isEqualToString:@"PrePortal"]) {
         glEnable(GL_STENCIL_TEST);
         glStencilFunc(GL_ALWAYS, PORTAL_STENCIL_VALUE, 0xFF);
@@ -398,8 +426,18 @@ typedef NS_ENUM (NSUInteger, PortalState) {
     if ([node.name isEqualToString:@"PostPortal"]) {
         glColorMask(GL_TRUE, GL_TRUE, GL_TRUE, GL_TRUE);
         glDepthMask(GL_TRUE);
-        glStencilMask(0x0);
-        glDisable(GL_STENCIL_TEST);
+
+
+        // Restore previous GL state:
+        if (prevSTENCIL_TEST) {
+            glEnable(GL_STENCIL_TEST);
+        } else {
+            glDisable(GL_STENCIL_TEST);
+        }
+
+        glStencilOp(prevGL_STENCIL_FAIL, prevGL_STENCIL_PASS_DEPTH_FAIL, prevGL_STENCIL_PASS_DEPTH_PASS);
+        glStencilFunc(prevGL_STENCIL_FUNC, prevGL_STENCIL_REF, prevGL_STENCIL_VALUE_MASK);
+        glStencilMask(prevGL_STENCIL_WRITEMASK);
     }
 
     if ([node.name isEqualToString:@"PreEnvironment"]) {

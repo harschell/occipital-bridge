@@ -69,6 +69,7 @@ GLuint CUSTOM_RENDER_MODE_CAMERA_TEXTURE_NAME = -1;
     glUniform2f(self.renderResolutionLocation, vp[2], vp[3]);
 
     glEnable(GL_DEPTH_TEST);
+    glEnable(GL_STENCIL_TEST);
 }
 
 - (const char *)vertexShaderSource {

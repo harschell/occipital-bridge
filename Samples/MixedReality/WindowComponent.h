@@ -69,13 +69,7 @@
  * These nodes require manual updates to their transform if the portal node's transform changes.
  */
 @interface WindowComponent : Component  <EventComponentProtocol, SCNNodeRendererDelegate, WindowComponentJS, SCNProgramDelegate>
-@property(nonatomic, weak) BEMixedRealityMode *mixedReality;
-// @property(nonatomic, strong) SCNNode *node; (protect the node)
-//@property(nonatomic, strong) GKEntity *robotEntity;
-
 @property(nonatomic, strong) SCNNode *node;
-@property(nonatomic) bool stereoRendering;
-@property(nonatomic) bool interactive;
 @property(nonatomic, readonly) bool open;
 
 // Overlay is used for casting a white overlay, when emergencyExit is animating.
@@ -103,8 +97,9 @@
 
 @end
 
+static const long saveStateRenderOrder = BEEnvironmentScanShadowRenderingOrder - 18;
 static const long prePortalRenderOrder = BEEnvironmentScanShadowRenderingOrder - 17;
 static const long portalOccludeRenderOrder = BEEnvironmentScanShadowRenderingOrder - 16;
 static const long postPortalRenderOrder = BEEnvironmentScanShadowRenderingOrder - 15;
-static const long preEnvironmentRenderOrder = BEEnvironmentScanShadowRenderingOrder - 10;
+static const long preEnvironmentRenderOrder = BEEnvironmentScanShadowRenderingOrder - 1;
 static const long postEnvironmentRenderOrder = BEEnvironmentScanShadowRenderingOrder + 10;
