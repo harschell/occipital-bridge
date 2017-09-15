@@ -123,7 +123,7 @@ static float const MAX_DISTANCE_FOR_DELETION = .3f;
     BECaptureReplayMode replayMode = BECaptureReplayModeDisabled;
     if ([AppSettings booleanValueFromAppSetting:@"replayCapture"
              defaultValueIfSettingIsNotInBundle:NO]) {
-        replayMode = BECaptureReplayModeDeterministic;
+        replayMode = BECaptureReplayModeRealTime;
     }
 
     self.runningInStereo = [AppSettings booleanValueFromAppSetting:@"stereoRendering"
