@@ -18,6 +18,7 @@ http://structure.io
 
 #import "WindowComponent.h"
 #import "OutsideWorldComponent.h"
+#import "MixedReality-Swift.h"
 
 //------------------------------------------------------------------------------
 
@@ -60,6 +61,8 @@ static float const MAX_DISTANCE_FOR_DELETION = .3f;
     AudioNode *_wind_rustling;
 
     bool musicPlaying;
+    
+    LanternManager *_lanternManager;
 }
 
 + (SCNNode *)loadNodeNamed:(NSString *)nodeName fromSceneNamed:(NSString *)sceneName {
@@ -123,7 +126,7 @@ static float const MAX_DISTANCE_FOR_DELETION = .3f;
     BECaptureReplayMode replayMode = BECaptureReplayModeDisabled;
     if ([AppSettings booleanValueFromAppSetting:@"replayCapture"
              defaultValueIfSettingIsNotInBundle:NO]) {
-        replayMode = BECaptureReplayModeRealTime;
+        replayMode = BECaptureReplayModeDeterministic;
     }
 
     self.runningInStereo = [AppSettings booleanValueFromAppSetting:@"stereoRendering"
@@ -228,6 +231,7 @@ static float const MAX_DISTANCE_FOR_DELETION = .3f;
     // When this function is called, it is guaranteed that the SceneKit world is set up, and any previously-positioned markup nodes are loaded.
     // As this function is called from a rendering thread, perform only SceneKit updates here.
     // Avoid UIKit manipulation here (use main thread for UIKit).
+    
 
     if (mappedAreaStatus==BEMappedAreaStatusNotFound) {
         NSLog(@"Your scene does not exist in the expected location on your device!");
@@ -260,6 +264,11 @@ static float const MAX_DISTANCE_FOR_DELETION = .3f;
     for (id markupName in _markupNameList) {
         [self updateObjectPositionWithMarkupName:markupName];
     }
+
+    // Load lanterns
+    _lanternManager = [[LanternManager alloc] initWithContainer:_mixedReality.worldNodeWhenRelocalized];
+    [_lanternManager setup];
+
 
     // Load music
     _music = [[AudioEngine main] loadAudioNamed:@"chimes.wav"];
@@ -334,6 +343,8 @@ static float const MAX_DISTANCE_FOR_DELETION = .3f;
 - (void)mixedRealityUpdateAtTime:(NSTimeInterval)time {
     // this updates all components
     [[SceneManager main] updateAtTime:time mixedRealityMode:_mixedReality];
+
+    [_lanternManager updateWithTime:(double) time];
 
     // This method is called before rendering each frame.
     // It is safe to modify SceneKit objects from here.
@@ -430,7 +441,7 @@ static float const MAX_DISTANCE_FOR_DELETION = .3f;
     if (mesh3DPoint.x!=NAN && mesh3DPoint.y!=NAN && mesh3DPoint.z!=NAN) {
 
         // No placing windows on upward / downward facing surfaces.
-        if (fabs(meshNormal.y) < .4) {
+        if (true || fabs(meshNormal.y) < .4) {
             // Test to see if there already exists a portal in this location
             NSArray<SCNNode *> *toplevelObjects = [[[Scene main] rootNode] childNodes];
 

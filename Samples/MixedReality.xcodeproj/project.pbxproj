@@ -28,6 +28,11 @@
 		BA5F3F081EE094D800D1DB9A /* OpenBE.framework in Frameworks */ = {isa = PBXBuildFile; fileRef = BA5129151EE092980044E0F0 /* OpenBE.framework */; };
 		BA5F3F091EE094EB00D1DB9A /* OpenBE.framework in Embed Frameworks */ = {isa = PBXBuildFile; fileRef = BA5129151EE092980044E0F0 /* OpenBE.framework */; settings = {ATTRIBUTES = (CodeSignOnCopy, RemoveHeadersOnCopy, ); }; };
 		CF3B09611F31127E00285A80 /* Utils.m in Sources */ = {isa = PBXBuildFile; fileRef = CF3B09601F31127E00285A80 /* Utils.m */; };
+		CF887DF51F6EED5A004805C3 /* Test.swift in Sources */ = {isa = PBXBuildFile; fileRef = CF887DF41F6EED5A004805C3 /* Test.swift */; };
+		CFB916EC1F6EF909002C9D46 /* RxSwift.framework in Frameworks */ = {isa = PBXBuildFile; fileRef = CFB916EB1F6EF909002C9D46 /* RxSwift.framework */; };
+		CFB916EE1F6EFD32002C9D46 /* RxSwift.framework in Frameworks */ = {isa = PBXBuildFile; fileRef = CFB916EB1F6EF909002C9D46 /* RxSwift.framework */; };
+		CFB916EF1F6EFD32002C9D46 /* RxSwift.framework in Embed Frameworks */ = {isa = PBXBuildFile; fileRef = CFB916EB1F6EF909002C9D46 /* RxSwift.framework */; settings = {ATTRIBUTES = (CodeSignOnCopy, RemoveHeadersOnCopy, ); }; };
+		CFB916F11F6F09B6002C9D46 /* SCNVector3+MathUtils.swift in Sources */ = {isa = PBXBuildFile; fileRef = CFB916F01F6F09B6002C9D46 /* SCNVector3+MathUtils.swift */; };
 /* End PBXBuildFile section */
 
 /* Begin PBXContainerItemProxy section */
@@ -49,6 +54,7 @@
 			files = (
 				BA5F3F091EE094EB00D1DB9A /* OpenBE.framework in Embed Frameworks */,
 				2DC3EA0E1E005B72007C3C02 /* BridgeEngine.framework in Embed Frameworks */,
+				CFB916EF1F6EFD32002C9D46 /* RxSwift.framework in Embed Frameworks */,
 			);
 			name = "Embed Frameworks";
 			runOnlyForDeploymentPostprocessing = 0;
@@ -105,6 +111,10 @@
 		BA5129101EE092980044E0F0 /* OpenBE.xcodeproj */ = {isa = PBXFileReference; lastKnownFileType = "wrapper.pb-project"; name = OpenBE.xcodeproj; path = ../OpenBE/OpenBE.xcodeproj; sourceTree = "<group>"; };
 		CF3B095F1F31127E00285A80 /* Utils.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; path = Utils.h; sourceTree = "<group>"; };
 		CF3B09601F31127E00285A80 /* Utils.m */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.objc; path = Utils.m; sourceTree = "<group>"; };
+		CF887DF31F6EED5A004805C3 /* MixedReality-Bridging-Header.h */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.c.h; path = "MixedReality-Bridging-Header.h"; sourceTree = "<group>"; };
+		CF887DF41F6EED5A004805C3 /* Test.swift */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.swift; path = Test.swift; sourceTree = "<group>"; };
+		CFB916EB1F6EF909002C9D46 /* RxSwift.framework */ = {isa = PBXFileReference; lastKnownFileType = wrapper.framework; name = RxSwift.framework; path = ../Frameworks/RxSwift.framework; sourceTree = "<group>"; };
+		CFB916F01F6F09B6002C9D46 /* SCNVector3+MathUtils.swift */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.swift; path = "SCNVector3+MathUtils.swift"; sourceTree = "<group>"; };
 		DA28568D1C6E546E0030250A /* CoreBluetooth.framework */ = {isa = PBXFileReference; lastKnownFileType = wrapper.framework; name = CoreBluetooth.framework; path = System/Library/Frameworks/CoreBluetooth.framework; sourceTree = SDKROOT; };
 /* End PBXFileReference section */
 
@@ -113,7 +123,9 @@
 			isa = PBXFrameworksBuildPhase;
 			buildActionMask = 2147483647;
 			files = (
+				CFB916EC1F6EF909002C9D46 /* RxSwift.framework in Frameworks */,
 				BA5F3F081EE094D800D1DB9A /* OpenBE.framework in Frameworks */,
+				CFB916EE1F6EFD32002C9D46 /* RxSwift.framework in Frameworks */,
 				2C7E5C7C1E1C61CF002F86AF /* OpenGLES.framework in Frameworks */,
 				2DC3EA0D1E005B5D007C3C02 /* BridgeEngine.framework in Frameworks */,
 				6F2E92131C7E735000C43E8A /* UIKit.framework in Frameworks */,
@@ -145,6 +157,7 @@
 		2AFC8D76176F966000F7F3B5 /* Frameworks */ = {
 			isa = PBXGroup;
 			children = (
+				CFB916EB1F6EF909002C9D46 /* RxSwift.framework */,
 				2DC3EA0C1E005B5D007C3C02 /* BridgeEngine.framework */,
 				4B2E22001C7128100010AFAB /* ExternalAccessory.framework */,
 				DA28568D1C6E546E0030250A /* CoreBluetooth.framework */,
@@ -176,6 +189,7 @@
 		6F5CA09A1C751A4B00A33642 /* MixedReality */ = {
 			isa = PBXGroup;
 			children = (
+				CFB916F01F6F09B6002C9D46 /* SCNVector3+MathUtils.swift */,
 				6F7255EA1C77F99D00409AA2 /* MixedReality.xcconfig */,
 				6FF00A3A1C812D61009A3BCD /* Settings.bundle */,
 				6F5CA0A71C751A4B00A33642 /* Assets.xcassets */,
@@ -200,6 +214,8 @@
 				AA98277693B9993E0F213DA8 /* OpenWindowComponent.m */,
 				CF3B095F1F31127E00285A80 /* Utils.h */,
 				CF3B09601F31127E00285A80 /* Utils.m */,
+				CF887DF41F6EED5A004805C3 /* Test.swift */,
+				CF887DF31F6EED5A004805C3 /* MixedReality-Bridging-Header.h */,
 			);
 			path = MixedReality;
 			sourceTree = "<group>";
@@ -245,6 +261,7 @@
 					6F5CA0981C751A4B00A33642 = {
 						CreatedOnToolsVersion = 7.2.1;
 						DevelopmentTeam = D83X25A57P;
+						LastSwiftMigration = 0830;
 						SystemCapabilities = {
 							com.apple.ApplicationGroups.iOS = {
 								enabled = 0;
@@ -313,6 +330,8 @@
 				6F5CA0A01C751A4B00A33642 /* AppDelegate.mm in Sources */,
 				6F5CA09D1C751A4B00A33642 /* main.mm in Sources */,
 				773DED7A1C8F8BF1006233EA /* AppSettings.mm in Sources */,
+				CFB916F11F6F09B6002C9D46 /* SCNVector3+MathUtils.swift in Sources */,
+				CF887DF51F6EED5A004805C3 /* Test.swift in Sources */,
 				2C7E5C7A1E1C5ECB002F86AF /* CustomRenderMode.mm in Sources */,
 				AA9826259567130803CC5946 /* WindowComponent.mm in Sources */,
 				AA982BD71B76B0D7C80D3FB8 /* OutsideWorldComponent.mm in Sources */,
@@ -441,6 +460,7 @@
 				CLANG_WARN__DUPLICATE_METHOD_MATCH = YES;
 				CODE_SIGN_IDENTITY = "iPhone Developer";
 				"CODE_SIGN_IDENTITY[sdk=iphoneos*]" = "iPhone Developer";
+				DEFINES_MODULE = YES;
 				DEVELOPMENT_TEAM = D83X25A57P;
 				ENABLE_STRICT_OBJC_MSGSEND = YES;
 				FRAMEWORK_SEARCH_PATHS = ../Frameworks;
@@ -466,6 +486,9 @@
 				PRODUCT_BUNDLE_IDENTIFIER = com.asg.aloftapp;
 				PRODUCT_NAME = "$(TARGET_NAME)";
 				PROVISIONING_PROFILE = "";
+				SWIFT_OBJC_BRIDGING_HEADER = "MixedReality/MixedReality-Bridging-Header.h";
+				SWIFT_OPTIMIZATION_LEVEL = "-Onone";
+				SWIFT_VERSION = 3.0;
 				USER_HEADER_SEARCH_PATHS = "\"${PROJECT_DIR}/../OpenBE\"/**";
 			};
 			name = Debug;
@@ -489,6 +512,7 @@
 				CODE_SIGN_IDENTITY = "iPhone Developer";
 				"CODE_SIGN_IDENTITY[sdk=iphoneos*]" = "iPhone Developer";
 				COPY_PHASE_STRIP = NO;
+				DEFINES_MODULE = YES;
 				DEVELOPMENT_TEAM = D83X25A57P;
 				ENABLE_STRICT_OBJC_MSGSEND = YES;
 				FRAMEWORK_SEARCH_PATHS = ../Frameworks;
@@ -512,6 +536,8 @@
 				PRODUCT_BUNDLE_IDENTIFIER = com.asg.aloftapp;
 				PRODUCT_NAME = "$(TARGET_NAME)";
 				PROVISIONING_PROFILE = "";
+				SWIFT_OBJC_BRIDGING_HEADER = "MixedReality/MixedReality-Bridging-Header.h";
+				SWIFT_VERSION = 3.0;
 				USER_HEADER_SEARCH_PATHS = "\"${PROJECT_DIR}/../OpenBE\"/**";
 			};
 			name = Release;
