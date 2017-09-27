@@ -61,7 +61,7 @@ static float const MAX_DISTANCE_FOR_DELETION = .3f;
     AudioNode *_wind_rustling;
 
     bool musicPlaying;
-    
+
     LanternManager *_lanternManager;
 }
 
@@ -231,7 +231,7 @@ static float const MAX_DISTANCE_FOR_DELETION = .3f;
     // When this function is called, it is guaranteed that the SceneKit world is set up, and any previously-positioned markup nodes are loaded.
     // As this function is called from a rendering thread, perform only SceneKit updates here.
     // Avoid UIKit manipulation here (use main thread for UIKit).
-    
+
 
     if (mappedAreaStatus==BEMappedAreaStatusNotFound) {
         NSLog(@"Your scene does not exist in the expected location on your device!");
@@ -264,10 +264,6 @@ static float const MAX_DISTANCE_FOR_DELETION = .3f;
     for (id markupName in _markupNameList) {
         [self updateObjectPositionWithMarkupName:markupName];
     }
-
-    // Load lanterns
-    _lanternManager = [[LanternManager alloc] initWithContainer:_mixedReality.worldNodeWhenRelocalized];
-    [_lanternManager setup];
 
 
     // Load music
@@ -303,6 +299,11 @@ static float const MAX_DISTANCE_FOR_DELETION = .3f;
 
     _outsideWorld = [[OutsideWorldComponent alloc] init];
     [[[SceneManager main] createEntity] addComponent:_outsideWorld];
+
+    // Load lanterns
+    _lanternManager = [[LanternManager alloc] initWithContainer:_outsideWorld.animationNode];
+    [_lanternManager setup];
+
 
     // Setup a node to render the camera even where there is no mesh
     _cameraDisplayMesh = [[SCNScene sceneNamed:@"Assets.scnassets/maya_files/inverted_sphere.dae"].rootNode clone];
@@ -441,7 +442,7 @@ static float const MAX_DISTANCE_FOR_DELETION = .3f;
     if (mesh3DPoint.x!=NAN && mesh3DPoint.y!=NAN && mesh3DPoint.z!=NAN) {
 
         // No placing windows on upward / downward facing surfaces.
-        if (true || fabs(meshNormal.y) < .4) {
+        if (fabs(meshNormal.y) < 0.4 || true) {
             // Test to see if there already exists a portal in this location
             NSArray<SCNNode *> *toplevelObjects = [[[Scene main] rootNode] childNodes];
 
@@ -462,45 +463,47 @@ static float const MAX_DISTANCE_FOR_DELETION = .3f;
 
             // If we're not overlapping an existing portal, place one!
             if (overlappingPortals.count==0) {
-                WindowComponent *_portal = [[WindowComponent alloc] init];
-                _portal.overlayComponent = _colorOverlay;
-                [_portal start];
+                dispatch_async(dispatch_get_main_queue(), ^{
+                    WindowComponent *_portal = [[WindowComponent alloc] init];
+                    _portal.overlayComponent = _colorOverlay;
+                    [_portal start];
 
-                GKEntity *_portalEntity = [[SceneManager main] createEntity];
-                [_portalEntity addComponent:_portal];
+                    GKEntity *_portalEntity = [[SceneManager main] createEntity];
+                    [_portalEntity addComponent:_portal];
 
-                [[EventManager main] addGlobalEventComponent:_portal];
+                    [[EventManager main] addGlobalEventComponent:_portal];
 
-                [_portal openPortalOnWallPosition:mesh3DPoint wallNormal:meshNormal toVRWorld:_outsideWorld];
+                    [_portal openPortalOnWallPosition:mesh3DPoint wallNormal:meshNormal toVRWorld:_outsideWorld];
 
-                if (!musicPlaying) {
-                    double delayInSeconds = 2.0;
-                    dispatch_time_t
-                            popTime = dispatch_time(DISPATCH_TIME_NOW, (uint64_t) (delayInSeconds * NSEC_PER_SEC));
-                    dispatch_after(popTime, dispatch_get_main_queue(), ^(void) {
-                        [_wind setPosition:mesh3DPoint];
-                        [_wind setVolume:0];
-                        [_wind setLooping:true];
-                        [_wind play];
+                    if (!musicPlaying) {
+                        double delayInSeconds = 2.0;
+                        dispatch_time_t
+                                popTime = dispatch_time(DISPATCH_TIME_NOW, (uint64_t) (delayInSeconds * NSEC_PER_SEC));
+                        dispatch_after(popTime, dispatch_get_main_queue(), ^(void) {
+                            [_wind setPosition:mesh3DPoint];
+                            [_wind setVolume:0];
+                            [_wind setLooping:true];
+                            [_wind play];
 
-                        [_wind_rustling setPosition:mesh3DPoint];
-                        [_wind_rustling setVolume:0];
-                        [_wind_rustling setLooping:true];
-                        [_wind_rustling play];
-                        [_wind_rustling player];
-                    });
+                            [_wind_rustling setPosition:mesh3DPoint];
+                            [_wind_rustling setVolume:0];
+                            [_wind_rustling setLooping:true];
+                            [_wind_rustling play];
+                            [_wind_rustling player];
+                        });
 
-                    delayInSeconds = 10.0;
-                    popTime = dispatch_time(DISPATCH_TIME_NOW, (uint64_t) (delayInSeconds * NSEC_PER_SEC));
-                    dispatch_after(popTime, dispatch_get_main_queue(), ^(void) {
-                        [_music setPosition:mesh3DPoint];
-                        [_music setVolume:0];
-                        [_music setLooping:true];
-                        [_music play];
-                    });
+                        delayInSeconds = 10.0;
+                        popTime = dispatch_time(DISPATCH_TIME_NOW, (uint64_t) (delayInSeconds * NSEC_PER_SEC));
+                        dispatch_after(popTime, dispatch_get_main_queue(), ^(void) {
+                            [_music setPosition:mesh3DPoint];
+                            [_music setVolume:0];
+                            [_music setLooping:true];
+                            [_music play];
+                        });
 
-                    musicPlaying = true;
-                }
+                        musicPlaying = true;
+                    }
+                });
             }
 
             // The number of portals that are very close to the target position (elegible for deletion).
