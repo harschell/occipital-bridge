@@ -37,33 +37,42 @@ unsigned int const LIGHTING_BITMASK = 0x01000000;
 
 @interface OutsideWorldComponent ()
 
-@property(nonatomic, strong) SCNNode *node;
-@property(nonatomic, strong) SCNNode *geometryNode;
+@property(nonatomic, strong) SCNNode *alignmentNode; // handles alignment to the windows
+@property(nonatomic, strong) SCNNode *animationNode; // handles animating the world left / right
+@property(nonatomic, strong) SCNNode *geometryNode; // holds the actual mountains geometry
 @property(nonatomic) double accumulatedTime;
 @property(nonatomic) bool aligned; // if the outside world is aligned to a window.
 
 @end
 
 @implementation OutsideWorldComponent
+- (id) init {
+    self.alignmentNode = [[SCNNode alloc] init];
+    self.alignmentNode.name = @"VR World";
+
+    self.animationNode = [[SCNNode alloc] init];
+    self.animationNode.name = @"Animation Translation";
+
+    return self;
+}
+
 - (void)setEnabled:(bool)enabled {
     [super setEnabled:enabled];
 
     //todo
-    self.node.hidden = false;//!enabled;
+    self.alignmentNode.hidden = false;//!enabled;
 }
 
 - (void)start {
     [super start];
 
-    self.node = [[SCNNode alloc] init];
-    self.node.name = @"VR World";
-
     // Give a 1cm offset, so we don't get co-planar z-fighting between VR world and real world floor.
-    self.node.position = SCNVector3Make(0, .01, 0);
+    self.alignmentNode.position = SCNVector3Make(0, .01, 0);
 
-    // ------ Robot Room ----
-//    self.geometryNode = [[SCNScene sceneNamed:@"Assets.scnassets/sky.dae"]
-//            .rootNode childNodeWithName:@"Sky" recursively:true];
+    // Create note for the translational animation
+    [self.alignmentNode addChildNode:self.animationNode];
+
+    // Create the actual geometry of the world
     auto mountainsScene = [SCNScene sceneNamed:@"Assets.scnassets/maya_files/mountains4.scn"];
     self.geometryNode = [mountainsScene.rootNode clone];
     [[Scene main] scene].fogColor = mountainsScene.fogColor;
@@ -71,52 +80,19 @@ unsigned int const LIGHTING_BITMASK = 0x01000000;
     [[Scene main] scene].fogStartDistance = mountainsScene.fogStartDistance;
     [[Scene main] scene].fogDensityExponent = mountainsScene.fogDensityExponent;
     self.geometryNode.name = @"GeometryNode";
-
     self.geometryNode.rotation = SCNVector4Make(1, 0, 0, (float) M_PI);
-    //self.geometryNode.scale = SCNVector3Make(.02, .02, .02);
+    NSAssert(self.geometryNode!=nil, @"Could not load the scene");
 
-    SCNNode *materialnode = [[SCNScene sceneNamed:@"Assets.scnassets/sky.dae"]
-            .rootNode childNodeWithName:@"Sky" recursively:true];
+    [self.animationNode addChildNode:self.geometryNode];
 
-    //self.geometryNode.geometry.firstMaterial = materialnode.geometry.firstMaterial;
+    [self.alignmentNode setRenderingOrderRecursively:VR_WORLD_RENDERING_ORDER];
+    [self.alignmentNode setCastsShadowRecursively:NO];
 
-    [self.node addChildNode:self.geometryNode];
-    NSAssert(self.node!=nil, @"Could not load the scene");
-
-
-    /*SCNNode *cnode = [self.geometryNode childNodeWithName:@"mountains" recursively:true];
-    NSAssert(cnode != nil, @"Could not find child node");
-    cnode.hidden = true;
-    [self.geometryNode setCategoryBitMaskRecursively:LIGHTING_BITMASK];
-
-    SCNNode *lightNode = [self.geometryNode childNodeWithName:@"directional_x0020_light" recursively:true].childNodes[0];
-    lightNode.light.categoryBitMask = LIGHTING_BITMASK;
-    NSAssert(lightNode != nil, @"Could not find child node");
-
-    cnode = [self.geometryNode childNodeWithName:@"ambient" recursively:true];
-    NSAssert(cnode != nil, @"Could not find child node");
-    cnode.hidden = true;*/
-
-    [self.node setRenderingOrderRecursively:VR_WORLD_RENDERING_ORDER];
-    [self.node setCastsShadowRecursively:NO];
-
-    [[Scene main].rootNode addChildNode:self.node];
-
-
-    // this is for greying out the VR world as tracking feedback
-//    [self.node enumerateChildNodesUsingBlock:^(SCNNode *_Nonnull child, BOOL *_Nonnull stop) {
-//        for (SCNMaterial *material in child.geometry.materials) {
-//            material.shaderModifiers = @{SCNShaderModifierEntryPointFragment:
-//                    @"uniform float grayAmount;\n"
-//                            "#pragma body\n"
-//                            "vec3 grayColor = vec3(dot(_output.color.rgb, vec3(0.2989, 0.5870, 0.1140)));\n"
-//                            "_output.color.rgb = (1.0 - grayAmount) * _output.color.rgb + grayAmount * grayColor;\n "};
-//        };
-//    }];
+    [[Scene main].rootNode addChildNode:self.alignmentNode];
 
     // Start off the rooms hidden.
     self.geometryNode.hidden = false;
-    self.node.hidden = false;
+    self.alignmentNode.hidden = false;
 }
 
 - (void)alignVRWorldToNode:(SCNNode *)targetNode {
@@ -124,22 +100,22 @@ unsigned int const LIGHTING_BITMASK = 0x01000000;
 
     SCNVector3 targetPos = targetNode.position;
     targetPos.y = 0.0; // Remove the y-offset from the target node, and align to its x/z position only.
-    self.node.position = targetPos;
+    self.alignmentNode.position = targetPos;
 
     SCNVector3 angles = targetNode.eulerAngles;
     angles.z = 0;
     angles.x = 0;
     angles.y -= M_PI_2;
-    self.node.eulerAngles = angles;
+    self.alignmentNode.eulerAngles = angles;
 
     // Start movement animation
     CABasicAnimation *movementAnimation = [CABasicAnimation animationWithKeyPath:@"position"];
     movementAnimation.toValue = [NSValue valueWithSCNVector3:SCNVector3Make(0, 0, -5)];
     movementAnimation.fromValue = [NSValue valueWithSCNVector3:SCNVector3Make(0, 0, 5)];
     movementAnimation.repeatCount = FLT_MAX;
-    movementAnimation.duration = 45;
+    movementAnimation.duration = 60;
     movementAnimation.autoreverses = true;
-    [self.geometryNode addAnimation:movementAnimation forKey:nil];
+    [self.animationNode addAnimation:movementAnimation forKey:nil];
 
     self.aligned = true;
 }

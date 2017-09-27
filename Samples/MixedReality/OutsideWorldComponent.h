@@ -11,6 +11,7 @@
 
 @interface OutsideWorldComponent : Component
 
+@property(readonly) SCNNode *animationNode; // handles animating the world left / right
 
 /**
  * Align the VRWorld to a movable node, like a Portal, so our entry/exit is consistenly oriented.
