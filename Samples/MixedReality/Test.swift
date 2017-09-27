@@ -28,15 +28,19 @@ public class LanternManager: NSObject, CAAnimationDelegate {
             let windows = Scene.main().rootNode!.childNodes(passingTest: { node, _ in node.name == "PortalNode" });
 
             for window in windows {
-                let mesh: SCNNode = SCNScene(named: "Assets.scnassets/maya_files/lantern2.dae")!.rootNode.clone();
+                let mesh: SCNNode = SCNScene(named: "Assets.scnassets/maya_files/lantern.dae")!.rootNode.clone();
 
                 let animationTime = 30.0;
-                let upwardVelocity = 0.3;  // unit / second
-                let distanceAway = random(-5 ..< -1);
-                mesh.scale = SCNVector3(0.01, 0.01, 0.01);
+                let upwardVelocity = 0.3;
+                // unit / second
+                let distance = Double.random(limits: 0.0 ... 1.0); // far .. close
+                let distanceAway: Double = distance.mapUnitToRange(limits: -5 ... -1)
+                let scale: Double = distance.mapUnitToRange(limits: 0.002...0.01);
+
+                mesh.scale = SCNVector3(scale, scale, scale);
 
                 // Setup position for lantern
-                mesh.position = window.convertPosition(SCNVector3(0, -5, distanceAway), to: self.container.presentation);
+                mesh.position = window.convertPosition(SCNVector3(-3, -5, distanceAway), to: self.container.presentation);
 
                 self.container.addChildNode(mesh);
                 self.lanterns.append(mesh);
@@ -65,11 +69,5 @@ public class LanternManager: NSObject, CAAnimationDelegate {
     func update(time: Double) {
         sub.on(Event.next(time as TimeInterval));
     }
-}
-
-
-func random(_ range:Range<Int>) -> Int
-{
-    return range.lowerBound + Int(arc4random_uniform(UInt32(range.upperBound - range.lowerBound)))
 }
 

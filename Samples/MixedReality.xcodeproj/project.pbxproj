@@ -23,6 +23,7 @@
 		6FF00A3B1C812D61009A3BCD /* Settings.bundle in Resources */ = {isa = PBXBuildFile; fileRef = 6FF00A3A1C812D61009A3BCD /* Settings.bundle */; };
 		773DED7A1C8F8BF1006233EA /* AppSettings.mm in Sources */ = {isa = PBXBuildFile; fileRef = 773DED791C8F8BF1006233EA /* AppSettings.mm */; };
 		AA9820484CB12B22F67CCCA1 /* OpenWindowComponent.m in Sources */ = {isa = PBXBuildFile; fileRef = AA98277693B9993E0F213DA8 /* OpenWindowComponent.m */; };
+		AA982489206BD334ACDAD9A8 /* MathUtils.swift in Sources */ = {isa = PBXBuildFile; fileRef = AA982598568FCB770D7C939E /* MathUtils.swift */; };
 		AA9826259567130803CC5946 /* WindowComponent.mm in Sources */ = {isa = PBXBuildFile; fileRef = AA98239CA4AD4A5E44C3268F /* WindowComponent.mm */; };
 		AA982BD71B76B0D7C80D3FB8 /* OutsideWorldComponent.mm in Sources */ = {isa = PBXBuildFile; fileRef = AA9824783C2BFADF22A472F8 /* OutsideWorldComponent.mm */; };
 		BA5F3F081EE094D800D1DB9A /* OpenBE.framework in Frameworks */ = {isa = PBXBuildFile; fileRef = BA5129151EE092980044E0F0 /* OpenBE.framework */; };
@@ -105,6 +106,7 @@
 		AA98234AF6981CAFD6A26E67 /* WindowComponent.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; path = WindowComponent.h; sourceTree = "<group>"; };
 		AA98239CA4AD4A5E44C3268F /* WindowComponent.mm */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.cpp.objcpp; path = WindowComponent.mm; sourceTree = "<group>"; };
 		AA9824783C2BFADF22A472F8 /* OutsideWorldComponent.mm */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.cpp.objcpp; path = OutsideWorldComponent.mm; sourceTree = "<group>"; };
+		AA982598568FCB770D7C939E /* MathUtils.swift */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.swift; path = MathUtils.swift; sourceTree = "<group>"; };
 		AA98277693B9993E0F213DA8 /* OpenWindowComponent.m */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.objc; path = OpenWindowComponent.m; sourceTree = "<group>"; };
 		AA982874FCCFD35F04DAD730 /* OpenWindowComponent.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; path = OpenWindowComponent.h; sourceTree = "<group>"; };
 		AA9829EBF9E10F44D1F00054 /* OutsideWorldComponent.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; path = OutsideWorldComponent.h; sourceTree = "<group>"; };
@@ -216,6 +218,7 @@
 				CF3B09601F31127E00285A80 /* Utils.m */,
 				CF887DF41F6EED5A004805C3 /* Test.swift */,
 				CF887DF31F6EED5A004805C3 /* MixedReality-Bridging-Header.h */,
+				AA982598568FCB770D7C939E /* MathUtils.swift */,
 			);
 			path = MixedReality;
 			sourceTree = "<group>";
@@ -336,6 +339,7 @@
 				AA9826259567130803CC5946 /* WindowComponent.mm in Sources */,
 				AA982BD71B76B0D7C80D3FB8 /* OutsideWorldComponent.mm in Sources */,
 				AA9820484CB12B22F67CCCA1 /* OpenWindowComponent.m in Sources */,
+				AA982489206BD334ACDAD9A8 /* MathUtils.swift in Sources */,
 			);
 			runOnlyForDeploymentPostprocessing = 0;
 		};
@@ -395,6 +399,7 @@
 				IPHONEOS_DEPLOYMENT_TARGET = 9.2;
 				ONLY_ACTIVE_ARCH = YES;
 				SDKROOT = iphoneos;
+				SWIFT_OPTIMIZATION_LEVEL = "-Onone";
 				TARGETED_DEVICE_FAMILY = "1,2";
 				USE_HEADERMAP = NO;
 			};
@@ -436,6 +441,7 @@
 				IPHONEOS_DEPLOYMENT_TARGET = 9.2;
 				ONLY_ACTIVE_ARCH = YES;
 				SDKROOT = iphoneos;
+				SWIFT_OPTIMIZATION_LEVEL = "-Onone";
 				TARGETED_DEVICE_FAMILY = "1,2";
 				USE_HEADERMAP = NO;
 				VALIDATE_PRODUCT = YES;
@@ -537,6 +543,7 @@
 				PRODUCT_NAME = "$(TARGET_NAME)";
 				PROVISIONING_PROFILE = "";
 				SWIFT_OBJC_BRIDGING_HEADER = "MixedReality/MixedReality-Bridging-Header.h";
+				SWIFT_OPTIMIZATION_LEVEL = "-Onone";
 				SWIFT_VERSION = 3.0;
 				USER_HEADER_SEARCH_PATHS = "\"${PROJECT_DIR}/../OpenBE\"/**";
 			};

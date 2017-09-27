@@ -73,7 +73,7 @@ unsigned int const LIGHTING_BITMASK = 0x01000000;
     [self.alignmentNode addChildNode:self.animationNode];
 
     // Create the actual geometry of the world
-    auto mountainsScene = [SCNScene sceneNamed:@"Assets.scnassets/maya_files/mountains4.scn"];
+    auto mountainsScene = [SCNScene sceneNamed:@"Assets.scnassets/maya_files/mountains5.scn"];
     self.geometryNode = [mountainsScene.rootNode clone];
     [[Scene main] scene].fogColor = mountainsScene.fogColor;
     [[Scene main] scene].fogEndDistance = mountainsScene.fogEndDistance;

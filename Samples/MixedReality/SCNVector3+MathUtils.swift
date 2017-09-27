@@ -153,3 +153,5 @@ extension SCNVector4 {
         self.init(x: vector.x, y: vector.y, z: vector.z, w: vector.w)
     }
 }
+
+
