@@ -44,6 +44,7 @@ unsigned int const LIGHTING_BITMASK = 0x01000000;
 
 @end
 
+
 @implementation OutsideWorldComponent
 - (void)setEnabled:(bool)enabled {
     [super setEnabled:enabled];
@@ -58,13 +59,12 @@ unsigned int const LIGHTING_BITMASK = 0x01000000;
     self.node = [[SCNNode alloc] init];
     self.node.name = @"VR World";
 
-    // Give a 1cm offset, so we don't get co-planar z-fighting between VR world and real world floor.
-    self.node.position = SCNVector3Make(0, .01, 0);
+    // Give a 1cm offset, so we don't get co-planar z-fighting between VR world and real wor`
 
     // ------ Robot Room ----
 //    self.geometryNode = [[SCNScene sceneNamed:@"Assets.scnassets/sky.dae"]
 //            .rootNode childNodeWithName:@"Sky" recursively:true];
-    auto mountainsScene = [SCNScene sceneNamed:@"Assets.scnassets/maya_files/mountains4.scn"];
+    auto mountainsScene = [SCNScene sceneNamed:@"Assets.scnassets/maya_files/mountains5.scn"];
     self.geometryNode = [mountainsScene.rootNode clone];
     [[Scene main] scene].fogColor = mountainsScene.fogColor;
     [[Scene main] scene].fogEndDistance = mountainsScene.fogEndDistance;
