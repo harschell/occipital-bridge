@@ -315,7 +315,7 @@ static float const MAX_DISTANCE_FOR_DELETION = .3f;
     [_cullingBoundaryMesh childNodeWithName:@"pSphere1" recursively:true].geometry.firstMaterial.diffuse.contents =
             [UIColor whiteColor];
     [_cullingBoundaryMesh setRenderingOrderRecursively:VR_WORLD_RENDERING_ORDER];
-    _cullingBoundaryMesh.scale = SCNVector3Make(29, 29, 29);
+    _cullingBoundaryMesh.scale = SCNVector3Make(27, 27, 27);
     [_mixedReality.worldNodeWhenRelocalized addChildNode:_cullingBoundaryMesh];
 
     SCNGeometry *geometry = [_cameraDisplayMesh childNodeWithName:@"pSphere1" recursively:true].geometry;
