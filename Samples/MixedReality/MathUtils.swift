@@ -45,3 +45,14 @@ public extension Double {
         return Double.random * (limits.upperBound - limits.lowerBound) + limits.lowerBound;
     }
 }
+
+public extension Optional {
+    public func orError(_ message: String) -> Wrapped {
+        if let value = self {
+            return value;
+        } else {
+            print("Error: " + message);
+            return self!; //throw error
+        }
+    }
+}

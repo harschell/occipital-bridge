@@ -72,7 +72,7 @@ public class LanternManager: NSObject, CAAnimationDelegate {
 
 
     func addNewLantern(position: SCNVector3, scale: Double, upwardVelocity: Double = 0.15) {
-        let mesh: SCNNode = SCNScene(named: "Assets.scnassets/maya_files/lantern.dae")!.rootNode.clone();
+        let mesh: SCNNode = SCNScene(named: "Assets.scnassets/maya_files/lantern.scn").orError("Couldn't load lantern scene").rootNode.clone();
         mesh.scale = SCNVector3(scale, scale, scale);
         mesh.rotation = SCNVector4Make(1, 0, 0, .pi);
         mesh.position = position;
