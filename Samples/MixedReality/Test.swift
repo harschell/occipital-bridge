@@ -22,52 +22,83 @@ public class LanternManager: NSObject, CAAnimationDelegate {
     }
 
     func setup() {
-        sub.throttle(1, scheduler: MainScheduler.instance).subscribe { _ in
-
-            // Add a lantern in front of every window
+        // Spawn a bunch of lanterns just on the horizon.
+        sub.delay(12, scheduler: MainScheduler.instance).throttle(3, scheduler: MainScheduler.instance).subscribe { _ in
             let windows = Scene.main().rootNode!.childNodes(passingTest: { node, _ in node.name == "PortalNode" });
 
-            for window in windows {
-                let mesh: SCNNode = SCNScene(named: "Assets.scnassets/maya_files/lantern.dae")!.rootNode.clone();
+            if (windows.count > 0) {
 
-                let animationTime = 30.0;
-                let upwardVelocity = 0.3;
-                // unit / second
-                let distance = Double.random(limits: 0.0 ... 1.0); // far .. close
-                let distanceAway: Double = distance.mapUnitToRange(limits: -5 ... -1)
-                let scale: Double = distance.mapUnitToRange(limits: 0.002...0.01);
-
-                mesh.scale = SCNVector3(scale, scale, scale);
+                // far .. close
+                let distance = Double.random(limits: 0.0...1.0);
+                let distanceAway: Double = distance.mapUnitToRange(limits: -22 ... -20)
+                let scale: Double = Double.random(limits: 0.005...0.01);
 
                 // Setup position for lantern
-                mesh.position = window.convertPosition(SCNVector3(-3, -5, distanceAway), to: self.container.presentation);
+                let position = windows[0].convertPosition(SCNVector3(
+                        Double.random(limits: -5.0...5.0),
+                        Double.random(limits: -3...1.0),
+                        distanceAway), to: self.container.presentation);
 
-                self.container.addChildNode(mesh);
-                self.lanterns.append(mesh);
-
-                MainScheduler.instance.scheduleRelative((), dueTime: animationTime, action: { _ in
-                    mesh.removeFromParentNode();
-                    self.lanterns.remove(at: self.lanterns.index(of: mesh)!);
-                    return BooleanDisposable();
-                });
-
-                // Setup floating animation
-                let movement = CABasicAnimation(keyPath: "position");
-                movement.toValue = NSValue(scnVector3: mesh.position - SCNVector3(0, upwardVelocity * animationTime, 0));
-                movement.fromValue = NSValue(scnVector3: mesh.position);
-                movement.repeatCount = 1;
-                movement.duration = animationTime;
-                movement.autoreverses = false;
-                movement.isRemovedOnCompletion = false;
-                movement.fillMode = kCAFillModeForwards;
-
-                mesh.addAnimation(movement, forKey: nil)
+                self.addNewLantern(position: position, scale: scale);
             }
         };
+
+        // Spawn an occasional lantern that comes right by the window.
+        let _ = sub
+                .delay(25, scheduler: MainScheduler.instance)
+                .throttle(15, scheduler: MainScheduler.instance).subscribe { _ in
+                    let windows = Scene.main().rootNode!.childNodes(passingTest: { n, _ in n.name == "PortalNode" });
+
+                    if (windows.count > 0) {
+                        let distance = Double.random(limits: 0.0...1.0);
+                        // far .. close
+                        let distanceAway: Double = distance.mapUnitToRange(limits: -9 ... -8)
+                        let scale: Double = 0.02;
+
+                        // Setup position for lantern
+                        let position = windows[0].convertPosition(SCNVector3(
+                                Double.random(limits: -0.25...0.25),
+                                -4,
+                                distanceAway), to: self.container.presentation);
+
+                        self.addNewLantern(position: position, scale: scale, upwardVelocity: 0.5);
+                    }
+                };
     }
 
     func update(time: Double) {
         sub.on(Event.next(time as TimeInterval));
+    }
+
+
+    func addNewLantern(position: SCNVector3, scale: Double, upwardVelocity: Double = 0.15) {
+        let mesh: SCNNode = SCNScene(named: "Assets.scnassets/maya_files/lantern.dae")!.rootNode.clone();
+        mesh.scale = SCNVector3(scale, scale, scale);
+        mesh.rotation = SCNVector4Make(1, 0, 0, .pi);
+        mesh.position = position;
+
+        let animationTime = 30.0;
+
+        self.container.addChildNode(mesh);
+        self.lanterns.append(mesh);
+
+        let _ = MainScheduler.instance.scheduleRelative((), dueTime: animationTime, action: { _ in
+            mesh.removeFromParentNode();
+            self.lanterns.remove(at: self.lanterns.index(of: mesh)!);
+            return BooleanDisposable();
+        });
+
+        // Setup floating animation
+        let movement = CABasicAnimation(keyPath: "position");
+        movement.toValue = NSValue(scnVector3: mesh.position - SCNVector3(0, upwardVelocity * animationTime, 0));
+        movement.fromValue = NSValue(scnVector3: mesh.position);
+        movement.repeatCount = 1;
+        movement.duration = animationTime;
+        movement.autoreverses = false;
+        movement.isRemovedOnCompletion = false;
+        movement.fillMode = kCAFillModeForwards;
+
+        mesh.addAnimation(movement, forKey: nil)
     }
 }
 

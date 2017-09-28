@@ -111,7 +111,7 @@ unsigned int const LIGHTING_BITMASK = 0x01000000;
     // Start movement animation
     CABasicAnimation *movementAnimation = [CABasicAnimation animationWithKeyPath:@"position"];
     movementAnimation.toValue = [NSValue valueWithSCNVector3:SCNVector3Make(-7, 0, 0)];
-    movementAnimation.fromValue = [NSValue valueWithSCNVector3:SCNVector3Make(21, 0, 0)];
+    movementAnimation.fromValue = [NSValue valueWithSCNVector3:SCNVector3Make(23, 0, 0)];
     movementAnimation.repeatCount = FLT_MAX;
     movementAnimation.duration = 60;
     movementAnimation.autoreverses = true;
