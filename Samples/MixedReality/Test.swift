@@ -22,6 +22,7 @@ public class LanternManager: NSObject, CAAnimationDelegate {
     }
 
     func setup() {
+
         // Spawn a bunch of lanterns just on the horizon.
         sub.delay(12, scheduler: MainScheduler.instance).throttle(3, scheduler: MainScheduler.instance).subscribe { _ in
             let windows = Scene.main().rootNode!.childNodes(passingTest: { node, _ in node.name == "PortalNode" });
