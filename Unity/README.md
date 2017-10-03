@@ -1,13 +1,18 @@
 Bridge Engine for Unity Package
 ===============================
 
-The Unity project `BridgeEngineUnityPackage` is for building the
-`BridgeEngine.unitypackage` (pre-built package included) for development and includes an
-example scenes "Assets/Scenes/MainExample.unity".
+This folder contains the build components for assembling the full `BridgeEngine.unitypackage`
+
+The Unity project `BridgeEngineUnityPackage` is the base for building `BridgeEngine.unitypackage`
+
+Example scene can be found in "Assets/BridgeEngine/Example/Example.unity"
+
+Most of the native interop code is contained in "Assets/BridgeEngine/Plugins".
+The C# side of the interop code is contained in "Assets/BridgeEngine/Scripts".
 
 If you're interested in starting a fresh Unity project from scratch, you can follow along
-with `BridgeEngineUnity-Getting-Started.pdf`, and copy in Models and Scripts from
-`GettingStartedAssets`.
+with `BridgeEngineUnity-Getting-Started.pdf`, and load the Models and Scripts from
+`Assets/BridgeEngine/Example` folder.
 
 Special note about GoogleVRDummy.cs
 ------------------------------------
@@ -33,3 +38,22 @@ or restore `GoogleVRDummy.cs`. If not then installation of the package will fail
 projects missing GoogleVR.
 
 * Please don't check-in the removal of GoogleVRDummy.cs *
+
+Special note about iOS 11
+------------------------------------
+iOS 11 and XCode 9 require any access to `[UIApplication sharedApplication].delegate` to happen on the main thread.  Due to this, to use iOS 11 with the `5.5.x` version of Unity you'll need to make a small change in the Unity code base.
+
+1. Export the Unity project to an Xcode project.
+2. Open the project in Xcode 9
+3. Open the file `iPhone_Sensors.mm` and go to `sMotionManager startAccelerometerUpdatesToQueue` on line 83.
+4. Replace `sMotionManager startAccelerometerUpdatesToQueue` with the code below:
+
+
+		[sMotionManager startAccelerometerUpdatesToQueue: sMotionQueue withHandler:^(CMAccelerometerData* data, NSError* error) {
+                dispatch_sync(dispatch_get_main_queue(), ^{
+                Vector3f res = UnityReorientVector3(data.acceleration.x, data.acceleration.y, data.acceleration.z);
+                UnityDidAccelerate(res.x, res.y, res.z, data.timestamp);
+                });
+            }];
+
+     

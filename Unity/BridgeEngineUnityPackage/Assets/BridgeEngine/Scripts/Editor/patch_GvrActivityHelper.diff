@@ -1,0 +1,13 @@
+diff --git a/Assets/GoogleVR/Scripts/Utilities/GvrActivityHelper.cs b/Assets/GoogleVR/Scripts/Utilities/GvrActivityHelper.cs
+index 6d26c81..403307c 100644
+--- a/Assets/GoogleVR/Scripts/Utilities/GvrActivityHelper.cs
++++ b/Assets/GoogleVR/Scripts/Utilities/GvrActivityHelper.cs
+@@ -17,7 +17,7 @@ using UnityEngine;
+ // Simple static class to abstract out several jni calls that need to be shared
+ // between different classes.
+ public static class GvrActivityHelper {
+-  public const string GVR_DLL_NAME = "gvr";
++  public const string GVR_DLL_NAME = "__Internal";
+   public const string PACKAGE_UNITY_PLAYER = "com.unity3d.player.UnityPlayer";
+ 
+ #if UNITY_ANDROID && !UNITY_EDITOR
