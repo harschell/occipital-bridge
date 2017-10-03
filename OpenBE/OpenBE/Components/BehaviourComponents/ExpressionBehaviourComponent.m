@@ -82,7 +82,9 @@
     }
     
     if( audioName != nil ) {
-        expr.audio = [[AudioEngine main] loadAudioNamed:audioName];
+        dispatch_async(dispatch_get_main_queue(), ^{
+            expr.audio = [[AudioEngine main] loadAudioNamed:audioName];
+        });
     }
     
     expr.vemojiSequence = vemojiSequence;

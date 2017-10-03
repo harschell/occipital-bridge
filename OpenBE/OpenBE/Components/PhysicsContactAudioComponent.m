@@ -25,7 +25,9 @@
     self = [super init];
     if (self) {
         self.nodeName = nodeName;
-        self.audioNode = [[AudioEngine main] loadAudioNamed:audioName];
+        dispatch_async(dispatch_get_main_queue(), ^{
+            self.audioNode = [[AudioEngine main] loadAudioNamed:audioName];
+        });
         
         self.minImpulse = 25;
         self.maxImpulse = 400;

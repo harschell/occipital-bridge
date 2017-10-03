@@ -357,12 +357,6 @@ typedef NS_ENUM (NSUInteger, PortalState) {
                 be_dbg("Emergency Exit VR -- Transfer to AR");
                 self.open = NO;
                 self.isInsideAR = YES;
-
-                // Force off the CollisionAvoidance mesh. Return environment rendering order to normal.
-                SCNNode *scanNode = [_mixedReality.sceneKitScene.rootNode childNodeWithName:@"customVizNode" recursively:YES];
-                [scanNode setRenderingOrder:BEEnvironmentScanRenderingOrder];
-                [_mixedReality setRenderStyle:BERenderStyleSceneKitAndColorCamera withDuration:0];
-
             }
             
             // Fade-level ramps from 1 to 0, over the remaining EMERGENCYEXIT_TELEPORT_DURATION
@@ -440,15 +434,6 @@ typedef NS_ENUM (NSUInteger, PortalState) {
     if( [hitTestResults count] ) {
         self.isInsideAR = !self.isInsideAR;
         NSLog( _isInsideAR ? @"Inside AR" : @"Inside VR" );
-        
-//         a hack, but if you're in VR, always render Robot:
-//        if( !self.isInsideAR ) {
-//           [((GeometryComponent *)[self.robotEntity componentForClass:[GeometryComponent class]]).node
-//                setRenderingOrderRecursively:(VR_WORLD_RENDERING_ORDER+6)];
-//        } else {
-//           [((GeometryComponent *)[self.robotEntity componentForClass:[GeometryComponent class]]).node
-//                setRenderingOrderRecursively:1];
-//        }
     }
     
     self.oldCameraPos = newCameraPos;
@@ -472,20 +457,38 @@ typedef NS_ENUM (NSUInteger, PortalState) {
     
     _isInsideAR = isInsideAR;
 
-    SCNNode *scanNode = [_mixedReality.sceneKitScene.rootNode childNodeWithName:@"customVizNode" recursively:YES];
+    // Switch around the rendering orders for things.
+    [SCNTransaction begin];
+    [SCNTransaction disableActions];
+    [SCNTransaction setAnimationDuration:0];
 
+    SCNNode *scanNode = [_mixedReality.sceneKitScene.rootNode childNodeWithName:@"customVizNode" recursively:YES];
     if (_isInsideAR)
     {
         [scanNode setRenderingOrder:BEEnvironmentScanRenderingOrder];
+//        [((GeometryComponent *)[self.robotEntity componentForClass:[GeometryComponent class]]).node
+//            setRenderingOrderRecursively:1];
+        // Restore normal rendering mode and order.
         [_mixedReality setRenderStyle:BERenderStyleSceneKitAndColorCamera withDuration:0];
     }
     else
     {
         // make the room mesh render after the vr world so that we get transparency on collision avoidance to work
         [scanNode setRenderingOrder:VR_WORLD_RENDERING_ORDER + 100];
+
+        // Make sure Robot and Controller appear after world render.
+//        [((GeometryComponent *)[self.robotEntity componentForClass:[GeometryComponent class]]).node
+//            setRenderingOrderRecursively:(VR_WORLD_RENDERING_ORDER+6)];
+            
+        [self.bridgeControllerComponent.node
+            setRenderingOrderRecursively:(VR_WORLD_RENDERING_ORDER+6)];
+
+        // Set inside VR rendering mode and order.
         [_mixedReality setRenderStyle:BERenderStyleSceneKitAndCollisionAvoidance withDuration:0];
     }
-//     self.collisionAvoidance = !_isInsideAR;
+    
+    [SCNTransaction commit];
+    
     
     if( isInsideAR && _emergencyExitVR ) {
         // Attempt to abort the emergency exit if we left AR early.
@@ -533,11 +536,13 @@ typedef NS_ENUM (NSUInteger, PortalState) {
 - (void) start{
     [super start];
     
-    self.audioWarpIn = [[AudioEngine main] loadAudioNamed:@"Robot_WarpIn.caf"];
-    self.audioWarpOut = [[AudioEngine main] loadAudioNamed:@"Robot_WarpOut.caf"];
-    
-    self.emergencyExitPowerUp = [[AudioEngine main] loadAudioNamed:@"ExitVR_PowerUp.caf"];
-    self.emergencyExitPowerAbort = [[AudioEngine main] loadAudioNamed:@"ExitVR_PowerAbort.caf"];
+    dispatch_async(dispatch_get_main_queue(), ^{
+        self.audioWarpIn = [[AudioEngine main] loadAudioNamed:@"Robot_WarpIn.caf"];
+        self.audioWarpOut = [[AudioEngine main] loadAudioNamed:@"Robot_WarpOut.caf"];
+        
+        self.emergencyExitPowerUp = [[AudioEngine main] loadAudioNamed:@"ExitVR_PowerUp.caf"];
+        self.emergencyExitPowerAbort = [[AudioEngine main] loadAudioNamed:@"ExitVR_PowerAbort.caf"];
+    });
     
     _open = NO;
     

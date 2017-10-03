@@ -21,7 +21,8 @@
 typedef void (^callback)(void);
 
 @interface PathFindMoveToBehaviourComponent()
-@property (strong) PathFinding * pathFinding;
+@property (strong, readwrite) PathFinding * pathFinding;
+@property (strong, readwrite) PathFinding * noCoverPathFinding;
 @property (weak)   MoveToBehaviourComponent * moveTo;
 @property (strong) NSMutableArray<NSValue*> * moveWayPoints; // NSValues of GLKVector3 structs.
 @property (nonatomic) int moveWayPointIndex;
@@ -55,10 +56,101 @@ typedef void (^callback)(void);
     [self deallocPath];
 }
 
++ (uint8_t*) unlockImage:(UIImage*) image
+{
+    CGImageRef imageRef = [image CGImage];
+    NSUInteger width = CGImageGetWidth(imageRef);
+    NSUInteger height = CGImageGetHeight(imageRef);
+    CGColorSpaceRef colorSpace = CGColorSpaceCreateDeviceRGB();
+    uint8_t *rawData = malloc(height * width * 4);
+    NSUInteger bytesPerPixel = 4;
+    NSUInteger bytesPerRow = bytesPerPixel * width;
+    NSUInteger bitsPerComponent = 8;
+    CGContextRef context = CGBitmapContextCreate(rawData, width, height,
+                                                 bitsPerComponent, bytesPerRow, colorSpace,
+                                                 kCGImageAlphaPremultipliedLast | kCGBitmapByteOrder32Big);
+
+    CGContextDrawImage(context, CGRectMake(0, 0, width, height), imageRef);
+    CGContextRelease(context);
+
+    return rawData;
+}
+
++ (void) lockImage:(UIImage**)image buffer:(uint8_t*) rawData
+{
+    CGContextRef ctx;
+    CGImageRef imageRef = [*image CGImage];
+    NSUInteger width = CGImageGetWidth(imageRef);
+    CGColorSpaceRef colorSpace = CGColorSpaceCreateDeviceRGB();
+    NSUInteger bytesPerPixel = 4;
+    NSUInteger bytesPerRow = bytesPerPixel * width;
+    ctx = CGBitmapContextCreate(rawData,
+                                CGImageGetWidth( imageRef ),
+                                CGImageGetHeight( imageRef ),
+                                8,
+                                bytesPerRow,
+                                colorSpace,
+                                kCGImageAlphaPremultipliedLast );
+    CGColorSpaceRelease(colorSpace);
+
+    imageRef = CGBitmapContextCreateImage (ctx);
+    *image = [UIImage imageWithCGImage:imageRef];
+    CGImageRelease(imageRef);
+
+    CGContextRelease(ctx);
+    free(rawData);
+}
+
 - (void) start {
     [super start];
 
-    self.pathFinding = [[PathFinding alloc] init];
+    {
+        NSArray *paths = NSSearchPathForDirectoriesInDomains(NSDocumentDirectory,
+                                                             NSUserDomainMask, YES);
+
+        NSString *documentsDirectory = [paths objectAtIndex:0];
+        NSString *scenePath = [documentsDirectory stringByAppendingPathComponent:@"BridgeEngineScene"];
+        NSString *occupancyFloorImagePath = [scenePath stringByAppendingPathComponent:@"OccupancyFloorMap.png"];
+        NSString *occupancyCoveringImagePath = [scenePath stringByAppendingPathComponent:@"OccupancyCoverMap.png"];
+
+        if ([[NSFileManager defaultManager] fileExistsAtPath:occupancyFloorImagePath] &&
+            [[NSFileManager defaultManager] fileExistsAtPath:occupancyCoveringImagePath])
+        {
+            UIImage * coveringImage = [[UIImage alloc] initWithContentsOfFile:occupancyCoveringImagePath];
+            UIImage * floorImage = [[UIImage alloc] initWithContentsOfFile:occupancyFloorImagePath];
+            uint8_t* coverImageBuf = [PathFindMoveToBehaviourComponent unlockImage:coveringImage];
+            uint8_t* floorImageBuf = [PathFindMoveToBehaviourComponent unlockImage:floorImage];
+
+            CGImageRef imageRef = [floorImage CGImage];
+            NSUInteger width = CGImageGetWidth(imageRef);
+            NSUInteger height = CGImageGetHeight(imageRef);
+            for (int i = 0; i < width * height * 4; i+=4)
+            {
+                // Floor map == 255 where there is valid floor
+                // Cover map == 255 where there is a covering surface
+                // Occupied where there's no floor or cover
+                bool occupied = floorImageBuf[i] <= 2 || coverImageBuf[i] == 255;
+                coverImageBuf[i] = 255 * (occupied ? 1 : 0);
+                coverImageBuf[i+1] = 255 * (occupied ? 1 : 0);
+                coverImageBuf[i+2] = 255 * (occupied ? 1 : 0);
+                coverImageBuf[i+3] = 255;
+                
+                // Invert the floorImageBuf for our path finding to work.
+                floorImageBuf[i] = 255 - floorImageBuf[i];
+            }
+            [PathFindMoveToBehaviourComponent lockImage:&floorImage buffer:floorImageBuf];
+            self.pathFinding = [[PathFinding alloc] initWithImage:floorImage];
+
+            [PathFindMoveToBehaviourComponent lockImage:&coveringImage buffer:coverImageBuf];
+            self.noCoverPathFinding = [[PathFinding alloc] initWithImage:coveringImage];
+        }
+        else
+        {
+            self.pathFinding = [[PathFinding alloc] init];
+            self.noCoverPathFinding = nil;
+        }
+    }
+
     self.moveTo = (MoveToBehaviourComponent *)[self.entity componentForClass:[MoveToBehaviourComponent class]];
 
     self.moveSpeedModifier = 1.f;
@@ -69,10 +161,12 @@ typedef void (^callback)(void);
     self.vemojiThinkingSequence = [RobotVemojiComponent nameArrayBase:@"Vemoji_Scanning" start:1 end:16 digits:2];
     self.animComponent=(AnimationComponent*)[self.entity componentForClass:AnimationComponent.class];
     self.vemojiComponent = (RobotVemojiComponent*)[self.entity componentForClass:RobotVemojiComponent.class];
-    self.thinkingAudio = [[AudioEngine main] loadAudioNamed:@"Robot_ThinkingLoop.caf"];
-    _thinkingAudio.looping = YES;
-    
-    self.pathUmWhatCorrection = [[AudioEngine main] loadAudioNamed:@"Robot_UmWhat.caf"];
+    dispatch_async(dispatch_get_main_queue(), ^{
+        self.thinkingAudio = [[AudioEngine main] loadAudioNamed:@"Robot_ThinkingLoop.caf"];
+        _thinkingAudio.looping = YES;
+
+        self.pathUmWhatCorrection = [[AudioEngine main] loadAudioNamed:@"Robot_UmWhat.caf"];
+    });
     
     [self initPath];
 }
@@ -204,10 +298,11 @@ typedef void (^callback)(void);
  * Get the largest available component area, and search for a point that's open.
  * Biases a little front (1m) and center.
  */
-- (GLKVector3) findLargestOpenAreaPoint {
-    unsigned char largestComponent = [_pathFinding largestConnectedComponent];
+- (GLKVector3) findLargestOpenAreaPoint:(PathFinding*) pathFinding {
+
+    unsigned char largestComponent = [pathFinding largestConnectedComponent];
     GLKVector3 point;
-    if( [_pathFinding closestAccessiblePointTo:(GLKVector3){0,0,-.3} inComponent:largestComponent result:&point] ) {
+    if( [pathFinding closestAccessiblePointTo:(GLKVector3){0,0,-.3} inComponent:largestComponent result:&point] ) {
         return point;
     } else {
         be_NSDbg(@"Failed to find a point in front/center that's open");

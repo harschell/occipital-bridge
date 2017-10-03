@@ -5,7 +5,7 @@
 */
 
 #import "ViewController.h"
-#import "AppSettings.h"
+#import "AppDelegate.h"
 
 #import <BridgeEngine/BridgeEngine.h>
 
@@ -13,29 +13,30 @@
 #import <OpenBE/Core/SceneManager.h>
 #import <OpenBE/Core/AudioEngine.h>
 
-#import <OpenBE/Components/RobotBehaviourComponent.h>
-#import <OpenBE/Components/RobotActionComponent.h>
-#import <OpenBE/Components/RobotMeshControllerComponent.h>
 #import <OpenBE/Components/AnimationComponent.h>
-#import <OpenBE/Components/GazeComponent.h>
-#import <OpenBE/Components/FixedSizeReticleComponent.h>
+#import <OpenBE/Components/BeamComponent.h>
 #import <OpenBE/Components/BlockDemoReticleComponent.h>
-#import <OpenBE/Components/RobotSeesMeComponent.h>
-#import <OpenBE/Components/RobotBodyEmojiComponent.h>
-#import <OpenBE/Components/RobotVemojiComponent.h>
 #import <OpenBE/Components/ButtonContainerComponent.h>
 #import <OpenBE/Components/ButtonComponent.h>
-#import <OpenBE/Components/MoveRobotEventComponent.h>
+#import <OpenBE/Components/BridgeControllerComponent.h>
 #import <OpenBE/Components/FetchEventComponent.h>
-#import <OpenBE/Components/BeamComponent.h>
+#import <OpenBE/Components/FixedSizeReticleComponent.h>
+#import <OpenBE/Components/GazeComponent.h>
+#import <OpenBE/Components/MoveRobotEventComponent.h>
+#import <OpenBE/Components/RobotActionComponent.h>
+#import <OpenBE/Components/RobotBehaviourComponent.h>
+#import <OpenBE/Components/RobotBodyEmojiComponent.h>
+#import <OpenBE/Components/RobotMeshControllerComponent.h>
+#import <OpenBE/Components/RobotSeesMeComponent.h>
+#import <OpenBE/Components/RobotVemojiComponent.h>
 #import <OpenBE/Components/ScanEventComponent.h>
 #import <OpenBE/Components/ScanComponent.h>
 #import <OpenBE/Components/SpawnComponent.h>
 #import <OpenBE/Components/SpawnPortalComponent.h>
 #import <OpenBE/Components/VRWorldComponent.h>
+#import <OpenBE/Components/ProjectedGeometryComponent.h>
 
-#import "OpenBE/Shaders/ScanEnvironmentShader.h"
-
+#import <OpenBE/Shaders/ScanEnvironmentShader.h>
 
 // Behaviors
 #import <OpenBE/Components/BehaviourComponents/BeamUIBehaviourComponent.h>
@@ -46,6 +47,7 @@
 #import <OpenBE/Components/BehaviourComponents/MoveToBehaviourComponent.h>
 #import <OpenBE/Components/BehaviourComponents/PathFindMoveToBehaviourComponent.h>
 #import <OpenBE/Components/BehaviourComponents/ScanBehaviourComponent.h>
+
 
 #import <OpenBE/Utils/ComponentUtils.h>
 #import <OpenBE/Utils/SceneKitExtensions.h>
@@ -59,8 +61,9 @@
 @property (nonatomic, strong) RobotActionComponent* robot;
 @property (nonatomic, strong) GKEntity * robotEntity;
 @property (nonatomic, strong) ButtonContainerComponent * renderMenu;
-@property (nonatomic, strong) Component *fixedSizeReticle;
-@property (nonatomic, strong) BEController* controller;
+@property (nonatomic, strong) FixedSizeReticleComponent *fixedSizeReticle;
+@property (nonatomic, strong) BridgeControllerComponent* bControllerComponent;
+@property (nonatomic, strong) ProjectedGeometryComponent *robotProjectionComponent;
 
 @end
 //------------------------------------------------------------------------------
@@ -71,7 +74,8 @@
 {
     BEMixedRealityMode* _mixedReality;
     NSArray*            _markupNameList;
-    BOOL                _experienceIsRunning;
+    BOOL                _sceneIsRunning;
+    BOOL                _experienceIsRunning; // Hold input events until we're done markup editing and experience is going. 
     VRWorldComponent *_vrWorld;
     PortalComponent *_portal;
 }
@@ -83,11 +87,20 @@
     // Markup is optional physical annotations of a scanned scene, that persist between app launches.
     // Here is a list of markup we'll use for our sample.
     // If the user decides, the locations of this markup will be saved on device.
-
-    _markupNameList = @[ @"Bridget", @"Rendering Menu"];
+    NSMutableArray<NSString*> *markupNames = @[].mutableCopy;
+    if (![BEAppSettings booleanValueFromAppSetting:SETTING_STEREO_SCANNING defaultValueIfSettingIsNotInBundle:NO]) {
+        [markupNames addObject:@"Bridget"];
+        if ([BEAppSettings booleanValueFromAppSetting:SETTING_SHOW_RENDER_TYPES defaultValueIfSettingIsNotInBundle:NO]) {
+            [markupNames addObject:@"Rendering Menu"];
+        }
+    } else {
+        _markupNameList = @[]; // Go with auto-placement of bridget for better default Stereo Set-up experience. 
+    }
+    _markupNameList = markupNames.copy;
+    
 
     BECaptureReplayMode replayMode = BECaptureReplayModeDisabled;
-    if ([AppSettings booleanValueFromAppSetting:@"replayCapture"
+    if ([BEAppSettings booleanValueFromAppSetting:SETTING_REPLAY_CAPTURE
              defaultValueIfSettingIsNotInBundle:NO])
     {
         replayMode = BECaptureReplayModeRealTime;
@@ -100,16 +113,19 @@
             kBECaptureReplayMode:
                 @(replayMode),
             kBEUsingWideVisionLens:
-                @([AppSettings booleanValueFromAppSetting:@"useWVL"
+                @([BEAppSettings booleanValueFromAppSetting:SETTING_USE_WVL
                        defaultValueIfSettingIsNotInBundle:YES]),
             kBEStereoRenderingEnabled:
-                @([AppSettings booleanValueFromAppSetting:@"stereoRendering"
+                @([BEAppSettings booleanValueFromAppSetting:SETTING_STEREO_RENDERING
                        defaultValueIfSettingIsNotInBundle:YES]),
             kBEUsingColorCameraOnly:
-                @([AppSettings booleanValueFromAppSetting:@"colorCameraOnly"
+                @([BEAppSettings booleanValueFromAppSetting:SETTING_COLOR_CAMERA_ONLY
                        defaultValueIfSettingIsNotInBundle:NO]),
             kBERecordingOptionsEnabled:
-                @([AppSettings booleanValueFromAppSetting:@"enableRecording"
+                @([BEAppSettings booleanValueFromAppSetting:SETTING_ENABLE_RECORDING
+                       defaultValueIfSettingIsNotInBundle:NO]),
+            kBEEnableStereoScanningBeta:
+                @([BEAppSettings booleanValueFromAppSetting:SETTING_STEREO_SCANNING
                        defaultValueIfSettingIsNotInBundle:NO]),
         }
         markupNames:_markupNameList
@@ -119,6 +135,13 @@
 
     // Link the event manager to this mixed reality instance.
     [EventManager main].mixedRealityMode = _mixedReality;
+
+    // Establish use of reticle or not.
+    if( [BEAppSettings booleanValueFromAppSetting:SETTING_STEREO_RENDERING defaultValueIfSettingIsNotInBundle:YES] ) {
+        [EventManager main].useReticleAsTouchLocation = YES;
+    } else {
+        [EventManager main].useReticleAsTouchLocation = NO;
+    }
     
     [_mixedReality start];
 }
@@ -169,7 +192,7 @@
 
 -(void) setUpEntityComponentSystem
 {
-    BOOL stereo = [AppSettings booleanValueFromAppSetting:@"stereoRendering" defaultValueIfSettingIsNotInBundle:YES];
+    BOOL stereo = [BEAppSettings booleanValueFromAppSetting:SETTING_STEREO_RENDERING defaultValueIfSettingIsNotInBundle:YES];
     
     // main Audio engine and Scene Manager
     [[SceneManager main] initWithMixedRealityMode:_mixedReality stereo:stereo];
@@ -184,6 +207,12 @@
     self.fixedSizeReticle = [[FixedSizeReticleComponent alloc] init];
     //Component *fixedSizeReticle = [[BlockDemoReticleComponent alloc] init];
     [gazeEntity addComponent:_fixedSizeReticle];
+    
+    // BController Entity
+    self.bControllerComponent = [[BridgeControllerComponent alloc] init];
+    GKEntity *controllerEntity = [[SceneManager main] createEntity];
+    [controllerEntity addComponent:self.bControllerComponent];
+    [self.bControllerComponent setEnabled:YES];
 
     [self updateReticleInputMode];
     
@@ -206,7 +235,13 @@
 
     ScanComponent * scanComponent = [[ScanComponent alloc] init];
     [self.robotEntity addComponent:scanComponent];
-
+    
+    // Markup Projection Object
+    SCNNode *robotBoxNode = [SCNNode firstNodeFromSceneNamed:@"Robot_Box.dae"];
+    robotBoxNode.eulerAngles = {-M_PI, 0, 0};  // flip it to upright
+    self.robotProjectionComponent = [[ProjectedGeometryComponent alloc] initWithChildNode:robotBoxNode];
+    self.robotProjectionComponent.node.scale = {0.25, 0.25, 0.25};
+    
     // Behaviour Components
     RobotBehaviourComponent * behaviourComponent = [[RobotBehaviourComponent alloc] init];
     [self.robotEntity addComponent:behaviourComponent];
@@ -244,6 +279,7 @@
     _portal.overlayComponent = colorOverlay;
     _vrWorld.portalComponent = _portal;
     _portal.robotEntity = self.robotEntity;
+    _portal.bridgeControllerComponent = self.bControllerComponent;
     _portal.stereoRendering = stereo;
     //_portal.interactive = [BEAppSettings booleanValueFromAppSetting:SETTING_PLAY_SCRIPT defaultValueIfSettingIsNotInBundle:NO] == NO;
     [[[SceneManager main] createEntity] addComponent:_portal];
@@ -358,7 +394,9 @@
         buttonPortalComponent,
         ].mutableCopy;
     
-    [self setupRenderingMenu];
+    if ([BEAppSettings booleanValueFromAppSetting:SETTING_SHOW_RENDER_TYPES defaultValueIfSettingIsNotInBundle:NO]) {
+        [self setupRenderingMenu];
+    }
     
     // Ready to start the Scene Manager- this will start all the components in the scene.
     [[SceneManager main] startWithMixedRealityMode:_mixedReality];
@@ -375,6 +413,20 @@
     scale = 0.4;
     [_renderMenu.node setScale:SCNVector3Make(scale, scale, scale)];
     
+    
+    // Find a roughly good starting position. If available, this will load floor and cover maps
+    // and find an open and uncovered area. Otherwise we'll use the normal obstacle occupancy map
+    // which may e.g. place the robot under a table.
+    GLKVector3 openPositon;
+    if (pathFindingComponent.noCoverPathFinding != nil) {
+        openPositon = [pathFindingComponent findLargestOpenAreaPoint:pathFindingComponent.noCoverPathFinding];
+    } else {
+        openPositon = [pathFindingComponent findLargestOpenAreaPoint:pathFindingComponent.pathFinding];
+    }
+
+    pathFindingComponent.reachableReferencePoint = openPositon;
+    [robotMeshControllerComponent setPosition:openPositon];
+    
     //---------------------------------------------------------------------
     // now go to the markup if we need to
     bool foundAllMarkup = YES;
@@ -390,10 +442,9 @@
     }
  
     // setup controller
-    self.controller = [BEController sharedController];
-    _controller.delegate = self;
+    [BEController sharedController].delegate = self;
+    [self updateReticleInputMode];
 
-    
     // if we found all the markups, skip markup editing.
     if (foundAllMarkup)
     {
@@ -423,30 +474,32 @@
 
 - (void)mixedRealitySetUpSceneKitWorlds:(BEMappedAreaStatus)mappedAreaStatus
 {
-    [self setUpEntityComponentSystem];
-    
-    RobotBehaviourComponent * behaviourComponent = (RobotBehaviourComponent *)[ComponentUtils getComponentFromEntity:self.robotEntity ofClass:[RobotBehaviourComponent class]];
-    [behaviourComponent runIdleBehaviours:YES];
-    [behaviourComponent cameraMovementTriggerAttention:YES];
-    
-    _experienceIsRunning = YES;
-}
+    _experienceIsRunning = NO;
+    _sceneIsRunning = NO;
 
-- (void)didReceiveMemoryWarning
-{
-    [super didReceiveMemoryWarning];
+    [self setUpEntityComponentSystem];
+
+    _sceneIsRunning = YES;
 }
 
 - (void)startExperience
 {
     // For this experience, let's switch to a mode with AR objects composited with the passthrough camera.
     [_mixedReality setRenderStyle:BERenderStyleSceneKitAndColorCamera withDuration:0.5];
- 
+
+    RobotBehaviourComponent * behaviourComponent = (RobotBehaviourComponent *)[ComponentUtils getComponentFromEntity:self.robotEntity ofClass:[RobotBehaviourComponent class]];
+    [behaviourComponent runIdleBehaviours:YES];
+    [behaviourComponent cameraMovementTriggerAttention:YES];
+    
     _experienceIsRunning = YES;
+    
+    [self updateReticleInputMode];
 }
 
 - (void)mixedRealityMarkupEditingEnded
 {
+    self.robotProjectionComponent.node.hidden = YES;
+    
     // If markup editing is over, then any experience in the scene may be started.
     [self startExperience];
 }
@@ -460,8 +513,20 @@
     
     if ([markupChangedName isEqualToString: @"Bridget"])
     {
-        RobotMeshControllerComponent *meshController = (RobotMeshControllerComponent *)[self.robotEntity componentForClass:[RobotMeshControllerComponent class]];
-        [meshController setPosition:SCNVector3ToGLKVector3(markupNode.position)];
+        // Double check and align to nearest open point.
+        PathFindMoveToBehaviourComponent * pathFindingComponent = (PathFindMoveToBehaviourComponent*)[self.robotEntity componentForClass:PathFindMoveToBehaviourComponent.class];
+        GLKVector3 markupPoint = SCNVector3ToGLKVector3(markupNode.position);
+        GLKVector3 markupRotationEuler = SCNVector3ToGLKVector3(markupNode.eulerAngles);
+        if( [pathFindingComponent occupied:markupPoint] == NO ) {
+            pathFindingComponent.reachableReferencePoint = markupPoint;
+
+            RobotMeshControllerComponent *meshController = (RobotMeshControllerComponent *)[self.robotEntity componentForClass:[RobotMeshControllerComponent class]];
+            [meshController setPosition:markupPoint];
+            [meshController setRotationEuler:markupRotationEuler];
+        } else {
+            RobotBehaviourComponent *robotBehaviour = (RobotBehaviourComponent *)[self.robotEntity componentForClass:[RobotBehaviourComponent class]];
+            [robotBehaviour beSad];
+        }
     }
     else if ([markupChangedName isEqualToString: @"Rendering Menu"])
     {
@@ -479,12 +544,28 @@
     }
 }
 
+- (BOOL)mixedRealityBridgeShouldProjectMarkupNode:(NSString *)markupName position:(SCNVector3)position eulerAngles:(SCNVector3)eulerAngles
+{
+    if ([markupName isEqualToString: @"Bridget"])
+    {
+        self.robotProjectionComponent.node.position = position;
+        self.robotProjectionComponent.node.eulerAngles = eulerAngles;
+        self.robotProjectionComponent.node.hidden = NO;
+        
+        return NO;
+    } else {
+        self.robotProjectionComponent.node.hidden = YES;
+    }
+    
+    return YES;
+}
+
 - (void)mixedRealityUpdateAtTime:(NSTimeInterval)time
 {
     // Update the controller's camera world transform, so we're tracking with it.
-    _controller.cameraTransform = SCNMatrix4ToGLKMatrix4(_mixedReality.localDeviceNode.worldTransform);
+    [BEController sharedController].cameraTransform = SCNMatrix4ToGLKMatrix4(_mixedReality.localDeviceNode.worldTransform);
 
-    if( !_experienceIsRunning ) {
+    if( !_sceneIsRunning ) {
         return;
     }
     
@@ -503,38 +584,53 @@
     [self updateReticleInputMode];
 }
 
-- (void)controllerButtonDown
-{
-    be_NSDbg(@"[Bridget][Controller] button down");
-    [[EventManager main] controllerButtonDown];
+- (void)controllerButtons:(BEControllerButtons)buttons down:(BEControllerButtons)buttonsDown up:(BEControllerButtons)buttonsUp {
+    if( _experienceIsRunning ) {
+        if( (buttonsDown & BEControllerButtonPrimary) != 0) {
+            [[EventManager main] controllerButtonDown];
+        }
+        
+        if( (buttonsUp & BEControllerButtonPrimary) != 0) {
+            [[EventManager main] controllerButtonUp];
+        }
+    }
 }
 
-- (void)controllerButtonUp
-{
-    be_NSDbg(@"[Bridget][Controller] button up");
-    [[EventManager main] controllerButtonUp];
+- (void)controllerMotionTransform:(GLKMatrix4)transform {
+}
+
+- (void)controllerTouchPosition:(GLKVector2)position status:(BEControllerTouchStatus)status{
 }
 
 // Touch handling helpers
 - (void)touchesBegan:(NSSet *)touches withEvent:(UIEvent *)event
 {
-    [[EventManager main] touchesBegan:touches withEvent:event];
+    if( _experienceIsRunning ) {
+        [[EventManager main] touchesBegan:touches withEvent:event];
+    }
 }
 
 - (void)touchesEnded:(NSSet *)touches withEvent:(UIEvent *)event
 {
-    [[EventManager main]  touchesEnded:touches withEvent:event];
+    if( _experienceIsRunning ) {
+        [[EventManager main]  touchesEnded:touches withEvent:event];
+    }
 }
 
 - (void)touchesCancelled:(NSSet *)touches withEvent:(UIEvent *)event
 {
-    [[EventManager main] touchesCancelled:touches withEvent:event];
+    if( _experienceIsRunning ) {
+        [[EventManager main] touchesCancelled:touches withEvent:event];
+    }
 }
 
 - (void)touchesMoved:(NSSet *)touches withEvent:(UIEvent *)event
 {
-    [[EventManager main] touchesMoved:touches withEvent:event];
+    if( _experienceIsRunning ) {
+        [[EventManager main] touchesMoved:touches withEvent:event];
+    }
 }
+
 - (void)handleTwoFingerTap:(UITapGestureRecognizer *)sender
 {
     // Increment through render styles, with fading transitions.
@@ -547,10 +643,17 @@
 
 #pragma mark - Support Methods
 
-/// Hook up reticle visibility to controller connectes status.
+/// Hook reticle visibility to controller connected status.
 - (void) updateReticleInputMode {
-    BOOL enableReticleInput = [BEController sharedController].isConnected;
-    [_fixedSizeReticle setEnabled:enableReticleInput];
+    BOOL stereo = [BEAppSettings booleanValueFromAppSetting:SETTING_STEREO_RENDERING defaultValueIfSettingIsNotInBundle:YES];
+    BOOL connected = [BEController sharedController].isConnected;
+    BOOL enableReticleInput = (connected || stereo);
+    
+    [EventManager main].useReticleAsTouchLocation = enableReticleInput;
+    [_fixedSizeReticle setEnabled:enableReticleInput && _experienceIsRunning];
+
+    // Only show Bridge Controller if it's specifically connected. 
+    [_bControllerComponent setEnabled:BEController.sharedController.isBridgeControllerConnected];
 }
 
 @end

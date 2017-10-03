@@ -39,11 +39,13 @@
 - (void) start {
     [super start];
     
-    // Beam sound effect.
-    self.audioLoop = [[AudioEngine main] loadAudioNamed:@"BeamLoop.caf"];
-    _audioLoop.looping = YES;
-    _audioLoop.volume = 0;
-    [_audioLoop play];
+    dispatch_async(dispatch_get_main_queue(), ^{
+        // Beam sound effect.
+        self.audioLoop = [[AudioEngine main] loadAudioNamed:@"BeamLoop.caf"];
+        _audioLoop.looping = YES;
+        _audioLoop.volume = 0;
+        [_audioLoop play];
+    });
 
     [self createBeam];
 }

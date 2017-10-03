@@ -41,8 +41,10 @@ bool menuSoundPlayed;
     self.beamComponent = (BeamComponent *)[self.entity componentForClass:[BeamComponent class]];
     [self.beamComponent setEnabled:NO];
     [self.uiComponent setEnabled:NO];
-    self.menuOpenSound = [[AudioEngine main] loadAudioNamed:@"Robot_MenuOpen.caf"];
-    self.menuCloseSound = [[AudioEngine main] loadAudioNamed:@"Robot_MenuClose.caf"];
+    dispatch_async(dispatch_get_main_queue(), ^{
+        self.menuOpenSound = [[AudioEngine main] loadAudioNamed:@"Robot_MenuOpen.caf"];
+        self.menuCloseSound = [[AudioEngine main] loadAudioNamed:@"Robot_MenuClose.caf"];
+    });
     menuSoundPlayed = NO;
 }
 

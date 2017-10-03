@@ -9,6 +9,8 @@
 /* Begin PBXBuildFile section */
 		2C22A9AE1EAABC69000A96EF /* BridgeControllerComponent.h in Headers */ = {isa = PBXBuildFile; fileRef = 2C22A9AC1EAABC69000A96EF /* BridgeControllerComponent.h */; };
 		2C22A9AF1EAABC69000A96EF /* BridgeControllerComponent.mm in Sources */ = {isa = PBXBuildFile; fileRef = 2C22A9AD1EAABC69000A96EF /* BridgeControllerComponent.mm */; };
+		2C4C7F0F1F27487200E69154 /* ProjectedGeometryComponent.h in Headers */ = {isa = PBXBuildFile; fileRef = 2C4C7F0D1F27487200E69154 /* ProjectedGeometryComponent.h */; };
+		2C4C7F101F27487200E69154 /* ProjectedGeometryComponent.m in Sources */ = {isa = PBXBuildFile; fileRef = 2C4C7F0E1F27487200E69154 /* ProjectedGeometryComponent.m */; };
 		2C5DA53C1E00EF1900A60606 /* ScanEnvironmentShader.h in Headers */ = {isa = PBXBuildFile; fileRef = 2C5DA53A1E00EF1900A60606 /* ScanEnvironmentShader.h */; };
 		2C5DA53D1E00EF1900A60606 /* ScanEnvironmentShader.mm in Sources */ = {isa = PBXBuildFile; fileRef = 2C5DA53B1E00EF1900A60606 /* ScanEnvironmentShader.mm */; };
 		2C5DA5421E00F06F00A60606 /* ScanComponent.h in Headers */ = {isa = PBXBuildFile; fileRef = 2C5DA53E1E00F06F00A60606 /* ScanComponent.h */; };
@@ -100,7 +102,6 @@
 		2DCD730C1DFFEF9D003691AE /* SceneKitExtensions.m in Sources */ = {isa = PBXBuildFile; fileRef = 2DCD72FD1DFFEF9C003691AE /* SceneKitExtensions.m */; };
 		2DCD730D1DFFEF9D003691AE /* SceneKitTools.h in Headers */ = {isa = PBXBuildFile; fileRef = 2DCD72FE1DFFEF9C003691AE /* SceneKitTools.h */; };
 		2DCD730E1DFFEF9D003691AE /* SceneKitTools.mm in Sources */ = {isa = PBXBuildFile; fileRef = 2DCD72FF1DFFEF9C003691AE /* SceneKitTools.mm */; };
-		2DCD73411DFFF2ED003691AE /* OpenBE.xcconfig in Resources */ = {isa = PBXBuildFile; fileRef = 2DCD73401DFFF2ED003691AE /* OpenBE.xcconfig */; };
 		2DE0874A1DFFF8C4000FF474 /* GameController.framework in Frameworks */ = {isa = PBXBuildFile; fileRef = 2DE087491DFFF8C4000FF474 /* GameController.framework */; };
 		6D11A5421E4954EF00EA8F3C /* CoreBluetooth.framework in Frameworks */ = {isa = PBXBuildFile; fileRef = 6D11A5411E4954EF00EA8F3C /* CoreBluetooth.framework */; };
 		6D6050F61E4CEE9E006760F3 /* VRWorldComponent.h in Headers */ = {isa = PBXBuildFile; fileRef = 6D6050F41E4CEE9E006760F3 /* VRWorldComponent.h */; };
@@ -123,6 +124,8 @@
 /* Begin PBXFileReference section */
 		2C22A9AC1EAABC69000A96EF /* BridgeControllerComponent.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; path = BridgeControllerComponent.h; sourceTree = "<group>"; };
 		2C22A9AD1EAABC69000A96EF /* BridgeControllerComponent.mm */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.cpp.objcpp; path = BridgeControllerComponent.mm; sourceTree = "<group>"; };
+		2C4C7F0D1F27487200E69154 /* ProjectedGeometryComponent.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; path = ProjectedGeometryComponent.h; sourceTree = "<group>"; };
+		2C4C7F0E1F27487200E69154 /* ProjectedGeometryComponent.m */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.objc; path = ProjectedGeometryComponent.m; sourceTree = "<group>"; };
 		2C5DA53A1E00EF1900A60606 /* ScanEnvironmentShader.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; path = ScanEnvironmentShader.h; sourceTree = "<group>"; };
 		2C5DA53B1E00EF1900A60606 /* ScanEnvironmentShader.mm */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.cpp.objcpp; path = ScanEnvironmentShader.mm; sourceTree = "<group>"; };
 		2C5DA53E1E00F06F00A60606 /* ScanComponent.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; path = ScanComponent.h; sourceTree = "<group>"; };
@@ -269,6 +272,7 @@
 				2DCD6FEE1DFFEED3003691AE /* Products */,
 				2C5DA5391E00EF1900A60606 /* Shaders */,
 				2DE087481DFFF8C4000FF474 /* Frameworks */,
+				CFA862681F8330A8008C1FC7 /* Recovered References */,
 			);
 			sourceTree = "<group>";
 		};
@@ -349,10 +353,12 @@
 				2DCD70841DFFEF8D003691AE /* MoveRobotEventComponent.m */,
 				2DCD70851DFFEF8D003691AE /* NavigationComponent.h */,
 				2DCD70861DFFEF8D003691AE /* NavigationComponent.m */,
-				6DD7C9411E5CF614006AAC6F /* PortalComponent.h */,
-				6DD7C9421E5CF614006AAC6F /* PortalComponent.mm */,
 				2DCD70871DFFEF8D003691AE /* PhysicsContactAudioComponent.h */,
 				2DCD70881DFFEF8D003691AE /* PhysicsContactAudioComponent.m */,
+				6DD7C9411E5CF614006AAC6F /* PortalComponent.h */,
+				6DD7C9421E5CF614006AAC6F /* PortalComponent.mm */,
+				2C4C7F0D1F27487200E69154 /* ProjectedGeometryComponent.h */,
+				2C4C7F0E1F27487200E69154 /* ProjectedGeometryComponent.m */,
 				2DCD708B1DFFEF8D003691AE /* RobotActionComponent.h */,
 				2DCD708C1DFFEF8D003691AE /* RobotActionComponent.mm */,
 				2DCD708D1DFFEF8D003691AE /* RobotBehaviourComponent.h */,
@@ -436,6 +442,17 @@
 			name = Products;
 			sourceTree = "<group>";
 		};
+		CFA862681F8330A8008C1FC7 /* Recovered References */ = {
+			isa = PBXGroup;
+			children = (
+				6D6050F41E4CEE9E006760F3 /* VRWorldComponent.h */,
+				6D6050FC1E4CF0F4006760F3 /* PortalComponent.h */,
+				6D6051071E4D07FF006760F3 /* SpawnPortalComponent.h */,
+				6D60511F1E4D1702006760F3 /* ColorOverlayComponent.h */,
+			);
+			name = "Recovered References";
+			sourceTree = "<group>";
+		};
 /* End PBXGroup section */
 
 /* Begin PBXHeadersBuildPhase section */
@@ -453,6 +470,7 @@
 				2DCD73061DFFEF9D003691AE /* Math.h in Headers */,
 				2DCD70481DFFEF84003691AE /* EventManager.h in Headers */,
 				2C5DA5481E00F12700A60606 /* ScanBehaviourComponent.h in Headers */,
+				2C4C7F0F1F27487200E69154 /* ProjectedGeometryComponent.h in Headers */,
 				2DCD70D21DFFEF8D003691AE /* NavigationComponent.h in Headers */,
 				6DD7C9431E5CF614006AAC6F /* PortalComponent.h in Headers */,
 				2DCD704A1DFFEF84003691AE /* GeometryComponent.h in Headers */,
@@ -531,7 +549,7 @@
 		2DCD6FE41DFFEED3003691AE /* Project object */ = {
 			isa = PBXProject;
 			attributes = {
-				LastUpgradeCheck = 0820;
+				LastUpgradeCheck = 0900;
 				ORGANIZATIONNAME = Occipital;
 				TargetAttributes = {
 					2DCD6FEC1DFFEED3003691AE = {
@@ -568,7 +586,6 @@
 			isa = PBXResourcesBuildPhase;
 			buildActionMask = 2147483647;
 			files = (
-				2DCD73411DFFF2ED003691AE /* OpenBE.xcconfig in Resources */,
 				2DC3E97E1E0005A2007C3C02 /* OpenBE.scnassets in Resources */,
 			);
 			runOnlyForDeploymentPostprocessing = 0;
@@ -586,6 +603,7 @@
 				2DCD73081DFFEF9D003691AE /* PathFinding.mm in Sources */,
 				2DCD70491DFFEF84003691AE /* EventManager.m in Sources */,
 				2DCD70B81DFFEF8D003691AE /* BlockDemoReticleComponent.m in Sources */,
+				2C4C7F101F27487200E69154 /* ProjectedGeometryComponent.m in Sources */,
 				2C5DA5491E00F12700A60606 /* ScanBehaviourComponent.m in Sources */,
 				2DCD70D11DFFEF8D003691AE /* MoveRobotEventComponent.m in Sources */,
 				2DCD70431DFFEF84003691AE /* Component.m in Sources */,
@@ -641,7 +659,9 @@
 				CLANG_ANALYZER_NONNULL = YES;
 				CLANG_ENABLE_MODULES = YES;
 				CLANG_ENABLE_OBJC_ARC = YES;
+				CLANG_WARN_BLOCK_CAPTURE_AUTORELEASING = YES;
 				CLANG_WARN_BOOL_CONVERSION = YES;
+				CLANG_WARN_COMMA = YES;
 				CLANG_WARN_CONSTANT_CONVERSION = YES;
 				CLANG_WARN_DIRECT_OBJC_ISA_USAGE = YES_ERROR;
 				CLANG_WARN_DOCUMENTATION_COMMENTS = YES;
@@ -649,7 +669,11 @@
 				CLANG_WARN_ENUM_CONVERSION = YES;
 				CLANG_WARN_INFINITE_RECURSION = YES;
 				CLANG_WARN_INT_CONVERSION = YES;
+				CLANG_WARN_NON_LITERAL_NULL_CONVERSION = YES;
+				CLANG_WARN_OBJC_LITERAL_CONVERSION = YES;
 				CLANG_WARN_OBJC_ROOT_CLASS = YES_ERROR;
+				CLANG_WARN_RANGE_LOOP_ANALYSIS = YES;
+				CLANG_WARN_STRICT_PROTOTYPES = YES;
 				CLANG_WARN_SUSPICIOUS_MOVE = YES;
 				CLANG_WARN_UNREACHABLE_CODE = YES;
 				CLANG_WARN__DUPLICATE_METHOD_MATCH = YES;
@@ -692,7 +716,9 @@
 				CLANG_ANALYZER_NONNULL = YES;
 				CLANG_ENABLE_MODULES = YES;
 				CLANG_ENABLE_OBJC_ARC = YES;
+				CLANG_WARN_BLOCK_CAPTURE_AUTORELEASING = YES;
 				CLANG_WARN_BOOL_CONVERSION = YES;
+				CLANG_WARN_COMMA = YES;
 				CLANG_WARN_CONSTANT_CONVERSION = YES;
 				CLANG_WARN_DIRECT_OBJC_ISA_USAGE = YES_ERROR;
 				CLANG_WARN_DOCUMENTATION_COMMENTS = YES;
@@ -700,7 +726,11 @@
 				CLANG_WARN_ENUM_CONVERSION = YES;
 				CLANG_WARN_INFINITE_RECURSION = YES;
 				CLANG_WARN_INT_CONVERSION = YES;
+				CLANG_WARN_NON_LITERAL_NULL_CONVERSION = YES;
+				CLANG_WARN_OBJC_LITERAL_CONVERSION = YES;
 				CLANG_WARN_OBJC_ROOT_CLASS = YES_ERROR;
+				CLANG_WARN_RANGE_LOOP_ANALYSIS = YES;
+				CLANG_WARN_STRICT_PROTOTYPES = YES;
 				CLANG_WARN_SUSPICIOUS_MOVE = YES;
 				CLANG_WARN_UNREACHABLE_CODE = YES;
 				CLANG_WARN__DUPLICATE_METHOD_MATCH = YES;
@@ -735,11 +765,10 @@
 		2DCD6FF61DFFEED3003691AE /* Debug */ = {
 			isa = XCBuildConfiguration;
 			buildSettings = {
-				ARCHS = arm64;
 				CLANG_ENABLE_MODULES = YES;
 				CLANG_LINK_OBJC_RUNTIME = YES;
 				CODE_SIGN_IDENTITY = "";
-				"CODE_SIGN_IDENTITY[sdk=iphoneos*]" = "iPhone Developer";
+				"CODE_SIGN_IDENTITY[sdk=iphoneos*]" = "";
 				DEFINES_MODULE = YES;
 				DEVELOPMENT_TEAM = "";
 				DYLIB_COMPATIBILITY_VERSION = 1;
@@ -766,11 +795,10 @@
 		2DCD6FF71DFFEED3003691AE /* Release */ = {
 			isa = XCBuildConfiguration;
 			buildSettings = {
-				ARCHS = arm64;
 				CLANG_ENABLE_MODULES = YES;
 				CLANG_LINK_OBJC_RUNTIME = YES;
 				CODE_SIGN_IDENTITY = "";
-				"CODE_SIGN_IDENTITY[sdk=iphoneos*]" = "iPhone Developer";
+				"CODE_SIGN_IDENTITY[sdk=iphoneos*]" = "";
 				DEFINES_MODULE = YES;
 				DEVELOPMENT_TEAM = "";
 				DYLIB_COMPATIBILITY_VERSION = 1;

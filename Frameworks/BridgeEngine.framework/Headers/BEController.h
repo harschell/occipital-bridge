@@ -6,19 +6,24 @@
 
 #pragma once
 
-#import <BridgeEngine/BridgeEngineAPI.h>
 #import <Foundation/Foundation.h>
 #import <GLKit/GLKit.h>
+
+#if TARGET_OS_IOS
+#import <BridgeEngine/BridgeEngineAPI.h>
+#else
+#import "BridgeEngineAPI.h"
+#endif
 
 //------------------------------------------------------------------------------
 
 /**
  * Bridge controller button bit values
  */
-typedef NS_ENUM(unsigned, BEControllerButtons) {
+typedef NS_OPTIONS(NSUInteger, BEControllerButtons) {
     BEControllerButtonPrimary   = 1<<0, // Trigger pulled or CODAWheel clicker
-    BEControllerButtonSecondary = 1<<1, // App button with (•••)
-    BEControllerButtonHomePower = 1<<2, // Home/Power button with (o)
+    BEControllerButtonSecondary = 1<<1, // Bridge Button 1 - App button with (•••)
+    BEControllerButtonHomePower = 1<<2, // Bridge Button 2 - Home/Power button with (o)
     BEControllerButtonTouchpad     = 1<<3, // Touch pad clicker pressed
     BEControllerButtonTouchContact = 1<<4, // Touch pad contact with finger
 };
@@ -66,7 +71,11 @@ BE_API
 
 /**
  * Controller motion event:
- * @parameter orientation Controller orientation in world coordinate space
+ * @parameter transform Controller transform in world coordinate space
+ * 
+ * The transform tracks with the user's camera in world space,
+ * and is offset relative to the BEController's offsetFromCamera.
+ * See offsetFromCamera property for more details.
  */
 - (void)controllerMotionTransform:(GLKMatrix4)transform;
 
@@ -110,16 +119,21 @@ BE_API
 /// Shared instance, BEController is a singleton.
 + (BEController*)sharedController;
 
-// Preventing a classical init, use sharedController.
-- (instancetype)init NS_UNAVAILABLE;
+// Allow inidividual init of BEController for controlled shutdown.
+- (instancetype)init;
 
 /// Delegate to receive the controller events.
 @property (nonatomic, weak) id<BEControllerDelegate> delegate;
 
-/** Whether the controller is currently connected.
+/** Whether any controller is currently connected.
  @note This property can be observed using the NSKeyValueObserver mechanism.
 */
 @property (nonatomic, readonly) BOOL isConnected;
+
+/** Whether the bridge controller is currently connected.
+ @note This property can be observed using the NSKeyValueObserver mechanism.
+*/
+@property (nonatomic, readonly) BOOL isBridgeControllerConnected;
 
 /**
  * Currently held down buttons
@@ -127,7 +141,12 @@ BE_API
 @property (nonatomic, readonly) BEControllerButtons buttons;
 
 /**
- * Current controller orientation in world coordinate space
+ * Current controller transform in world coordinate space
+ *
+ * The controller's transform tracks with the BE camera in world space,
+ * and its position is offset with offsetFromCamera.
+ *
+ * See offsetFromCamera property for more details.
  */
 @property (nonatomic, readonly) GLKMatrix4 transform;
 
@@ -138,6 +157,10 @@ BE_API
 
 /**
  * Current touch pad position.
+ * x,y Coordinate system is:
+ *   0, 0 is dead center
+ *  -1,-1 is bottom left
+ *  +1,+1 is top right
  */
 @property (nonatomic, readonly) GLKVector2 touchPosition;
 

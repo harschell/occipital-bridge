@@ -57,4 +57,16 @@
     return self.node;
 }
 
+- (id)copyWithZone:(NSZone *)zone {
+    be_dbg("geo copy with zone");
+    
+    GeometryComponent *component = [[self.class alloc] init];
+    SCNNode *node = [self.node copy];
+    node.geometry = [node.geometry copy];
+    node.geometry.firstMaterial = [node.geometry.firstMaterial copy];
+    
+    component.node = node;
+    return component;
+}
+
 @end

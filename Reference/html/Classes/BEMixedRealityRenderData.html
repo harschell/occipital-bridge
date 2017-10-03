@@ -1,0 +1,270 @@
+<!DOCTYPE html>
+<html>
+<head>
+	<meta charset="utf-8">
+
+	<title>BEMixedRealityRenderData Class Reference</title>
+
+	<link rel="stylesheet" href="../css/style.css">
+	<meta name="viewport" content="initial-scale=1, maximum-scale=1.4">
+	<meta name="generator" content="appledoc 2.2.1 (build 1333)">
+</head>
+<body class="appledoc">
+	<header>
+		<div class="container" class="hide-in-xcode">
+			
+			<h1 id="library-title">
+				<a href="../index.html">Bridge Engine SDK </a>
+			</h1>
+
+			<p id="developer-home">
+				<a href="../index.html">Occipital</a>
+			</p>
+			
+		</div>
+	</header>
+
+	<aside>
+		<div class="container">
+			<nav>
+				<ul id="header-buttons" role="toolbar">
+					<li><a href="../index.html">Index</a></li>
+<li><a href="../hierarchy.html">Hierarchy</a></li>
+
+					<li id="on-this-page" role="navigation">
+						<label>
+							On This Page
+
+							<div class="chevron">
+								<div class="chevy chevron-left"></div>
+								<div class="chevy chevron-right"></div>
+							</div>
+
+							<select id="jump-to">
+	<option value="top">Jump To&#133;</option>
+	
+	<option value="overview">Overview</option>
+	
+
+	
+	
+	<option value="tasks">Tasks</option>
+	
+	
+
+	
+	
+	<optgroup label="Properties">
+		
+		<option value="//api/name/leftEyePose">leftEyePose</option>
+		
+		<option value="//api/name/leftEyeGLProjection">leftEyeGLProjection</option>
+		
+		<option value="//api/name/rightEyePose">rightEyePose</option>
+		
+		<option value="//api/name/rightEyeGLProjection">rightEyeGLProjection</option>
+		
+		<option value="//api/name/mixedRealityRgbaTexture">mixedRealityRgbaTexture</option>
+		
+		<option value="//api/name/mixedRealityRgbaTextureWidth">mixedRealityRgbaTextureWidth</option>
+		
+		<option value="//api/name/mixedRealityRgbaTextureHeight">mixedRealityRgbaTextureHeight</option>
+		
+	</optgroup>
+	
+
+	
+
+	
+	
+</select>
+						</label>
+					</li>
+				</ul>
+			</nav>
+		</div>
+	</aside>
+
+	<article>
+		<div id="overview_contents" class="container">
+			<div id="content">
+				<main role="main">
+					<h1 class="title">BEMixedRealityRenderData Class Reference</h1>
+
+					
+					<div class="section section-specification"><table cellspacing="0"><tbody>
+						<tr>
+	<th>Inherits from</th>
+	<td>NSObject</td>
+</tr><tr>
+	<th>Declared in</th>
+	<td>BEMixedRealityMode.h</td>
+</tr>
+						</tbody></table></div>
+					
+
+                    
+					
+					<div class="section section-overview">
+						<a title="Overview" name="overview"></a>
+						<h2 class="subtitle subtitle-overview">Overview</h2>
+						<pre><code>BEMixedRealityRenderData can be used to create your own stereo rendering system including:
+    - Position, rotation, and projection of both eyes.
+    - Information needed to color your mixed reality mesh using an undistorted OpenGL texture from the camera feed.
+
+This struct is designed to be used primarily in headless mode, although it can be used to retrieve camera texture
+data in non-headless mode as well.
+</code></pre>
+					</div>
+					
+					
+
+					
+					
+					<div class="section section-tasks">
+						<a title="Tasks" name="tasks"></a>
+						
+
+						
+						
+
+						<div class="task-list">
+							<div class="section-method">
+	<a name="//api/name/leftEyePose" title="leftEyePose"></a>
+	<h3 class="method-title"><code><a href="#//api/name/leftEyePose">&nbsp;&nbsp;leftEyePose</a></code>
+</h3>
+
+	<div class="method-info">
+		<div class="pointy-thing"></div>
+
+		<div class="method-info-container">
+			
+
+			<div class="method-subsection method-declaration"><code>@property (nonatomic, readonly) GLKMatrix4 leftEyePose</code></div>
+
+		    
+		</div>
+	</div>
+</div><div class="section-method">
+	<a name="//api/name/leftEyeGLProjection" title="leftEyeGLProjection"></a>
+	<h3 class="method-title"><code><a href="#//api/name/leftEyeGLProjection">&nbsp;&nbsp;leftEyeGLProjection</a></code>
+</h3>
+
+	<div class="method-info">
+		<div class="pointy-thing"></div>
+
+		<div class="method-info-container">
+			
+
+			<div class="method-subsection method-declaration"><code>@property (nonatomic, readonly) GLKMatrix4 leftEyeGLProjection</code></div>
+
+		    
+		</div>
+	</div>
+</div><div class="section-method">
+	<a name="//api/name/rightEyePose" title="rightEyePose"></a>
+	<h3 class="method-title"><code><a href="#//api/name/rightEyePose">&nbsp;&nbsp;rightEyePose</a></code>
+</h3>
+
+	<div class="method-info">
+		<div class="pointy-thing"></div>
+
+		<div class="method-info-container">
+			
+
+			<div class="method-subsection method-declaration"><code>@property (nonatomic, readonly) GLKMatrix4 rightEyePose</code></div>
+
+		    
+		</div>
+	</div>
+</div><div class="section-method">
+	<a name="//api/name/rightEyeGLProjection" title="rightEyeGLProjection"></a>
+	<h3 class="method-title"><code><a href="#//api/name/rightEyeGLProjection">&nbsp;&nbsp;rightEyeGLProjection</a></code>
+</h3>
+
+	<div class="method-info">
+		<div class="pointy-thing"></div>
+
+		<div class="method-info-container">
+			
+
+			<div class="method-subsection method-declaration"><code>@property (nonatomic, readonly) GLKMatrix4 rightEyeGLProjection</code></div>
+
+		    
+		</div>
+	</div>
+</div><div class="section-method">
+	<a name="//api/name/mixedRealityRgbaTexture" title="mixedRealityRgbaTexture"></a>
+	<h3 class="method-title"><code><a href="#//api/name/mixedRealityRgbaTexture">&nbsp;&nbsp;mixedRealityRgbaTexture</a></code>
+</h3>
+
+	<div class="method-info">
+		<div class="pointy-thing"></div>
+
+		<div class="method-info-container">
+			
+
+			<div class="method-subsection method-declaration"><code>@property (nonatomic, readonly) GLuint mixedRealityRgbaTexture</code></div>
+
+		    
+		</div>
+	</div>
+</div><div class="section-method">
+	<a name="//api/name/mixedRealityRgbaTextureWidth" title="mixedRealityRgbaTextureWidth"></a>
+	<h3 class="method-title"><code><a href="#//api/name/mixedRealityRgbaTextureWidth">&nbsp;&nbsp;mixedRealityRgbaTextureWidth</a></code>
+</h3>
+
+	<div class="method-info">
+		<div class="pointy-thing"></div>
+
+		<div class="method-info-container">
+			
+
+			<div class="method-subsection method-declaration"><code>@property (nonatomic, readonly) int mixedRealityRgbaTextureWidth</code></div>
+
+		    
+		</div>
+	</div>
+</div><div class="section-method">
+	<a name="//api/name/mixedRealityRgbaTextureHeight" title="mixedRealityRgbaTextureHeight"></a>
+	<h3 class="method-title"><code><a href="#//api/name/mixedRealityRgbaTextureHeight">&nbsp;&nbsp;mixedRealityRgbaTextureHeight</a></code>
+</h3>
+
+	<div class="method-info">
+		<div class="pointy-thing"></div>
+
+		<div class="method-info-container">
+			
+
+			<div class="method-subsection method-declaration"><code>@property (nonatomic, readonly) int mixedRealityRgbaTextureHeight</code></div>
+
+		    
+		</div>
+	</div>
+</div>
+						</div>
+						
+					</div>
+					
+					
+
+                    
+				</main>
+
+				<footer>
+					<div class="footer-copyright">
+						
+						<p class="copyright">Copyright &copy; 2017 Occipital. All rights reserved. Updated: 2017-09-21</p>
+						
+						
+						<p class="generator">Generated by <a href="http://appledoc.gentlebytes.com">appledoc 2.2.1 (build 1333)</a>.</p>
+						
+					</div>
+				</footer>
+			</div>
+		</div>
+	</article>
+
+	<script src="../js/script.js"></script>
+</body>
+</html>

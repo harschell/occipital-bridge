@@ -10,12 +10,16 @@
 #import "../Utils/ComponentUtils.h"
 #import "../Utils/SceneKitExtensions.h"
 
+#pragma clang diagnostic push
+#pragma clang diagnostic ignored "-Wprotocol"
+
 @interface AnimationComponent ()
 //@property (weak) GeometryComponent * geometryComponent;
 @property (weak) RobotMeshControllerComponent * robotMeshComponent;
 @end
 
 @implementation AnimationComponent
+@dynamic animationKeys;
 
 + (CAAnimation*) animationWithSceneNamed:(NSString*)name {
     NSURL *sceneURL;
@@ -97,40 +101,35 @@
 
 #pragma mark - Passthru SCNAnimatable to underlying _geometryComponent.node
 
-- (void) addAnimation:(nonnull CAAnimation*)animation forKey:(NSString*)animKey {
-    [_robotMeshComponent.robotNode addAnimation:animation forKey:animKey];
+// Follow the method forwarding guidance from Apple's documentation:
+// https://developer.apple.com/library/content/documentation/Cocoa/Conceptual/ObjCRuntimeGuide/Articles/ocrtForwarding.html#//apple_ref/doc/uid/TP40008048-CH105-SW1
+
+- (void) forwardInvocation:(NSInvocation *)anInvocation {
+    if( [_robotMeshComponent.robotNode respondsToSelector:anInvocation.selector] ) {
+        [anInvocation invokeWithTarget:_robotMeshComponent.robotNode];
+    } else {
+        [super forwardInvocation:anInvocation];
+    }
 }
 
-- (void)removeAllAnimations {
-    [_robotMeshComponent.robotNode removeAllAnimations];
+- (BOOL)respondsToSelector:(SEL)aSelector
+{
+    if ( [super respondsToSelector:aSelector] )
+        return YES;
+    else {
+        return [_robotMeshComponent.robotNode respondsToSelector:aSelector];
+    }
 }
 
-- (void)removeAnimationForKey:(NSString *)key {
-    [_robotMeshComponent.robotNode removeAnimationForKey:key];
-}
-
-- (NSArray<NSString *> *) animationKeys {
-    return [_robotMeshComponent.robotNode animationKeys];
-}
-
-- (nullable CAAnimation *)animationForKey:(NSString *)key {
-    return [_robotMeshComponent.robotNode animationForKey:key];
-}
-
-- (void)pauseAnimationForKey:(NSString *)key {
-    [_robotMeshComponent.robotNode pauseAnimationForKey:key];
-}
-
-- (void)resumeAnimationForKey:(NSString *)key {
-    [_robotMeshComponent.robotNode resumeAnimationForKey:key];
-}
-
-- (BOOL)isAnimationForKeyPaused:(NSString *)key {
-    return [_robotMeshComponent.robotNode isAnimationForKeyPaused:key];
-}
-
-- (void)removeAnimationForKey:(NSString *)key fadeOutDuration:(CGFloat)duration {
-    [_robotMeshComponent.robotNode removeAnimationForKey:key fadeOutDuration:duration];
+- (NSMethodSignature*) methodSignatureForSelector:(SEL)selector
+{
+    NSMethodSignature* signature = [super methodSignatureForSelector:selector];
+    if (!signature) {
+        signature = [_robotMeshComponent.robotNode methodSignatureForSelector:selector];
+    }
+    return signature;
 }
 
 @end
+
+#pragma clang diagnostic pop

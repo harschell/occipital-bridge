@@ -35,6 +35,7 @@
 //    worldViz if in VR: render just after VR and portalDone is run
 
 #import "../Core/Core.h"
+#import "BridgeControllerComponent.h"
 #import "ColorOverlayComponent.h"
 #import <JavascriptCore/JavascriptCore.h>
 
@@ -81,11 +82,14 @@ typedef NS_ENUM (NSUInteger, PortalMode) {
 @property(nonatomic, weak) BEMixedRealityMode *mixedReality;
 // @property(nonatomic, strong) SCNNode *node; (protect the node)
 //@property(nonatomic, strong) GKEntity *robotEntity;
-
+@property (nonatomic, weak) BridgeControllerComponent *bridgeControllerComponent;
 @property(nonatomic, strong) SCNNode *node;
 @property(nonatomic) bool isInsideAR;
 @property(nonatomic) bool stereoRendering;
+
+/// If we're interactive, then Enable/Disable the BeamUI component when passing through.
 @property(nonatomic) bool interactive;
+
 @property(nonatomic, readonly) BOOL open;
 @property(nonatomic) PortalMode mode;
 @property(nonatomic) BOOL emergencyExitVR;

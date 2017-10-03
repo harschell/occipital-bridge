@@ -13,6 +13,7 @@
 
 @interface GazeComponent()
 @property (strong) GKEntity * activeEntity;
+@property CFTimeInterval lastUpdate;
 @end
 
 @implementation GazeComponent
@@ -25,6 +26,13 @@
 
 - (void) updateWithDeltaTime:(NSTimeInterval)seconds {
     if( ![self isEnabled] ) return;
+    
+    // Let's only run this 5 times a second!
+    CFTimeInterval startTime = CACurrentMediaTime();
+    if (startTime - self.lastUpdate < 1.0 / 5.0) {
+        return;
+    }
+    self.lastUpdate = startTime;
     
     float maxDistance = GAZE_INTERSECTION_FAR_DISTANCE;
         
@@ -65,9 +73,13 @@
             if( [hitTestPhysicsResults count] ) {
                 for( SCNHitTestResult * hitTestResult in hitTestPhysicsResults ) {
                     if( !(resultPhysics.node.categoryBitMask & RAYCAST_IGNORE_BIT) ) {
-                        result = hitTestResult;
-                        resultPhysics = hitTestResult;
-                        break;
+                        if (resultPhysics == nil ||
+                            GLKVector3Distance([Camera main].position, SCNVector3ToGLKVector3(hitTestResult.worldCoordinates)) <
+                            GLKVector3Distance([Camera main].position, SCNVector3ToGLKVector3(resultPhysics.worldCoordinates))) {
+                            
+                            result = hitTestResult;
+                            resultPhysics = hitTestResult;
+                        }
                     }
                 }
             }
@@ -121,7 +133,7 @@
             }
         }
         
-        // Eiterh Start on a new entity, or Stay the existing activeEntity.
+        // Either Start on a new entity, or Stay the existing activeEntity.
         for( GKComponent <GazePointerProtocol> * component in gazePointers ) {
             if( resultEntity != self.activeEntity ) {
                 if( entityEventComponent != NULL && [entityEventComponent respondsToSelector:@selector(gazeStart:intersection:)]) {

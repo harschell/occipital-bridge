@@ -13,6 +13,8 @@
 #include <queue>
 #include <stack>
 #include <functional>
+#include <unordered_map>
+#include <map>
 #include <vector>
 
 namespace {
@@ -170,10 +172,26 @@ struct setNode
 
 - (instancetype) init
 {
+    NSArray *paths = NSSearchPathForDirectoriesInDomains(NSDocumentDirectory,
+                                                         NSUserDomainMask, YES);
+    NSString *documentsDirectory = [paths objectAtIndex:0];
+    NSString *scenePath = [documentsDirectory stringByAppendingPathComponent:@"BridgeEngineScene"];
+    NSString *occupancyImagePath = [scenePath stringByAppendingPathComponent:@"OccupancyMap.png"];
+
+    UIImage * mapImage = [[UIImage alloc] initWithContentsOfFile:occupancyImagePath];
+    if( mapImage == nil ) {
+        NSLog(@"Failed to load the OccupancyMap.png from %@", occupancyImagePath);
+        return nil;
+    }
+    return [self initWithImage:mapImage];
+}
+
+- (instancetype) initWithImage:(UIImage*) mapImage
+{
     self = [super init];
     if (self) {
         robotRadiusInPixels = 2; // 7.0;
-        pixelSizeInMeters = 0.3; // 0.03;
+        pixelSizeInMeters = 0.04; // 0.04;
         worldCenterX = -2.89995;
         worldCenterY= -2.90582;
         
@@ -183,38 +201,25 @@ struct setNode
                                                              NSUserDomainMask, YES);
         NSString *documentsDirectory = [paths objectAtIndex:0];
         NSString *scenePath = [documentsDirectory stringByAppendingPathComponent:@"BridgeEngineScene"];
-        NSString *occupancyImagePath = [scenePath stringByAppendingPathComponent:@"OccupancyMap.png"];
         NSString *occupancyMetadata = [scenePath stringByAppendingPathComponent:@"OccupancyMap.metadata"];
-
-        UIImage * mapImage = [[UIImage alloc] initWithContentsOfFile:occupancyImagePath];
-        if( mapImage == nil ) {
-            NSLog(@"Failed to load the OccupancyMap.png from %@", occupancyImagePath);
-            return nil;
-        }
 
         // Parse the metadata file for three values, OriginX, OriginZ, PixelSize.
         // Example:
-        // OriginX -3.5293
-        // OriginZ -1.42487
-        // PixelSize 0.04
+        // { "OriginX" :-3.5293,
+        //   "OriginZ": -1.42487,
+        //   "MetersPerPixel" : 0.04 }
         NSString *metadata = [[NSString alloc] initWithContentsOfFile:occupancyMetadata encoding:NSUTF8StringEncoding error:nil];
-        if( metadata != nil ) {
-            NSMutableDictionary<NSString*,NSNumber*> *dict = [[NSMutableDictionary alloc] initWithCapacity:3];
-            NSScanner *mdScanner = [NSScanner scannerWithString:metadata];
-            while(mdScanner.isAtEnd == NO) {
-                NSString *key = nil;
-                double dblValue = NAN;
-                
-                [mdScanner scanCharactersFromSet:[NSCharacterSet alphanumericCharacterSet] intoString:&key];
-                [mdScanner scanDouble:&dblValue];
-                if( key != nil && isnan(dblValue) == false ) {
-                    dict[key] = @(dblValue);
-                }
-            }
+        if( metadata != nil && [metadata length] > 0 ) {
+            NSError *error;
+            NSData *data = [metadata dataUsingEncoding:NSUTF8StringEncoding];
+            NSDictionary *jsonDictionary = [NSJSONSerialization JSONObjectWithData:data
+                                             options:kNilOptions
+                                             error:&error];
+            NSAssert(error == nil, @"Error decoding occupancy map : %@", error.localizedDescription);
             
-            worldCenterX = dict[@"OriginX"].doubleValue;
-            worldCenterY = dict[@"OriginZ"].doubleValue;
-            pixelSizeInMeters = dict[@"PixelSize"].doubleValue;
+            worldCenterX = [jsonDictionary[@"OriginX"] doubleValue];
+            worldCenterY = [jsonDictionary[@"OriginZ"] doubleValue];
+            pixelSizeInMeters = [jsonDictionary[@"MetersPerPixel"] doubleValue];
         } else {
             NSLog(@"Failed to load the OccupancyMap.metadata from %@", occupancyMetadata);
             return nil;
@@ -246,34 +251,30 @@ struct setNode
         }
         
         free(rawData);
-        
-        // ------------ Convolve map image by pixel radius of robot -----------
-        for(int y = 0; y < map.height; y++)
+
+
+        matrix mapCopy;
+        mapCopy.resize(map.width, map.height);
+        mapCopy.copy(map);
+
+        // Dialate the occupied regions by the radius
+        for (int y = 0; y < map.height; ++y)
+        for (int x = 0; x < map.width; ++x)
         {
-            for(int x = 0; x < map.width; x++)
+            for (int dy = -robotRadiusInPixels; dy <= robotRadiusInPixels; dy++)
+            for (int dx = -robotRadiusInPixels; dx <= robotRadiusInPixels; dx++)
             {
-                for(int dy = -1*robotRadiusInPixels; dy <= robotRadiusInPixels; dy++)
-                {
-                    for(int dx = -1*robotRadiusInPixels; dx <= robotRadiusInPixels; dx++)
-                    {
-                        if(dy*dy + dx*dx > robotRadiusInPixels*robotRadiusInPixels)
-                        {
-                            continue;
-                        }
-                        
-                        if(dy == 0 && dx == 0) continue;
-                        
-                        int py = y + dy;
-                        int px = x + dx;
-                        
-                        if(py < 0 || py >= map.height || px < 0 || px >= map.width) continue;
-                        
-                        if(map.data[px][py] == 255 && map.data[x][y] != 255)
-                        {
-                            map.data[x][y] = 254;
-                        }
-                    }
-                }
+                const int py = y + dy;
+                const int px = x + dx;
+
+                if(dy*dy + dx*dx > robotRadiusInPixels*robotRadiusInPixels)
+                    continue;
+
+                if(py < 0 || py >= map.height || px < 0 || px >= map.width) continue;
+
+
+                if (mapCopy.data[px][py] == 255)
+                    map.data[x][y] = 255;
             }
         }
         
@@ -370,63 +371,63 @@ struct setNode
         for(int x = 0; x < map.width; x++)
         {
 //            NSLog(@"Labeling at: (%d, %d)\n", x, y);
-            if(map.data[x][y] < 254)
+            if (map.data[x][y] == 255)
+                continue;
+
+            //find neighbors that are not obstacles
+            std::vector<point> neighbors;
+            for(int dy=-1; dy <= 0; dy++)
             {
-                //find neighbors that are not obstacles
-                std::vector<point> neighbors;
-                for(int dy=-1; dy <= 0; dy++)
+                for(int dx=-1; dx <=1; dx++)
                 {
-                    for(int dx=-1; dx <=1; dx++)
+                    if(dy >= 0 && dx >= 0) continue; // only concern yourself with points that could have been previously labelled
+                                                     // This looks NW, N, NE, W of the current point
+                    
+                    int px = x+dx;
+                    int py = y+dy;
+                    
+                    if(px < 0 || px >= map.width || py < 0 || py >= map.height) continue;
+                    
+                    if(map.data[px][py] <= 254)
                     {
-                        if(dy >= 0 && dx >= 0) continue; // only concern yourself with points that could have been previously labelled
-                                                         // This looks NW, N, NE, W of the current point
+                        point p;
+                        p.x = px;
+                        p.y = py;
+                        p.label = disjointSet[py][px]->label;
                         
-                        int px = x+dx;
-                        int py = y+dy;
-                        
-                        if(px < 0 || px >= map.width || py < 0 || py >= map.height) continue;
-                        
-                        if(map.data[px][py] < 254)
-                        {
-                            point p;
-                            p.x = px;
-                            p.y = py;
-                            p.label = disjointSet[py][px]->label;
-                            
-                            neighbors.push_back(p);
-                        }
+                        neighbors.push_back(p);
                     }
                 }
-                
-                if(neighbors.size() == 0)
-                {
-                    // If this point has no neighbors it's deserving of a new label.
-                    // This label might eventually be found to be equivalent to an older label, but we'll get to that.
+            }
+            
+            if(neighbors.size() == 0)
+            {
+                // If this point has no neighbors it's deserving of a new label.
+                // This label might eventually be found to be equivalent to an older label, but we'll get to that.
 
-                    disjointSet[y][x] = new setNode;
-                    disjointSet[y][x]->label = nextLabel;
-                    disjointSet[y][x]->parent = disjointSet[y][x];
-                    
-                    linked.push_back(disjointSet[y][x]);
-                    nextLabel++;
-                } else{
-                    // If there are a few neighbors, we should include them all in the smallest label's set.
-                    int smallestLabel = INT_MAX;
-                    for(int i = 0; i < neighbors.size(); i++)
-                    {
-                        if(neighbors[i].label < smallestLabel)
-                            smallestLabel = neighbors[i].label;
-                    }
-                    
+                disjointSet[y][x] = new setNode;
+                disjointSet[y][x]->label = nextLabel;
+                disjointSet[y][x]->parent = disjointSet[y][x];
+                
+                linked.push_back(disjointSet[y][x]);
+                nextLabel++;
+            } else{
+                // If there are a few neighbors, we should include them all in the smallest label's set.
+                int smallestLabel = INT_MAX;
+                for(int i = 0; i < neighbors.size(); i++)
+                {
+                    if(neighbors[i].label < smallestLabel)
+                        smallestLabel = neighbors[i].label;
+                }
+                
 //                    NSLog(@"\t Has %lu neighbors - smallest label: %d\n", neighbors.size(), smallestLabel);
-                    
-                    // Add the current point to the smallest label set.
-                    disjointSet[y][x] = linked[smallestLabel];
-                    
-                    for(int i=0; i < neighbors.size(); i++)
-                    {
-                        linked[smallestLabel] = [self unionOf:linked[smallestLabel] andSet:disjointSet[neighbors[i].y][neighbors[i].x]];
-                    }
+                
+                // Add the current point to the smallest label set.
+                disjointSet[y][x] = linked[smallestLabel];
+                
+                for(int i=0; i < neighbors.size(); i++)
+                {
+                    linked[smallestLabel] = [self unionOf:linked[smallestLabel] andSet:disjointSet[neighbors[i].y][neighbors[i].x]];
                 }
             }
         }
@@ -721,14 +722,6 @@ struct setNode
     // Algorithm should seek to minimize the sum of traversed values on the topoMap.
     // This will keep the robot away from edges, and will probably cause it to follow smooth paths.
     
-    //initialize scores to -1
-    for(int y = 0; y < topoMap.height; y++)
-    {
-        for(int x = 0; x < topoMap.width; x++)
-        {
-            scores[y][x] = -1;
-        }
-    }
 
     NSMutableArray *waypoints = [[NSMutableArray alloc] initWithCapacity:16];
 
@@ -751,162 +744,130 @@ struct setNode
     }
 
     
-    //auto cmp = [](DijkstraNode* left, DijkstraNode* right) { return *left < *right;};
-    //std::priority_queue<DjikstraNode*, std::vector<DjikstraNode*>, decltype(cmp)> queue(cmp);
-    std::deque<DijkstraNode*> queue;
-    
-    DijkstraNode* startNode = new DijkstraNode;
-    startNode->x = startPosX;
-    startNode->y = startPosY;
-    startNode->accumulatedScore = topoMap.data[startPosX][startPosY];
-    startNode->distanceTravelled = 0;
-    startNode->last = nullptr;
-    startNode->heuristic = (startPosX - goalPosX)*(startPosX - goalPosX) + (startPosY - goalPosY)*(startPosY - goalPosY);
-    
-    queue.push_back(startNode);
-    
-    std::vector<DijkstraNode*> parts;
-    parts.push_back(startNode);
-    
-    //queue.push(startNode);
-    DijkstraNode* goalNode= nullptr;
-    
-    int goalScore = -1;
-    float minDistTravelled = -1;
-    
 #if defined(DEBUG)
     NSDate* startTime = [NSDate date];
 #endif
     
     be_NSDbg(@"starting A*");
-    
-    while(queue.size() > 0)
+
+    using GraphLocation = std::pair<int16_t, int16_t>;
+    const int w = topoMap.width;
+    const int h = topoMap.height;
+
+    // Normal, 2D -> linear array access
+    auto hashFcn = [w](const GraphLocation& g) -> size_t
     {
-        DijkstraNode* cNode = queue.front();
-        queue.pop_front();
-        
-        if(cNode->x == goalPosX && cNode->y == goalPosY)
+        return g.second * w + g.first;
+    };
+
+    // Normal unordered maps, but they accept a special hashing function for std::pair
+    // Holds "costs so far"
+    std::unordered_map<GraphLocation, float, decltype(hashFcn)> costEstimates(w*h, hashFcn);
+    // Holds parent node used to reach you. Used reconstruct the path
+    std::unordered_map<GraphLocation, GraphLocation, decltype(hashFcn)> parents(w*h, hashFcn);
+    // Key is cost estimate (cost so far + heursitic)
+    std::multimap<float, GraphLocation> priorityQueue;
+
+    const GraphLocation startLoc = std::make_pair(startPosX, startPosY);
+    const GraphLocation goalLoc = std::make_pair(goalPosX, goalPosY);
+
+    // Set up first node
+    parents[startLoc] = startLoc; // unique invariant for starting node: you are your parent
+    priorityQueue.insert(std::make_pair(0.f, startLoc));
+    costEstimates[startLoc] = 0.f;
+
+    // Returns true if a location is on the graph
+    auto inRange = [w, h](const GraphLocation& loc) -> bool
+    {
+        return ((loc.first >= 0) &&
+                (loc.second >= 0) &&
+                (loc.first < w) &&
+                (loc.second < h));
+    };
+
+    // Get all in-range, non-obstacle, neighbors from a location (excluding self)
+    auto getNeighbors = [inRange, self](const GraphLocation& currentLocation) -> std::vector<GraphLocation>
+    {
+        std::vector<GraphLocation> neighborCandidates;
+        neighborCandidates.resize(8);
+
+        const std::initializer_list<GraphLocation> neighborIndices { {-1, -1}, {-1, 0}, {-1, 1},
+                                                                     {0, -1} ,          {0, 1} ,
+                                                                     {1, -1} , {1, 0} , {1, 1} };
+        for (const auto& ni : neighborIndices)
         {
-            if(minDistTravelled == -1 || cNode->distanceTravelled < minDistTravelled)
+            int16_t x, y;
+            std::tie(x, y) = ni;
+            GraphLocation neighborCandidate(currentLocation.first + x, currentLocation.second + y);
+            if (inRange(neighborCandidate)
+                && (map.data[neighborCandidate.first][neighborCandidate.second] < 254))
+                neighborCandidates.push_back(neighborCandidate);
+        }
+        return neighborCandidates;
+    };
+
+    // Cost to take one step on the graph
+    auto stepCostFcn = [](const GraphLocation& current, const GraphLocation& next) -> float
+    {
+        if (current.first == next.first || current.second == next.second)
+            // directly left, right, up, or down
+            return 1.f;
+        else
+            // diagonal
+            return 1.414213f;
+    };
+
+    auto diagonalDist = [](const GraphLocation& a, const GraphLocation& b) -> float
+    {
+        const int dx = abs(a.first - b.first);
+        const int dy = abs(a.second - b.second);
+        return (dx + dy) + (1.41412f - 2.f) * std::min(dx, dy);
+    };
+
+    bool solutionFound = false;
+    while (!priorityQueue.empty())
+    {
+        // Get node on the frontier with lowest estimated cost
+        const GraphLocation current = priorityQueue.begin()->second;
+        priorityQueue.erase(priorityQueue.begin());
+
+        // A* is "best-first" so if we get here we're done
+        if (current == goalLoc)
+        {
+            solutionFound = true;
+            break;
+        }
+
+        for (auto neighbor : getNeighbors(current))
+        {
+            const float neighborCost = costEstimates[current] + stepCostFcn(current, neighbor);
+            const bool isNew = costEstimates.find(neighbor) == costEstimates.end();
+
+            // if the neighbor is not yet visited or if we found a new, better way to get there
+            if (isNew || neighborCost < costEstimates[neighbor])
             {
-                minDistTravelled = cNode->distanceTravelled;
-            }
-            
-            if(goalNode != nullptr)
-            {
-                if(goalNode->accumulatedScore > cNode->accumulatedScore)
-                {
-                    goalNode = cNode;
-                    goalScore = goalNode->accumulatedScore;
-                }
-            } else{
-                be_NSDbg(@"Found a path (not the best one)");
-                /*DjikstraNode* cn = cNode;
-                 while(cn != nullptr)
-                 {
-                 mapImage(cn->x, cn->y)[0] = 0;
-                 mapImage(cn->x, cn->y)[1] = 255;
-                 mapImage(cn->x, cn->y)[2] = 0;
-                 
-                 cn = cn->last;
-                 }*/
-                goalNode = cNode;
-                goalScore = goalNode->accumulatedScore;
-                
-            }
-        } else{
-            // Attempt to enqueue all possible directions from here.
-            // Push all but the "best" direction change to the back.
-            
-            float minDist2 = -1;
-            for(int dy = -1; dy <= 1; dy++)
-            {
-                for(int dx = -1; dx <= 1; dx++)
-                {
-                    int px = cNode->x + dx;
-                    int py = cNode->y + dy;
-                    float dist2 = (px - goalPosX)*(px - goalPosX) + (py - goalPosY)*(py - goalPosY);
-                    if(minDist2 == -1 | dist2 < minDist2)
-                        minDist2 = dist2;
-                }
-            }
-            for(int dy = -1; dy <= 1; dy++)
-            {
-                for(int dx = -1; dx <= 1; dx++)
-                {
-                    if(dy == 0 && dx == 0) continue;
-                    
-                    int px = cNode->x + dx;
-                    int py = cNode->y + dy;
-                    if(px < 0 || px >= topoMap.width || py < 0 || py >= topoMap.height) continue;
-                    
-                    if(map.data[px][py] >= 254) continue;
-                    
-                    int newScore = cNode->accumulatedScore + topoMap.data[px][py];
-                    
-                    if(goalScore != -1 && newScore > goalScore) continue;
-                    
-                    if(scores[py][px] == -1 || scores[py][px] > newScore)
-                    {
-                        scores[py][px] = newScore;
-                        
-                        float nDist2 = (px - goalPosX)*(px - goalPosX) + (py - goalPosY)*(py - goalPosY);
-                        if(minDistTravelled != -1 && (cNode->distanceTravelled + sqrt(nDist2) > 1.1*minDistTravelled))
-                        {
-                            continue;
-                        }
-                        
-                        DijkstraNode* newNode = new DijkstraNode;
-                        
-                        parts.push_back(newNode);
-                        
-                        newNode->x = px;
-                        newNode->y = py;
-                        if(dx != 0 && dy != 0)
-                        {
-                            newNode->accumulatedScore = newScore + 4*1.414;
-                            newNode->distanceTravelled = cNode->distanceTravelled + 1.414;
-                        }
-                        else
-                        {
-                            newNode->accumulatedScore = newScore + 4;
-                            newNode->distanceTravelled = cNode->distanceTravelled + 1;
-                        }
-                        
-                        //newNode->accumulatedScore = newNode->distanceTravelled;
-                        
-                        newNode->last = cNode;
-                        
-                        newNode->heuristic = nDist2 + newNode->distanceTravelled*newNode->distanceTravelled;
-                        
-                        if(nDist2 == minDist2)
-                            queue.push_front(newNode);
-                        else
-                            queue.push_back(newNode);
-                        //queue.push(newNode);
-                    }
-                }
+                costEstimates[neighbor] = neighborCost;
+                const float heuristicCost = neighborCost + diagonalDist(goalLoc, neighbor);
+                priorityQueue.insert(std::make_pair(heuristicCost, neighbor));
+                parents[neighbor] = current;
             }
         }
     }
-    
-    
-    std::stack<DijkstraNode*> simplifiedPath;
+
+    std::stack<GraphLocation> simplifiedPath;
     
     be_NSDbg(@"Completed in %fs", [[NSDate date] timeIntervalSinceDate:startTime]);
     
     // ------------- Draw the path if it exists. -------------
-    if (goalNode == nullptr)
+    if (!solutionFound)
     {
         NSLog(@"Could not find a path!");
         
     } else{
         
         path_id++;
-        NSLog(@"Found a path with score %f, and path_id: %u", goalNode->accumulatedScore, path_id);
-        
-        DijkstraNode* cn = goalNode->last;
-        
+        NSLog(@"Found a path with score %f, and path_id: %u", costEstimates[goalLoc], path_id);
+
         float lastX = goalPosX;
         float lastY = goalPosY;
         
@@ -915,38 +876,38 @@ struct setNode
         
         float pointsSinceLastWp = 0;  //TODO float max
         
-        simplifiedPath.push(goalNode);
-        
-        while(cn != nullptr)
+        simplifiedPath.push(goalLoc);
+        GraphLocation currentLocation = goalLoc;
+
+        while(parents[currentLocation] != currentLocation)
         {
             //                mapImage(cn->x, cn->y)[0] = 255;
             //                mapImage(cn->x, cn->y)[1] = 0;
             //                mapImage(cn->x, cn->y)[2] = 0;
             
-            float dx = lastX - cn->x;
-            float dy = lastY - cn->y;
+            float dx = lastX - currentLocation.first;
+            float dy = lastY - currentLocation.second;
             
             if(pointsSinceLastWp > robotRadiusInPixels/2 && (lastDx != dx || lastDy != dy))
             {
                 pointsSinceLastWp = 0;
                 lastDx = dx;
                 lastDy = dy;
-                simplifiedPath.push(cn);
+                simplifiedPath.push(currentLocation);
             }
             
             pointsSinceLastWp++;
             
-            
-            lastX = cn->x;
-            lastY = cn->y;
-            
-            cn = cn->last;
+            lastX = currentLocation.first;
+            lastY = currentLocation.second;
+
+            currentLocation = parents[currentLocation];
         }
         
         uint32_t sequence_number = 0;
         while(simplifiedPath.size() > 0)
         {
-            cn = simplifiedPath.top();
+            GraphLocation node = simplifiedPath.top();
             simplifiedPath.pop();
             
             //                mapImage(cn->x, cn->y)[0] = 255;
@@ -954,10 +915,10 @@ struct setNode
             //                mapImage(cn->x, cn->y)[2] = 0;
             
             float wx, wy;
-            [self pixCoordToWorldXYWithPx:cn->x Py:cn->y Wxp:&wx Wyp:&wy];
+            [self pixCoordToWorldXYWithPx:node.first Py:node.second Wxp:&wx Wyp:&wy];
+
             
-            
-            be_NSDbg(@"Waypoint: %i, %i \t %f, %f", cn->x, cn->y, wx, wy);
+            be_NSDbg(@"Waypoint: %i, %i \t %f, %f", node.first, node.second, wx, wy);
             
             // if( cn->x != startPosX || cn->y != startPosY ) {
             GLKVector3 target = GLKVector3Make( wx, 0.f,  wy);
@@ -965,12 +926,6 @@ struct setNode
             // }
             sequence_number++;
         }
-    }
-    
-    // clean up
-    for(int i = 0; i < parts.size(); i++)
-    {
-        delete parts[i];
     }
     
     return waypoints;

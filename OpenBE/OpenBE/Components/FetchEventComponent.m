@@ -159,9 +159,12 @@ typedef NS_ENUM (NSUInteger, FetchPositionState) {
     self.lookAt = (LookAtBehaviourComponent *)[self.robotBehaviourComponent.entity componentForClass:[LookAtBehaviourComponent class]];
     self.vemojiComponent = (RobotVemojiComponent *)[self.robotBehaviourComponent.entity componentForClass:[RobotVemojiComponent class]];
 
-    self.audioBallToss = [[AudioEngine main] loadAudioNamed:@"BallToss.caf"];
-    self.audioBallPickup = [[AudioEngine main] loadAudioNamed:@"BallPickup.caf"];
-    self.audioBallReturn = [[AudioEngine main] loadAudioNamed:@"BallReturn.caf"];
+    dispatch_async(dispatch_get_main_queue(), ^{
+        self.audioBallToss = [[AudioEngine main] loadAudioNamed:@"BallToss.caf"];
+        self.audioBallPickup = [[AudioEngine main] loadAudioNamed:@"BallPickup.caf"];
+        self.audioBallReturn = [[AudioEngine main] loadAudioNamed:@"BallReturn.caf"];
+    });
+
     self.bounce = [_physicsContactAudio addNodeName:@"ball" audioName:@"BallBounce.caf"];
     
     self.squeeOpenEyesVemojiSequence = [RobotVemojiComponent nameArrayBase:@"Vemoji_Squee_OpenEyes" start:1 end:8 digits:1];

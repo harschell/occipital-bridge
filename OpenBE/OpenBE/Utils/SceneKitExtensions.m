@@ -209,6 +209,27 @@
     }
 }
 
+- (void) setEmissionRecursively:(id)emissionValue {
+    [self.geometry.firstMaterial.emission setContents:emissionValue];
+    for( SCNNode * child in self.childNodes ) {
+        [child setEmissionRecursively:emissionValue];
+    }
+}
+
+- (void) setWritesToDepthBufferRecursively:(BOOL)doDepthTest {
+    self.geometry.firstMaterial.writesToDepthBuffer = doDepthTest;
+    for( SCNNode * child in self.childNodes ) {
+        [child setWritesToDepthBufferRecursively:doDepthTest];
+    }
+}
+
+- (void) setReadsFromDepthBufferRecursively:(BOOL)doDepthTest {
+    self.geometry.firstMaterial.readsFromDepthBuffer = doDepthTest;
+    for( SCNNode * child in self.childNodes ) {
+        [child setReadsFromDepthBufferRecursively:doDepthTest];
+    }
+}
+
 + (SCNNode*) firstNodeFromSceneNamed:(NSString*)sceneName
 {
     NSString* resourcePath = [SceneKit pathForResourceNamed:sceneName];

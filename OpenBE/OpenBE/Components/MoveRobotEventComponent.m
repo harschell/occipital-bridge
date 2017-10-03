@@ -41,6 +41,7 @@
         [self.robotBehaviourComponent stopAllBehaviours];
         [self.robotBehaviourComponent startMoveTo:SCNVector3ToGLKVector3(hit.worldCoordinates)];
     } else {
+        NSLog(@"Move Be Sad: No Target");
         [self.robotBehaviourComponent beSad];
     }
     

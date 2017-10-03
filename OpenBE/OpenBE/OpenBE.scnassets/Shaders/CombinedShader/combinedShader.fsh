@@ -8,6 +8,7 @@
 precision mediump float;
 
 varying vec2 uv;
+varying lowp float rim;
 varying float fragmentShaderType;
 
 uniform float active;
@@ -47,5 +48,9 @@ void main(void)
         //   if( alpha < .5 ) discard;
         
         gl_FragColor = vec4(col,alpha);
+        
+    } else if ( fragmentShaderType < 3.5 ) {
+        // Projection Shader
+            gl_FragColor = vec4(55.0/255.0, 179.0/255.0, 246.0/255.0, 1.0) * 0.35 + vec4(1.0, 1.0, 1.0, 0.5) * pow(rim, 1.5);
     }
 }

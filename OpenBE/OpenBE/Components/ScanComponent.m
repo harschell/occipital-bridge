@@ -27,7 +27,9 @@
     self.scanTime = 0.f;
     self.scanRadius = 2.f;
     
-    self.scanSound = [[AudioEngine main] loadAudioNamed:@"Robot_ScanBeam.caf"];
+    dispatch_async(dispatch_get_main_queue(), ^{
+        self.scanSound = [[AudioEngine main] loadAudioNamed:@"Robot_ScanBeam.caf"];
+    });
 }
 
 - (void) updateWithDeltaTime:(NSTimeInterval)seconds {

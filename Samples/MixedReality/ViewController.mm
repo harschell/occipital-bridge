@@ -5,7 +5,7 @@ http://structure.io
 */
 
 #import "ViewController.h"
-#import "AppSettings.h"
+#import "AppDelegate.h"
 #import "SceneKitExtensions.h"
 
 #import <BridgeEngine/BridgeEngine.h>
@@ -124,12 +124,12 @@ static float const MAX_DISTANCE_FOR_DELETION = .3f;
     _markupNameList = @[];
 
     BECaptureReplayMode replayMode = BECaptureReplayModeDisabled;
-    if ([AppSettings booleanValueFromAppSetting:@"replayCapture"
+    if ([BEAppSettings booleanValueFromAppSetting:SETTING_REPLAY_CAPTURE
              defaultValueIfSettingIsNotInBundle:NO]) {
         replayMode = BECaptureReplayModeDeterministic;
     }
 
-    self.runningInStereo = [AppSettings booleanValueFromAppSetting:@"stereoRendering"
+    self.runningInStereo = [BEAppSettings booleanValueFromAppSetting:SETTING_STEREO_RENDERING
                                 defaultValueIfSettingIsNotInBundle:YES];
 
     _mixedReality = [[BEMixedRealityMode alloc]
@@ -138,62 +138,35 @@ static float const MAX_DISTANCE_FOR_DELETION = .3f;
                    kBECaptureReplayMode:
                    @(replayMode),
                    kBEUsingWideVisionLens:
-                   @([AppSettings booleanValueFromAppSetting:@"useWVL"
+                @([BEAppSettings booleanValueFromAppSetting:SETTING_USE_WVL
                           defaultValueIfSettingIsNotInBundle:YES]),
                    kBEStereoRenderingEnabled: @(self.runningInStereo),
                    kBEUsingColorCameraOnly:
-                   @([AppSettings booleanValueFromAppSetting:@"colorCameraOnly"
+                @([BEAppSettings booleanValueFromAppSetting:SETTING_COLOR_CAMERA_ONLY
                           defaultValueIfSettingIsNotInBundle:NO]),
                    kBERecordingOptionsEnabled:
-                   @([AppSettings booleanValueFromAppSetting:@"enableRecording"
+                @([BEAppSettings booleanValueFromAppSetting:SETTING_ENABLE_RECORDING
+                       defaultValueIfSettingIsNotInBundle:NO]),
+            kBEEnableStereoScanningBeta:
+                @([BEAppSettings booleanValueFromAppSetting:SETTING_STEREO_SCANNING
                           defaultValueIfSettingIsNotInBundle:NO]),
                    kBEMapperVolumeResolutionKey:
-                   @([AppSettings floatValueFromAppSetting:@"mapperVoxelResolution"
+                @([BEAppSettings floatValueFromAppSetting:@"mapperVoxelResolution"
                         defaultValueIfSettingIsNotInBundle:0.02]),
            }
              markupNames:_markupNameList
     ];
 
-    BEController *controller = [BEController sharedController];
-    controller.delegate = self;
+    [BEController sharedController].delegate = self;
 
     _mixedReality.delegate = self;
 
     [_mixedReality start];
 }
 
-- (void)viewDidAppear:(BOOL)animated {
+- (void)viewDidAppear:(BOOL)animated
+{
     [super viewDidAppear:animated];
-
-    // Here we initialize two gesture recognizers as a way to expose features.
-
-    {
-        // todo: This gesture recongnizer doesn't seem to work.
-        // Allocate and initialize the first tap gesture.
-
-        UITapGestureRecognizer
-                *tapRecognizer = [[UITapGestureRecognizer alloc] initWithTarget:self action:@selector(handleTap:)];
-
-        // Specify that the gesture must be a single tap.
-
-        tapRecognizer.numberOfTapsRequired = 1;
-
-        // Add the tap gesture recognizer to the view.
-
-        [self.view addGestureRecognizer:tapRecognizer];
-    }
-
-    {
-        // Allocate and initialize the second gesture as a double-tap one.
-
-        UITapGestureRecognizer *twoFingerTapRecognizer =
-                [[UITapGestureRecognizer alloc] initWithTarget:self action:@selector(changeRenderMode)];
-
-        twoFingerTapRecognizer.numberOfTouchesRequired = 2;
-
-        [self.view addGestureRecognizer:twoFingerTapRecognizer];
-    }
-
 }
 
 - (void)didReceiveMemoryWarning {
@@ -205,12 +178,35 @@ static float const MAX_DISTANCE_FOR_DELETION = .3f;
     //[_mixedReality setRenderStyle:BERenderStyleSceneKitAndColorCamera withDuration:0.5];
 
     _experienceIsRunning = YES;
+    
+    [self addGestureRecognizers];
 }
 
 - (void)updateObjectPositionWithMarkupName:(NSString *)markupName {
     // Here, we're using markup to set the location of static objects.
     // However, you could do something much more sophisticated, like have multiple markup points be waypoints for a virtual character.
 }
+
+
+#pragma mark - User Interaction
+
+- (void)addGestureRecognizers {
+    // Allocate and initialize the first tap gesture.
+    UITapGestureRecognizer *tapRecognizer = [[UITapGestureRecognizer alloc] initWithTarget:self action:@selector(handleTap:)];
+    
+    // Specify that the gesture must be a single tap.
+    tapRecognizer.numberOfTapsRequired = 1;
+    
+    // Add the tap gesture recognizer to the view.
+    [self.view addGestureRecognizer:tapRecognizer];
+    
+    // Allocate and initialize the second gesture as a double-tap one.
+    UITapGestureRecognizer *twoFingerTapRecognizer = [[UITapGestureRecognizer alloc] initWithTarget:self action:@selector(changeRenderMode)];
+    twoFingerTapRecognizer.numberOfTouchesRequired = 2;
+    [self.view addGestureRecognizer:twoFingerTapRecognizer];
+}
+
+#pragma mark - Mixed Reality Delegate
 
 // --------------------------------------------
 // MixedReality Delegate Methods
@@ -346,6 +342,8 @@ static float const MAX_DISTANCE_FOR_DELETION = .3f;
     [[SceneManager main] updateAtTime:time mixedRealityMode:_mixedReality];
 
     [_lanternManager updateWithTime:(double) time];
+    // Update the controller's camera world transform, so we're tracking with it.
+    [BEController sharedController].cameraTransform = SCNMatrix4ToGLKMatrix4(_mixedReality.localDeviceNode.worldTransform);
 
     // This method is called before rendering each frame.
     // It is safe to modify SceneKit objects from here.
@@ -379,7 +377,6 @@ static float const MAX_DISTANCE_FOR_DELETION = .3f;
     float music_volume = .04f;
     if ([_music volume] < music_volume && [[_music player] isPlaying]) {
         [_music setVolume:[_music volume] + increment * music_volume];
-        NSLog(@"volume: %f %f", [_music volume], time);
     }
 
     float wind_rustle_volume = 0.01f;
@@ -438,11 +435,12 @@ static float const MAX_DISTANCE_FOR_DELETION = .3f;
     SCNVector3 outNormal{NAN, NAN, NAN};
     SCNVector3 mesh3DPoint = [_mixedReality mesh3DFrom2DPoint:tapPoint outputNormal:&outNormal];
 
-    GLKVector3 meshNormal = GLKVector3Normalize(SCNVector3ToGLKVector3(outNormal));
     if (mesh3DPoint.x!=NAN && mesh3DPoint.y!=NAN && mesh3DPoint.z!=NAN) {
+        GLKVector3 meshNormal = GLKVector3Normalize(SCNVector3ToGLKVector3(outNormal));
+        NSLog(@"x:%f, y:%f, z:%f", meshNormal.x, meshNormal.y, meshNormal.z);
 
         // No placing windows on upward / downward facing surfaces.
-        if (fabs(meshNormal.y) < 0.4 || true) {
+        if (fabs(meshNormal.y) < 0.4) {
             // Test to see if there already exists a portal in this location
             NSArray<SCNNode *> *toplevelObjects = [[[Scene main] rootNode] childNodes];
 

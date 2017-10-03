@@ -115,6 +115,8 @@
     return self;
 }
 
+#pragma mark - Setup
+
 - (void) start {
     [super start];
     
@@ -127,7 +129,7 @@
     [self.robotTransformNode addChildNode:self.robotBodyNode];
     
     self.robotNode = [SCNNode firstNodeFromSceneNamed:@"Robot_NonZeroed.dae"];
-    [self fixupMaterialsFor:self.robotNode];
+    [self setLightingModelForChildren:self.robotNode];
     
     [self.robotBodyNode addChildNode:self.robotNode];
     self.animatedHeadCtrl = [self.robotNode childNodeWithName:@"Head_Ctrl" recursively:YES];
@@ -138,18 +140,8 @@
     self.robotBoxRootCtrl = [_robotNode childNodeWithName:@"BoxRoot" recursively:YES];
     self.targetLookAtPosition = GLKVector3Make(1000.f, 0.f, 1000.f);
     
-    
-    { // Add some physics bodies to the model
-        SCNNode *vemojiHeadNode = [_animatedHeadCtrl childNodeWithName:@"Vemoji_Head_Mesh" recursively:NO];
-        SCNPhysicsBody *vemojiHeadPhysics = [SCNPhysicsBody bodyWithType:SCNPhysicsBodyTypeKinematic shape:nil]; 
-        vemojiHeadNode.physicsBody = vemojiHeadPhysics;
-        
-        _bodyCtrl.physicsBody = [SCNPhysicsBody bodyWithType:SCNPhysicsBodyTypeKinematic shape:nil];
-        SCNNode *larm = [_rootCtrl childNodeWithName:@"Boxy_LArmMesh" recursively:YES];
-        larm.physicsBody = [SCNPhysicsBody bodyWithType:SCNPhysicsBodyTypeKinematic shape:nil];
-
-        SCNNode *rarm = [_rootCtrl childNodeWithName:@"Boxy_RArm_Mesh" recursively:YES];
-        rarm.physicsBody = [SCNPhysicsBody bodyWithType:SCNPhysicsBodyTypeKinematic shape:nil];
+    if (!self.startWithUnboxingSequence) {
+        [self setupRobotPhysics];
     }
     
     // default
@@ -157,12 +149,16 @@
     
     self.headCtrl = self.animatedHeadCtrl;
     
-    // Init a default audio for movement.
-    // Special set-up happens in the setMovementAudio setter.
-    AudioNode *moveAudio = [[AudioEngine main] loadAudioNamed:@"Robot_IdleMovingLoop.caf"];
-    moveAudio.looping = YES;
-    moveAudio.volume = 0.5;
-    [self setMovementAudio:moveAudio];
+    self.movementPeakVolume = 0.5;
+    
+    dispatch_async(dispatch_get_main_queue(), ^{
+        // Init a default audio for movement.
+        // Special set-up happens in the setMovementAudio setter.
+        AudioNode *moveAudio = [[AudioEngine main] loadAudioNamed:@"Robot_IdleMovingLoop.caf"];
+        moveAudio.looping = YES;
+        moveAudio.volume = 0;
+        [self setMovementAudio:moveAudio];
+    });
 
     // Re-parent the head to a controllable node.
     self.headCtrl = [SCNNode node];
@@ -181,14 +177,18 @@
         _robotBoxUnfolded = NO;
 
         self.robotBoxNode = [SCNNode firstNodeFromSceneNamed:@"Robot_Unboxing.dae"];
-        [self fixupMaterialsFor:_robotBoxNode];
+        [self setLightingModelForChildren:_robotBoxNode];
         [self.robotTransformNode addChildNode:self.robotBoxNode];
         
         self.robotBoxUnfoldingAnim = [AnimationComponent animationWithSceneNamed:@"Robot_Unboxing.dae"];
         [_robotBoxUnfoldingAnim setFadeInDuration:0];
         [_robotBoxUnfoldingAnim setFadeOutDuration:0];
 
+#if __IPHONE_OS_VERSION_MAX_ALLOWED >= 110000
+        SCNAnimationEvent *liftBodyToPositionEvent = [SCNAnimationEvent animationEventWithKeyTime:0.75 block:^(id<SCNAnimation> _Nonnull animation, id  _Nonnull animatedObject, BOOL playingBackward) {
+#else
         SCNAnimationEvent *liftBodyToPositionEvent = [SCNAnimationEvent animationEventWithKeyTime:0.75 block:^(CAAnimation * _Nonnull animation, id  _Nonnull animatedObject, BOOL playingBackward) {
+#endif
             RobotMeshControllerComponent *strongSelf = weakSelf;
             [SCNTransaction begin];
             [SCNTransaction setAnimationDuration:(1-0.75)*strongSelf.robotBoxUnfoldingAnim.duration];
@@ -198,7 +198,11 @@
         }];
 
         CGFloat nearEndFrame = (_robotBoxUnfoldingAnim.duration-(10.0/60.0))/_robotBoxUnfoldingAnim.duration;
+#if __IPHONE_OS_VERSION_MAX_ALLOWED >= 110000
+        SCNAnimationEvent *finishUnboxingEvent = [SCNAnimationEvent animationEventWithKeyTime:nearEndFrame block:^(id<SCNAnimation> _Nonnull animation, id  _Nonnull animatedObject, BOOL playingBackward) {
+#else
         SCNAnimationEvent *finishUnboxingEvent = [SCNAnimationEvent animationEventWithKeyTime:nearEndFrame block:^(CAAnimation * _Nonnull animation, id  _Nonnull animatedObject, BOOL playingBackward) {
+#endif
             RobotMeshControllerComponent *strongSelf = weakSelf;
             if( strongSelf ) {
                 strongSelf->_robotBoxUnfolded = YES;
@@ -233,9 +237,6 @@
         // Make the robotBox model a selectable that we can target.
         _robotBoxRadius = 0.2;
         self.robotBoxSelectable = [[SelectableModelComponent alloc] initWithMarkupName:@"RobotBox" withRadius:_robotBoxRadius];
-        SCNVector3 boxPos = self.node.position;
-        boxPos.y -= _robotBoxRadius;
-        _robotBoxSelectable.node.position = boxPos;
         
         // Defer hooking up the component so we don't mutate the SceneManager entities while starting.
         [[SceneManager main].mixedRealityMode runBlockInRenderThread:^(void) {
@@ -243,15 +244,19 @@
             [_robotBoxSelectable start];
         }];
 
+        // Handle selecting the box, kick off the box unfolding sequence and remove the callback handler.
         _robotBoxSelectable.callbackBlock = ^{
             RobotMeshControllerComponent *strongSelf = weakSelf;
             if( strongSelf ) {
                 [strongSelf setRobotBoxUnfolded:YES];
+                [strongSelf setupRobotPhysics];
                 strongSelf->_robotBoxSelectable.callbackBlock = nil;
             }
         };
 
-        _robotBoxUnfoldingSound = [[AudioEngine main] loadAudioNamed:@"Robot_Unboxing.caf"];
+        dispatch_async(dispatch_get_main_queue(), ^{
+            self.robotBoxUnfoldingSound = [[AudioEngine main] loadAudioNamed:@"Robot_Unboxing.caf"];
+        });
     } else {
         // Robot is already unfolded.
         _robotBoxUnfolded = YES; 
@@ -264,7 +269,17 @@
 
     //  [SceneKit printSceneHierarchy:self.node];
 }
-
+                                                  
+- (void)setupRobotPhysics {
+    SCNNode *colliderNode = [SCNNode nodeWithGeometry:[SCNBox boxWithWidth:1.38 height:1.61 length:0.89 chamferRadius:0]];
+    colliderNode.scale = {self.scale, self.scale, self.scale};
+    colliderNode.position = {0, 0.7, 0};
+    colliderNode.opacity = 0.0;
+    colliderNode.name = @"Robot Collider";
+    colliderNode.physicsBody = [SCNPhysicsBody bodyWithType:SCNPhysicsBodyTypeKinematic shape:nil];
+    [self.robotBodyNode addChildNode:colliderNode];
+}
+                                                  
 #pragma mark - CAAnimation control
 
 - (BOOL) isAnimated  {
@@ -323,6 +338,10 @@
     [self handleMoveTo:0];
 }
 
+- (void) setRotationEuler:(GLKVector3) euler {
+    self.robotBodyNode.eulerAngles = SCNVector3FromGLKVector3(euler);
+}
+                                                  
 - (void) updateWithDeltaTime:(NSTimeInterval)seconds {
     if( ![self isEnabled] ) return;
     if( ![Scene main].rootNode ) return;
@@ -380,19 +399,26 @@
     if( _moveToTimeInterval > 0 ) {
         self.moveToTimer += seconds;
         
-        if( self.moveToTimer < self.moveToTimeInterval ) {
-            float frac = self.moveToTimer / self.moveToTimeInterval;
-            self.movementAudio.player.volume = self.movementAudio.volume * smoothstepDxf(0.f, 1.f, frac);
-            float progress = smoothstepf(0.f, 1.f, frac); // Try with basic accelerate/decelerate motion.
-            GLKVector3 position = GLKVector3Lerp(self.moveToStart, self.moveToTarget, progress );
-            self.node.position = SCNVector3FromGLKVector3(position);
-            self.movementAudio.position = self.node.position;
-        } else {
-            self.node.position = SCNVector3FromGLKVector3(self.moveToTarget); // Get precisely on target.
-            self.movementAudio.player.volume = 0;
-            self.movementAudio.position = self.node.position;
-            self.moveToTimer = self.moveToTimeInterval = 0; // Clear the timer, stop running movement ops.
-        }
+        // Modify Audio on main thread 
+        dispatch_async(dispatch_get_main_queue(), ^{
+            if( self.moveToTimer < self.moveToTimeInterval ) {
+                if( [_movementAudio.player isPlaying] == NO) {
+                    [_movementAudio play];
+                }
+
+                float frac = self.moveToTimer / self.moveToTimeInterval;
+                self.movementAudio.volume = self.movementPeakVolume * smoothstepDxf(0.f, 1.f, frac);
+                float progress = smoothstepf(0.f, 1.f, frac); // Try with basic accelerate/decelerate motion.
+                GLKVector3 position = GLKVector3Lerp(self.moveToStart, self.moveToTarget, progress );
+                self.node.position = SCNVector3FromGLKVector3(position);
+                self.movementAudio.position = self.node.position;
+            } else {
+                self.node.position = SCNVector3FromGLKVector3(self.moveToTarget); // Get precisely on target.
+                self.movementAudio.volume = 0;
+                self.movementAudio.position = self.node.position;
+                self.moveToTimer = self.moveToTimeInterval = 0; // Clear the timer, stop running movement ops.
+            }
+        });
     }
 
     // Track the selectable node. Move it up about half the height of the box.
@@ -415,7 +441,7 @@
     _movementAudio = movementAudio;
     
     if( _movementAudio != nil ) {
-        _movementAudio.player.volume = 0;
+        _movementAudio.volume = 0;
         _movementAudio.looping = YES;
         [_movementAudio play];
     }
@@ -703,10 +729,10 @@ float angleDifference(float a, float b) {
 }
 
 /**
- * this is used fo make material settings on the hierarchy this is a pain in the ass to set manually in Xcode every time
+ * this is used to make material settings on the hierarchy this is a pain to set manually in Xcode every time
  * the character is exported from modo.
  */
--(void) fixupMaterialsFor:(SCNNode*)robot
+- (void)setLightingModelForChildren:(SCNNode*)robot
 {
     [robot _enumerateHierarchyUsingBlock:^(SCNNode * _Nonnull node, BOOL * _Nonnull stop) {
         [node.geometry.materials enumerateObjectsUsingBlock:^(SCNMaterial * _Nonnull obj, NSUInteger idx, BOOL * _Nonnull stop) {

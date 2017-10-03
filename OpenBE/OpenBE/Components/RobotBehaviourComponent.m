@@ -298,9 +298,9 @@
     {
         // Initial start of movement, make sure the first location is reachable, and use it for our future reference point.
         if( [pathFindComponent occupied:targetPosition] == NO ) {
-            pathFindComponent.reachableReferencePoint = targetPosition;
             [self.meshControllerComponent moveTo:targetPosition moveIn:1];
         } else {
+            NSLog(@"Move Be Sad: RobotBehaviourComponent - target is occupied");
             [self beSad];
         }
     }

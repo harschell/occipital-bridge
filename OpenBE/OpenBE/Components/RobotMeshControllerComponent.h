@@ -30,6 +30,7 @@ typedef NS_ENUM (NSUInteger, RobotBodies) {
 @property (nonatomic) float scale;
 
 @property (nonatomic, strong) AudioNode *movementAudio;
+@property (nonatomic) float movementPeakVolume;
 
 @property (nonatomic, strong) SCNNode * robotNode; // Lowest-level of the robot model nodes.
 @property (nonatomic, strong) SCNNode * rootCtrl; // Character.Root_Ctrl - Base root animation node
@@ -47,6 +48,7 @@ typedef NS_ENUM (NSUInteger, RobotBodies) {
 - (GLKVector3) getForward;
 
 - (void) setPosition:(GLKVector3) position;
+- (void) setRotationEuler:(GLKVector3) euler;
 
 - (void) start;
 - (void) moveTo:(GLKVector3)moveToTarget moveIn:(float)seconds;

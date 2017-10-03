@@ -47,6 +47,9 @@
 - (void) setCategoryBitMaskRecursively:(int)bitmask;
 - (void) setRenderingOrderRecursively:(int)order;
 - (void) setOpacityRecursively:(float)opacity;
+- (void) setEmissionRecursively:(id)emissiveValue;
+- (void) setWritesToDepthBufferRecursively:(BOOL)doDepthTest;
+- (void) setReadsFromDepthBufferRecursively:(BOOL)doDepthTest;
 
 @end
 

@@ -65,22 +65,26 @@
 @property (nonatomic, strong) NSArray * displayCubes;
 @property (nonatomic) float displayTime;
 #endif
+
+@property (nonatomic) float lastGrayness;
 @end
 
 
 @implementation VRWorldComponent
 - (void) setEnabled:(bool)enabled {
     [super setEnabled:enabled];
-
     self.node.hidden = !enabled;
 }
 
 - (void) start{
     [super start];
+    self.lastGrayness = NSNotFound;
 
     self.node = [[SCNNode alloc] init];
     self.node.name = @"VR World";
     _node.position = SCNVector3Make(0, .01, 0); // Give a 1cm offset, so we don't get co-planar z-fighting between VR world and real world floor.
+    self.node.hidden = !self.isEnabled;
+
 #ifdef ENABLE_ROBOTROOM
     // ------ Robot Room ----
     self.robotRoomNode = [SCNNode firstNodeFromSceneNamed:@"RobotRoom.dae"];
@@ -129,11 +133,14 @@
                                                                 [SceneKit pathForImageResourceNamed:@"Space_back.jpg"],
                                                                 [SceneKit pathForImageResourceNamed:@"Space_front.jpg"]]];
 
-    self.lightsOnAudio = [[AudioEngine main] loadAudioNamed:@"VRWorld_LightsOn.caf"];
     _targetLightLevel = VR_LIGHT_LEVEL_OUTSIDE;
     [self setLightLevel:VR_LIGHT_LEVEL_OUTSIDE];
 
-    self.openBayDoorsAudio = [[AudioEngine main] loadAudioNamed:@"VRWorld_BayDoorsOpening.caf"];
+
+    dispatch_async(dispatch_get_main_queue(), ^{
+        self.lightsOnAudio = [[AudioEngine main] loadAudioNamed:@"VRWorld_LightsOn.caf"];
+        self.openBayDoorsAudio = [[AudioEngine main] loadAudioNamed:@"VRWorld_BayDoorsOpening.caf"];
+    });
 // ------ /Robot Room ----
 #endif
 
@@ -191,6 +198,7 @@
 - (void) observeValueForKeyPath:(NSString *)keyPath ofObject:(id)object change:(NSDictionary<NSKeyValueChangeKey,id> *)change context:(void *)context {
     if( object == _portalComponent && [keyPath isEqualToString:@"enabled"] ) {
         self.node.hidden = !_portalComponent.isEnabled;
+        [self setEnabled:_portalComponent.isEnabled];
     }
 }
 
@@ -216,6 +224,11 @@
 
 - (void) updateWithDeltaTime:(NSTimeInterval)seconds {
     [super updateWithDeltaTime:seconds];
+    
+    if (!self.isEnabled) {
+        return;
+    }
+    
 #ifdef ENABLE_ROBOTROOM
     if( _mode == VRWorldRobotRoom ) {
         if( self.portalComponent.isInsideAR == NO ){
@@ -263,17 +276,21 @@
         [self flickerDisplayCubes:seconds];
     }
 #endif
+    
     float grayness = 1.0 - 2.0 * _portalComponent.mixedReality.lastTrackerHints.modelVisibilityPercentage;
-    if ( isnan(grayness))
+    if ( isnan(grayness)) {
         grayness = 1.0;
-
+    }
     grayness = fmaxf(fminf(grayness, 1.0), 0.0);
 
-    [self.node enumerateChildNodesUsingBlock:^(SCNNode * _Nonnull child, BOOL * _Nonnull stop) {
-        for( SCNMaterial * material in child.geometry.materials ) {
-            [material setValue: @(grayness) forKeyPath:@"grayAmount"];
-        };
-    }];
+    if (self.lastGrayness != grayness) {
+        self.lastGrayness = grayness;
+        [self.node enumerateChildNodesUsingBlock:^(SCNNode * _Nonnull child, BOOL * _Nonnull stop) {
+            for( SCNMaterial * material in child.geometry.materials ) {
+                [material setValue: @(grayness) forKeyPath:@"grayAmount"];
+            };
+        }];
+    }
 }
 
 #ifdef ENABLE_ROBOTROOM

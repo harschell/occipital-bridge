@@ -13,6 +13,11 @@
 #import "Core.h"
 #import "CoreMotionComponentProtocol.h"
 
+#ifdef ENABLE_COMPONENT_PROFILING
+#include <mach/mach.h>
+#include <mach/mach_time.h>
+#endif
+
 @interface TouchEventResponders : NSObject
 @property (weak) UITouch* touch;
 @property (strong) NSMutableArray * eventComponents;
@@ -102,6 +107,14 @@
 }
 
 - (void) updateWithDeltaTime:(NSTimeInterval)seconds {
+#ifdef ENABLE_COMPONENT_PROFILING
+    // Check global time averages, and every second report runtime cost.
+    static mach_timebase_info_data_t sTimebaseInfo;
+    if( sTimebaseInfo.denom == 0 ) mach_timebase_info(&sTimebaseInfo);
+    
+    uint64_t start = mach_absolute_time();
+#endif // ENABLE_COMPONENT_PROFILING
+
     if( !self.globalEventComponentsPaused ) {
         for( GKComponent * component in self.globalEventComponents ) {
             if( [component conformsToProtocol:@protocol(ComponentProtocol)]) {
@@ -109,6 +122,29 @@
             }
         }
     }
+    
+#ifdef ENABLE_COMPONENT_PROFILING
+    uint64_t end = mach_absolute_time();
+    uint64_t elapsedNano = (end-start) * (uint64_t)sTimebaseInfo.numer / (uint64_t)sTimebaseInfo.denom;
+    
+    // Integrate timing averages, and throttle to 1-update per second.
+    static uint64_t avgElapsed = 0;
+    static int avgElapsedCount = 0;
+    
+    avgElapsed += elapsedNano;
+    avgElapsedCount++;
+    
+    static uint64_t throttleStart = 0;
+    uint64_t throttleElapsedNano = (end - throttleStart) * (uint64_t)sTimebaseInfo.numer / (uint64_t)sTimebaseInfo.denom;
+    if( throttleElapsedNano > 1000000000L ) {
+        avgElapsed /= avgElapsedCount;
+        NSLog(@"Event Cmp: %0.4f (ms)", (double)avgElapsed / 1000000.0 );
+        avgElapsed = 0;
+        avgElapsedCount = 0;
+        
+        throttleStart = end;
+    }
+#endif // ENABLE_COMPONENT_PROFILING
 }
 
 - (void) addGlobalEventComponent:(GKComponent *)component {
@@ -452,10 +488,11 @@
             return nil;
         }
         
-        // SCNHitTestOptionCategoryBitMask only works on iOS 10 !!!
-        //NSDictionary *options = @{SCNHitTestSortResultsKey:@YES, SCNHitTestBackFaceCullingKey:@NO, SCNHitTestOptionCategoryBitMask:@(~(NSUInteger)RAYCAST_IGNORE_BIT)};
-        
-        NSDictionary *options = @{SCNHitTestSortResultsKey:@YES, SCNHitTestBackFaceCullingKey:@NO};
+        NSDictionary *options = @{SCNHitTestOptionSortResults:@YES, SCNHitTestBackFaceCullingKey:@NO};
+        if (@available(iOS 11.0, *)) {
+            options = @{SCNHitTestOptionSearchMode:@1 /*SCNHitTestSearchModeAll*/,
+                        SCNHitTestBackFaceCullingKey:@NO};
+        }
         hitTestResults = [[Scene main].scene.rootNode hitTestWithSegmentFromPoint:from toPoint:to options:options];
 //        NSLog(@"%ld reticle intersection hits", hitTestResults.count);
     } else {
@@ -465,6 +502,17 @@
     }
     
     if( [hitTestResults count] ) {
+
+        // First search for buttons
+        for( SCNHitTestResult * result in hitTestResults ) {
+            if( !(result.node.categoryBitMask & RAYCAST_IGNORE_BIT) &&
+                 (result.node.categoryBitMask & CATEGORY_BIT_MASK_UI_BUTTONS))
+            {
+				return result;
+			}
+        }
+
+        // If not a button, respond with the nearest geometry
         for( SCNHitTestResult * result in hitTestResults ) {
             if( !(result.node.categoryBitMask & RAYCAST_IGNORE_BIT) ) {
 				return result;

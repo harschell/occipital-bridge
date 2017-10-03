@@ -52,8 +52,10 @@
 - (void) start{
     [super start];
     
-    self.spawnSound = [[AudioEngine main] loadAudioNamed:@"BallToss.caf"];
-    self.resetSound = [[AudioEngine main] loadAudioNamed:@"BallReturn.caf"];
+    dispatch_async(dispatch_get_main_queue(), ^{
+        self.spawnSound = [[AudioEngine main] loadAudioNamed:@"BallToss.caf"];
+        self.resetSound = [[AudioEngine main] loadAudioNamed:@"BallReturn.caf"];
+    });
     
     self.furniture = [[NSMutableArray alloc] init];
     

@@ -26,7 +26,9 @@ typedef void (^callback)(void);
     
     self.callbackBlock = callbackBlock;
     
-    self.buttonClickSound = [[AudioEngine main] loadAudioNamed:@"Robot_MenuClick.caf"];
+    dispatch_async(dispatch_get_main_queue(), ^{
+        self.buttonClickSound = [[AudioEngine main] loadAudioNamed:@"Robot_MenuClick.caf"];
+    });
     
     return self;
 }
@@ -68,8 +70,10 @@ typedef void (^callback)(void);
 
 - (void) createButton:(NSString *)imageName {
     self.node = [self createSceneNodeForGaze];
+    self.node.name = @"Button";
     
     self.node.geometry = [SCNBox boxWithWidth:1. height:1. length:.05 chamferRadius:0];
+    self.node.categoryBitMask = CATEGORY_BIT_MASK_UI_BUTTONS;
     _frontMaterial = [SCNMaterial material];
 
     [self setImage:imageName];

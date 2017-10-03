@@ -5,6 +5,7 @@
 */
 
 #import "AppDelegate.h"
+#import <BridgeEngine/BridgeEngine.h>
 
 //------------------------------------------------------------------------------
 
@@ -38,7 +39,7 @@ void preventApplicationFromStartingInTheBackgroundWhenTheStructureSensorIsPlugge
 
 //------------------------------------------------------------------------------
 
-@interface AppDelegate ()
+@interface AppDelegate () <BEDebugSettingsDelegate>
 
 @end
 
@@ -51,6 +52,24 @@ void preventApplicationFromStartingInTheBackgroundWhenTheStructureSensorIsPlugge
     // Override point for customization after application launch.
 
     preventApplicationFromStartingInTheBackgroundWhenTheStructureSensorIsPlugged();
+
+#ifdef REMOTE_LOG_HOST
+    NSError* error = nil;
+    BEStartLoggingToWirelessConsole(@REMOTE_LOG_HOST, 4999, &error);
+    if (error)
+        NSLog(@"Can't start wireless log: %@", [error localizedDescription]);
+#endif
+
+    self.window = [[UIWindow alloc] initWithFrame:[UIScreen mainScreen].bounds];
+    
+    // Show the settings UI, with a prepared set of debug settings.
+    NSBundle *beBundle = [NSBundle bundleForClass:BEDebugSettingsViewController.class];
+    UIStoryboard *beDebugSettingsStoryboard = [UIStoryboard storyboardWithName:@"BEDebugSettings" bundle:beBundle];
+    self.navController = [beDebugSettingsStoryboard instantiateInitialViewController];
+    BEDebugSettingsViewController *debugSettingsVC = (BEDebugSettingsViewController *)_navController.viewControllers.firstObject;
+    [self prepareDebugSettingsVC:debugSettingsVC];
+
+    [_window setRootViewController:_navController];
 
     return YES;
 }
@@ -85,6 +104,46 @@ void preventApplicationFromStartingInTheBackgroundWhenTheStructureSensorIsPlugge
     // Called when the application is about to terminate.
     // Save data if appropriate.
     // See also applicationDidEnterBackground:.
+}
+
+#pragma mark - BEDebugSettingsVC Delegate Handler
+
+/**
+ * Add all the debug setting options to the VC.
+ * See AppDelegate.h for details
+ */
+- (void) prepareDebugSettingsVC:(BEDebugSettingsViewController*)vc {
+    [vc addKey:SETTING_STEREO_SCANNING label:@"Stereo Scanning" defaultBool:YES];
+    [vc addKey:SETTING_STEREO_RENDERING label:@"Stereo Rendering" defaultBool:YES];
+
+    [vc addKey:SETTING_USE_WVL label:@"Use Wide Vision Lens" defaultBool:YES];
+    [vc addKey:SETTING_COLOR_CAMERA_ONLY label:@"Color Camera Only" defaultBool:NO];
+    
+    [vc addKey:SETTING_REPLAY_CAPTURE label:@"Replay last OCC Recording" defaultBool:NO];
+    [vc addKey:SETTING_ENABLE_RECORDING label:@"Enable OCC In-Scene Recording" defaultBool:NO];
+    vc.delegate = self;
+}
+
+/**
+ * Reset all the settings for release.
+ */
+- (void) resetSettingsToDefaults {
+    [BEAppSettings setBooleanValue:YES forAppSetting:SETTING_STEREO_SCANNING];
+    [BEAppSettings setBooleanValue:YES forAppSetting:SETTING_STEREO_RENDERING];
+    [BEAppSettings setBooleanValue:YES forAppSetting:SETTING_USE_WVL];
+    [BEAppSettings setBooleanValue:NO forAppSetting:SETTING_COLOR_CAMERA_ONLY];
+    [BEAppSettings setBooleanValue:NO forAppSetting:SETTING_REPLAY_CAPTURE];
+    [BEAppSettings setBooleanValue:NO forAppSetting:SETTING_ENABLE_RECORDING];
+}
+
+/**
+ * User tapped on "Begin" to start the BE experience.
+ */
+- (void) debugSettingsBegin {
+    UIStoryboard *mainStoryboard = [UIStoryboard storyboardWithName:@"Main" bundle:nil];
+    UIViewController *mainVC = [mainStoryboard instantiateInitialViewController];
+    [_navController pushViewController:mainVC animated:YES];
+    [_navController setNavigationBarHidden:YES animated:YES];
 }
 
 @end

@@ -132,7 +132,11 @@
 		
 		<option value="//api/name/unlockSceneMesh">- unlockSceneMesh</option>
 		
+		<option value="//api/name/coarseMesh">- coarseMesh</option>
+		
 		<option value="//api/name/predictColorCameraPoseForDisplayLinkStart:">- predictColorCameraPoseForDisplayLinkStart:</option>
+		
+		<option value="//api/name/renderDataForPrediction:requiresTexture:">- renderDataForPrediction:requiresTexture:</option>
 		
 		<option value="//api/name/renderSceneMeshWithStyle:modelView:projection:associatedColorFrame:">- renderSceneMeshWithStyle:modelView:projection:associatedColorFrame:</option>
 		
@@ -224,12 +228,16 @@
 <ul>
 <li><code>k</code>BECaptureReplayMode<code></code>: Whether a previous capture should be replayed. Valid values are listed in <a href="../Constants/BECaptureReplayMode.html">BECaptureReplayMode</a>. Default is BECaptureReplayModeDisabled.</li>
 <li><code>kBECaptureReplayFile</code>: path to the OCC replay file, relative to the app documents folder. Default is &ldquo;BridgeEngineScene/sceneReplay.occ&rdquo;, with a fallback on &ldquo;BridgeEngineScene/capture.occ&rdquo;.</li>
-<li><code>kBETrackerFallbackOnIMUEnabled</code>: If YES, will fallback to IMU-based rotational-only pose updates if the visual tracker is lost. Default is NO.</li>
-<li><code>kBEVisualInertialPoseFilterEnabled</code>: If YES, the tracker output will be smoother, but with potentially a slightly higher latency. Default is NO.</li>
 <li><code>kBEUsingWideVisionLens</code>:  Whether a Wide Vision Lens is attached. Default is NO.</li>
 <li><code>kBEUsingColorCameraOnly</code>: Whether the engine should try to connect to a Structure Sensor. Default is NO.</li>
 <li><code>kBEStereoRenderingEnabled</code>: If YES, we render two views, as if for a head-mounted display. If NO, we render a single (mono) view. Default is NO.</li>
 <li><code>kBERecordingOptionsEnabled</code>: If YES, a button to record a replay sequence will appear in mono mode. This option does nothing if kBEStereoRenderingEnabled or <code>k</code>BECaptureReplayMode<code></code> are also enabled. <strong>IMPORTANT</strong>: this option will disable touch interactions, as the Record button will instantiate a tap recognizer.</li>
+<li><code>kBETrackerFallbackOnIMUEnabled</code>: If YES, will fallback to IMU-based rotational-only pose updates if the visual tracker is lost. Default is YES.</li>
+<li><code>kBEVisualInertialPoseFilterEnabled</code>: If YES, the tracker output will be smoother, but with potentially a slightly higher latency. Default is YES.</li>
+<li><code>kBEAutoExposeWhileRelocalizing</code>: If YES, the iOS color camera will auto-expose while trying to relocalize. Use this if lighting may have changed since the mapped area was captured. Default is NO.</li>
+<li><code>kBEExpectedFpsForTrackingEstimation</code> : This value should be set when running the engine in headless mode. It&rsquo;s used to improve tracking performance by setting an expected display speed for frame rate prediction. Set this number to the FPS of your display loop and the engine will attempt to keep tracking data and display data as close to sync as possible.
+Accepted values are 60 or 30. The default value is 60.
+NOTE: When not in headless mode this setting has no effect.</li>
 </ul>
 </td>
 					</tr>
@@ -298,12 +306,15 @@
 
 <ul>
 <li><code>k</code>BECaptureReplayMode<code></code>: Whether a previous capture should be replayed. Valid values are listed in <a href="../Constants/BECaptureReplayMode.html">BECaptureReplayMode</a>. Default is BECaptureReplayModeDisabled.</li>
-<li><code>kBETrackerFallbackOnIMUEnabled</code>: If YES, will fallback to IMU-based rotational-only pose updates if the visual tracker is lost. Default is NO.</li>
-<li><code>kBEVisualInertialPoseFilterEnabled</code>: If YES, the tracker output will be smoother, but with potentially a slightly higher latency. Default is NO.</li>
 <li><code>kBEUsingWideVisionLens</code>:  Whether a Wide Vision Lens is attached. Default is NO.</li>
 <li><code>kBEUsingColorCameraOnly</code>: Whether the engine should try to connect to a Structure Sensor. Default is NO.</li>
 <li><code>kBEStereoRenderingEnabled</code>: If YES, we render two views, as if for a head-mounted display. If NO, we render a single (mono) view. Default is NO.</li>
 <li><code>kBERecordingOptionsEnabled</code>: If YES, a button to record a replay sequence will appear in mono mode. This option does nothing if kBEStereoRenderingEnabled or <code>k</code>BECaptureReplayMode<code></code> are also enabled. <strong>IMPORTANT</strong>: this option will disable touch interactions, as the Record button will instantiate a tap recognizer.</li>
+<li><code>kBETrackerFallbackOnIMUEnabled</code>: If YES, will fallback to IMU-based rotational-only pose updates if the visual tracker is lost. Default is YES.</li>
+<li><code>kBEVisualInertialPoseFilterEnabled</code>: If YES, the tracker output will be smoother, but with potentially a slightly higher latency. Default is YES.</li>
+<li><code>kBEExpectedFpsForTrackingEstimation</code> : This value should be set when running the engine in headless mode. It&rsquo;s used to improve tracking performance by setting an expected display speed for frame rate prediction.  Set this number to the FPS of your display loop and the engine will attempt to keep tracking data and display data as close to sync as possible.
+Accepted values are 60 or 30. The default value is 60.
+NOTE: When not in headless mode this setting has no effect.</li>
 </ul>
 </td>
 					</tr>
@@ -1729,6 +1740,48 @@ Pressing Done dismisses the view.</p>
 		</div>
 	</div>
 </div><div class="section-method">
+	<a name="//api/name/coarseMesh" title="coarseMesh"></a>
+	<h3 class="method-title"><code><a href="#//api/name/coarseMesh">&ndash;&nbsp;coarseMesh</a></code>
+</h3>
+
+	<div class="method-info">
+		<div class="pointy-thing"></div>
+
+		<div class="method-info-container">
+			
+			
+			<div class="method-subsection brief-description">
+				<p>Return a coarse version of the scene mesh, ideal for physics.
+This is only updated after an export or reload operation.</p>
+			</div>
+			
+		    
+
+			<div class="method-subsection method-declaration"><code>- (BEMesh *)coarseMesh</code></div>
+
+		    
+			
+
+			
+
+			
+
+			
+
+			
+
+			
+
+			
+			<div class="method-subsection declared-in-section">
+				<h4 class="method-subtitle">Declared In</h4>
+				<p><code class="declared-in-ref">BEMixedRealityMode.h</code></p>
+			</div>
+			
+			
+		</div>
+	</div>
+</div><div class="section-method">
 	<a name="//api/name/predictColorCameraPoseForDisplayLinkStart:" title="predictColorCameraPoseForDisplayLinkStart:"></a>
 	<h3 class="method-title"><code><a href="#//api/name/predictColorCameraPoseForDisplayLinkStart:">&ndash;&nbsp;predictColorCameraPoseForDisplayLinkStart:</a></code>
 </h3>
@@ -1776,6 +1829,79 @@ Pressing Done dismisses the view.</p>
 				<h4 class="method-subtitle">Discussion</h4>
 				<p>This is meant to be used in headless mode (when BEView==nil), e.g. from the Unity plugin.</p>
 			</div>
+			
+
+			
+
+			
+
+			
+			<div class="method-subsection declared-in-section">
+				<h4 class="method-subtitle">Declared In</h4>
+				<p><code class="declared-in-ref">BEMixedRealityMode.h</code></p>
+			</div>
+			
+			
+		</div>
+	</div>
+</div><div class="section-method">
+	<a name="//api/name/renderDataForPrediction:requiresTexture:" title="renderDataForPrediction:requiresTexture:"></a>
+	<h3 class="method-title"><code><a href="#//api/name/renderDataForPrediction:requiresTexture:">&ndash;&nbsp;renderDataForPrediction:requiresTexture:</a></code>
+</h3>
+
+	<div class="method-info">
+		<div class="pointy-thing"></div>
+
+		<div class="method-info-container">
+			
+			
+			<div class="method-subsection brief-description">
+				<p>Uses the color camera pose estimates to return data for rendering.</p>
+
+<pre><code>This is meant to be used in headless mode (when BEView==nil), e.g. from the Unity plugin.
+</code></pre>
+			</div>
+			
+		    
+
+			<div class="method-subsection method-declaration"><code>- (BEMixedRealityRenderData *)renderDataForPrediction:(BEMixedRealityPrediction *)<em>mrPrediction</em> requiresTexture:(BOOL)<em>requiresTexture</em></code></div>
+
+		    
+			
+			<div class="method-subsection arguments-section parameters">
+				<h4 class="method-subtitle parameter-title">Parameters</h4>
+				<table class="argument-def parameter-def">
+				
+					<tr>
+						<th scope="row" class="argument-name"><code>mrPrediction</code></th>
+						<td><ul>
+<li>The prediction to be used for this render data.  This should be created this frame by calling - (BEMixedRealityPrediction*)<a href="#//api/name/predictColorCameraPoseForDisplayLinkStart:">predictColorCameraPoseForDisplayLinkStart:</a>(NSTimeInterval)displayLinkStart;</li>
+</ul>
+</td>
+					</tr>
+				
+					<tr>
+						<th scope="row" class="argument-name"><code>requiresTexture</code></th>
+						<td><ul>
+<li>If we should return texture information with camera information.
+  @warn Only use if you need the texture! This will create a delay in predictive mode as we wait for the latest color frame from the camera.</li>
+</ul>
+</td>
+					</tr>
+				
+				</table>
+			</div>
+			
+
+			
+			<div class="method-subsection return">
+				<h4 class="method-subtitle parameter-title">Return Value</h4>
+				<p>nil if mrPrediction.couldPredict == NO. Otherwise returns render data driven by the estimated pose.  This includes information for the left / right eyes and the texture of the real world mesh.</p>
+			</div>
+			
+
+			
+
 			
 
 			
@@ -1936,7 +2062,7 @@ This is best for monocular modes where the color background can fill the screen 
 				<footer>
 					<div class="footer-copyright">
 						
-						<p class="copyright">Copyright &copy; 2017 Occipital. All rights reserved. Updated: 2017-05-04</p>
+						<p class="copyright">Copyright &copy; 2017 Occipital. All rights reserved. Updated: 2017-09-21</p>
 						
 						
 						<p class="generator">Generated by <a href="http://appledoc.gentlebytes.com">appledoc 2.2.1 (build 1333)</a>.</p>

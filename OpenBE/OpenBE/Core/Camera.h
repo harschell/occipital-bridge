@@ -29,6 +29,7 @@
 @property (atomic) GLKVector3 forward;
 @property (atomic) GLKVector3 reticleForward;
 @property (atomic) GLKVector3 up;
+@property (atomic) GLKVector3 right;
 @property (atomic) GLKVector3 position;
 
 @property (atomic) float speed;

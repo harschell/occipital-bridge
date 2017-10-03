@@ -39,6 +39,11 @@
     return self;
 }
 
+- (void) setEnabled:(bool)enabled {
+    [super setEnabled:enabled];
+    [self updateReticleVisibility];
+}
+
 - (void) createReticle {
     self.node = [self createSceneNode];
     self.node.castsShadow = NO;
@@ -115,10 +120,20 @@
 }
 
 - (void) updateWithDeltaTime:(NSTimeInterval)seconds {
-    
     self.currentDistance = lerpf( self.currentDistance, self.targetDistance, 1.f-powf( self.dampFactor, seconds ) );
-    
     self.node.position = SCNVector3FromGLKVector3( GLKVector3Add( [Camera main].position, GLKVector3MultiplyScalar( [Camera main].reticleForward, self.currentDistance)));
+    
+    [self updateReticleVisibility];
+}
+
+- (void) updateReticleVisibility {
+    // Override showing the reticle geometry depending on tracking state,
+    // so we don't overlay reticle on top of the the sign saying "Look Back at Scene" 
+    BOOL hideReticleNotTracking = [SceneManager main].mixedRealityMode.lastTrackerHints.isOrientationOnly || ([SceneManager main].mixedRealityMode.lastTrackerPoseAccuracy == BETrackerPoseAccuracyNotAvailable);
+    BOOL hideReticle = hideReticleNotTracking || (self.isEnabled==NO);
+    if( self.node.hidden != hideReticle) {
+        self.node.hidden = hideReticle;
+    }
 }
 
 @end

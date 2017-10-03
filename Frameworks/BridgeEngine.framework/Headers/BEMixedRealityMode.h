@@ -42,7 +42,9 @@ BE_API
 /// The user has tapped "Done" on the editing panel.
 - (void) mixedRealityMarkupEditingEnded;
 
-/// Called before rendering each frame. This is good place to update your SceneKit nodes.
+/** Called before rendering each frame. This is good place to update your SceneKit nodes.
+     This is called on the render thread, which is a background thread, not the main thread.
+ **/
 - (void) mixedRealityUpdateAtTime:(NSTimeInterval)time;
 
 @optional
@@ -55,6 +57,15 @@ BE_API
  @param mappedAreaStatus indicates whether a previously scanned scene could be reloaded from the device successfully
  */
 - (void) mixedRealityDidLoadScene:(BEMappedAreaStatus)mappedAreaStatus;
+
+/** Called once per frame while markup placement is happening. This allows you
+ to project your object into the world how it will be placed.
+ @pararm markupName - The name of the markup node being placed.
+ @param position - Position of projected node
+ @param eulerAngles - Euler angles of projected node
+ @returns BOOL - YES if you want BridgeEngine to project a node. NO if you want to handle the projection yourself.
+ */
+- (BOOL) mixedRealityBridgeShouldProjectMarkupNode:(NSString *)markupName position:(SCNVector3)position eulerAngles:(SCNVector3)eulerAngles;
 
 @end
 
@@ -73,13 +84,17 @@ BE_API
  
  - `kBECaptureReplayMode`: Whether a previous capture should be replayed. Valid values are listed in BECaptureReplayMode. Default is BECaptureReplayModeDisabled.
  - `kBECaptureReplayFile`: path to the OCC replay file, relative to the app documents folder. Default is "BridgeEngineScene/sceneReplay.occ", with a fallback on "BridgeEngineScene/capture.occ".
- - `kBETrackerFallbackOnIMUEnabled`: If YES, will fallback to IMU-based rotational-only pose updates if the visual tracker is lost. Default is NO.
- - `kBEVisualInertialPoseFilterEnabled`: If YES, the tracker output will be smoother, but with potentially a slightly higher latency. Default is NO.
  - `kBEUsingWideVisionLens`:  Whether a Wide Vision Lens is attached. Default is NO.
  - `kBEUsingColorCameraOnly`: Whether the engine should try to connect to a Structure Sensor. Default is NO.
  - `kBEStereoRenderingEnabled`: If YES, we render two views, as if for a head-mounted display. If NO, we render a single (mono) view. Default is NO.
  - `kBERecordingOptionsEnabled`: If YES, a button to record a replay sequence will appear in mono mode. This option does nothing if kBEStereoRenderingEnabled or `kBECaptureReplayMode` are also enabled. **IMPORTANT**: this option will disable touch interactions, as the Record button will instantiate a tap recognizer.
- 
+ - `kBETrackerFallbackOnIMUEnabled`: If YES, will fallback to IMU-based rotational-only pose updates if the visual tracker is lost. Default is YES.
+ - `kBEVisualInertialPoseFilterEnabled`: If YES, the tracker output will be smoother, but with potentially a slightly higher latency. Default is YES.
+ - `kBEAutoExposeWhileRelocalizing`: If YES, the iOS color camera will auto-expose while trying to relocalize. Use this if lighting may have changed since the mapped area was captured. Default is NO.
+ - `kBEExpectedFpsForTrackingEstimation` : This value should be set when running the engine in headless mode. It's used to improve tracking performance by setting an expected display speed for frame rate prediction. Set this number to the FPS of your display loop and the engine will attempt to keep tracking data and display data as close to sync as possible.
+ Accepted values are 60 or 30. The default value is 60.
+ NOTE: When not in headless mode this setting has no effect.
+
  @param markupNames An optional list of markup names, which will persist in the scene over multiple runs of the appl. In your app, you may call [BEMixedRealityMode startMarkupEditing] to load our internal UI for setting and saving markup.
  */
 - (instancetype) initWithView:(BEView*)view
@@ -91,12 +106,15 @@ BE_API
  @param engineOptions The valid keys are:
  
  - `kBECaptureReplayMode`: Whether a previous capture should be replayed. Valid values are listed in BECaptureReplayMode. Default is BECaptureReplayModeDisabled.
- - `kBETrackerFallbackOnIMUEnabled`: If YES, will fallback to IMU-based rotational-only pose updates if the visual tracker is lost. Default is NO.
- - `kBEVisualInertialPoseFilterEnabled`: If YES, the tracker output will be smoother, but with potentially a slightly higher latency. Default is NO.
  - `kBEUsingWideVisionLens`:  Whether a Wide Vision Lens is attached. Default is NO.
  - `kBEUsingColorCameraOnly`: Whether the engine should try to connect to a Structure Sensor. Default is NO.
  - `kBEStereoRenderingEnabled`: If YES, we render two views, as if for a head-mounted display. If NO, we render a single (mono) view. Default is NO.
  - `kBERecordingOptionsEnabled`: If YES, a button to record a replay sequence will appear in mono mode. This option does nothing if kBEStereoRenderingEnabled or `kBECaptureReplayMode` are also enabled. **IMPORTANT**: this option will disable touch interactions, as the Record button will instantiate a tap recognizer.
+ - `kBETrackerFallbackOnIMUEnabled`: If YES, will fallback to IMU-based rotational-only pose updates if the visual tracker is lost. Default is YES.
+ - `kBEVisualInertialPoseFilterEnabled`: If YES, the tracker output will be smoother, but with potentially a slightly higher latency. Default is YES.
+ - `kBEExpectedFpsForTrackingEstimation` : This value should be set when running the engine in headless mode. It's used to improve tracking performance by setting an expected display speed for frame rate prediction.  Set this number to the FPS of your display loop and the engine will attempt to keep tracking data and display data as close to sync as possible.
+ Accepted values are 60 or 30. The default value is 60.
+ NOTE: When not in headless mode this setting has no effect.
  
  @param markupNames An optional list of markup names, which will persist in the scene over multiple runs of the appl. In your app, you may call [BEMixedRealityMode startMarkupEditing] to load our internal UI for setting and saving markup.
  
@@ -270,6 +288,30 @@ These coordinates can be used for UIKit operations like moving a UIView to a spe
 
 //------------------------------------------------------------------------------
 
+/**
+    BEMixedRealityRenderData can be used to create your own stereo rendering system including:
+        - Position, rotation, and projection of both eyes.
+        - Information needed to color your mixed reality mesh using an undistorted OpenGL texture from the camera feed.
+ 
+    This struct is designed to be used primarily in headless mode, although it can be used to retrieve camera texture
+    data in non-headless mode as well.
+ */
+@interface BEMixedRealityRenderData : NSObject
+
+@property (nonatomic,readonly) GLKMatrix4 leftEyePose;
+@property (nonatomic,readonly) GLKMatrix4 leftEyeGLProjection;
+
+@property (nonatomic,readonly) GLKMatrix4 rightEyePose;
+@property (nonatomic,readonly) GLKMatrix4 rightEyeGLProjection;
+
+@property (nonatomic,readonly) GLuint mixedRealityRgbaTexture;
+@property (nonatomic,readonly) int mixedRealityRgbaTextureWidth;
+@property (nonatomic,readonly) int mixedRealityRgbaTextureHeight;
+
+@end
+
+//------------------------------------------------------------------------------
+
 struct BEColorFrameReference;
 
 @interface BEMixedRealityPrediction : NSObject
@@ -280,6 +322,8 @@ struct BEColorFrameReference;
 @property (nonatomic,readonly) GLKMatrix4 associatedColorFramePose;
 @property (nonatomic,readonly) GLKMatrix4 colorFrameGLProjection;
 @end
+
+//------------------------------------------------------------------------------
 
 @interface BEMixedRealityMode(LowLevel)
 
@@ -293,6 +337,11 @@ struct BEColorFrameReference;
  */
 - (void)unlockSceneMesh;
 
+/** Return a coarse version of the scene mesh, ideal for physics. 
+ This is only updated after an export or reload operation.
+ */
+- (BEMesh*)coarseMesh;
+
 /** Return the best estimate of the color camera pose for a given a display link timestamp
  
  This is meant to be used in headless mode (when BEView==nil), e.g. from the Unity plugin.
@@ -302,6 +351,19 @@ struct BEColorFrameReference;
  
  */
 - (BEMixedRealityPrediction*)predictColorCameraPoseForDisplayLinkStart:(NSTimeInterval)displayLinkStart;
+
+/** Uses the color camera pose estimates to return data for rendering.
+    
+    This is meant to be used in headless mode (when BEView==nil), e.g. from the Unity plugin.
+ 
+    @param mrPrediction - The prediction to be used for this render data.  This should be created this frame by calling - (BEMixedRealityPrediction*)predictColorCameraPoseForDisplayLinkStart:(NSTimeInterval)displayLinkStart;
+    
+    @param requiresTexture - If we should return texture information with camera information. 
+    @warn Only use if you need the texture! This will create a delay in predictive mode as we wait for the latest color frame from the camera.
+ 
+    @return nil if mrPrediction.couldPredict == NO. Otherwise returns render data driven by the estimated pose.  This includes information for the left / right eyes and the texture of the real world mesh.
+*/
+- (BEMixedRealityRenderData *)renderDataForPrediction:(BEMixedRealityPrediction *)mrPrediction requiresTexture:(BOOL)requiresTexture;
 
 /** Render the scene mesh in the current GL context.
  

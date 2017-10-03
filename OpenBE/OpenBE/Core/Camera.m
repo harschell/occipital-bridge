@@ -12,6 +12,7 @@
 @interface Camera ()
 @property(atomic) GLKVector3 tmpForward;
 @property(atomic) GLKVector3 tmpUp;
+@property (atomic) GLKVector3 tmpRight;
 @property(atomic) GLKVector3 previousPosition;
 @property(atomic) GLKVector3 reticleOffset;
 
@@ -26,6 +27,7 @@
     self.reticleOffset = GLKVector3Make(0, RETICLE_VERTICAL_OFFSET, 0);
 
     self.tmpUp = GLKVector3Make(0, 1, 0);
+    self.tmpRight = GLKVector3Make(1,0,0);
     self.position = GLKVector3Make(0, 0, 0);
     self.speed = 0.f;
 
@@ -60,6 +62,7 @@
     self.reticleForward = GLKVector3Normalize(self.reticleForward);
 
     self.up = GLKQuaternionRotateVector3(orientation, self.tmpUp);
+    self.right = GLKQuaternionRotateVector3( orientation, self.tmpRight );
     self.position = SCNVector3ToGLKVector3(node.position);
 
     // Update positional and orientation of the AudioEngine.

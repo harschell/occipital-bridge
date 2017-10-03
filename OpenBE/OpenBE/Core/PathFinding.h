@@ -22,6 +22,15 @@
 @interface PathFinding : NSObject
 
 /**
+ * Default initializer: Reads occupancy map from default location
+ */
+- (instancetype) init;
+/**
+ * Initializer accepts user provided occupancy map
+ */
+- (instancetype) initWithImage:(UIImage*) mapImage;
+
+/**
  * Check if the target location is occupied.
  */
 - (BOOL) occupied:(GLKVector3)target;

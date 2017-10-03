@@ -8,6 +8,11 @@
 #import "SceneManager.h"
 #import "Core.h"
 
+#ifdef ENABLE_COMPONENT_PROFILING
+#include <mach/mach.h>
+#include <mach/mach_time.h>
+#endif
+
 @import GLKit;
 
 @interface SceneManager ()
@@ -30,6 +35,7 @@
 - (void) initWithMixedRealityMode:(BEMixedRealityMode *)mixedRealityMode stereo:(BOOL)stereo {
     self.isStereo = stereo;
     self.mixedRealityMode = mixedRealityMode;
+    
     // update scene
     [Scene main].scene = mixedRealityMode.sceneKitScene;
     [Scene main].rootNode = mixedRealityMode.worldNodeWhenRelocalized;
@@ -78,6 +84,10 @@
 
 - (void) addEntity:(GKEntity * ) entity {
     [self.entities addObject:entity];
+}
+
+- (void) removeEntity:(GKEntity *)entity {
+    [self.entities removeObject:entity];
 }
 
 - (GKEntity * ) createEntity {
@@ -130,12 +140,42 @@
 }
 
 - (void) updateWithDeltaTime:(NSTimeInterval)seconds mixedRealityMode:(BEMixedRealityMode *) mixedRealityMode {
+#ifdef ENABLE_COMPONENT_PROFILING
+    // Check global time averages, and every second report runtime cost.
+    static mach_timebase_info_data_t sTimebaseInfo;
+    if( sTimebaseInfo.denom == 0 ) mach_timebase_info(&sTimebaseInfo);
     
+    uint64_t start = mach_absolute_time();
+#endif // ENABLE_COMPONENT_PROFILING
+
     [self updateSingletons:mixedRealityMode withDeltaTime:(NSTimeInterval)seconds];
 
     for( GKEntity * entity in self.entities ) {
         [entity updateWithDeltaTime:seconds];
     }
+
+#ifdef ENABLE_COMPONENT_PROFILING
+    uint64_t end = mach_absolute_time();
+    uint64_t elapsedNano = (end-start) * (uint64_t)sTimebaseInfo.numer / (uint64_t)sTimebaseInfo.denom;
+    
+    // Integrate timing averages, and throttle to 1-update per second.
+    static uint64_t avgElapsed = 0;
+    static int avgElapsedCount = 0;
+    
+    avgElapsed += elapsedNano;
+    avgElapsedCount++;
+    
+    static uint64_t throttleStart = 0;
+    uint64_t throttleElapsedNano = (end - throttleStart) * (uint64_t)sTimebaseInfo.numer / (uint64_t)sTimebaseInfo.denom;
+    if( throttleElapsedNano > 1000000000L ) {
+        avgElapsed /= avgElapsedCount;
+        NSLog(@"Scene Cmp: %0.4f (ms)", (double)avgElapsed / 1000000.0 );
+        avgElapsed = 0;
+        avgElapsedCount = 0;
+        
+        throttleStart = end;
+    }
+#endif // ENABLE_COMPONENT_PROFILING
 }
 
 - (void)updateAtTime:(NSTimeInterval)time mixedRealityMode:(BEMixedRealityMode *) mixedRealityMode {

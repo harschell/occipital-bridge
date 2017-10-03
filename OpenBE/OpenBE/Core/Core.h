@@ -10,8 +10,6 @@
 // Global settings.
 // #define ENABLE_ROBOTROOM - Moved to OpenBE Preprocessor Macros.
 
-#define USE_3DSPATIALIZED_AUDIO 1
-
 // Rendering And Ray-casting bits.
 #define RAYCAST_IGNORE_BIT (1<<16)
 
@@ -23,6 +21,9 @@
 #define CATEGORY_BIT_MASK_CASTS_SHADOWS_ONTO_ENVIRONMENT 2
 #define CATEGORY_BIT_MASK_CASTS_SHADOWS_ONTO_AR 4
 #define CATEGORY_BIT_MASK_LIGHTING (CATEGORY_BIT_MASK_CASTS_SHADOWS_ONTO_ENVIRONMENT|CATEGORY_BIT_MASK_CASTS_SHADOWS_ONTO_AR)
+#define CATEGORY_BIT_MASK_UI_BUTTONS 8
+
+// #define ENABLE_COMPONENT_PROFILING 1
 
 /**
  * Transaprency and world rendering is put at specific render order levels,

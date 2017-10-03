@@ -1,0 +1,549 @@
+// !$*UTF8*$!
+{
+	archiveVersion = 1;
+	classes = {
+	};
+	objectVersion = 46;
+	objects = {
+
+/* Begin PBXBuildFile section */
+		2C2225491EFB32E900493D35 /* BridgeControllerManipulationComponent.mm in Sources */ = {isa = PBXBuildFile; fileRef = 2C2225421EFB32E900493D35 /* BridgeControllerManipulationComponent.mm */; };
+		2C22254A1EFB32E900493D35 /* InputBeamComponent.mm in Sources */ = {isa = PBXBuildFile; fileRef = 2C2225441EFB32E900493D35 /* InputBeamComponent.mm */; };
+		2C22254B1EFB32E900493D35 /* InteractablePhysicsComponent.m in Sources */ = {isa = PBXBuildFile; fileRef = 2C2225461EFB32E900493D35 /* InteractablePhysicsComponent.m */; };
+		2C22254C1EFB32E900493D35 /* InteractableSpawnComponent.m in Sources */ = {isa = PBXBuildFile; fileRef = 2C2225481EFB32E900493D35 /* InteractableSpawnComponent.m */; };
+		2C2225541EFB375400493D35 /* GeometryHitTest.m in Sources */ = {isa = PBXBuildFile; fileRef = 2C2225531EFB375400493D35 /* GeometryHitTest.m */; };
+		5A466B9C1EB3B4580031B54A /* main.m in Sources */ = {isa = PBXBuildFile; fileRef = 5A466B9B1EB3B4580031B54A /* main.m */; };
+		5A466B9F1EB3B4580031B54A /* AppDelegate.mm in Sources */ = {isa = PBXBuildFile; fileRef = 5A466B9E1EB3B4580031B54A /* AppDelegate.mm */; };
+		5A466BA21EB3B4580031B54A /* ViewController.mm in Sources */ = {isa = PBXBuildFile; fileRef = 5A466BA11EB3B4580031B54A /* ViewController.mm */; };
+		5A466BA51EB3B4580031B54A /* Main.storyboard in Resources */ = {isa = PBXBuildFile; fileRef = 5A466BA31EB3B4580031B54A /* Main.storyboard */; };
+		5A466BA71EB3B4580031B54A /* Assets.xcassets in Resources */ = {isa = PBXBuildFile; fileRef = 5A466BA61EB3B4580031B54A /* Assets.xcassets */; };
+		5A466BAA1EB3B4580031B54A /* LaunchScreen.storyboard in Resources */ = {isa = PBXBuildFile; fileRef = 5A466BA81EB3B4580031B54A /* LaunchScreen.storyboard */; };
+		5A466C6D1EB3BA530031B54A /* CoreBluetooth.framework in Frameworks */ = {isa = PBXBuildFile; fileRef = 5A466C6C1EB3BA530031B54A /* CoreBluetooth.framework */; };
+		5A466C6F1EB3BA5C0031B54A /* UIKit.framework in Frameworks */ = {isa = PBXBuildFile; fileRef = 5A466C6E1EB3BA5C0031B54A /* UIKit.framework */; };
+		5A466C711EB3BA610031B54A /* GameController.framework in Frameworks */ = {isa = PBXBuildFile; fileRef = 5A466C701EB3BA610031B54A /* GameController.framework */; };
+		5A466C731EB3BA6B0031B54A /* SceneKit.framework in Frameworks */ = {isa = PBXBuildFile; fileRef = 5A466C721EB3BA6B0031B54A /* SceneKit.framework */; };
+		5A466C751EB3BA720031B54A /* AVFoundation.framework in Frameworks */ = {isa = PBXBuildFile; fileRef = 5A466C741EB3BA720031B54A /* AVFoundation.framework */; };
+		5A466C771EB3BA8E0031B54A /* Accelerate.framework in Frameworks */ = {isa = PBXBuildFile; fileRef = 5A466C761EB3BA8E0031B54A /* Accelerate.framework */; };
+		5A466C7D1EB3BA9D0031B54A /* CoreGraphics.framework in Frameworks */ = {isa = PBXBuildFile; fileRef = 5A466C781EB3BA9D0031B54A /* CoreGraphics.framework */; };
+		5A466C7E1EB3BA9D0031B54A /* CoreImage.framework in Frameworks */ = {isa = PBXBuildFile; fileRef = 5A466C791EB3BA9D0031B54A /* CoreImage.framework */; };
+		5A466C7F1EB3BA9D0031B54A /* CoreMedia.framework in Frameworks */ = {isa = PBXBuildFile; fileRef = 5A466C7A1EB3BA9D0031B54A /* CoreMedia.framework */; };
+		5A466C801EB3BA9D0031B54A /* CoreMotion.framework in Frameworks */ = {isa = PBXBuildFile; fileRef = 5A466C7B1EB3BA9D0031B54A /* CoreMotion.framework */; };
+		5A466C811EB3BA9D0031B54A /* CoreVideo.framework in Frameworks */ = {isa = PBXBuildFile; fileRef = 5A466C7C1EB3BA9D0031B54A /* CoreVideo.framework */; };
+		5A466C831EB3BAA60031B54A /* ExternalAccessory.framework in Frameworks */ = {isa = PBXBuildFile; fileRef = 5A466C821EB3BAA60031B54A /* ExternalAccessory.framework */; };
+		5A466C851EB3BAB50031B54A /* Foundation.framework in Frameworks */ = {isa = PBXBuildFile; fileRef = 5A466C841EB3BAB50031B54A /* Foundation.framework */; };
+		5A466C871EB3BABB0031B54A /* ImageIO.framework in Frameworks */ = {isa = PBXBuildFile; fileRef = 5A466C861EB3BABB0031B54A /* ImageIO.framework */; };
+		5A466C891EB3BAC00031B54A /* Metal.framework in Frameworks */ = {isa = PBXBuildFile; fileRef = 5A466C881EB3BAC00031B54A /* Metal.framework */; };
+		5A466C8B1EB3BAC70031B54A /* OpenGLES.framework in Frameworks */ = {isa = PBXBuildFile; fileRef = 5A466C8A1EB3BAC70031B54A /* OpenGLES.framework */; };
+		5A466C8D1EB3BACB0031B54A /* QuartzCore.framework in Frameworks */ = {isa = PBXBuildFile; fileRef = 5A466C8C1EB3BACB0031B54A /* QuartzCore.framework */; };
+		5A466C8F1EB3BAD50031B54A /* libz.tbd in Frameworks */ = {isa = PBXBuildFile; fileRef = 5A466C8E1EB3BAD50031B54A /* libz.tbd */; };
+		5A466C901EB3BBEB0031B54A /* OpenBE.framework in Frameworks */ = {isa = PBXBuildFile; fileRef = 5A466C301EB3B6A50031B54A /* OpenBE.framework */; };
+		5A466C911EB3BBEB0031B54A /* OpenBE.framework in Embed Frameworks */ = {isa = PBXBuildFile; fileRef = 5A466C301EB3B6A50031B54A /* OpenBE.framework */; settings = {ATTRIBUTES = (CodeSignOnCopy, RemoveHeadersOnCopy, ); }; };
+		5A466C941EB3BBF80031B54A /* BridgeEngine.framework in Frameworks */ = {isa = PBXBuildFile; fileRef = 5A466C6A1EB3BA470031B54A /* BridgeEngine.framework */; };
+		5A466C951EB3BBF80031B54A /* BridgeEngine.framework in Embed Frameworks */ = {isa = PBXBuildFile; fileRef = 5A466C6A1EB3BA470031B54A /* BridgeEngine.framework */; settings = {ATTRIBUTES = (CodeSignOnCopy, RemoveHeadersOnCopy, ); }; };
+		5A4960D51EB68CD600292694 /* JavaScriptCore.framework in Frameworks */ = {isa = PBXBuildFile; fileRef = 5A4960D41EB68CD600292694 /* JavaScriptCore.framework */; };
+/* End PBXBuildFile section */
+
+/* Begin PBXContainerItemProxy section */
+		5A466C2F1EB3B6A50031B54A /* PBXContainerItemProxy */ = {
+			isa = PBXContainerItemProxy;
+			containerPortal = 5A466C2B1EB3B6A50031B54A /* OpenBE.xcodeproj */;
+			proxyType = 2;
+			remoteGlobalIDString = 2DCD6FED1DFFEED3003691AE;
+			remoteInfo = OpenBE;
+		};
+		5A466C921EB3BBEB0031B54A /* PBXContainerItemProxy */ = {
+			isa = PBXContainerItemProxy;
+			containerPortal = 5A466C2B1EB3B6A50031B54A /* OpenBE.xcodeproj */;
+			proxyType = 1;
+			remoteGlobalIDString = 2DCD6FEC1DFFEED3003691AE;
+			remoteInfo = OpenBE;
+		};
+/* End PBXContainerItemProxy section */
+
+/* Begin PBXCopyFilesBuildPhase section */
+		5A466C381EB3B83F0031B54A /* Embed Frameworks */ = {
+			isa = PBXCopyFilesBuildPhase;
+			buildActionMask = 2147483647;
+			dstPath = "";
+			dstSubfolderSpec = 10;
+			files = (
+				5A466C911EB3BBEB0031B54A /* OpenBE.framework in Embed Frameworks */,
+				5A466C951EB3BBF80031B54A /* BridgeEngine.framework in Embed Frameworks */,
+			);
+			name = "Embed Frameworks";
+			runOnlyForDeploymentPostprocessing = 0;
+		};
+/* End PBXCopyFilesBuildPhase section */
+
+/* Begin PBXFileReference section */
+		2C2225411EFB32E900493D35 /* BridgeControllerManipulationComponent.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; path = BridgeControllerManipulationComponent.h; sourceTree = "<group>"; };
+		2C2225421EFB32E900493D35 /* BridgeControllerManipulationComponent.mm */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.cpp.objcpp; path = BridgeControllerManipulationComponent.mm; sourceTree = "<group>"; };
+		2C2225431EFB32E900493D35 /* InputBeamComponent.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; path = InputBeamComponent.h; sourceTree = "<group>"; };
+		2C2225441EFB32E900493D35 /* InputBeamComponent.mm */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.cpp.objcpp; path = InputBeamComponent.mm; sourceTree = "<group>"; };
+		2C2225451EFB32E900493D35 /* InteractablePhysicsComponent.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; path = InteractablePhysicsComponent.h; sourceTree = "<group>"; };
+		2C2225461EFB32E900493D35 /* InteractablePhysicsComponent.m */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.objc; path = InteractablePhysicsComponent.m; sourceTree = "<group>"; };
+		2C2225471EFB32E900493D35 /* InteractableSpawnComponent.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; path = InteractableSpawnComponent.h; sourceTree = "<group>"; };
+		2C2225481EFB32E900493D35 /* InteractableSpawnComponent.m */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.objc; path = InteractableSpawnComponent.m; sourceTree = "<group>"; };
+		2C22254E1EFB343D00493D35 /* PhysicsEventComponentProtocol.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; path = PhysicsEventComponentProtocol.h; sourceTree = "<group>"; };
+		2C2225521EFB375400493D35 /* GeometryHitTest.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; path = GeometryHitTest.h; sourceTree = "<group>"; };
+		2C2225531EFB375400493D35 /* GeometryHitTest.m */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.objc; path = GeometryHitTest.m; sourceTree = "<group>"; };
+		5A466B971EB3B4580031B54A /* LaserManipulator.app */ = {isa = PBXFileReference; explicitFileType = wrapper.application; includeInIndex = 0; path = LaserManipulator.app; sourceTree = BUILT_PRODUCTS_DIR; };
+		5A466B9B1EB3B4580031B54A /* main.m */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.c.objc; path = main.m; sourceTree = "<group>"; };
+		5A466B9D1EB3B4580031B54A /* AppDelegate.h */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.c.h; path = AppDelegate.h; sourceTree = "<group>"; };
+		5A466B9E1EB3B4580031B54A /* AppDelegate.mm */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.cpp.objcpp; path = AppDelegate.mm; sourceTree = "<group>"; };
+		5A466BA01EB3B4580031B54A /* ViewController.h */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.c.h; path = ViewController.h; sourceTree = "<group>"; };
+		5A466BA11EB3B4580031B54A /* ViewController.mm */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.cpp.objcpp; path = ViewController.mm; sourceTree = "<group>"; };
+		5A466BA41EB3B4580031B54A /* Base */ = {isa = PBXFileReference; lastKnownFileType = file.storyboard; name = Base; path = Base.lproj/Main.storyboard; sourceTree = "<group>"; };
+		5A466BA61EB3B4580031B54A /* Assets.xcassets */ = {isa = PBXFileReference; lastKnownFileType = folder.assetcatalog; path = Assets.xcassets; sourceTree = "<group>"; };
+		5A466BA91EB3B4580031B54A /* Base */ = {isa = PBXFileReference; lastKnownFileType = file.storyboard; name = Base; path = Base.lproj/LaunchScreen.storyboard; sourceTree = "<group>"; };
+		5A466BAB1EB3B4580031B54A /* Info.plist */ = {isa = PBXFileReference; lastKnownFileType = text.plist.xml; path = Info.plist; sourceTree = "<group>"; };
+		5A466C2B1EB3B6A50031B54A /* OpenBE.xcodeproj */ = {isa = PBXFileReference; lastKnownFileType = "wrapper.pb-project"; name = OpenBE.xcodeproj; path = ../OpenBE/OpenBE.xcodeproj; sourceTree = "<group>"; };
+		5A466C6A1EB3BA470031B54A /* BridgeEngine.framework */ = {isa = PBXFileReference; lastKnownFileType = wrapper.framework; name = BridgeEngine.framework; path = ../Frameworks/BridgeEngine.framework; sourceTree = "<group>"; };
+		5A466C6C1EB3BA530031B54A /* CoreBluetooth.framework */ = {isa = PBXFileReference; lastKnownFileType = wrapper.framework; name = CoreBluetooth.framework; path = System/Library/Frameworks/CoreBluetooth.framework; sourceTree = SDKROOT; };
+		5A466C6E1EB3BA5C0031B54A /* UIKit.framework */ = {isa = PBXFileReference; lastKnownFileType = wrapper.framework; name = UIKit.framework; path = System/Library/Frameworks/UIKit.framework; sourceTree = SDKROOT; };
+		5A466C701EB3BA610031B54A /* GameController.framework */ = {isa = PBXFileReference; lastKnownFileType = wrapper.framework; name = GameController.framework; path = System/Library/Frameworks/GameController.framework; sourceTree = SDKROOT; };
+		5A466C721EB3BA6B0031B54A /* SceneKit.framework */ = {isa = PBXFileReference; lastKnownFileType = wrapper.framework; name = SceneKit.framework; path = System/Library/Frameworks/SceneKit.framework; sourceTree = SDKROOT; };
+		5A466C741EB3BA720031B54A /* AVFoundation.framework */ = {isa = PBXFileReference; lastKnownFileType = wrapper.framework; name = AVFoundation.framework; path = System/Library/Frameworks/AVFoundation.framework; sourceTree = SDKROOT; };
+		5A466C761EB3BA8E0031B54A /* Accelerate.framework */ = {isa = PBXFileReference; lastKnownFileType = wrapper.framework; name = Accelerate.framework; path = System/Library/Frameworks/Accelerate.framework; sourceTree = SDKROOT; };
+		5A466C781EB3BA9D0031B54A /* CoreGraphics.framework */ = {isa = PBXFileReference; lastKnownFileType = wrapper.framework; name = CoreGraphics.framework; path = System/Library/Frameworks/CoreGraphics.framework; sourceTree = SDKROOT; };
+		5A466C791EB3BA9D0031B54A /* CoreImage.framework */ = {isa = PBXFileReference; lastKnownFileType = wrapper.framework; name = CoreImage.framework; path = System/Library/Frameworks/CoreImage.framework; sourceTree = SDKROOT; };
+		5A466C7A1EB3BA9D0031B54A /* CoreMedia.framework */ = {isa = PBXFileReference; lastKnownFileType = wrapper.framework; name = CoreMedia.framework; path = System/Library/Frameworks/CoreMedia.framework; sourceTree = SDKROOT; };
+		5A466C7B1EB3BA9D0031B54A /* CoreMotion.framework */ = {isa = PBXFileReference; lastKnownFileType = wrapper.framework; name = CoreMotion.framework; path = System/Library/Frameworks/CoreMotion.framework; sourceTree = SDKROOT; };
+		5A466C7C1EB3BA9D0031B54A /* CoreVideo.framework */ = {isa = PBXFileReference; lastKnownFileType = wrapper.framework; name = CoreVideo.framework; path = System/Library/Frameworks/CoreVideo.framework; sourceTree = SDKROOT; };
+		5A466C821EB3BAA60031B54A /* ExternalAccessory.framework */ = {isa = PBXFileReference; lastKnownFileType = wrapper.framework; name = ExternalAccessory.framework; path = System/Library/Frameworks/ExternalAccessory.framework; sourceTree = SDKROOT; };
+		5A466C841EB3BAB50031B54A /* Foundation.framework */ = {isa = PBXFileReference; lastKnownFileType = wrapper.framework; name = Foundation.framework; path = System/Library/Frameworks/Foundation.framework; sourceTree = SDKROOT; };
+		5A466C861EB3BABB0031B54A /* ImageIO.framework */ = {isa = PBXFileReference; lastKnownFileType = wrapper.framework; name = ImageIO.framework; path = System/Library/Frameworks/ImageIO.framework; sourceTree = SDKROOT; };
+		5A466C881EB3BAC00031B54A /* Metal.framework */ = {isa = PBXFileReference; lastKnownFileType = wrapper.framework; name = Metal.framework; path = System/Library/Frameworks/Metal.framework; sourceTree = SDKROOT; };
+		5A466C8A1EB3BAC70031B54A /* OpenGLES.framework */ = {isa = PBXFileReference; lastKnownFileType = wrapper.framework; name = OpenGLES.framework; path = System/Library/Frameworks/OpenGLES.framework; sourceTree = SDKROOT; };
+		5A466C8C1EB3BACB0031B54A /* QuartzCore.framework */ = {isa = PBXFileReference; lastKnownFileType = wrapper.framework; name = QuartzCore.framework; path = System/Library/Frameworks/QuartzCore.framework; sourceTree = SDKROOT; };
+		5A466C8E1EB3BAD50031B54A /* libz.tbd */ = {isa = PBXFileReference; lastKnownFileType = "sourcecode.text-based-dylib-definition"; name = libz.tbd; path = usr/lib/libz.tbd; sourceTree = SDKROOT; };
+		5A466C971EB3BC5C0031B54A /* LaserManipulator.xcconfig */ = {isa = PBXFileReference; lastKnownFileType = text.xcconfig; path = LaserManipulator.xcconfig; sourceTree = "<group>"; };
+		5A4960D41EB68CD600292694 /* JavaScriptCore.framework */ = {isa = PBXFileReference; lastKnownFileType = wrapper.framework; name = JavaScriptCore.framework; path = System/Library/Frameworks/JavaScriptCore.framework; sourceTree = SDKROOT; };
+/* End PBXFileReference section */
+
+/* Begin PBXFrameworksBuildPhase section */
+		5A466B941EB3B4580031B54A /* Frameworks */ = {
+			isa = PBXFrameworksBuildPhase;
+			buildActionMask = 2147483647;
+			files = (
+				5A4960D51EB68CD600292694 /* JavaScriptCore.framework in Frameworks */,
+				5A466C941EB3BBF80031B54A /* BridgeEngine.framework in Frameworks */,
+				5A466C8F1EB3BAD50031B54A /* libz.tbd in Frameworks */,
+				5A466C6F1EB3BA5C0031B54A /* UIKit.framework in Frameworks */,
+				5A466C8D1EB3BACB0031B54A /* QuartzCore.framework in Frameworks */,
+				5A466C8B1EB3BAC70031B54A /* OpenGLES.framework in Frameworks */,
+				5A466C891EB3BAC00031B54A /* Metal.framework in Frameworks */,
+				5A466C871EB3BABB0031B54A /* ImageIO.framework in Frameworks */,
+				5A466C851EB3BAB50031B54A /* Foundation.framework in Frameworks */,
+				5A466C831EB3BAA60031B54A /* ExternalAccessory.framework in Frameworks */,
+				5A466C7D1EB3BA9D0031B54A /* CoreGraphics.framework in Frameworks */,
+				5A466C901EB3BBEB0031B54A /* OpenBE.framework in Frameworks */,
+				5A466C7E1EB3BA9D0031B54A /* CoreImage.framework in Frameworks */,
+				5A466C7F1EB3BA9D0031B54A /* CoreMedia.framework in Frameworks */,
+				5A466C801EB3BA9D0031B54A /* CoreMotion.framework in Frameworks */,
+				5A466C811EB3BA9D0031B54A /* CoreVideo.framework in Frameworks */,
+				5A466C771EB3BA8E0031B54A /* Accelerate.framework in Frameworks */,
+				5A466C751EB3BA720031B54A /* AVFoundation.framework in Frameworks */,
+				5A466C731EB3BA6B0031B54A /* SceneKit.framework in Frameworks */,
+				5A466C711EB3BA610031B54A /* GameController.framework in Frameworks */,
+				5A466C6D1EB3BA530031B54A /* CoreBluetooth.framework in Frameworks */,
+			);
+			runOnlyForDeploymentPostprocessing = 0;
+		};
+/* End PBXFrameworksBuildPhase section */
+
+/* Begin PBXGroup section */
+		2C2225401EFB32E900493D35 /* Components */ = {
+			isa = PBXGroup;
+			children = (
+				2C2225411EFB32E900493D35 /* BridgeControllerManipulationComponent.h */,
+				2C2225421EFB32E900493D35 /* BridgeControllerManipulationComponent.mm */,
+				2C2225431EFB32E900493D35 /* InputBeamComponent.h */,
+				2C2225441EFB32E900493D35 /* InputBeamComponent.mm */,
+				2C2225451EFB32E900493D35 /* InteractablePhysicsComponent.h */,
+				2C2225461EFB32E900493D35 /* InteractablePhysicsComponent.m */,
+				2C2225471EFB32E900493D35 /* InteractableSpawnComponent.h */,
+				2C2225481EFB32E900493D35 /* InteractableSpawnComponent.m */,
+			);
+			path = Components;
+			sourceTree = "<group>";
+		};
+		2C22254D1EFB343D00493D35 /* Core */ = {
+			isa = PBXGroup;
+			children = (
+				2C2225521EFB375400493D35 /* GeometryHitTest.h */,
+				2C2225531EFB375400493D35 /* GeometryHitTest.m */,
+				2C22254E1EFB343D00493D35 /* PhysicsEventComponentProtocol.h */,
+			);
+			path = Core;
+			sourceTree = "<group>";
+		};
+		5A466B8E1EB3B4580031B54A = {
+			isa = PBXGroup;
+			children = (
+				5A466C2B1EB3B6A50031B54A /* OpenBE.xcodeproj */,
+				5A466B991EB3B4580031B54A /* LaserManipulator */,
+				5A466B981EB3B4580031B54A /* Products */,
+				5A466BB31EB3B4930031B54A /* Frameworks */,
+			);
+			sourceTree = "<group>";
+		};
+		5A466B981EB3B4580031B54A /* Products */ = {
+			isa = PBXGroup;
+			children = (
+				5A466B971EB3B4580031B54A /* LaserManipulator.app */,
+			);
+			name = Products;
+			sourceTree = "<group>";
+		};
+		5A466B991EB3B4580031B54A /* LaserManipulator */ = {
+			isa = PBXGroup;
+			children = (
+				2C22254D1EFB343D00493D35 /* Core */,
+				2C2225401EFB32E900493D35 /* Components */,
+				5A466C9A1EB3BF280031B54A /* Resources */,
+				5A466C971EB3BC5C0031B54A /* LaserManipulator.xcconfig */,
+				5A466B9D1EB3B4580031B54A /* AppDelegate.h */,
+				5A466B9E1EB3B4580031B54A /* AppDelegate.mm */,
+				5A466BA01EB3B4580031B54A /* ViewController.h */,
+				5A466BA11EB3B4580031B54A /* ViewController.mm */,
+				5A466B9A1EB3B4580031B54A /* Supporting Files */,
+			);
+			path = LaserManipulator;
+			sourceTree = "<group>";
+		};
+		5A466B9A1EB3B4580031B54A /* Supporting Files */ = {
+			isa = PBXGroup;
+			children = (
+				5A466BAB1EB3B4580031B54A /* Info.plist */,
+				5A466B9B1EB3B4580031B54A /* main.m */,
+			);
+			name = "Supporting Files";
+			sourceTree = "<group>";
+		};
+		5A466BB31EB3B4930031B54A /* Frameworks */ = {
+			isa = PBXGroup;
+			children = (
+				5A4960D41EB68CD600292694 /* JavaScriptCore.framework */,
+				5A466C8E1EB3BAD50031B54A /* libz.tbd */,
+				5A466C8C1EB3BACB0031B54A /* QuartzCore.framework */,
+				5A466C8A1EB3BAC70031B54A /* OpenGLES.framework */,
+				5A466C881EB3BAC00031B54A /* Metal.framework */,
+				5A466C861EB3BABB0031B54A /* ImageIO.framework */,
+				5A466C841EB3BAB50031B54A /* Foundation.framework */,
+				5A466C821EB3BAA60031B54A /* ExternalAccessory.framework */,
+				5A466C781EB3BA9D0031B54A /* CoreGraphics.framework */,
+				5A466C791EB3BA9D0031B54A /* CoreImage.framework */,
+				5A466C7A1EB3BA9D0031B54A /* CoreMedia.framework */,
+				5A466C7B1EB3BA9D0031B54A /* CoreMotion.framework */,
+				5A466C7C1EB3BA9D0031B54A /* CoreVideo.framework */,
+				5A466C761EB3BA8E0031B54A /* Accelerate.framework */,
+				5A466C741EB3BA720031B54A /* AVFoundation.framework */,
+				5A466C721EB3BA6B0031B54A /* SceneKit.framework */,
+				5A466C701EB3BA610031B54A /* GameController.framework */,
+				5A466C6E1EB3BA5C0031B54A /* UIKit.framework */,
+				5A466C6C1EB3BA530031B54A /* CoreBluetooth.framework */,
+				5A466C6A1EB3BA470031B54A /* BridgeEngine.framework */,
+			);
+			name = Frameworks;
+			sourceTree = "<group>";
+		};
+		5A466C2C1EB3B6A50031B54A /* Products */ = {
+			isa = PBXGroup;
+			children = (
+				5A466C301EB3B6A50031B54A /* OpenBE.framework */,
+			);
+			name = Products;
+			sourceTree = "<group>";
+		};
+		5A466C9A1EB3BF280031B54A /* Resources */ = {
+			isa = PBXGroup;
+			children = (
+				5A466BA31EB3B4580031B54A /* Main.storyboard */,
+				5A466BA61EB3B4580031B54A /* Assets.xcassets */,
+				5A466BA81EB3B4580031B54A /* LaunchScreen.storyboard */,
+			);
+			name = Resources;
+			sourceTree = "<group>";
+		};
+/* End PBXGroup section */
+
+/* Begin PBXNativeTarget section */
+		5A466B961EB3B4580031B54A /* LaserManipulator */ = {
+			isa = PBXNativeTarget;
+			buildConfigurationList = 5A466BAE1EB3B4580031B54A /* Build configuration list for PBXNativeTarget "LaserManipulator" */;
+			buildPhases = (
+				5A466B931EB3B4580031B54A /* Sources */,
+				5A466B941EB3B4580031B54A /* Frameworks */,
+				5A466B951EB3B4580031B54A /* Resources */,
+				5A466C381EB3B83F0031B54A /* Embed Frameworks */,
+			);
+			buildRules = (
+			);
+			dependencies = (
+				5A466C931EB3BBEB0031B54A /* PBXTargetDependency */,
+			);
+			name = LaserManipulator;
+			productName = CodingChallenge;
+			productReference = 5A466B971EB3B4580031B54A /* LaserManipulator.app */;
+			productType = "com.apple.product-type.application";
+		};
+/* End PBXNativeTarget section */
+
+/* Begin PBXProject section */
+		5A466B8F1EB3B4580031B54A /* Project object */ = {
+			isa = PBXProject;
+			attributes = {
+				LastUpgradeCheck = 0830;
+				ORGANIZATIONNAME = AZ;
+				TargetAttributes = {
+					5A466B961EB3B4580031B54A = {
+						CreatedOnToolsVersion = 8.3.1;
+						ProvisioningStyle = Automatic;
+					};
+				};
+			};
+			buildConfigurationList = 5A466B921EB3B4580031B54A /* Build configuration list for PBXProject "LaserManipulator" */;
+			compatibilityVersion = "Xcode 3.2";
+			developmentRegion = English;
+			hasScannedForEncodings = 0;
+			knownRegions = (
+				en,
+				Base,
+			);
+			mainGroup = 5A466B8E1EB3B4580031B54A;
+			productRefGroup = 5A466B981EB3B4580031B54A /* Products */;
+			projectDirPath = "";
+			projectReferences = (
+				{
+					ProductGroup = 5A466C2C1EB3B6A50031B54A /* Products */;
+					ProjectRef = 5A466C2B1EB3B6A50031B54A /* OpenBE.xcodeproj */;
+				},
+			);
+			projectRoot = "";
+			targets = (
+				5A466B961EB3B4580031B54A /* LaserManipulator */,
+			);
+		};
+/* End PBXProject section */
+
+/* Begin PBXReferenceProxy section */
+		5A466C301EB3B6A50031B54A /* OpenBE.framework */ = {
+			isa = PBXReferenceProxy;
+			fileType = wrapper.framework;
+			path = OpenBE.framework;
+			remoteRef = 5A466C2F1EB3B6A50031B54A /* PBXContainerItemProxy */;
+			sourceTree = BUILT_PRODUCTS_DIR;
+		};
+/* End PBXReferenceProxy section */
+
+/* Begin PBXResourcesBuildPhase section */
+		5A466B951EB3B4580031B54A /* Resources */ = {
+			isa = PBXResourcesBuildPhase;
+			buildActionMask = 2147483647;
+			files = (
+				5A466BAA1EB3B4580031B54A /* LaunchScreen.storyboard in Resources */,
+				5A466BA71EB3B4580031B54A /* Assets.xcassets in Resources */,
+				5A466BA51EB3B4580031B54A /* Main.storyboard in Resources */,
+			);
+			runOnlyForDeploymentPostprocessing = 0;
+		};
+/* End PBXResourcesBuildPhase section */
+
+/* Begin PBXSourcesBuildPhase section */
+		5A466B931EB3B4580031B54A /* Sources */ = {
+			isa = PBXSourcesBuildPhase;
+			buildActionMask = 2147483647;
+			files = (
+				2C2225491EFB32E900493D35 /* BridgeControllerManipulationComponent.mm in Sources */,
+				2C22254C1EFB32E900493D35 /* InteractableSpawnComponent.m in Sources */,
+				5A466BA21EB3B4580031B54A /* ViewController.mm in Sources */,
+				5A466B9F1EB3B4580031B54A /* AppDelegate.mm in Sources */,
+				2C22254B1EFB32E900493D35 /* InteractablePhysicsComponent.m in Sources */,
+				5A466B9C1EB3B4580031B54A /* main.m in Sources */,
+				2C22254A1EFB32E900493D35 /* InputBeamComponent.mm in Sources */,
+				2C2225541EFB375400493D35 /* GeometryHitTest.m in Sources */,
+			);
+			runOnlyForDeploymentPostprocessing = 0;
+		};
+/* End PBXSourcesBuildPhase section */
+
+/* Begin PBXTargetDependency section */
+		5A466C931EB3BBEB0031B54A /* PBXTargetDependency */ = {
+			isa = PBXTargetDependency;
+			name = OpenBE;
+			targetProxy = 5A466C921EB3BBEB0031B54A /* PBXContainerItemProxy */;
+		};
+/* End PBXTargetDependency section */
+
+/* Begin PBXVariantGroup section */
+		5A466BA31EB3B4580031B54A /* Main.storyboard */ = {
+			isa = PBXVariantGroup;
+			children = (
+				5A466BA41EB3B4580031B54A /* Base */,
+			);
+			name = Main.storyboard;
+			sourceTree = "<group>";
+		};
+		5A466BA81EB3B4580031B54A /* LaunchScreen.storyboard */ = {
+			isa = PBXVariantGroup;
+			children = (
+				5A466BA91EB3B4580031B54A /* Base */,
+			);
+			name = LaunchScreen.storyboard;
+			sourceTree = "<group>";
+		};
+/* End PBXVariantGroup section */
+
+/* Begin XCBuildConfiguration section */
+		5A466BAC1EB3B4580031B54A /* Debug */ = {
+			isa = XCBuildConfiguration;
+			buildSettings = {
+				ALWAYS_SEARCH_USER_PATHS = NO;
+				CLANG_ANALYZER_NONNULL = YES;
+				CLANG_ANALYZER_NUMBER_OBJECT_CONVERSION = YES_AGGRESSIVE;
+				CLANG_CXX_LANGUAGE_STANDARD = "gnu++0x";
+				CLANG_CXX_LIBRARY = "libc++";
+				CLANG_ENABLE_MODULES = YES;
+				CLANG_ENABLE_OBJC_ARC = YES;
+				CLANG_WARN_BOOL_CONVERSION = YES;
+				CLANG_WARN_CONSTANT_CONVERSION = YES;
+				CLANG_WARN_DIRECT_OBJC_ISA_USAGE = YES_ERROR;
+				CLANG_WARN_DOCUMENTATION_COMMENTS = YES;
+				CLANG_WARN_EMPTY_BODY = YES;
+				CLANG_WARN_ENUM_CONVERSION = YES;
+				CLANG_WARN_INFINITE_RECURSION = YES;
+				CLANG_WARN_INT_CONVERSION = YES;
+				CLANG_WARN_OBJC_ROOT_CLASS = YES_ERROR;
+				CLANG_WARN_SUSPICIOUS_MOVE = YES;
+				CLANG_WARN_UNREACHABLE_CODE = YES;
+				CLANG_WARN__DUPLICATE_METHOD_MATCH = YES;
+				"CODE_SIGN_IDENTITY[sdk=iphoneos*]" = "iPhone Developer";
+				COPY_PHASE_STRIP = NO;
+				DEBUG_INFORMATION_FORMAT = dwarf;
+				ENABLE_STRICT_OBJC_MSGSEND = YES;
+				ENABLE_TESTABILITY = YES;
+				GCC_C_LANGUAGE_STANDARD = gnu99;
+				GCC_DYNAMIC_NO_PIC = NO;
+				GCC_NO_COMMON_BLOCKS = YES;
+				GCC_OPTIMIZATION_LEVEL = 0;
+				GCC_PREPROCESSOR_DEFINITIONS = (
+					"DEBUG=1",
+					"$(inherited)",
+				);
+				GCC_WARN_64_TO_32_BIT_CONVERSION = YES;
+				GCC_WARN_ABOUT_RETURN_TYPE = YES_ERROR;
+				GCC_WARN_UNDECLARED_SELECTOR = YES;
+				GCC_WARN_UNINITIALIZED_AUTOS = YES_AGGRESSIVE;
+				GCC_WARN_UNUSED_FUNCTION = YES;
+				GCC_WARN_UNUSED_VARIABLE = YES;
+				IPHONEOS_DEPLOYMENT_TARGET = 10.3;
+				MTL_ENABLE_DEBUG_INFO = YES;
+				ONLY_ACTIVE_ARCH = YES;
+				SDKROOT = iphoneos;
+				TARGETED_DEVICE_FAMILY = "1,2";
+			};
+			name = Debug;
+		};
+		5A466BAD1EB3B4580031B54A /* Release */ = {
+			isa = XCBuildConfiguration;
+			buildSettings = {
+				ALWAYS_SEARCH_USER_PATHS = NO;
+				CLANG_ANALYZER_NONNULL = YES;
+				CLANG_ANALYZER_NUMBER_OBJECT_CONVERSION = YES_AGGRESSIVE;
+				CLANG_CXX_LANGUAGE_STANDARD = "gnu++0x";
+				CLANG_CXX_LIBRARY = "libc++";
+				CLANG_ENABLE_MODULES = YES;
+				CLANG_ENABLE_OBJC_ARC = YES;
+				CLANG_WARN_BOOL_CONVERSION = YES;
+				CLANG_WARN_CONSTANT_CONVERSION = YES;
+				CLANG_WARN_DIRECT_OBJC_ISA_USAGE = YES_ERROR;
+				CLANG_WARN_DOCUMENTATION_COMMENTS = YES;
+				CLANG_WARN_EMPTY_BODY = YES;
+				CLANG_WARN_ENUM_CONVERSION = YES;
+				CLANG_WARN_INFINITE_RECURSION = YES;
+				CLANG_WARN_INT_CONVERSION = YES;
+				CLANG_WARN_OBJC_ROOT_CLASS = YES_ERROR;
+				CLANG_WARN_SUSPICIOUS_MOVE = YES;
+				CLANG_WARN_UNREACHABLE_CODE = YES;
+				CLANG_WARN__DUPLICATE_METHOD_MATCH = YES;
+				"CODE_SIGN_IDENTITY[sdk=iphoneos*]" = "iPhone Developer";
+				COPY_PHASE_STRIP = NO;
+				DEBUG_INFORMATION_FORMAT = "dwarf-with-dsym";
+				ENABLE_NS_ASSERTIONS = NO;
+				ENABLE_STRICT_OBJC_MSGSEND = YES;
+				GCC_C_LANGUAGE_STANDARD = gnu99;
+				GCC_NO_COMMON_BLOCKS = YES;
+				GCC_WARN_64_TO_32_BIT_CONVERSION = YES;
+				GCC_WARN_ABOUT_RETURN_TYPE = YES_ERROR;
+				GCC_WARN_UNDECLARED_SELECTOR = YES;
+				GCC_WARN_UNINITIALIZED_AUTOS = YES_AGGRESSIVE;
+				GCC_WARN_UNUSED_FUNCTION = YES;
+				GCC_WARN_UNUSED_VARIABLE = YES;
+				IPHONEOS_DEPLOYMENT_TARGET = 10.3;
+				MTL_ENABLE_DEBUG_INFO = NO;
+				SDKROOT = iphoneos;
+				TARGETED_DEVICE_FAMILY = "1,2";
+				VALIDATE_PRODUCT = YES;
+			};
+			name = Release;
+		};
+		5A466BAF1EB3B4580031B54A /* Debug */ = {
+			isa = XCBuildConfiguration;
+			buildSettings = {
+				ASSETCATALOG_COMPILER_APPICON_NAME = AppIcon;
+				DEVELOPMENT_TEAM = "";
+				ENABLE_BITCODE = NO;
+				FRAMEWORK_SEARCH_PATHS = ../Frameworks;
+				HEADER_SEARCH_PATHS = ../OpenBE;
+				INFOPLIST_FILE = "$(SRCROOT)/LaserManipulator/Info.plist";
+				IPHONEOS_DEPLOYMENT_TARGET = 9.3;
+				LD_RUNPATH_SEARCH_PATHS = "$(inherited) @executable_path/Frameworks";
+				PRODUCT_BUNDLE_IDENTIFIER = "com.example.occipital-samplecode.LaserManipulator";
+				PRODUCT_NAME = "$(TARGET_NAME)";
+				USE_HEADERMAP = NO;
+			};
+			name = Debug;
+		};
+		5A466BB01EB3B4580031B54A /* Release */ = {
+			isa = XCBuildConfiguration;
+			buildSettings = {
+				ASSETCATALOG_COMPILER_APPICON_NAME = AppIcon;
+				DEVELOPMENT_TEAM = "";
+				ENABLE_BITCODE = NO;
+				FRAMEWORK_SEARCH_PATHS = ../Frameworks;
+				HEADER_SEARCH_PATHS = ../OpenBE;
+				INFOPLIST_FILE = "$(SRCROOT)/LaserManipulator/Info.plist";
+				IPHONEOS_DEPLOYMENT_TARGET = 9.3;
+				LD_RUNPATH_SEARCH_PATHS = "$(inherited) @executable_path/Frameworks";
+				PRODUCT_BUNDLE_IDENTIFIER = "com.example.occipital-samplecode.LaserManipulator";
+				PRODUCT_NAME = "$(TARGET_NAME)";
+				USE_HEADERMAP = NO;
+			};
+			name = Release;
+		};
+/* End XCBuildConfiguration section */
+
+/* Begin XCConfigurationList section */
+		5A466B921EB3B4580031B54A /* Build configuration list for PBXProject "LaserManipulator" */ = {
+			isa = XCConfigurationList;
+			buildConfigurations = (
+				5A466BAC1EB3B4580031B54A /* Debug */,
+				5A466BAD1EB3B4580031B54A /* Release */,
+			);
+			defaultConfigurationIsVisible = 0;
+			defaultConfigurationName = Release;
+		};
+		5A466BAE1EB3B4580031B54A /* Build configuration list for PBXNativeTarget "LaserManipulator" */ = {
+			isa = XCConfigurationList;
+			buildConfigurations = (
+				5A466BAF1EB3B4580031B54A /* Debug */,
+				5A466BB01EB3B4580031B54A /* Release */,
+			);
+			defaultConfigurationIsVisible = 0;
+			defaultConfigurationName = Release;
+		};
+/* End XCConfigurationList section */
+	};
+	rootObject = 5A466B8F1EB3B4580031B54A /* Project object */;
+}

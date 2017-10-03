@@ -64,9 +64,6 @@ typedef NS_ENUM (NSUInteger, PortalState) {
 @property(atomic) float time;
 @property(atomic) PortalState portalState;
 
-@property(nonatomic, strong) AudioNode *audioWarpIn;
-@property(nonatomic, strong) AudioNode *audioWarpOut;
-
 @end
 
 @implementation WindowComponent {
@@ -153,30 +150,30 @@ typedef NS_ENUM (NSUInteger, PortalState) {
 
     if (_open) {
         // Re-target if portal was closing.
-        self.time = (_portalState==PORTAL_CLOSE) ? (_audioWarpOut.duration - _time) : 0.f;
+        self.time = (_portalState==PORTAL_CLOSE) ? (self.closeDuration - _time) : 0.f;
 
         [self setEnabled:true];
 
-        _audioWarpIn.position = self.node.position;
-        [_audioWarpIn play];
+        AudioNode* node = [[AudioEngine main] playAudio:@"sliding.wav" atVolume:1];
+        node.position = self.node.position;
         self.portalState = PORTAL_OPEN;
 
     } else {
 
         self.time =
-                (_portalState==PORTAL_OPEN) ? (_audioWarpIn.duration - _time) : 0.f; // Re-target if portal was opening.
-        _audioWarpOut.position = self.node.position;
-        [_audioWarpOut play];
+                (_portalState==PORTAL_OPEN) ? (self.openDuration - _time) : 0.f; // Re-target if portal was opening.
+        AudioNode* node = [[AudioEngine main] playAudio:@"close_window.wav" atVolume:1];
+        node.position = self.node.position;
         self.portalState = PORTAL_CLOSE;
     }
 }
 
 - (float)openDuration {
-    return _audioWarpIn.duration;
+    return 3;
 }
 
 - (float)closeDuration {
-    return _audioWarpOut.duration;
+    return 1;
 }
 
 - (bool)isFullyClosed {
@@ -193,13 +190,13 @@ typedef NS_ENUM (NSUInteger, PortalState) {
     self.time += seconds;
 
     if (self.portalState==PORTAL_OPEN) {
-        if (self.time > _audioWarpIn.duration) {
+        if (self.time > self.openDuration) {
             self.portalState = PORTAL_IDLE;
         }
     }
 
     if (self.portalState==PORTAL_CLOSE) {
-        if (self.time > _audioWarpOut.duration) {
+        if (self.time > self.closeDuration) {
             self.portalState = PORTAL_IDLE;
             [self setEnabled:false];
             return;
@@ -314,19 +311,12 @@ typedef NS_ENUM (NSUInteger, PortalState) {
     [frameNode setRenderingOrderRecursively:postEnvironmentRenderOrder + 10000];
 
     [self.node setCastsShadowRecursively:false];
-
-    // Setup the collision mesh on each portal
-    self.node.physicsBody = [SCNPhysicsBody staticBody];
-    self.node.physicsBody.categoryBitMask = 1 << 4;
-    self.node.physicsBody.physicsShape =
-            [SCNPhysicsShape shapeWithGeometry:[SCNBox boxWithWidth:100 height:100 length:100 chamferRadius:0] options:nil];
 }
 
 - (void)start {
     [super start];
 
-    self.audioWarpIn = [[AudioEngine main] loadAudioNamed:@"sliding.wav" allocateNew:true];
-    self.audioWarpOut = [[AudioEngine main] loadAudioNamed:@"close_window.wav" allocateNew:true];
+    NSLog(@"Window start");
 
     self.open = false;
 

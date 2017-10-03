@@ -16,7 +16,7 @@
 
 //------------------------------------------------------------------------------
 
-/// if enabled, the app will attempt to load a replay of Structure Sensor data from device. This allows for debugging while the device is plugged in to a development machine.
+/// if enabled, the app will attempt to load a replay of Structure Sensor data from device. This allows for debugging while the device is plugged in to a development machine.  NOTE: If you are looking to use this for performance testing, make sure to use BECaptureReplayModeRealTime. 
 BE_API extern NSString* const kBECaptureReplayMode;
 
 /// optionally specifies a custom path to the OCC replay file.
@@ -49,6 +49,13 @@ BE_API extern NSString* const kBEEnableStereoScanningBeta;
 /// control the voxel size used for the mapping phase. Larger voxels allow scanning a larger area, at decreased accuracy
 BE_API extern NSString* const kBEMapperVolumeResolutionKey;
 
+/// enable camera to auto expose while relocalizing
+BE_API extern NSString* const kBEAutoExposeWhileRelocalizing;
+
+/// set FPS for the bridge engine (this only works in headless mode)
+BE_API extern NSString* const kBEExpectedFpsForTrackingEstimation;
+
+
 
 //------------------------------------------------------------------------------
 
@@ -58,10 +65,10 @@ typedef NS_ENUM(NSInteger, BECaptureReplayMode) {
     /// No capture replay, the real sensor will be used.
     BECaptureReplayModeDisabled      = 0,
     
-    /// Replay a recorded sequence at approximately the sensor rates, but never skipping any frame.
+    /// Replay a recorded sequence at approximately the sensor rates, but never skipping any frames. Don't use this for performance testing.
     BECaptureReplayModeDeterministic = 1,
     
-    /// Simulate the sensor timings as accurately as possible, potentially dropping if user processing is too slow.
+    /// Simulate the sensor timings as accurately as possible, potentially dropping if user processing is too slow. Use this for performance testing.
     BECaptureReplayModeRealTime      = 2
 };
 

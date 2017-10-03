@@ -6,6 +6,8 @@
  */
 
 uniform mat4 modelViewProjection;
+uniform mat4 modelView;
+
 uniform mat4 projection;
 
 uniform float shaderType;
@@ -16,9 +18,12 @@ uniform float width;
 uniform float height;
 
 attribute vec3 position;
+attribute vec3 normal;
 
 varying vec2 uv;
+varying lowp float rim;
 varying float fragmentShaderType;
+
 
 #define HASHSCALE3 vec3(443.897, 441.423, 437.195)
 
@@ -97,5 +102,16 @@ void main(void)
         gl_Position.z = 0.001;
         
         uv = sign(position.xy);
+    }
+    
+    else if( shaderType < 3.5 ) {
+        // Projection Shader
+        
+        gl_Position =  modelViewProjection * vec4(position, 1.0);
+        
+        vec3 n = normalize(modelView * vec4(normal, 0)).xyz;  // convert normal to view space
+        vec3 viewPos = (modelView * vec4(position, 1.0)).xyz; // convert position to view space
+        vec3 v = normalize(-viewPos);                                  // vector towards eye
+        rim = (1.0 - max(dot(v, n), 0.0)) * length(normal);             // rim shading (w/fallback if normal isn't set)
     }
 }

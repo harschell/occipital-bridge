@@ -20,6 +20,8 @@
 - (BOOL) isStereo;
 
 - (void) addEntity:(GKEntity *) entity;
+- (void) removeEntity:(GKEntity *)entity;
+
 - (GKEntity *) createEntity;
 - (GKEntity *) createEntityWithSceneNode:(SCNNode *)node;
 

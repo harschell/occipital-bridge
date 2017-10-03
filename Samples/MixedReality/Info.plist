@@ -29,7 +29,7 @@
 	<key>LSRequiresIPhoneOS</key>
 	<true/>
 	<key>NSBluetoothPeripheralUsageDescription</key>
-	<string>Requires bluetooth to connect to Bridge controller.</string>
+	<string>Bluetooth is used to communicate with handheld controllers.</string>
 	<key>NSCameraUsageDescription</key>
 	<string>Camera is used for tracking and mixed reality.</string>
 	<key>UIApplicationExitsOnSuspend</key>

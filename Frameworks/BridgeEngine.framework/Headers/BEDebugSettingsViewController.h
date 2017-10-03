@@ -13,7 +13,7 @@
 @protocol BEDebugSettingsDelegate <NSObject>
 
 /// Reset all the settings for release.
-- (void) prepareSettingsForRelease;
+- (void) resetSettingsToDefaults;
 
 /// User tapped on "Begin" to start the BE experience.
 - (void) debugSettingsBegin;
@@ -22,7 +22,6 @@
 
 BE_API
 @interface BEDebugSettingsViewController : UITableViewController
-
 @property(nonatomic, weak) id<BEDebugSettingsDelegate> delegate;
 
 /// Add a User Default's setting switch.
