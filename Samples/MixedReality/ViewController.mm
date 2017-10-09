@@ -323,6 +323,11 @@ static float const MAX_DISTANCE_FOR_DELETION = .3f;
     // uncomment this line to trigger the custom rendering mode.
     [_mixedReality setRenderStyle:BERenderStyleSceneKitAndCustomEnvironmentShader withDuration:1];
 
+    // Setup button handlers
+    ButtonDetection *buttons = [[ButtonDetection alloc] init];
+
+    [[EventManager main] addGlobalEventComponent:buttons];
+
     // Ready to start the Scene Manager- this will start all the components in the scene.
     [[SceneManager main] startWithMixedRealityMode:_mixedReality];
 }

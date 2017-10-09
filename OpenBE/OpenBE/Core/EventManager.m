@@ -207,7 +207,7 @@
     // Mimic taps on the screen, but with specific _netTouches UITouch objects representing each button.
     UITouch *touch = _controllerButtonTouch;
     NSSet* set = [NSSet setWithObject:touch];
-    [self handleTouchesBegan:set withEvent:nil];
+    [self handlety:set withEvent:nil];
     
     self.useReticleAsTouchLocation = currentUseReticleAsTouchLocation;
 }

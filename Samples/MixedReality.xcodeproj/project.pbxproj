@@ -24,6 +24,7 @@
 		AA982489206BD334ACDAD9A8 /* MathUtils.swift in Sources */ = {isa = PBXBuildFile; fileRef = AA982598568FCB770D7C939E /* MathUtils.swift */; };
 		AA9826259567130803CC5946 /* WindowComponent.mm in Sources */ = {isa = PBXBuildFile; fileRef = AA98239CA4AD4A5E44C3268F /* WindowComponent.mm */; };
 		AA982BD71B76B0D7C80D3FB8 /* OutsideWorldComponent.mm in Sources */ = {isa = PBXBuildFile; fileRef = AA9824783C2BFADF22A472F8 /* OutsideWorldComponent.mm */; };
+		AA982E470107FC7201C47EE2 /* ButtonDetection.swift in Sources */ = {isa = PBXBuildFile; fileRef = AA98215A0901906288153E9B /* ButtonDetection.swift */; };
 		BA5F3F081EE094D800D1DB9A /* OpenBE.framework in Frameworks */ = {isa = PBXBuildFile; fileRef = BA5129151EE092980044E0F0 /* OpenBE.framework */; };
 		BA5F3F091EE094EB00D1DB9A /* OpenBE.framework in Embed Frameworks */ = {isa = PBXBuildFile; fileRef = BA5129151EE092980044E0F0 /* OpenBE.framework */; settings = {ATTRIBUTES = (CodeSignOnCopy, RemoveHeadersOnCopy, ); }; };
 		CF3B09611F31127E00285A80 /* Utils.m in Sources */ = {isa = PBXBuildFile; fileRef = CF3B09601F31127E00285A80 /* Utils.m */; };
@@ -97,6 +98,7 @@
 		6F9041F81C18DD4800FCD94D /* Security.framework */ = {isa = PBXFileReference; lastKnownFileType = wrapper.framework; name = Security.framework; path = System/Library/Frameworks/Security.framework; sourceTree = SDKROOT; };
 		7E5132211AEBF3D000B75178 /* Metal.framework */ = {isa = PBXFileReference; lastKnownFileType = wrapper.framework; name = Metal.framework; path = System/Library/Frameworks/Metal.framework; sourceTree = SDKROOT; };
 		94892A221BB20AA300E8C5E9 /* GameController.framework */ = {isa = PBXFileReference; lastKnownFileType = wrapper.framework; name = GameController.framework; path = System/Library/Frameworks/GameController.framework; sourceTree = SDKROOT; };
+		AA98215A0901906288153E9B /* ButtonDetection.swift */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.swift; path = ButtonDetection.swift; sourceTree = "<group>"; };
 		AA98234AF6981CAFD6A26E67 /* WindowComponent.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; path = WindowComponent.h; sourceTree = "<group>"; };
 		AA98239CA4AD4A5E44C3268F /* WindowComponent.mm */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.cpp.objcpp; path = WindowComponent.mm; sourceTree = "<group>"; };
 		AA9824783C2BFADF22A472F8 /* OutsideWorldComponent.mm */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.cpp.objcpp; path = OutsideWorldComponent.mm; sourceTree = "<group>"; };
@@ -209,6 +211,7 @@
 				CF887DF41F6EED5A004805C3 /* Test.swift */,
 				CF887DF31F6EED5A004805C3 /* MixedReality-Bridging-Header.h */,
 				AA982598568FCB770D7C939E /* MathUtils.swift */,
+				AA98215A0901906288153E9B /* ButtonDetection.swift */,
 			);
 			path = MixedReality;
 			sourceTree = "<group>";
@@ -328,6 +331,7 @@
 				AA982BD71B76B0D7C80D3FB8 /* OutsideWorldComponent.mm in Sources */,
 				AA9820484CB12B22F67CCCA1 /* OpenWindowComponent.m in Sources */,
 				AA982489206BD334ACDAD9A8 /* MathUtils.swift in Sources */,
+				AA982E470107FC7201C47EE2 /* ButtonDetection.swift in Sources */,
 			);
 			runOnlyForDeploymentPostprocessing = 0;
 		};
