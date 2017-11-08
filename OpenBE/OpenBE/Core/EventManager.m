@@ -207,7 +207,7 @@
     // Mimic taps on the screen, but with specific _netTouches UITouch objects representing each button.
     UITouch *touch = _controllerButtonTouch;
     NSSet* set = [NSSet setWithObject:touch];
-    [self handlety:set withEvent:nil];
+    [self handleTouchesBegan:set withEvent:nil];
     
     self.useReticleAsTouchLocation = currentUseReticleAsTouchLocation;
 }
@@ -243,12 +243,12 @@
 }
 
 - (void)handleTouchesBegan:(NSSet *)touches withEvent:(UIEvent *)event {
-    
-    // FIXME: This temporarily blocks all controller actions when not tracking.  Later this can be changed, it's not a fundamental thing we need to keep forever.
-    if( _mixedRealityMode.lastTrackerPoseAccuracy == BETrackerPoseAccuracyNotAvailable ){
-        be_dbg("Ignored touchesBegan event, pose not available");
-        return;
-    }
+//
+//    // FIXME: This temporarily blocks all controller actions when not tracking.  Later this can be changed, it's not a fundamental thing we need to keep forever.
+//    if( _mixedRealityMode.lastTrackerPoseAccuracy == BETrackerPoseAccuracyNotAvailable ){
+//        be_dbg("Ignored touchesBegan event, pose not available");
+//        //return;
+//    }
     
     for( UITouch * touch in  touches ) {
         
@@ -324,7 +324,7 @@
         }
         
         for( GKComponent * component in touchEventRepsonders.eventComponents ) {
-            be_NSDbg(@"Touch Began on component: %@, button: %d", NSStringFromClass(component.class), button);
+            NSLog(@"Touch Began on component: %@, button: %d", NSStringFromClass(component.class), button);
             [_mixedRealityMode runBlockInRenderThread:^(void) {
                 [(GKComponent <EventComponentProtocol> * )component touchBeganButton:button forward:forward hit:hit];
             }];
@@ -335,11 +335,11 @@
 - (void)touchesEnded:(NSSet *)touches withEvent:(UIEvent *)event {
     // FIXME: This temporarily blocks all controller actions when not tracking.
     // This can be changed, it's not a fundamental thing we need to keep forever.
-    if(_mixedRealityMode.lastTrackerPoseAccuracy == BETrackerPoseAccuracyNotAvailable ) {
-        be_dbg("Ignored touchesEnded event, pose not available");
-        [self cleanUpTouchEventResponders:event];
-        return;
-    }
+//    if(_mixedRealityMode.lastTrackerPoseAccuracy == BETrackerPoseAccuracyNotAvailable ) {
+//        be_dbg("Ignored touchesEnded event, pose not available");
+//        [self cleanUpTouchEventResponders:event];
+//        return;
+//    }
     
     for( UITouch * touch in  touches ) {
         
@@ -373,11 +373,11 @@
 - (void)touchesCancelled:(NSSet *)touches withEvent:(UIEvent *)event {
     // FIXME: This temporarily blocks all controller actions when not tracking.
     // This can be changed, it's not a fundamental thing we need to keep forever.
-    if(_mixedRealityMode.lastTrackerPoseAccuracy == BETrackerPoseAccuracyNotAvailable ) {
-        be_dbg("Ignored touchesCancelled event, pose not available");
-        [self cleanUpTouchEventResponders:event];
-        return;
-    }
+//    if(_mixedRealityMode.lastTrackerPoseAccuracy == BETrackerPoseAccuracyNotAvailable ) {
+//        be_dbg("Ignored touchesCancelled event, pose not available");
+//        [self cleanUpTouchEventResponders:event];
+//        return;
+//    }
     
     for( UITouch * touch in  touches ) {
         
@@ -417,11 +417,11 @@
 - (void)touchesMoved:(NSSet *)touches withEvent:(UIEvent *)event {
     // FIXME: This temporarily blocks all controller actions when not tracking.
     // This can be changed, it's not a fundamental thing we need to keep forever.
-    if(_mixedRealityMode.lastTrackerPoseAccuracy == BETrackerPoseAccuracyNotAvailable ) {
-        be_dbg("Ignored touchesMoved event, pose not available");
-        [self cleanUpTouchEventResponders:event];
-        return;
-    }
+//    if(_mixedRealityMode.lastTrackerPoseAccuracy == BETrackerPoseAccuracyNotAvailable ) {
+//        be_dbg("Ignored touchesMoved event, pose not available");
+//        [self cleanUpTouchEventResponders:event];
+//        return;
+//    }
     
     for( UITouch * touch in  touches ) {
         
@@ -464,10 +464,10 @@
 
 - (SCNHitTestResult *) intersectSceneFromTouch:(UITouch *)touch {
     
-    if(_mixedRealityMode.lastTrackerPoseAccuracy == BETrackerPoseAccuracyNotAvailable ) {
-        be_dbg("Ignored intersection test, pose not available");
-        return nil;
-    }
+//    if(_mixedRealityMode.lastTrackerPoseAccuracy == BETrackerPoseAccuracyNotAvailable ) {
+//        be_dbg("Ignored intersection test, pose not available");
+////        return nil;
+//    }
     
     float maxDistance = 100.;
     

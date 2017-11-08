@@ -437,10 +437,38 @@ static float const MAX_DISTANCE_FOR_DELETION = .3f;
 
 - (void)userSelection:(CGPoint)tapPoint {
 
+
+    NSDictionary *options = @{SCNHitTestSortResultsKey:@YES, SCNHitTestBackFaceCullingKey:@NO};
+     NSArray<SCNHitTestResult *> *hitTestResults = [_mixedReality hitTestSceneKitFrom2DScreenPoint:tapPoint options:options];
+
+    SCNHitTestResult* hitResult = nil;
+    if( [hitTestResults count] ) {
+        NSLog(@"-----------------------------");
+
+        // First search for buttons
+        for( SCNHitTestResult * result in hitTestResults ) {
+            if( !(result.node.categoryBitMask & RAYCAST_IGNORE_BIT) &&
+                    (result.node.categoryBitMask & CATEGORY_BIT_MASK_UI_BUTTONS))
+            {
+            }
+        }
+
+        // If not a button, respond with the nearest geometry
+        for( SCNHitTestResult * result in hitTestResults ) {
+            if( !(result.node.categoryBitMask & RAYCAST_IGNORE_BIT) ) {
+                hitResult = result;
+            }
+        }
+    }
+
     SCNVector3 outNormal{NAN, NAN, NAN};
     SCNVector3 mesh3DPoint = [_mixedReality mesh3DFrom2DPoint:tapPoint outputNormal:&outNormal];
+    if (hitResult != nil) {
+        outNormal = hitResult.worldNormal;
+        mesh3DPoint = hitResult.worldCoordinates;
+    }
 
-    if (mesh3DPoint.x!=NAN && mesh3DPoint.y!=NAN && mesh3DPoint.z!=NAN) {
+    if (!isnan(mesh3DPoint.x) && !isnan(mesh3DPoint.y) && !isnan(mesh3DPoint.z)) {
         GLKVector3 meshNormal = GLKVector3Normalize(SCNVector3ToGLKVector3(outNormal));
         NSLog(@"x:%f, y:%f, z:%f", meshNormal.x, meshNormal.y, meshNormal.z);
 
@@ -549,6 +577,36 @@ static float const MAX_DISTANCE_FOR_DELETION = .3f;
                 [closeOverlappingPortals[0] removeFromParentNode];
             }
         }
+    }
+}
+
+
+// Touch handling helpers
+- (void)touchesBegan:(NSSet *)touches withEvent:(UIEvent *)event
+{
+    if( _experienceIsRunning ) {
+        [[EventManager main] touchesBegan:touches withEvent:event];
+    }
+}
+
+- (void)touchesEnded:(NSSet *)touches withEvent:(UIEvent *)event
+{
+    if( _experienceIsRunning ) {
+        [[EventManager main]  touchesEnded:touches withEvent:event];
+    }
+}
+
+- (void)touchesCancelled:(NSSet *)touches withEvent:(UIEvent *)event
+{
+    if( _experienceIsRunning ) {
+        [[EventManager main] touchesCancelled:touches withEvent:event];
+    }
+}
+
+- (void)touchesMoved:(NSSet *)touches withEvent:(UIEvent *)event
+{
+    if( _experienceIsRunning ) {
+        [[EventManager main] touchesMoved:touches withEvent:event];
     }
 }
 
