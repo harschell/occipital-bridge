@@ -154,7 +154,7 @@ typedef NS_ENUM (NSUInteger, PortalState) {
 
         [self setEnabled:true];
 
-        AudioNode* node = [[AudioEngine main] playAudio:@"sliding.wav" atVolume:1];
+        AudioNode* node = [[AudioEngine main] playAudio:@"window_open.mp3" atVolume:1];
         node.position = self.node.position;
         self.portalState = PORTAL_OPEN;
 
@@ -162,7 +162,7 @@ typedef NS_ENUM (NSUInteger, PortalState) {
 
         self.time =
                 (_portalState==PORTAL_OPEN) ? (self.openDuration - _time) : 0.f; // Re-target if portal was opening.
-        AudioNode* node = [[AudioEngine main] playAudio:@"close_window.wav" atVolume:1];
+        AudioNode* node = [[AudioEngine main] playAudio:@"window_close.mp3" atVolume:1];
         node.position = self.node.position;
         self.portalState = PORTAL_CLOSE;
     }
@@ -280,12 +280,13 @@ typedef NS_ENUM (NSUInteger, PortalState) {
     // Stop animation after 1 loop
     SCNNode *window_piece = [portalFrameMesh childNodeWithName:@"window_piece" recursively:true];
 
-    CAAnimation *animation = [window_piece animationForKey:@"window_piece-anim"];
-    [window_piece removeAnimationForKey:@"window_piece-anim"];
+    CAAnimation *animation = [window_piece animationForKey:@"window_piece-Matrix-animation-transform"];
+    [window_piece removeAnimationForKey:@"window_piece-Matrix-animation-transform"];
 
     [animation setRepeatCount:1];
     [animation setRemovedOnCompletion:false];
-    [window_piece addAnimation:animation forKey:@"window_piece-anim"];
+    [animation setFillMode:kCAFillModeForwards];
+    [window_piece addAnimation:animation forKey:@"window_piece-Matrix-animation-transform"];
 
     portalFrameMesh.position = SCNVector3Make(0, 0, 0);
 
