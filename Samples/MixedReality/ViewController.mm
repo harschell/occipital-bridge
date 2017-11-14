@@ -63,6 +63,11 @@ static float const MAX_DISTANCE_FOR_DELETION = .3f;
     bool musicPlaying;
 
     LanternManager *_lanternManager;
+    
+    bool justTapped;
+    SCNVector3 tapMeshPoint;
+    GLKVector3 tapMeshNormal;
+    
 }
 
 + (SCNNode *)loadNodeNamed:(NSString *)nodeName fromSceneNamed:(NSString *)sceneName {
@@ -393,6 +398,15 @@ static float const MAX_DISTANCE_FOR_DELETION = .3f;
     if ([_wind volume] < wind_volume && [[_wind player] isPlaying]) {
         [_wind setVolume:[_wind volume] + increment * wind_volume];
     }
+    
+    // handle taps
+    @synchronized (self) {
+        if (justTapped) {
+            justTapped = false;
+            
+            [self addRemoveWindowAtPoint:tapMeshPoint withNormal:tapMeshNormal];
+        }
+    }
 }
 
 // end MixedReality Delegate Methods
@@ -474,109 +488,116 @@ static float const MAX_DISTANCE_FOR_DELETION = .3f;
 
         // No placing windows on upward / downward facing surfaces.
         if (fabs(meshNormal.y) < 0.4) {
-            // Test to see if there already exists a portal in this location
-            NSArray<SCNNode *> *toplevelObjects = [[[Scene main] rootNode] childNodes];
-
-            NSArray<SCNNode *> *overlappingPortals =
-                    [toplevelObjects objectsAtIndexes:[toplevelObjects indexesOfObjectsPassingTest:^BOOL(id obj,
-                                                                                                         NSUInteger idx,
-                                                                                                         BOOL *stop) {
-                        SCNNode *node = obj;
-                        if (![[node name] isEqualToString:@"PortalNode"]) { return false; }
-
-                        float dx = mesh3DPoint.x - node.position.x;
-                        float dy = mesh3DPoint.y - node.position.y;
-                        float dz = mesh3DPoint.z - node.position.z;
-
-                        float distanceBetweenNodeAndPosition = (float) sqrt(dx * dx + dy * dy + dz * dz);
-                        return distanceBetweenNodeAndPosition < MIN_DISTANCE_BETWEEN_PORTALS;
-                    }]];
-
-            // If we're not overlapping an existing portal, place one!
-            if (overlappingPortals.count==0) {
-                dispatch_async(dispatch_get_main_queue(), ^{
-                    WindowComponent *_portal = [[WindowComponent alloc] init];
-                    _portal.overlayComponent = _colorOverlay;
-                    [_portal start];
-
-                    GKEntity *_portalEntity = [[SceneManager main] createEntity];
-                    [_portalEntity addComponent:_portal];
-
-                    [[EventManager main] addGlobalEventComponent:_portal];
-
-                    [_portal openPortalOnWallPosition:mesh3DPoint wallNormal:meshNormal toVRWorld:_outsideWorld];
-
-                    if (!musicPlaying) {
-                        double delayInSeconds = 2.0;
-                        dispatch_time_t
-                                popTime = dispatch_time(DISPATCH_TIME_NOW, (uint64_t) (delayInSeconds * NSEC_PER_SEC));
-                        dispatch_after(popTime, dispatch_get_main_queue(), ^(void) {
-                            [_wind setPosition:mesh3DPoint];
-                            [_wind setVolume:0];
-                            [_wind setLooping:true];
-                            [_wind play];
-
-                            [_wind_rustling setPosition:mesh3DPoint];
-                            [_wind_rustling setVolume:0];
-                            [_wind_rustling setLooping:true];
-                            [_wind_rustling play];
-                            [_wind_rustling player];
-                        });
-
-                        delayInSeconds = 10.0;
-                        popTime = dispatch_time(DISPATCH_TIME_NOW, (uint64_t) (delayInSeconds * NSEC_PER_SEC));
-                        dispatch_after(popTime, dispatch_get_main_queue(), ^(void) {
-                            [_music setPosition:mesh3DPoint];
-                            [_music setVolume:0];
-                            [_music setLooping:true];
-                            [_music play];
-                        });
-
-                        musicPlaying = true;
-                    }
-                });
-            }
-
-            // The number of portals that are very close to the target position (elegible for deletion).
-            NSArray<SCNNode *> *closeOverlappingPortals =
-                    [toplevelObjects objectsAtIndexes:[toplevelObjects indexesOfObjectsPassingTest:^BOOL(id obj,
-                                                                                                         NSUInteger idx,
-                                                                                                         BOOL *stop) {
-                        SCNNode *node = obj;
-                        if (![[node name] isEqualToString:@"PortalNode"]) { return false; }
-
-                        float dx = mesh3DPoint.x - node.position.x;
-                        float dy = mesh3DPoint.y - node.position.y;
-                        float dz = mesh3DPoint.z - node.position.z;
-
-                        float distanceBetweenNodeAndPosition = (float) sqrt(dx * dx + dy * dy + dz * dz);
-                        return distanceBetweenNodeAndPosition < MAX_DISTANCE_FOR_DELETION;
-                    }]];
-
-            if (closeOverlappingPortals.count > 0) {
-                // The number of portals that are very close to the target position (elegible for deletion).
-                NSArray<GKComponent *> *foundComponent = [[[EventManager main] getAllComponents]
-                        objectsAtIndexes:[[[EventManager main] getAllComponents]
-                                indexesOfObjectsPassingTest:^BOOL(id obj,
-                                                                  NSUInteger idx,
-                                                                  BOOL *stop) {
-                                    if ([obj isKindOfClass:[WindowComponent class]]) {
-                                        WindowComponent *component = obj;
-                                        return component.node==closeOverlappingPortals[0];
-                                    }
-                                    return false;
-                                }]];
-                if (foundComponent.count!=1) {
-                    NSLog(@"Didn't find the right amount of components for the clicked on portal.");
-
-                    return;
-                }
-
-                // Actually remove the portal element
-                [[EventManager main] removeGlobalEventComponent:foundComponent[0]];
-                [closeOverlappingPortals[0] removeFromParentNode];
+            @synchronized (self) {
+                justTapped = true;
+                tapMeshPoint = mesh3DPoint;
+                tapMeshNormal = meshNormal;
             }
         }
+    }
+}
+
+- (void)addRemoveWindowAtPoint: (SCNVector3)mesh3DPoint withNormal:(GLKVector3) meshNormal
+{
+    // Test to see if there already exists a portal in this location
+    NSArray<SCNNode *> *toplevelObjects = [[[Scene main] rootNode] childNodes];
+    
+    NSArray<SCNNode *> *overlappingPortals =
+    [toplevelObjects objectsAtIndexes:[toplevelObjects indexesOfObjectsPassingTest:^BOOL(id obj,
+                                                                                         NSUInteger idx,
+                                                                                         BOOL *stop) {
+        SCNNode *node = obj;
+        if (![[node name] isEqualToString:@"PortalNode"]) { return false; }
+        
+        float dx = mesh3DPoint.x - node.position.x;
+        float dy = mesh3DPoint.y - node.position.y;
+        float dz = mesh3DPoint.z - node.position.z;
+        
+        float distanceBetweenNodeAndPosition = (float) sqrt(dx * dx + dy * dy + dz * dz);
+        return distanceBetweenNodeAndPosition < MIN_DISTANCE_BETWEEN_PORTALS;
+    }]];
+    
+    // If we're not overlapping an existing portal, place one!
+    if (overlappingPortals.count==0) {
+        WindowComponent *_portal = [[WindowComponent alloc] init];
+        _portal.overlayComponent = _colorOverlay;
+        [_portal start];
+        
+        GKEntity *_portalEntity = [[SceneManager main] createEntity];
+        [_portalEntity addComponent:_portal];
+        
+        [[EventManager main] addGlobalEventComponent:_portal];
+        
+        [_portal openPortalOnWallPosition:mesh3DPoint wallNormal:meshNormal toVRWorld:_outsideWorld];
+        
+        if (!musicPlaying) {
+            double delayInSeconds = 2.0;
+            dispatch_time_t
+            popTime = dispatch_time(DISPATCH_TIME_NOW, (uint64_t) (delayInSeconds * NSEC_PER_SEC));
+            dispatch_after(popTime, dispatch_get_main_queue(), ^(void) {
+                [_wind setPosition:mesh3DPoint];
+                [_wind setVolume:0];
+                [_wind setLooping:true];
+                [_wind play];
+                
+                [_wind_rustling setPosition:mesh3DPoint];
+                [_wind_rustling setVolume:0];
+                [_wind_rustling setLooping:true];
+                [_wind_rustling play];
+                [_wind_rustling player];
+            });
+            
+            delayInSeconds = 10.0;
+            popTime = dispatch_time(DISPATCH_TIME_NOW, (uint64_t) (delayInSeconds * NSEC_PER_SEC));
+            dispatch_after(popTime, dispatch_get_main_queue(), ^(void) {
+                [_music setPosition:mesh3DPoint];
+                [_music setVolume:0];
+                [_music setLooping:true];
+                [_music play];
+            });
+            
+            musicPlaying = true;
+        }
+    }
+    
+    // The number of portals that are very close to the target position (elegible for deletion).
+    NSArray<SCNNode *> *closeOverlappingPortals =
+    [toplevelObjects objectsAtIndexes:[toplevelObjects indexesOfObjectsPassingTest:^BOOL(id obj,
+                                                                                         NSUInteger idx,
+                                                                                         BOOL *stop) {
+        SCNNode *node = obj;
+        if (![[node name] isEqualToString:@"PortalNode"]) { return false; }
+        
+        float dx = mesh3DPoint.x - node.position.x;
+        float dy = mesh3DPoint.y - node.position.y;
+        float dz = mesh3DPoint.z - node.position.z;
+        
+        float distanceBetweenNodeAndPosition = (float) sqrt(dx * dx + dy * dy + dz * dz);
+        return distanceBetweenNodeAndPosition < MAX_DISTANCE_FOR_DELETION;
+    }]];
+    
+    if (closeOverlappingPortals.count > 0) {
+        NSArray<GKComponent *> *foundComponent = [[[EventManager main] getAllComponents]
+                                                  objectsAtIndexes:[[[EventManager main] getAllComponents]
+                                                                    indexesOfObjectsPassingTest:^BOOL(id obj,
+                                                                                                      NSUInteger idx,
+                                                                                                      BOOL *stop) {
+                                                                        if ([obj isKindOfClass:[WindowComponent class]]) {
+                                                                            WindowComponent *component = obj;
+                                                                            return component.node==closeOverlappingPortals[0];
+                                                                        }
+                                                                        return false;
+                                                                    }]];
+        if (foundComponent.count!=1) {
+            NSLog(@"Didn't find the right amount of components for the clicked on portal.");
+            
+            return;
+        }
+        [((WindowComponent *) foundComponent[0]) closePortal];
+        
+        // Actually remove the portal element
+        [[EventManager main] removeGlobalEventComponent:foundComponent[0]];
+        [closeOverlappingPortals[0] removeFromParentNode];
     }
 }
 
