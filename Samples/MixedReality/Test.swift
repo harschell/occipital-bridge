@@ -7,21 +7,21 @@
 //
 
 import Foundation
-import SceneKit
+import SceneKit.SCNNode
 import GameplayKit
 import RxSwift
 
 public class LanternManager: NSObject, CAAnimationDelegate {
     private var lanterns: [SCNNode] = [];
-    private var container: SceneKit.SCNNode;
+    private var container: SCNNode;
     private var sub: RxSwift.PublishSubject<TimeInterval>;
 
-    init(container: SceneKit.SCNNode) {
+    @objc init(container: SCNNode) {
         self.container = container;
         sub = PublishSubject();
     }
 
-    func setup() {
+    @objc func setup() {
 
         // Spawn a bunch of lanterns just   on the horizon.
         let _ = sub.delay(12, scheduler: MainScheduler.instance).throttle(3, scheduler: MainScheduler.instance).subscribe { _ in
@@ -67,12 +67,11 @@ public class LanternManager: NSObject, CAAnimationDelegate {
                 };
     }
 
-    func update(time: Double) {
+    @objc func update(time: Double) {
         sub.on(Event.next(time as TimeInterval));
     }
 
-
-    func addNewLantern(position: SCNVector3, scale: Double, upwardVelocity: Double = 0.15) {
+    @objc func addNewLantern(position: SCNVector3, scale: Double, upwardVelocity: Double = 0.15) {
         let mesh: SCNNode = SCNScene(named: "Assets.scnassets/maya_files/lantern.scn").orError("Couldn't load lantern scene").rootNode.clone();
         mesh.scale = SCNVector3(scale, scale, scale);
         mesh.rotation = SCNVector4Make(1, 0, 0, .pi);
@@ -100,6 +99,9 @@ public class LanternManager: NSObject, CAAnimationDelegate {
         movement.fillMode = kCAFillModeForwards;
 
         mesh.addAnimation(movement, forKey: nil)
+
+        let environmentScanShadowRenderingOrder:Int = 99999 + 1 + 10000;
+        mesh.setRenderingOrderRecursively(Int32(environmentScanShadowRenderingOrder));
     }
 }
 

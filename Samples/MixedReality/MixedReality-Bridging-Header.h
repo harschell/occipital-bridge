@@ -5,5 +5,8 @@
 #import <OpenBE/Core/EventComponentProtocol.h>
 #import <OpenBE/Core/ComponentProtocol.h>
 #import <OpenBE/Core/Component.h>
+#import <OpenBE/Core/Core.h>
 #import <OpenBE/Components/GazeComponent.h>
+#import <OpenBE/Utils/SceneKitExtensions.h>
+
 
