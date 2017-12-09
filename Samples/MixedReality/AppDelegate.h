@@ -7,6 +7,8 @@
 #pragma once
 
 #import <UIKit/UIKit.h>
+#import <BridgeEngine/BridgeEngine.h>
+
 
 /// Use the 120° Wide View Lens
 #define SETTING_USE_WVL                         @"useWVL"
@@ -35,6 +37,9 @@
 
 @property (strong, nonatomic) UIWindow *window;
 @property (nonatomic, strong) UINavigationController *navController;
+
+- (void) prepareDebugSettingsVC:(BEDebugSettingsViewController*)vc;
+- (void) debugSettingsBegin;
 
 @end
 

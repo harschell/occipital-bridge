@@ -8,5 +8,5 @@
 #import <OpenBE/Core/Core.h>
 #import <OpenBE/Components/GazeComponent.h>
 #import <OpenBE/Utils/SceneKitExtensions.h>
-
+#import "AppDelegate.h"
 

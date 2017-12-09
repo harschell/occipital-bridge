@@ -63,11 +63,11 @@ static float const MAX_DISTANCE_FOR_DELETION = .3f;
     bool musicPlaying;
 
     LanternManager *_lanternManager;
-    
+
     bool justTapped;
     SCNVector3 tapMeshPoint;
     GLKVector3 tapMeshNormal;
-    
+
 }
 
 + (SCNNode *)loadNodeNamed:(NSString *)nodeName fromSceneNamed:(NSString *)sceneName {
@@ -130,12 +130,12 @@ static float const MAX_DISTANCE_FOR_DELETION = .3f;
 
     BECaptureReplayMode replayMode = BECaptureReplayModeDisabled;
     if ([BEAppSettings booleanValueFromAppSetting:SETTING_REPLAY_CAPTURE
-             defaultValueIfSettingIsNotInBundle:NO]) {
+               defaultValueIfSettingIsNotInBundle:NO]) {
         replayMode = BECaptureReplayModeDeterministic;
     }
 
     self.runningInStereo = [BEAppSettings booleanValueFromAppSetting:SETTING_STEREO_RENDERING
-                                defaultValueIfSettingIsNotInBundle:YES];
+                                  defaultValueIfSettingIsNotInBundle:YES];
 
     _mixedReality = [[BEMixedRealityMode alloc]
             initWithView:(BEView *) self.view
@@ -143,21 +143,21 @@ static float const MAX_DISTANCE_FOR_DELETION = .3f;
                    kBECaptureReplayMode:
                    @(replayMode),
                    kBEUsingWideVisionLens:
-                @([BEAppSettings booleanValueFromAppSetting:SETTING_USE_WVL
-                          defaultValueIfSettingIsNotInBundle:YES]),
+                   @([BEAppSettings booleanValueFromAppSetting:SETTING_USE_WVL
+                            defaultValueIfSettingIsNotInBundle:YES]),
                    kBEStereoRenderingEnabled: @(self.runningInStereo),
                    kBEUsingColorCameraOnly:
-                @([BEAppSettings booleanValueFromAppSetting:SETTING_COLOR_CAMERA_ONLY
-                          defaultValueIfSettingIsNotInBundle:NO]),
+                   @([BEAppSettings booleanValueFromAppSetting:SETTING_COLOR_CAMERA_ONLY
+                            defaultValueIfSettingIsNotInBundle:NO]),
                    kBERecordingOptionsEnabled:
-                @([BEAppSettings booleanValueFromAppSetting:SETTING_ENABLE_RECORDING
-                       defaultValueIfSettingIsNotInBundle:NO]),
-            kBEEnableStereoScanningBeta:
-                @([BEAppSettings booleanValueFromAppSetting:SETTING_STEREO_SCANNING
-                          defaultValueIfSettingIsNotInBundle:NO]),
+                   @([BEAppSettings booleanValueFromAppSetting:SETTING_ENABLE_RECORDING
+                            defaultValueIfSettingIsNotInBundle:NO]),
+                   kBEEnableStereoScanningBeta:
+                   @([BEAppSettings booleanValueFromAppSetting:SETTING_STEREO_SCANNING
+                            defaultValueIfSettingIsNotInBundle:NO]),
                    kBEMapperVolumeResolutionKey:
-                @([BEAppSettings floatValueFromAppSetting:@"mapperVoxelResolution"
-                        defaultValueIfSettingIsNotInBundle:0.02]),
+                   @([BEAppSettings floatValueFromAppSetting:@"mapperVoxelResolution"
+                          defaultValueIfSettingIsNotInBundle:0.02]),
            }
              markupNames:_markupNameList
     ];
@@ -169,8 +169,7 @@ static float const MAX_DISTANCE_FOR_DELETION = .3f;
     [_mixedReality start];
 }
 
-- (void)viewDidAppear:(BOOL)animated
-{
+- (void)viewDidAppear:(BOOL)animated {
     [super viewDidAppear:animated];
 }
 
@@ -183,7 +182,7 @@ static float const MAX_DISTANCE_FOR_DELETION = .3f;
     //[_mixedReality setRenderStyle:BERenderStyleSceneKitAndColorCamera withDuration:0.5];
 
     _experienceIsRunning = YES;
-    
+
     [self addGestureRecognizers];
 }
 
@@ -192,21 +191,22 @@ static float const MAX_DISTANCE_FOR_DELETION = .3f;
     // However, you could do something much more sophisticated, like have multiple markup points be waypoints for a virtual character.
 }
 
-
 #pragma mark - User Interaction
 
 - (void)addGestureRecognizers {
     // Allocate and initialize the first tap gesture.
-    UITapGestureRecognizer *tapRecognizer = [[UITapGestureRecognizer alloc] initWithTarget:self action:@selector(handleTap:)];
-    
+    UITapGestureRecognizer
+            *tapRecognizer = [[UITapGestureRecognizer alloc] initWithTarget:self action:@selector(handleTap:)];
+
     // Specify that the gesture must be a single tap.
     tapRecognizer.numberOfTapsRequired = 1;
-    
+
     // Add the tap gesture recognizer to the view.
     [self.view addGestureRecognizer:tapRecognizer];
-    
+
     // Allocate and initialize the second gesture as a double-tap one.
-    UITapGestureRecognizer *twoFingerTapRecognizer = [[UITapGestureRecognizer alloc] initWithTarget:self action:@selector(changeRenderMode)];
+    UITapGestureRecognizer *twoFingerTapRecognizer =
+            [[UITapGestureRecognizer alloc] initWithTarget:self action:@selector(changeRenderMode)];
     twoFingerTapRecognizer.numberOfTouchesRequired = 2;
     [self.view addGestureRecognizer:twoFingerTapRecognizer];
 }
@@ -279,7 +279,7 @@ static float const MAX_DISTANCE_FOR_DELETION = .3f;
     self.reticleNode.geometry.firstMaterial.readsFromDepthBuffer = NO;
     self.reticleNode.castsShadow = NO;
     // Reticle should be the last thing drawn in the scene, so that it can render on top of everything
-    self.reticleNode.renderingOrder = BEEnvironmentScanRenderingOrder + 100;
+    self.reticleNode.renderingOrder = BEEnvironmentScanRenderingOrder + 1000;
 
     self.reticleNode.hidden = ![[BEController sharedController] isConnected] || !self.runningInStereo;
 
@@ -348,12 +348,32 @@ static float const MAX_DISTANCE_FOR_DELETION = .3f;
 }
 
 - (void)mixedRealityUpdateAtTime:(NSTimeInterval)time {
+    // hide world and portals if tracking is lost
+    NSArray<SCNNode *> *toplevelObjects = [[[Scene main] rootNode] childNodes];
+    NSArray<SCNNode *> *portals =
+            [toplevelObjects objectsAtIndexes:[toplevelObjects indexesOfObjectsPassingTest:^BOOL(id obj,
+                                                                                                 NSUInteger idx,
+                                                                                                 BOOL *stop) {
+                SCNNode *node = obj;
+                return [[node name] isEqualToString:@"PortalNode"];
+            }]];
+
+    bool hidden = _mixedReality.lastTrackerPoseAccuracy==BETrackerPoseAccuracyNotAvailable;
+    _outsideWorld.animationNode.hidden = hidden;
+
+    // hide all portals
+    for (int i = 0; i < portals.count; ++i) {
+
+        portals[i].hidden = hidden;
+    }
+
     // this updates all components
     [[SceneManager main] updateAtTime:time mixedRealityMode:_mixedReality];
 
     [_lanternManager updateWithTime:(double) time];
     // Update the controller's camera world transform, so we're tracking with it.
-    [BEController sharedController].cameraTransform = SCNMatrix4ToGLKMatrix4(_mixedReality.localDeviceNode.worldTransform);
+    [BEController sharedController].cameraTransform =
+            SCNMatrix4ToGLKMatrix4(_mixedReality.localDeviceNode.worldTransform);
 
     // This method is called before rendering each frame.
     // It is safe to modify SceneKit objects from here.
@@ -398,12 +418,12 @@ static float const MAX_DISTANCE_FOR_DELETION = .3f;
     if ([_wind volume] < wind_volume && [[_wind player] isPlaying]) {
         [_wind setVolume:[_wind volume] + increment * wind_volume];
     }
-    
+
     // handle taps
     @synchronized (self) {
         if (justTapped) {
             justTapped = false;
-            
+
             [self addRemoveWindowAtPoint:tapMeshPoint withNormal:tapMeshNormal];
         }
     }
@@ -451,25 +471,24 @@ static float const MAX_DISTANCE_FOR_DELETION = .3f;
 
 - (void)userSelection:(CGPoint)tapPoint {
 
+    NSDictionary *options = @{SCNHitTestSortResultsKey: @YES, SCNHitTestBackFaceCullingKey: @NO};
+    NSArray<SCNHitTestResult *>
+            *hitTestResults = [_mixedReality hitTestSceneKitFrom2DScreenPoint:tapPoint options:options];
 
-    NSDictionary *options = @{SCNHitTestSortResultsKey:@YES, SCNHitTestBackFaceCullingKey:@NO};
-     NSArray<SCNHitTestResult *> *hitTestResults = [_mixedReality hitTestSceneKitFrom2DScreenPoint:tapPoint options:options];
-
-    SCNHitTestResult* hitResult = nil;
-    if( [hitTestResults count] ) {
+    SCNHitTestResult *hitResult = nil;
+    if ([hitTestResults count]) {
         NSLog(@"-----------------------------");
 
         // First search for buttons
-        for( SCNHitTestResult * result in hitTestResults ) {
-            if( !(result.node.categoryBitMask & RAYCAST_IGNORE_BIT) &&
-                    (result.node.categoryBitMask & CATEGORY_BIT_MASK_UI_BUTTONS))
-            {
+        for (SCNHitTestResult *result in hitTestResults) {
+            if (!(result.node.categoryBitMask & RAYCAST_IGNORE_BIT) &&
+                    (result.node.categoryBitMask & CATEGORY_BIT_MASK_UI_BUTTONS)) {
             }
         }
 
         // If not a button, respond with the nearest geometry
-        for( SCNHitTestResult * result in hitTestResults ) {
-            if( !(result.node.categoryBitMask & RAYCAST_IGNORE_BIT) ) {
+        for (SCNHitTestResult *result in hitTestResults) {
+            if (!(result.node.categoryBitMask & RAYCAST_IGNORE_BIT)) {
                 hitResult = result;
             }
         }
@@ -477,7 +496,7 @@ static float const MAX_DISTANCE_FOR_DELETION = .3f;
 
     SCNVector3 outNormal{NAN, NAN, NAN};
     SCNVector3 mesh3DPoint = [_mixedReality mesh3DFrom2DPoint:tapPoint outputNormal:&outNormal];
-    if (hitResult != nil) {
+    if (hitResult!=nil) {
         outNormal = hitResult.worldNormal;
         mesh3DPoint = hitResult.worldCoordinates;
     }
@@ -497,56 +516,55 @@ static float const MAX_DISTANCE_FOR_DELETION = .3f;
     }
 }
 
-- (void)addRemoveWindowAtPoint: (SCNVector3)mesh3DPoint withNormal:(GLKVector3) meshNormal
-{
+- (void)addRemoveWindowAtPoint:(SCNVector3)mesh3DPoint withNormal:(GLKVector3)meshNormal {
     // Test to see if there already exists a portal in this location
     NSArray<SCNNode *> *toplevelObjects = [[[Scene main] rootNode] childNodes];
-    
+
     NSArray<SCNNode *> *overlappingPortals =
-    [toplevelObjects objectsAtIndexes:[toplevelObjects indexesOfObjectsPassingTest:^BOOL(id obj,
-                                                                                         NSUInteger idx,
-                                                                                         BOOL *stop) {
-        SCNNode *node = obj;
-        if (![[node name] isEqualToString:@"PortalNode"]) { return false; }
-        
-        float dx = mesh3DPoint.x - node.position.x;
-        float dy = mesh3DPoint.y - node.position.y;
-        float dz = mesh3DPoint.z - node.position.z;
-        
-        float distanceBetweenNodeAndPosition = (float) sqrt(dx * dx + dy * dy + dz * dz);
-        return distanceBetweenNodeAndPosition < MIN_DISTANCE_BETWEEN_PORTALS;
-    }]];
-    
+            [toplevelObjects objectsAtIndexes:[toplevelObjects indexesOfObjectsPassingTest:^BOOL(id obj,
+                                                                                                 NSUInteger idx,
+                                                                                                 BOOL *stop) {
+                SCNNode *node = obj;
+                if (![[node name] isEqualToString:@"PortalNode"]) { return false; }
+
+                float dx = mesh3DPoint.x - node.position.x;
+                float dy = mesh3DPoint.y - node.position.y;
+                float dz = mesh3DPoint.z - node.position.z;
+
+                float distanceBetweenNodeAndPosition = (float) sqrt(dx * dx + dy * dy + dz * dz);
+                return distanceBetweenNodeAndPosition < MIN_DISTANCE_BETWEEN_PORTALS;
+            }]];
+
     // If we're not overlapping an existing portal, place one!
     if (overlappingPortals.count==0) {
         WindowComponent *_portal = [[WindowComponent alloc] init];
         _portal.overlayComponent = _colorOverlay;
         [_portal start];
-        
+
         GKEntity *_portalEntity = [[SceneManager main] createEntity];
         [_portalEntity addComponent:_portal];
-        
+
         [[EventManager main] addGlobalEventComponent:_portal];
-        
+
         [_portal openPortalOnWallPosition:mesh3DPoint wallNormal:meshNormal toVRWorld:_outsideWorld];
-        
+
         if (!musicPlaying) {
             double delayInSeconds = 2.0;
             dispatch_time_t
-            popTime = dispatch_time(DISPATCH_TIME_NOW, (uint64_t) (delayInSeconds * NSEC_PER_SEC));
+                    popTime = dispatch_time(DISPATCH_TIME_NOW, (uint64_t) (delayInSeconds * NSEC_PER_SEC));
             dispatch_after(popTime, dispatch_get_main_queue(), ^(void) {
                 [_wind setPosition:mesh3DPoint];
                 [_wind setVolume:0];
                 [_wind setLooping:true];
                 [_wind play];
-                
+
                 [_wind_rustling setPosition:mesh3DPoint];
                 [_wind_rustling setVolume:0];
                 [_wind_rustling setLooping:true];
                 [_wind_rustling play];
                 [_wind_rustling player];
             });
-            
+
             delayInSeconds = 10.0;
             popTime = dispatch_time(DISPATCH_TIME_NOW, (uint64_t) (delayInSeconds * NSEC_PER_SEC));
             dispatch_after(popTime, dispatch_get_main_queue(), ^(void) {
@@ -555,78 +573,69 @@ static float const MAX_DISTANCE_FOR_DELETION = .3f;
                 [_music setLooping:true];
                 [_music play];
             });
-            
+
             musicPlaying = true;
         }
     }
-    
+
     // The number of portals that are very close to the target position (elegible for deletion).
     NSArray<SCNNode *> *closeOverlappingPortals =
-    [toplevelObjects objectsAtIndexes:[toplevelObjects indexesOfObjectsPassingTest:^BOOL(id obj,
-                                                                                         NSUInteger idx,
-                                                                                         BOOL *stop) {
-        SCNNode *node = obj;
-        if (![[node name] isEqualToString:@"PortalNode"]) { return false; }
-        
-        float dx = mesh3DPoint.x - node.position.x;
-        float dy = mesh3DPoint.y - node.position.y;
-        float dz = mesh3DPoint.z - node.position.z;
-        
-        float distanceBetweenNodeAndPosition = (float) sqrt(dx * dx + dy * dy + dz * dz);
-        return distanceBetweenNodeAndPosition < MAX_DISTANCE_FOR_DELETION;
-    }]];
-    
+            [toplevelObjects objectsAtIndexes:[toplevelObjects indexesOfObjectsPassingTest:^BOOL(id obj,
+                                                                                                 NSUInteger idx,
+                                                                                                 BOOL *stop) {
+                SCNNode *node = obj;
+                if (![[node name] isEqualToString:@"PortalNode"]) { return false; }
+
+                float dx = mesh3DPoint.x - node.position.x;
+                float dy = mesh3DPoint.y - node.position.y;
+                float dz = mesh3DPoint.z - node.position.z;
+
+                float distanceBetweenNodeAndPosition = (float) sqrt(dx * dx + dy * dy + dz * dz);
+                return distanceBetweenNodeAndPosition < MAX_DISTANCE_FOR_DELETION;
+            }]];
+
     if (closeOverlappingPortals.count > 0) {
         NSArray<GKComponent *> *foundComponent = [[[EventManager main] getAllComponents]
-                                                  objectsAtIndexes:[[[EventManager main] getAllComponents]
-                                                                    indexesOfObjectsPassingTest:^BOOL(id obj,
-                                                                                                      NSUInteger idx,
-                                                                                                      BOOL *stop) {
-                                                                        if ([obj isKindOfClass:[WindowComponent class]]) {
-                                                                            WindowComponent *component = obj;
-                                                                            return component.node==closeOverlappingPortals[0];
-                                                                        }
-                                                                        return false;
-                                                                    }]];
+                objectsAtIndexes:[[[EventManager main] getAllComponents]
+                        indexesOfObjectsPassingTest:^BOOL(id obj,
+                                                          NSUInteger idx,
+                                                          BOOL *stop) {
+                            if ([obj isKindOfClass:[WindowComponent class]]) {
+                                WindowComponent *component = obj;
+                                return component.node==closeOverlappingPortals[0];
+                            }
+                            return false;
+                        }]];
         if (foundComponent.count!=1) {
             NSLog(@"Didn't find the right amount of components for the clicked on portal.");
-            
+
             return;
         }
         [((WindowComponent *) foundComponent[0]) closePortal];
-        
-        // Actually remove the portal element
-        [[EventManager main] removeGlobalEventComponent:foundComponent[0]];
-        [closeOverlappingPortals[0] removeFromParentNode];
     }
 }
 
-
 // Touch handling helpers
-- (void)touchesBegan:(NSSet *)touches withEvent:(UIEvent *)event
-{
-    if( _experienceIsRunning ) {
+- (void)touchesBegan:(NSSet *)touches withEvent:(UIEvent *)event {
+    if (_experienceIsRunning) {
         [[EventManager main] touchesBegan:touches withEvent:event];
     }
 }
 
-- (void)touchesEnded:(NSSet *)touches withEvent:(UIEvent *)event
-{
-    if( _experienceIsRunning ) {
-        [[EventManager main]  touchesEnded:touches withEvent:event];
+- (void)touchesEnded:(NSSet *)touches withEvent:(UIEvent *)event {
+    if (_experienceIsRunning) {
+        [[EventManager main] touchesEnded:touches withEvent:event];
     }
 }
 
-- (void)touchesCancelled:(NSSet *)touches withEvent:(UIEvent *)event
-{
-    if( _experienceIsRunning ) {
+- (void)touchesCancelled:(NSSet *)touches withEvent:(UIEvent *)event {
+    if (_experienceIsRunning) {
         [[EventManager main] touchesCancelled:touches withEvent:event];
     }
 }
 
-- (void)touchesMoved:(NSSet *)touches withEvent:(UIEvent *)event
-{
-    if( _experienceIsRunning ) {
+- (void)touchesMoved:(NSSet *)touches withEvent:(UIEvent *)event {
+    if (_experienceIsRunning) {
         [[EventManager main] touchesMoved:touches withEvent:event];
     }
 }

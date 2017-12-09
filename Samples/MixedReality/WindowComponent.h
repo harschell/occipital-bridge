@@ -68,7 +68,7 @@
  *
  * These nodes require manual updates to their transform if the portal node's transform changes.
  */
-@interface WindowComponent : Component  <EventComponentProtocol, SCNNodeRendererDelegate, WindowComponentJS, SCNProgramDelegate>
+@interface WindowComponent : Component  <EventComponentProtocol, SCNNodeRendererDelegate, WindowComponentJS, SCNProgramDelegate, CAAnimationDelegate>
 @property(nonatomic, strong) SCNNode *node;
 @property(nonatomic, readonly) bool open;
 
@@ -95,6 +95,9 @@
  */
 - (bool) isFullyClosed;
 
+// Handler for the end of the animation for the window.
+- (void)animationDidStop:(CAAnimation *)anim finished:(BOOL)flag;
+
 @end
 
 static const long saveStateRenderOrder = BEEnvironmentScanShadowRenderingOrder - 18;
@@ -103,3 +106,4 @@ static const long portalOccludeRenderOrder = BEEnvironmentScanShadowRenderingOrd
 static const long postPortalRenderOrder = BEEnvironmentScanShadowRenderingOrder - 15;
 static const long preEnvironmentRenderOrder = BEEnvironmentScanShadowRenderingOrder - 1;
 static const long postEnvironmentRenderOrder = BEEnvironmentScanShadowRenderingOrder + 10;
+static const long reticleRenderingOrder = BEEnvironmentScanShadowRenderingOrder + 1000;

@@ -18,7 +18,7 @@
 		6F5CA0A31C751A4B00A33642 /* ViewController.mm in Sources */ = {isa = PBXBuildFile; fileRef = 6F5CA0A21C751A4B00A33642 /* ViewController.mm */; };
 		6F5CA0A61C751A4B00A33642 /* Main.storyboard in Resources */ = {isa = PBXBuildFile; fileRef = 6F5CA0A41C751A4B00A33642 /* Main.storyboard */; };
 		6F5CA0A81C751A4B00A33642 /* Assets.xcassets in Resources */ = {isa = PBXBuildFile; fileRef = 6F5CA0A71C751A4B00A33642 /* Assets.xcassets */; };
-		6F5CA0AB1C751A4B00A33642 /* LaunchScreen.storyboard in Resources */ = {isa = PBXBuildFile; fileRef = 6F5CA0A91C751A4B00A33642 /* LaunchScreen.storyboard */; };
+		6F5CA0AB1C751A4B00A33642 /* Menu.storyboard in Resources */ = {isa = PBXBuildFile; fileRef = 6F5CA0A91C751A4B00A33642 /* Menu.storyboard */; };
 		6F85C2751C7E69C600152850 /* Assets.scnassets in Resources */ = {isa = PBXBuildFile; fileRef = 6F85C2741C7E69C600152850 /* Assets.scnassets */; };
 		AA9820484CB12B22F67CCCA1 /* OpenWindowComponent.m in Sources */ = {isa = PBXBuildFile; fileRef = AA98277693B9993E0F213DA8 /* OpenWindowComponent.m */; };
 		AA982489206BD334ACDAD9A8 /* MathUtils.swift in Sources */ = {isa = PBXBuildFile; fileRef = AA982598568FCB770D7C939E /* MathUtils.swift */; };
@@ -32,6 +32,9 @@
 		CFB916EC1F6EF909002C9D46 /* RxSwift.framework in Frameworks */ = {isa = PBXBuildFile; fileRef = CFB916EB1F6EF909002C9D46 /* RxSwift.framework */; };
 		CFB916EF1F6EFD32002C9D46 /* RxSwift.framework in Embed Frameworks */ = {isa = PBXBuildFile; fileRef = CFB916EB1F6EF909002C9D46 /* RxSwift.framework */; settings = {ATTRIBUTES = (CodeSignOnCopy, RemoveHeadersOnCopy, ); }; };
 		CFB916F11F6F09B6002C9D46 /* SCNVector3+MathUtils.swift in Sources */ = {isa = PBXBuildFile; fileRef = CFB916F01F6F09B6002C9D46 /* SCNVector3+MathUtils.swift */; };
+		CFBBB79C1FDB6D2300AEC2B6 /* launch_screen_background.jpeg in Resources */ = {isa = PBXBuildFile; fileRef = CFBBB79B1FDB6D2200AEC2B6 /* launch_screen_background.jpeg */; };
+		CFBBB79E1FDB71F700AEC2B6 /* LaunchScreenViewController.swift in Sources */ = {isa = PBXBuildFile; fileRef = CFBBB79D1FDB71F700AEC2B6 /* LaunchScreenViewController.swift */; };
+		CFBBB7A01FDB74CA00AEC2B6 /* Launch Screen.storyboard in Resources */ = {isa = PBXBuildFile; fileRef = CFBBB79F1FDB74CA00AEC2B6 /* Launch Screen.storyboard */; };
 /* End PBXBuildFile section */
 
 /* Begin PBXContainerItemProxy section */
@@ -90,7 +93,7 @@
 		6F5CA0A21C751A4B00A33642 /* ViewController.mm */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.cpp.objcpp; path = ViewController.mm; sourceTree = "<group>"; };
 		6F5CA0A51C751A4B00A33642 /* Base */ = {isa = PBXFileReference; lastKnownFileType = file.storyboard; name = Base; path = Base.lproj/Main.storyboard; sourceTree = "<group>"; };
 		6F5CA0A71C751A4B00A33642 /* Assets.xcassets */ = {isa = PBXFileReference; lastKnownFileType = folder.assetcatalog; path = Assets.xcassets; sourceTree = "<group>"; };
-		6F5CA0AA1C751A4B00A33642 /* Base */ = {isa = PBXFileReference; lastKnownFileType = file.storyboard; name = Base; path = Base.lproj/LaunchScreen.storyboard; sourceTree = "<group>"; };
+		6F5CA0AA1C751A4B00A33642 /* Base */ = {isa = PBXFileReference; lastKnownFileType = file.storyboard; name = Base; path = Base.lproj/Menu.storyboard; sourceTree = "<group>"; };
 		6F5CA0AC1C751A4B00A33642 /* Info.plist */ = {isa = PBXFileReference; lastKnownFileType = text.plist.xml; path = Info.plist; sourceTree = "<group>"; };
 		6F7255EA1C77F99D00409AA2 /* MixedReality.xcconfig */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = text.xcconfig; path = MixedReality.xcconfig; sourceTree = "<group>"; };
 		6F7265D61C1B91EC0001C800 /* libz.tbd */ = {isa = PBXFileReference; lastKnownFileType = "sourcecode.text-based-dylib-definition"; name = libz.tbd; path = usr/lib/libz.tbd; sourceTree = SDKROOT; };
@@ -113,6 +116,9 @@
 		CF887DF41F6EED5A004805C3 /* Test.swift */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.swift; path = Test.swift; sourceTree = "<group>"; };
 		CFB916EB1F6EF909002C9D46 /* RxSwift.framework */ = {isa = PBXFileReference; lastKnownFileType = wrapper.framework; name = RxSwift.framework; path = ../Frameworks/RxSwift.framework; sourceTree = "<group>"; };
 		CFB916F01F6F09B6002C9D46 /* SCNVector3+MathUtils.swift */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.swift; path = "SCNVector3+MathUtils.swift"; sourceTree = "<group>"; };
+		CFBBB79B1FDB6D2200AEC2B6 /* launch_screen_background.jpeg */ = {isa = PBXFileReference; lastKnownFileType = image.jpeg; name = launch_screen_background.jpeg; path = Assets.xcassets/launch_screen_background.jpeg; sourceTree = "<group>"; };
+		CFBBB79D1FDB71F700AEC2B6 /* LaunchScreenViewController.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = LaunchScreenViewController.swift; sourceTree = "<group>"; };
+		CFBBB79F1FDB74CA00AEC2B6 /* Launch Screen.storyboard */ = {isa = PBXFileReference; lastKnownFileType = file.storyboard; path = "Launch Screen.storyboard"; sourceTree = "<group>"; };
 		DA28568D1C6E546E0030250A /* CoreBluetooth.framework */ = {isa = PBXFileReference; lastKnownFileType = wrapper.framework; name = CoreBluetooth.framework; path = System/Library/Frameworks/CoreBluetooth.framework; sourceTree = SDKROOT; };
 /* End PBXFileReference section */
 
@@ -189,12 +195,15 @@
 				CFB916F01F6F09B6002C9D46 /* SCNVector3+MathUtils.swift */,
 				6F7255EA1C77F99D00409AA2 /* MixedReality.xcconfig */,
 				6F5CA0A71C751A4B00A33642 /* Assets.xcassets */,
+				CFBBB79B1FDB6D2200AEC2B6 /* launch_screen_background.jpeg */,
 				6F85C2741C7E69C600152850 /* Assets.scnassets */,
 				6F5CA0AC1C751A4B00A33642 /* Info.plist */,
-				6F5CA0A91C751A4B00A33642 /* LaunchScreen.storyboard */,
+				CFBBB79F1FDB74CA00AEC2B6 /* Launch Screen.storyboard */,
+				6F5CA0A91C751A4B00A33642 /* Menu.storyboard */,
 				6F5CA0A41C751A4B00A33642 /* Main.storyboard */,
 				2C7E5C781E1C5ECB002F86AF /* CustomRenderMode.h */,
 				2C7E5C791E1C5ECB002F86AF /* CustomRenderMode.mm */,
+				CFBBB79D1FDB71F700AEC2B6 /* LaunchScreenViewController.swift */,
 				6F5CA09C1C751A4B00A33642 /* main.mm */,
 				6F5CA09E1C751A4B00A33642 /* AppDelegate.h */,
 				6F5CA09F1C751A4B00A33642 /* AppDelegate.mm */,
@@ -306,9 +315,11 @@
 			isa = PBXResourcesBuildPhase;
 			buildActionMask = 2147483647;
 			files = (
+				CFBBB7A01FDB74CA00AEC2B6 /* Launch Screen.storyboard in Resources */,
+				CFBBB79C1FDB6D2300AEC2B6 /* launch_screen_background.jpeg in Resources */,
 				6F85C2751C7E69C600152850 /* Assets.scnassets in Resources */,
 				6F5CA0A81C751A4B00A33642 /* Assets.xcassets in Resources */,
-				6F5CA0AB1C751A4B00A33642 /* LaunchScreen.storyboard in Resources */,
+				6F5CA0AB1C751A4B00A33642 /* Menu.storyboard in Resources */,
 				6F5CA0A61C751A4B00A33642 /* Main.storyboard in Resources */,
 			);
 			runOnlyForDeploymentPostprocessing = 0;
@@ -321,6 +332,7 @@
 			buildActionMask = 2147483647;
 			files = (
 				CF3B09611F31127E00285A80 /* Utils.m in Sources */,
+				CFBBB79E1FDB71F700AEC2B6 /* LaunchScreenViewController.swift in Sources */,
 				6F5CA0A31C751A4B00A33642 /* ViewController.mm in Sources */,
 				6F5CA0A01C751A4B00A33642 /* AppDelegate.mm in Sources */,
 				6F5CA09D1C751A4B00A33642 /* main.mm in Sources */,
@@ -346,12 +358,12 @@
 			name = Main.storyboard;
 			sourceTree = "<group>";
 		};
-		6F5CA0A91C751A4B00A33642 /* LaunchScreen.storyboard */ = {
+		6F5CA0A91C751A4B00A33642 /* Menu.storyboard */ = {
 			isa = PBXVariantGroup;
 			children = (
 				6F5CA0AA1C751A4B00A33642 /* Base */,
 			);
-			name = LaunchScreen.storyboard;
+			name = Menu.storyboard;
 			sourceTree = "<group>";
 		};
 /* End PBXVariantGroup section */
@@ -516,6 +528,7 @@
 				GCC_WARN_UNUSED_VARIABLE = YES;
 				HEADER_SEARCH_PATHS = ../OpenBE;
 				INFOPLIST_FILE = MixedReality/Info.plist;
+				IPHONEOS_DEPLOYMENT_TARGET = 9.2;
 				LD_RUNPATH_SEARCH_PATHS = "$(inherited) @executable_path/Frameworks";
 				MTL_ENABLE_DEBUG_INFO = YES;
 				PRODUCT_BUNDLE_IDENTIFIER = com.asg.aloftapp;
@@ -526,6 +539,7 @@
 				SWIFT_OPTIMIZATION_LEVEL = "-Onone";
 				SWIFT_SWIFT3_OBJC_INFERENCE = On;
 				SWIFT_VERSION = 4.0;
+				TARGETED_DEVICE_FAMILY = "1,2";
 				USER_HEADER_SEARCH_PATHS = "\"${PROJECT_DIR}/../OpenBE\"/**";
 			};
 			name = Debug;
@@ -569,6 +583,7 @@
 				GCC_WARN_UNUSED_VARIABLE = YES;
 				HEADER_SEARCH_PATHS = ../OpenBE;
 				INFOPLIST_FILE = MixedReality/Info.plist;
+				IPHONEOS_DEPLOYMENT_TARGET = 9.2;
 				LD_RUNPATH_SEARCH_PATHS = "$(inherited) @executable_path/Frameworks";
 				MTL_ENABLE_DEBUG_INFO = NO;
 				PRODUCT_BUNDLE_IDENTIFIER = com.asg.aloftapp;
@@ -579,6 +594,7 @@
 				SWIFT_OPTIMIZATION_LEVEL = "-Owholemodule";
 				SWIFT_SWIFT3_OBJC_INFERENCE = On;
 				SWIFT_VERSION = 4.0;
+				TARGETED_DEVICE_FAMILY = "1,2";
 				USER_HEADER_SEARCH_PATHS = "\"${PROJECT_DIR}/../OpenBE\"/**";
 			};
 			name = Release;

@@ -59,19 +59,12 @@ void preventApplicationFromStartingInTheBackgroundWhenTheStructureSensorIsPlugge
     if (error)
         NSLog(@"Can't start wireless log: %@", [error localizedDescription]);
 #endif
-
-    self.window = [[UIWindow alloc] initWithFrame:[UIScreen mainScreen].bounds];
-    
-    // Show the settings UI, with a prepared set of debug settings.
-    NSBundle *beBundle = [NSBundle bundleForClass:BEDebugSettingsViewController.class];
-    UIStoryboard *beDebugSettingsStoryboard = [UIStoryboard storyboardWithName:@"BEDebugSettings" bundle:beBundle];
-    self.navController = [beDebugSettingsStoryboard instantiateInitialViewController];
-    BEDebugSettingsViewController *debugSettingsVC = (BEDebugSettingsViewController *)_navController.viewControllers.firstObject;
-    [self prepareDebugSettingsVC:debugSettingsVC];
-
-    [_window setRootViewController:_navController];
-
     return YES;
+    
+}
+
+- (void)buttonPressed:(UIButton *)button {
+    NSLog(@"Button Pressed");
 }
 
 - (void)applicationWillResignActive:(UIApplication *)application

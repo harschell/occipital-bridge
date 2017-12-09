@@ -154,15 +154,29 @@ typedef NS_ENUM (NSUInteger, PortalState) {
 
         [self setEnabled:true];
 
-        AudioNode* node = [[AudioEngine main] playAudio:@"window_open.mp3" atVolume:1];
+        AudioNode *node = [[AudioEngine main] playAudio:@"window_open.mp3" atVolume:1];
         node.position = self.node.position;
         self.portalState = PORTAL_OPEN;
 
     } else {
 
+        SCNNode *window_piece = [self.portalFrameNode childNodeWithName:@"window_piece" recursively:true];
+
+        CAAnimation *animation = [window_piece animationForKey:@"window_piece-Matrix-animation-transform"];
+        [window_piece removeAnimationForKey:@"window_piece-Matrix-animation-transform"];
+
+        CAMediaTimingFunction *func = [CAMediaTimingFunction functionWithControlPoints:0 :1 :1 :0];
+
+        [animation setRepeatCount:1];
+        [animation setTimingFunction:func];
+        [animation setRemovedOnCompletion:false];
+        [animation setFillMode:kCAFillModeForwards];
+        [window_piece addAnimation:animation forKey:@"window_piece-Matrix-animation-transform"];
+        [animation setDelegate:self];
+
         self.time =
                 (_portalState==PORTAL_OPEN) ? (self.openDuration - _time) : 0.f; // Re-target if portal was opening.
-        AudioNode* node = [[AudioEngine main] playAudio:@"window_close.mp3" atVolume:1];
+        AudioNode *node = [[AudioEngine main] playAudio:@"window_close.mp3" atVolume:1];
         node.position = self.node.position;
         self.portalState = PORTAL_CLOSE;
     }
@@ -178,6 +192,14 @@ typedef NS_ENUM (NSUInteger, PortalState) {
 
 - (bool)isFullyClosed {
     return !_open && (_portalState==PORTAL_IDLE);
+}
+
+- (void)animationDidStop:(CAAnimation *)anim finished:(BOOL)flag {
+    NSLog(@"!!!!!!!!!!!!!!!!! Got the end of the close animation!");
+
+    // Actually remove the portal element
+    [[EventManager main] removeGlobalEventComponent:self];
+    [self.node removeFromParentNode];
 }
 
 #pragma mark - Inner Methods
@@ -392,13 +414,13 @@ typedef NS_ENUM (NSUInteger, PortalState) {
 
     if ([node.name isEqualToString:@"SaveState"]) {
         glGetBooleanv(GL_STENCIL_TEST, &prevSTENCIL_TEST);
-        glGetIntegerv(GL_STENCIL_FAIL, (GLint*)&prevGL_STENCIL_FAIL);
-        glGetIntegerv(GL_STENCIL_PASS_DEPTH_FAIL, (GLint*)&prevGL_STENCIL_PASS_DEPTH_FAIL);
-        glGetIntegerv(GL_STENCIL_PASS_DEPTH_PASS, (GLint*)&prevGL_STENCIL_PASS_DEPTH_PASS);
-        glGetIntegerv(GL_STENCIL_FUNC, (GLint*)&prevGL_STENCIL_FUNC);
-        glGetIntegerv(GL_STENCIL_VALUE_MASK, (GLint*)&prevGL_STENCIL_VALUE_MASK);
+        glGetIntegerv(GL_STENCIL_FAIL, (GLint *) &prevGL_STENCIL_FAIL);
+        glGetIntegerv(GL_STENCIL_PASS_DEPTH_FAIL, (GLint *) &prevGL_STENCIL_PASS_DEPTH_FAIL);
+        glGetIntegerv(GL_STENCIL_PASS_DEPTH_PASS, (GLint *) &prevGL_STENCIL_PASS_DEPTH_PASS);
+        glGetIntegerv(GL_STENCIL_FUNC, (GLint *) &prevGL_STENCIL_FUNC);
+        glGetIntegerv(GL_STENCIL_VALUE_MASK, (GLint *) &prevGL_STENCIL_VALUE_MASK);
         glGetIntegerv(GL_STENCIL_REF, &prevGL_STENCIL_REF);
-        glGetIntegerv(GL_STENCIL_WRITEMASK, (GLint*)&prevGL_STENCIL_WRITEMASK);
+        glGetIntegerv(GL_STENCIL_WRITEMASK, (GLint *) &prevGL_STENCIL_WRITEMASK);
     }
 
     if ([node.name isEqualToString:@"PrePortal"]) {
