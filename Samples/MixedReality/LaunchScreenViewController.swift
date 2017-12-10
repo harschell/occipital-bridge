@@ -37,25 +37,12 @@ class LaunchScreenViewController: UIViewController {
         
         let appDelegate = UIApplication.shared.delegate as! AppDelegate;
 
-        //appDelegate.window = UIWindow(frame: UIScreen.main.bounds);
-        
         let beBundle = Bundle(for: BEDebugSettingsViewController.self);
         let storyboard = UIStoryboard(name: "BEDebugSettings", bundle: beBundle);
         appDelegate.navController = storyboard.instantiateInitialViewController()! as! UINavigationController;
         let settingsVC = appDelegate.navController.viewControllers.first;
         appDelegate.prepareDebugSettingsVC(settingsVC as! BEDebugSettingsViewController);
         appDelegate.window.rootViewController = appDelegate.navController;
-        
-        
-        // Show the settings UI, with a prepared set of debug settings.
-       // NSBundle *beBundle = [NSBundle bundleForClass:BEDebugSettingsViewController.class];
-        //UIStoryboard *beDebugSettingsStoryboard = [UIStoryboard storyboardWithName:@"BEDebugSettings" bundle:beBundle];
-        //self.navController = [beDebugSettingsStoryboard instantiateInitialViewController];
-        //BEDebugSettingsViewController *debugSettingsVC = (BEDebugSettingsViewController *)_navController.viewControllers.firstObject;
-//        [self prepareDebugSettingsVC:debugSettingsVC];
-        
-//        [_window setRootViewController:_navController];
-
     }
     
 

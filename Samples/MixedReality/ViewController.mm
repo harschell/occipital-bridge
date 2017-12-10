@@ -279,7 +279,7 @@ static float const MAX_DISTANCE_FOR_DELETION = .3f;
     self.reticleNode.geometry.firstMaterial.readsFromDepthBuffer = NO;
     self.reticleNode.castsShadow = NO;
     // Reticle should be the last thing drawn in the scene, so that it can render on top of everything
-    self.reticleNode.renderingOrder = BEEnvironmentScanRenderingOrder + 1000;
+    self.reticleNode.renderingOrder = BEEnvironmentScanRenderingOrder + 15000;
 
     self.reticleNode.hidden = ![[BEController sharedController] isConnected] || !self.runningInStereo;
 
@@ -358,7 +358,7 @@ static float const MAX_DISTANCE_FOR_DELETION = .3f;
                 return [[node name] isEqualToString:@"PortalNode"];
             }]];
 
-    bool hidden = _mixedReality.lastTrackerPoseAccuracy==BETrackerPoseAccuracyNotAvailable;
+    bool hidden = _mixedReality.lastTrackerPoseAccuracy==BETrackerPoseAccuracyNotAvailable || _mixedReality.lastTrackerPoseAccuracy == BETrackerPoseAccuracyLow;
     _outsideWorld.animationNode.hidden = hidden;
 
     // hide all portals

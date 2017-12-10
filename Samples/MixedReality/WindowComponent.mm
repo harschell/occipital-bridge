@@ -34,7 +34,6 @@ static float const PORTAL_HEIGHT = 1.8;
 typedef NS_ENUM (NSUInteger, PortalState) {
     PORTAL_IDLE,
     PORTAL_OPEN,
-    PORTAL_CLOSE
 };
 
 @interface WindowComponent ()
@@ -63,6 +62,9 @@ typedef NS_ENUM (NSUInteger, PortalState) {
 @property(atomic) GLKVector3 oldCameraPos;
 @property(atomic) float time;
 @property(atomic) PortalState portalState;
+
+@property(atomic) SCNVector3 startingWindowPiecePosition; // used for reverse animation
+@property(atomic) CABasicAnimation* closeAnimation;
 
 @end
 
@@ -149,8 +151,7 @@ typedef NS_ENUM (NSUInteger, PortalState) {
     _open = open;
 
     if (_open) {
-        // Re-target if portal was closing.
-        self.time = (_portalState==PORTAL_CLOSE) ? (self.closeDuration - _time) : 0.f;
+        self.time = 0;
 
         [self setEnabled:true];
 
@@ -161,24 +162,36 @@ typedef NS_ENUM (NSUInteger, PortalState) {
     } else {
 
         SCNNode *window_piece = [self.portalFrameNode childNodeWithName:@"window_piece" recursively:true];
-
-        CAAnimation *animation = [window_piece animationForKey:@"window_piece-Matrix-animation-transform"];
         [window_piece removeAnimationForKey:@"window_piece-Matrix-animation-transform"];
 
-        CAMediaTimingFunction *func = [CAMediaTimingFunction functionWithControlPoints:0 :1 :1 :0];
+        double duration = .4;
+        CAMediaTimingFunction *timingFunc = [CAMediaTimingFunction functionWithControlPoints:0 :0 :.5 :1];
 
-        [animation setRepeatCount:1];
-        [animation setTimingFunction:func];
-        [animation setRemovedOnCompletion:false];
-        [animation setFillMode:kCAFillModeForwards];
-        [window_piece addAnimation:animation forKey:@"window_piece-Matrix-animation-transform"];
-        [animation setDelegate:self];
+         self.closeAnimation = [CABasicAnimation animationWithKeyPath:@"position"];
+        [self.closeAnimation setToValue: [NSValue valueWithSCNVector3:self.startingWindowPiecePosition]];
+        [self.closeAnimation setFromValue:[NSValue valueWithSCNVector3:SCNVector3Make(self.startingWindowPiecePosition.x, self.startingWindowPiecePosition.y - 30, self.startingWindowPiecePosition.z - 80)]];
+        [self.closeAnimation setRepeatCount:1];
+        [self.closeAnimation setDuration:duration];
+        [self.closeAnimation setTimingFunction:timingFunc];
+        [self.closeAnimation setAutoreverses: false];
+        [self.closeAnimation setRemovedOnCompletion: false];
+        [self.closeAnimation setFillMode: kCAFillModeForwards];
+        [self.closeAnimation setDelegate: self];
 
-        self.time =
-                (_portalState==PORTAL_OPEN) ? (self.openDuration - _time) : 0.f; // Re-target if portal was opening.
+//        CABasicAnimation* closeAnimationScale = [CABasicAnimation animationWithKeyPath:@"scale"];
+//        [self.closeAnimation setFromValue:[NSValue valueWithSCNVector3:SCNVector3Make(0, 0, 0)]];
+//        [self.closeAnimation setToValue: [NSValue valueWithSCNVector3:SCNVector3Make(1, 1, 1)]];
+//        [self.closeAnimation setRepeatCount:1];
+//        [self.closeAnimation setDuration:duration];
+//        [self.closeAnimation setTimingFunction:timingFunc];
+//        [self.closeAnimation setAutoreverses: false];
+//        [self.closeAnimation setRemovedOnCompletion: false];
+//        [self.closeAnimation setFillMode: kCAFillModeForwards];
+
+        [window_piece addAnimation:self.closeAnimation forKey:nil];
+
         AudioNode *node = [[AudioEngine main] playAudio:@"window_close.mp3" atVolume:1];
         node.position = self.node.position;
-        self.portalState = PORTAL_CLOSE;
     }
 }
 
@@ -195,11 +208,11 @@ typedef NS_ENUM (NSUInteger, PortalState) {
 }
 
 - (void)animationDidStop:(CAAnimation *)anim finished:(BOOL)flag {
-    NSLog(@"!!!!!!!!!!!!!!!!! Got the end of the close animation!");
-
-    // Actually remove the portal element
-    [[EventManager main] removeGlobalEventComponent:self];
-    [self.node removeFromParentNode];
+    if (anim == self.closeAnimation) {
+        // Actually remove the portal element
+        [[EventManager main] removeGlobalEventComponent:self];
+        [self.node removeFromParentNode];
+    }
 }
 
 #pragma mark - Inner Methods
@@ -214,14 +227,6 @@ typedef NS_ENUM (NSUInteger, PortalState) {
     if (self.portalState==PORTAL_OPEN) {
         if (self.time > self.openDuration) {
             self.portalState = PORTAL_IDLE;
-        }
-    }
-
-    if (self.portalState==PORTAL_CLOSE) {
-        if (self.time > self.closeDuration) {
-            self.portalState = PORTAL_IDLE;
-            [self setEnabled:false];
-            return;
         }
     }
 
@@ -301,6 +306,7 @@ typedef NS_ENUM (NSUInteger, PortalState) {
 
     // Stop animation after 1 loop
     SCNNode *window_piece = [portalFrameMesh childNodeWithName:@"window_piece" recursively:true];
+    self.startingWindowPiecePosition = window_piece.position;
 
     CAAnimation *animation = [window_piece animationForKey:@"window_piece-Matrix-animation-transform"];
     [window_piece removeAnimationForKey:@"window_piece-Matrix-animation-transform"];
