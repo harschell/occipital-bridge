@@ -28,6 +28,8 @@
 		BA5F3F081EE094D800D1DB9A /* OpenBE.framework in Frameworks */ = {isa = PBXBuildFile; fileRef = BA5129151EE092980044E0F0 /* OpenBE.framework */; };
 		BA5F3F091EE094EB00D1DB9A /* OpenBE.framework in Embed Frameworks */ = {isa = PBXBuildFile; fileRef = BA5129151EE092980044E0F0 /* OpenBE.framework */; settings = {ATTRIBUTES = (CodeSignOnCopy, RemoveHeadersOnCopy, ); }; };
 		CF3B09611F31127E00285A80 /* Utils.m in Sources */ = {isa = PBXBuildFile; fileRef = CF3B09601F31127E00285A80 /* Utils.m */; };
+		CF509BAD1FE0974000F6BB41 /* mainscreen_bg.png in Resources */ = {isa = PBXBuildFile; fileRef = CF509BAB1FE0973F00F6BB41 /* mainscreen_bg.png */; };
+		CF509BAE1FE0974000F6BB41 /* mainscreen_bg.psd in Resources */ = {isa = PBXBuildFile; fileRef = CF509BAC1FE0974000F6BB41 /* mainscreen_bg.psd */; };
 		CF887DF51F6EED5A004805C3 /* Test.swift in Sources */ = {isa = PBXBuildFile; fileRef = CF887DF41F6EED5A004805C3 /* Test.swift */; };
 		CFB916EC1F6EF909002C9D46 /* RxSwift.framework in Frameworks */ = {isa = PBXBuildFile; fileRef = CFB916EB1F6EF909002C9D46 /* RxSwift.framework */; };
 		CFB916EF1F6EFD32002C9D46 /* RxSwift.framework in Embed Frameworks */ = {isa = PBXBuildFile; fileRef = CFB916EB1F6EF909002C9D46 /* RxSwift.framework */; settings = {ATTRIBUTES = (CodeSignOnCopy, RemoveHeadersOnCopy, ); }; };
@@ -112,6 +114,8 @@
 		BA5129101EE092980044E0F0 /* OpenBE.xcodeproj */ = {isa = PBXFileReference; lastKnownFileType = "wrapper.pb-project"; name = OpenBE.xcodeproj; path = ../OpenBE/OpenBE.xcodeproj; sourceTree = "<group>"; };
 		CF3B095F1F31127E00285A80 /* Utils.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; path = Utils.h; sourceTree = "<group>"; };
 		CF3B09601F31127E00285A80 /* Utils.m */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.objc; path = Utils.m; sourceTree = "<group>"; };
+		CF509BAB1FE0973F00F6BB41 /* mainscreen_bg.png */ = {isa = PBXFileReference; lastKnownFileType = image.png; name = mainscreen_bg.png; path = Assets.xcassets/mainscreen_bg.png; sourceTree = "<group>"; };
+		CF509BAC1FE0974000F6BB41 /* mainscreen_bg.psd */ = {isa = PBXFileReference; lastKnownFileType = file; name = mainscreen_bg.psd; path = Assets.xcassets/mainscreen_bg.psd; sourceTree = "<group>"; };
 		CF887DF31F6EED5A004805C3 /* MixedReality-Bridging-Header.h */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.c.h; path = "MixedReality-Bridging-Header.h"; sourceTree = "<group>"; };
 		CF887DF41F6EED5A004805C3 /* Test.swift */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.swift; path = Test.swift; sourceTree = "<group>"; };
 		CFB916EB1F6EF909002C9D46 /* RxSwift.framework */ = {isa = PBXFileReference; lastKnownFileType = wrapper.framework; name = RxSwift.framework; path = ../Frameworks/RxSwift.framework; sourceTree = "<group>"; };
@@ -195,6 +199,8 @@
 				CFB916F01F6F09B6002C9D46 /* SCNVector3+MathUtils.swift */,
 				6F7255EA1C77F99D00409AA2 /* MixedReality.xcconfig */,
 				6F5CA0A71C751A4B00A33642 /* Assets.xcassets */,
+				CF509BAB1FE0973F00F6BB41 /* mainscreen_bg.png */,
+				CF509BAC1FE0974000F6BB41 /* mainscreen_bg.psd */,
 				CFBBB79B1FDB6D2200AEC2B6 /* launch_screen_background.jpeg */,
 				6F85C2741C7E69C600152850 /* Assets.scnassets */,
 				6F5CA0AC1C751A4B00A33642 /* Info.plist */,
@@ -317,6 +323,8 @@
 			files = (
 				CFBBB7A01FDB74CA00AEC2B6 /* Launch Screen.storyboard in Resources */,
 				CFBBB79C1FDB6D2300AEC2B6 /* launch_screen_background.jpeg in Resources */,
+				CF509BAD1FE0974000F6BB41 /* mainscreen_bg.png in Resources */,
+				CF509BAE1FE0974000F6BB41 /* mainscreen_bg.psd in Resources */,
 				6F85C2751C7E69C600152850 /* Assets.scnassets in Resources */,
 				6F5CA0A81C751A4B00A33642 /* Assets.xcassets in Resources */,
 				6F5CA0AB1C751A4B00A33642 /* Menu.storyboard in Resources */,

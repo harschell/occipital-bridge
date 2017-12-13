@@ -10,6 +10,14 @@
         <capability name="Constraints with non-1.0 multipliers" minToolsVersion="5.1"/>
         <capability name="documents saved in the Xcode 8 format" minToolsVersion="8.0"/>
     </dependencies>
+    <customFonts key="customFonts">
+        <array key="OpenSans-Bold.ttf">
+            <string>OpenSans-Bold</string>
+        </array>
+        <array key="OpenSans-Regular.ttf">
+            <string>OpenSans-Regular</string>
+        </array>
+    </customFonts>
     <scenes>
         <!--Launch Screen View Controller-->
         <scene sceneID="EHf-IW-A2E">
@@ -24,29 +32,35 @@
                         <autoresizingMask key="autoresizingMask" widthSizable="YES" heightSizable="YES"/>
                         <subviews>
                             <view contentMode="scaleAspectFill" insetsLayoutMarginsFromSafeArea="NO" translatesAutoresizingMaskIntoConstraints="NO" id="Hdo-aR-OYB">
-                                <rect key="frame" x="0.0" y="-146" width="667" height="667"/>
+                                <rect key="frame" x="0.0" y="-62.5" width="667" height="500"/>
                                 <subviews>
-                                    <imageView userInteractionEnabled="NO" contentMode="scaleToFill" horizontalHuggingPriority="251" verticalHuggingPriority="251" insetsLayoutMarginsFromSafeArea="NO" image="launch_screen_background.jpeg" translatesAutoresizingMaskIntoConstraints="NO" id="2Tg-Xp-gL0">
-                                        <rect key="frame" x="0.0" y="0.0" width="667" height="667"/>
+                                    <imageView userInteractionEnabled="NO" contentMode="scaleToFill" horizontalHuggingPriority="251" verticalHuggingPriority="251" insetsLayoutMarginsFromSafeArea="NO" image="mainscreen_bg.png" translatesAutoresizingMaskIntoConstraints="NO" id="2Tg-Xp-gL0">
+                                        <rect key="frame" x="0.0" y="0.0" width="667" height="500"/>
                                         <edgeInsets key="layoutMargins" top="0.0" left="0.0" bottom="0.0" right="0.0"/>
                                     </imageView>
                                     <button opaque="NO" contentMode="scaleToFill" contentHorizontalAlignment="center" contentVerticalAlignment="center" buttonType="roundedRect" lineBreakMode="middleTruncation" translatesAutoresizingMaskIntoConstraints="NO" id="RYZ-vl-vPx" userLabel="Start">
-                                        <rect key="frame" x="400.5" y="200" width="150" height="30"/>
+                                        <rect key="frame" x="521.5" y="152.5" width="150" height="53"/>
                                         <constraints>
                                             <constraint firstAttribute="width" constant="150" id="Kve-SB-DfN"/>
                                         </constraints>
-                                        <state key="normal" title="Start"/>
+                                        <fontDescription key="fontDescription" name="OpenSans-Bold" family="Open Sans" pointSize="35"/>
+                                        <state key="normal" title="Start">
+                                            <color key="titleColor" red="0.058485243055555552" green="0.2673611111111111" blue="0.2178860574102206" alpha="1" colorSpace="custom" customColorSpace="sRGB"/>
+                                        </state>
                                         <connections>
                                             <action selector="StartButton:" destination="01J-lp-oVM" eventType="touchUpInside" id="RGg-kr-A5N"/>
                                             <action selector="StartButton:" destination="EZJ-nA-VFG" eventType="touchUpInside" id="pER-0O-uO3"/>
                                         </connections>
                                     </button>
                                     <button opaque="NO" contentMode="scaleToFill" contentHorizontalAlignment="center" contentVerticalAlignment="center" buttonType="roundedRect" lineBreakMode="middleTruncation" translatesAutoresizingMaskIntoConstraints="NO" id="FDR-bH-9qL" userLabel="Settings">
-                                        <rect key="frame" x="400" y="267" width="150" height="30"/>
+                                        <rect key="frame" x="525.5" y="215" width="150" height="36"/>
                                         <constraints>
                                             <constraint firstAttribute="width" constant="150" id="dXr-aD-OLP"/>
                                         </constraints>
-                                        <state key="normal" title="Settings"/>
+                                        <fontDescription key="fontDescription" name="OpenSans-Regular" family="Open Sans" pointSize="20"/>
+                                        <state key="normal" title="Settings">
+                                            <color key="titleColor" red="0.058485243059999997" green="0.26736111109999999" blue="0.2178860574" alpha="1" colorSpace="custom" customColorSpace="sRGB"/>
+                                        </state>
                                         <connections>
                                             <action selector="SettingsButton:" destination="01J-lp-oVM" eventType="touchUpInside" id="NKF-io-N7w"/>
                                         </connections>
@@ -54,14 +68,14 @@
                                 </subviews>
                                 <color key="backgroundColor" white="1" alpha="1" colorSpace="calibratedWhite"/>
                                 <constraints>
-                                    <constraint firstItem="RYZ-vl-vPx" firstAttribute="leading" secondItem="Hdo-aR-OYB" secondAttribute="trailing" multiplier="0.6" id="9rE-DX-83e"/>
+                                    <constraint firstItem="RYZ-vl-vPx" firstAttribute="leading" secondItem="Hdo-aR-OYB" secondAttribute="trailing" multiplier="0.782" id="9rE-DX-83e"/>
                                     <constraint firstItem="2Tg-Xp-gL0" firstAttribute="centerY" secondItem="Hdo-aR-OYB" secondAttribute="centerY" id="Bhu-XI-ieB"/>
-                                    <constraint firstItem="RYZ-vl-vPx" firstAttribute="top" secondItem="Hdo-aR-OYB" secondAttribute="bottom" multiplier="0.3" id="FzE-iL-d74"/>
-                                    <constraint firstItem="FDR-bH-9qL" firstAttribute="top" secondItem="Hdo-aR-OYB" secondAttribute="bottom" multiplier="0.4" id="I8S-EV-9tn"/>
+                                    <constraint firstItem="RYZ-vl-vPx" firstAttribute="top" secondItem="Hdo-aR-OYB" secondAttribute="bottom" multiplier="0.305" id="FzE-iL-d74"/>
+                                    <constraint firstItem="FDR-bH-9qL" firstAttribute="top" secondItem="Hdo-aR-OYB" secondAttribute="bottom" multiplier="0.429" id="I8S-EV-9tn"/>
                                     <constraint firstItem="2Tg-Xp-gL0" firstAttribute="centerX" secondItem="Hdo-aR-OYB" secondAttribute="centerX" id="NaK-Ng-dlu"/>
-                                    <constraint firstAttribute="width" secondItem="Hdo-aR-OYB" secondAttribute="height" id="gxj-aN-qyi"/>
+                                    <constraint firstAttribute="width" secondItem="Hdo-aR-OYB" secondAttribute="height" multiplier="4:3" id="gxj-aN-qyi"/>
                                     <constraint firstItem="2Tg-Xp-gL0" firstAttribute="width" secondItem="Hdo-aR-OYB" secondAttribute="width" id="qso-8H-u1G"/>
-                                    <constraint firstItem="FDR-bH-9qL" firstAttribute="leading" secondItem="Hdo-aR-OYB" secondAttribute="trailing" multiplier="0.6" id="v4X-8j-uHk"/>
+                                    <constraint firstItem="FDR-bH-9qL" firstAttribute="leading" secondItem="Hdo-aR-OYB" secondAttribute="trailing" multiplier="0.787" id="v4X-8j-uHk"/>
                                     <constraint firstItem="2Tg-Xp-gL0" firstAttribute="height" secondItem="Hdo-aR-OYB" secondAttribute="height" id="zbr-vs-YAQ"/>
                                 </constraints>
                                 <edgeInsets key="layoutMargins" top="0.0" left="0.0" bottom="0.0" right="0.0"/>
@@ -85,6 +99,6 @@
         </scene>
     </scenes>
     <resources>
-        <image name="launch_screen_background.jpeg" width="259" height="194"/>
+        <image name="mainscreen_bg.png" width="4687" height="3515"/>
     </resources>
 </document>
